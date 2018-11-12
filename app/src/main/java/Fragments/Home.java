@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -7,12 +8,14 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.locationUpdater;
 
 import adapter.TablayoutAdapter_Home;
 
@@ -42,6 +45,16 @@ public class Home extends Fragment {
          */
         
         changeLocation = rootView.findViewById(R.id.changeLocation);
+        
+        changeLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+    
+                Log.e("Home", "click received ");
+                startActivity(new Intent(getActivity(), locationUpdater.class));
+                
+            }
+        });
         viewPager1 = rootView.findViewById(R.id.viewpager1);
         tabLayout1 = rootView.findViewById(R.id.tablayout1);
         
@@ -108,18 +121,9 @@ public class Home extends Fragment {
             }
         });
         
-        changeLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-                updateLocation();
-            }
-        });
         return rootView;
     }
     
-    private void updateLocation() {
-    }
     
     public void wrapTabIndicatorToTitle(TabLayout tabLayout, int externalMargin, int internalMargin) {
         View tabStrip = tabLayout.getChildAt(0);

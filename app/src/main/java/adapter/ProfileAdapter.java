@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
@@ -55,7 +56,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             /*
             Code questions part here
              */
-            context.startActivity(new Intent(context, QuestionsActivity.class));
+            
+            holder.profileItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, QuestionsActivity.class));
+                }
+            });
+           
         }
 
     }
@@ -67,6 +75,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView inbox,arrow;
+        LinearLayout profileItem;
         TextView txttrades,txthistory;
 
         public ViewHolder(View itemView) {
@@ -76,6 +85,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             arrow=itemView.findViewById(R.id.arrow);
             txttrades=itemView.findViewById(R.id.txttrades);
             txthistory=itemView.findViewById(R.id.txthistory);
+            profileItem = itemView.findViewById(R.id.profileItem);
         }
     }
 }

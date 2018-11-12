@@ -35,7 +35,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.Arrays;
 
@@ -156,10 +158,15 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                             Log.d(TAG, "signInWithCredential:success");
                             Boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                             Log.e(TAG, "The user is a new user or not " + isnewUser);
+                            FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                             if (isnewUser) {
                                 /*
                                     move to setup the account/profile
                                      */
+                                // for now update users database
+                                
+                                updateDatabaseWithUser(mCurrentUser);
+                                
                                 startActivity(new Intent(SignIn.this, MainActivity.class));
                                 finish();
                                 
@@ -181,6 +188,16 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                         // ...
                     }
                 });
+    }
+    
+    private void updateDatabaseWithUser(FirebaseUser mCurrentUser) {
+        ModelUser user = new ModelUser(mCurrentUser.getDisplayName(), String.valueOf(mCurrentUser.getPhotoUrl())
+        , "20", null, null);
+        
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo).child(mCurrentUser.getUid());
+        
+        reference.setValue(user);
     }
     
     private void signIn() {
@@ -225,11 +242,12 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 Boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                                 Log.e(TAG, "The user is a new user or not " + isnewUser);
                                 //   checkAndUpdateUserInfo(user);
+                                FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                                 if (isnewUser) {
                                     /*
                                     move to setup the account/profile
                                      */
-                                    
+                                    updateDatabaseWithUser(mCurrentUser);
                                     startActivity(new Intent(SignIn.this, MainActivity.class));
                                     finish();
                                     
