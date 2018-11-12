@@ -8,7 +8,6 @@
     <tab
         id="@+id/tab_message"
         icon="@drawable/ic_message_square"
-        barColorWhenSelected="#FF1493"
         inActiveColor="#4De9e9e9"
         activeColor="#118df0"/>
 

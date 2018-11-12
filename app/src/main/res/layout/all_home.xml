@@ -43,6 +43,7 @@
                 android:id="@+id/imagers"
                 android:layout_marginTop="4dp"
                 android:layout_width="8dp"
+                android:visibility="invisible"
                 android:layout_height="8.5dp"
                 android:src="@drawable/ic_rupee"/>
 

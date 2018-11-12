@@ -1,6 +1,7 @@
 package adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.R;
 
 import java.util.ArrayList;
@@ -43,6 +45,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         holder.arrow.setImageResource(profileModelArrayList.get(position).getArrow());
         holder.txttrades.setText(profileModelArrayList.get(position).getTxttrades());
         holder.txthistory.setText(profileModelArrayList.get(position).getTxthistory());
+        
+        /*
+        setting up clicks for items in profile section
+         */
+        
+        if(position==0)
+        {
+            /*
+            Code questions part here
+             */
+            context.startActivity(new Intent(context, QuestionsActivity.class));
+        }
 
     }
 
