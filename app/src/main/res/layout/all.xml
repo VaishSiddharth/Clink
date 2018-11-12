@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="9dp"
+        android:layout_marginRight="17dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/image"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:src="@drawable/profile"/>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keith Mills"
+                android:textSize="12.5sp"
+                android:textColor="#a9a9b0"/>
+
+            <ImageView
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="9dp"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:background="@drawable/ic_brightness_1_black"/>
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24m ago"
+                android:textSize="12.5sp"
+                android:textColor="#a9a9b0"/>
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+            <customfonts.MyTextView_SF_Pro_Display_Medium
+                android:id="@+id/txt"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hey, would you be interested in ..."
+                android:textColor="#3b3b3b"
+                android:textSize="13sp"/>
+
+                <ImageView
+                    android:id="@+id/n2"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check_grey"/>
+
+
+                <ImageView
+                    android:id="@+id/n3"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check"/>
+
+                <ImageView
+                    android:id="@+id/n4"
+                    android:layout_marginLeft="12dp"
+                    android:layout_width="11dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="7dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_credit_card"/>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/n1"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="visible"
+            android:textSize="11sp"
+            android:text="1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/circle_blue"/>
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

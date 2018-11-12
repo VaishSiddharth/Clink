@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splaxe"
+    tools:context="com.testlabic.datenearu.SignIn">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="74.7dp"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_logo" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="12.7dp"
+                android:src="@drawable/logo_fliply" />
+
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginBottom="25dp"
+    android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rect_white"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ic_facebook" />
+
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="1dp"
+                    android:textSize="12sp"
+                    android:id="@+id/facebook"
+                    android:text="Continue with Facebook"
+                    android:textColor="#3b3b3b" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="22dp"
+                android:paddingLeft="38dp"
+                android:paddingRight="38dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@drawable/rect_white"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ic_search" />
+
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="1dp"
+                    android:textSize="12sp"
+                    android:id="@+id/gmail"
+                    android:text="Continue with Google"
+                    android:textColor="#3b3b3b" />
+
+            </LinearLayout>
+
+            <com.facebook.login.widget.LoginButton
+                android:layout_width="wrap_content"
+                android:id="@+id/login_button"
+                android:visibility="gone"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="17dp"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="50dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#33ffffff" />
+
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:text="or"
+                    android:textColor="#99ffffff"
+                    android:textSize="10sp" />
+
+                <View
+                    android:layout_width="50dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#33ffffff" />
+
+
+            </LinearLayout>
+
+
+
+        <customfonts.MyTextView_SF_Pro_Display_Medium
+            android:background="@drawable/rect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="55dp"
+            android:paddingRight="55dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="13dp"
+            android:text="Signup with Email"
+            android:textSize="12sp"
+            android:textColor="#ffffff" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <customfonts.TextViewSFProDisplayRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Existing user?"
+            android:textSize="11.5sp"
+            android:textColor="#B3ffffff"/>
+
+        <customfonts.MyTextView_SF_Pro_Display_Semibold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login now"
+            android:layout_marginLeft="9dp"
+            android:textSize="11.5sp"
+            android:textColor="#ffffff"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "506966503434",
+    "firebase_url": "https://datenearu.firebaseio.com",
+    "project_id": "datenearu",
+    "storage_bucket": "datenearu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506966503434:android:ddde7ff5e2adfa91",
+        "android_client_info": {
+          "package_name": "com.testlabic.datenearu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506966503434-6ac6ibp80hsbpbgjisjfjc2filjmvg62.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.testlabic.datenearu",
+            "certificate_hash": "4041c99dfe73447d888196b0f64b5a6c6b4c065c"
+          }
+        },
+        {
+          "client_id": "506966503434-f27so8mnu8urjqopeq8nl2h6tvmgq3es.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ_purIsBLDiGQZkWCSXZBikZzwCjJw2g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506966503434-f27so8mnu8urjqopeq8nl2h6tvmgq3es.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

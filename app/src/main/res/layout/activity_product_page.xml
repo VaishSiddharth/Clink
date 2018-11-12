@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.testlabic.datenearu.ProductPage">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="370dp">
+
+                <android.support.v4.view.ViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/viewpager"/>
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/circleindicator"
+                    android:layout_marginTop="150dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="bottom"
+                    app:ci_margin="3dp"
+                    app:ci_drawable="@drawable/ic_brightness_1_black_24dp"
+                    app:ci_drawable_unselected="@drawable/ic_brightness_1_black"/>
+
+                <include layout="@layout/toolbar_productpage"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="23dp">
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chennai, India  .  2h ago"
+                    android:textColor="#a9a9b0"
+                    android:textSize="12sp"/>
+
+
+                <LinearLayout
+                    android:layout_marginTop="7dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <customfonts.MyTextView_SF_Pro_Display_Bold
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DJI Spark"
+                    android:textSize="23sp"
+                    android:textColor="#3b3b3b"/>
+
+                    <ImageView
+                        android:tint="#000000"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:src="@drawable/ic_rupee"/>
+
+                    <customfonts.MyTextView_SF_Pro_Display_Bold
+                        android:layout_marginRight="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="50k"
+                        android:textSize="23sp"
+                        android:textColor="#3b3b3b"/>
+                </LinearLayout>
+                
+                <View
+                    android:layout_marginTop="21dp"
+                    android:layout_marginBottom="21dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:background="#1A979797"/>
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Selling my 2017 DJI Spark. Barely used, pretty new in condition and its the “Fly More Combo&quot;. No Negotiations please."
+                    android:textColor="#a9a9b0"
+                    android:textSize="12.3sp"/>
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:lineSpacingExtra="4dp"
+                    android:layout_marginTop="19dp"
+                    android:text="Seize the Moment. Meet Spark, a mini drone that features all of \ n  DJI&apos;s signature technologies, allowing you to seize the moment whenever you feel inspired."
+                    android:textColor="#a9a9b0"
+                    android:textSize="12.3sp"/>
+
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Read More"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:textSize="12.3sp"
+                    android:textColor="#3b3b3b"/>
+
+                <View
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:layout_marginRight="20dp"
+                    android:background="#A3979797"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="19dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/profile" />
+
+                <LinearLayout
+                    android:layout_marginLeft="13dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <customfonts.MyTextView_SF_Pro_Display_Semibold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Keith Mills"
+                        android:textColor="#3b3b3b"
+                        android:textSize="16sp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:tint="#a9a9b0"
+                            android:layout_marginTop="1dp"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_rate_star_button"/>
+                        <customfonts.TextViewSFProDisplayRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4.6"
+                            android:layout_marginLeft="7dp"
+                            android:textSize="12sp"
+                            android:textColor="#a9a9b0"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:orientation="horizontal">
+
+                    <customfonts.MyTextView_SF_Pro_Display_Semibold
+                        android:layout_marginTop="1dp"
+                        android:background="@drawable/rect_grey"
+                        android:layout_width="74dp"
+                        android:layout_height="33dp"
+                        android:paddingTop="7dp"
+                        android:paddingRight="3dp"
+                        android:layout_marginRight="12dp"
+                        android:paddingLeft="14dp"
+                        android:paddingBottom="7.5dp"
+                        android:text="Message"
+                        android:textColor="#3b3b3b"
+                        android:textSize="12sp"/>
+
+                    <customfonts.MyTextView_SF_Pro_Display_Semibold
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/rect_blue"
+                        android:layout_width="74dp"
+                        android:layout_height="33dp"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="8dp"
+                        android:gravity="center"
+                        android:text="Buy Now"
+                        android:textColor="#ffffff"
+                        android:textSize="12sp"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+
+
+
+
+</LinearLayout>
