@@ -15,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import adapter.TablayoutAdapter_Home;
 
@@ -25,18 +27,34 @@ public class Home extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Typeface mTypeface;
     private Typeface mTypefaceBold;
+    private TextView changeLocation;
+    private BottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        
+        bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         viewPager1 = findViewById(R.id.viewpager1);
         tabLayout1 = findViewById(R.id.tablayout1);
+        
+        changeLocation = findViewById(R.id.changeLocation);
+        
+        /*
+        refresh current location when change location is tapped.
+         */
+        
+        changeLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+        
+                updateLocation();
+            }
+        });
 
         //setCustomFontAndStyle(tabLayout1, 0);
         tabLayout1.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -49,6 +67,18 @@ public class Home extends AppCompatActivity {
         tabLayout1.addTab(tabLayout1.newTab().setText("Home"));
 
 
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(int tabId) {
+        
+                if(tabId == R.id.tab_message)
+                {
+                    // switch to messages fragment
+                    
+                }
+            }
+        });
+        
 //        Typeface mTypeface = Typeface.createFromAsset(getAssets(), "fonts/SF-Pro-Display-Bold.otf");
 //        ViewGroup vg = (ViewGroup) tabLayout1.getChildAt(0);
 //        int tabsCount = vg.getChildCount();
@@ -124,7 +154,11 @@ public class Home extends AppCompatActivity {
 
 
     }
-
+    
+    private void updateLocation() {
+    
+    
+    }
 
 //    private void setCustomFontAndStyle(TabLayout tabLayout, Integer position) {
 //

@@ -20,8 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:id="@+id/currentLocation"
         android:layout_gravity="center"
-        android:text="CHENNAI, INDIA"
+        android:text="DELHI, INDIA"
         android:textColor="#3b3b3b"
         android:textSize="12sp"/>
 
@@ -41,10 +42,6 @@
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:src="@drawable/ic_notification"/>
-
-
-
-
 
 
 </android.support.v7.widget.Toolbar>

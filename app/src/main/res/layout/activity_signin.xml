@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splaxe"
+    android:background="@drawable/back_si"
     tools:context="com.testlabic.datenearu.SignIn">
 
     <LinearLayout
