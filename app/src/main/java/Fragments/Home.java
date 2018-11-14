@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,7 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.locationUpdater;
 
 import adapter.TablayoutAdapter_Home;
@@ -45,6 +53,8 @@ public class Home extends Fragment {
          */
         
         changeLocation = rootView.findViewById(R.id.changeLocation);
+        
+        putValueInchangeLocation();
         
         changeLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +134,31 @@ public class Home extends Fragment {
         return rootView;
     }
     
+    private void putValueInchangeLocation() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo).child(Constants.uid).child("cityLabel");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        
+                if(dataSnapshot.getValue()!=null)
+                {
+                    String value = dataSnapshot.getValue(String.class);
+                    changeLocation.setText(value);
+                }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        putValueInchangeLocation();
+    }
     
     public void wrapTabIndicatorToTitle(TabLayout tabLayout, int externalMargin, int internalMargin) {
         View tabStrip = tabLayout.getChildAt(0);

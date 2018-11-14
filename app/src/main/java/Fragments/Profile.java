@@ -38,9 +38,10 @@ public class Profile extends Fragment {
     private ImageView displayImage;
     
     Integer inbox[]={R.drawable.ic_inbox,R.drawable.ic_like,R.drawable.ic_profile,R.drawable.ic_settings};
-    Integer arrow[]={R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp};
-    String txttrades[]={"My Questions","Interests","Edit profile","Settings"};
-    String txthistory[]={"Your questions for matches","Your interests","Change your profile details","Settings"};
+    Integer arrow[]={R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,
+            R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp};
+    String txttrades[]={"My Questions","Interests","About you","Settings"};
+    String txthistory[]={"Your questions for matches","Your interests","Tap to Edit","Settings"};
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

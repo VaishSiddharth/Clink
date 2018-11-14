@@ -2,7 +2,10 @@ package com.testlabic.datenearu.Utils;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -14,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,19 +31,26 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.R;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class locationUpdater extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
     
     private static final String TAG = locationUpdater.class.getSimpleName();
+    private static final int REQUEST_CHECK_SETTINGS = 47;
     private GoogleApiClient mGoogleApiClient;
     
     @Override
@@ -49,6 +60,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 assert manager != null;
                 if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    Log.e(TAG, "Displaying location settings...");
                     displayLocationSettingsRequest(locationUpdater.this);
                 }
                 FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(locationUpdater.this);
@@ -74,7 +86,8 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-    
+        
+        
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(2000);
         mLocationRequest.setFastestInterval(1500);
@@ -87,17 +100,59 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
-        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        final Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+       String uid =  FirebaseAuth.getInstance().getUid();
+        if(location!=null && location.getAccuracy()<100&& uid!=null) {
     
-        if(location!=null) {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                String cityName = addresses.get(0).getLocality();
+                String stateName = addresses.get(0).getAdminArea();
+                String countryName = addresses.get(0).getCountryName();
+                String cityLabel = cityName+", "+stateName+", "+countryName;
     
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.userInfo).child(uid);
+                
+                HashMap<String, Object> updateCityLabel = new HashMap<>();
+                updateCityLabel.put("cityLabel", cityLabel);
+                
+                reference.updateChildren(updateCityLabel);
+               // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
+               
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+           
+            
             LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
     
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.userInfo).child(FirebaseAuth.getInstance().getUid()).child(Constants.location);
+                    .child(Constants.userInfo).child(uid).child(Constants.location);
     
-            reference.setValue(latLong);
+            reference.setValue(latLong).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        finish();
+                        Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
+                        /*
+                        change the city label on main screen
+                         */
+                    }
+                }
+            });
         }
+        else
+            if(location!=null&&location.getAccuracy()>100)
+            {
+                Toast.makeText(locationUpdater.this, "Waiting for accurate location...", Toast.LENGTH_SHORT).show();
+            }
+        
     }
     
     private void displayLocationSettingsRequest(final Context context) {
@@ -121,6 +176,14 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+    
+                        try {
+                            // Show the dialog by calling startResolutionForResult(), and check the result
+                            // in onActivityResult().
+                            status.startResolutionForResult(locationUpdater.this, REQUEST_CHECK_SETTINGS);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.i(TAG, "PendingIntent unable to execute request.");
+                        }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
@@ -143,14 +206,33 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     
     @Override
     public void onLocationChanged(Location location) {
-    
-        LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
-    
-    
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.userInfo).child(FirebaseAuth.getInstance().getUid()).child(Constants.location);
-    
-        reference.setValue(latLong);
+        
+        String uid = FirebaseAuth.getInstance().getUid();
+        if(location!=null && location.getAccuracy()<100 && uid!=null) {
+        
+            LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
+        
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo).child(uid).child(Constants.location);
+        
+            reference.setValue(latLong).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        finish();
+                        /*
+                        change the city label on main screen
+                         */
+                    }
+                }
+            });
+        }
+        else
+        if(location!=null&&location.getAccuracy()>100)
+        {
+            Toast.makeText(locationUpdater.this, "Waiting for accurate location...", Toast.LENGTH_SHORT).show();
+        }
     }
     
     @Override

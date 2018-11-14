@@ -45,7 +45,7 @@ public class ProductPage extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        if (first == true) {
+        if (first) {
             f1.setBackgroundResource(R.drawable.ic_like_1);
             first = false;
         } else {

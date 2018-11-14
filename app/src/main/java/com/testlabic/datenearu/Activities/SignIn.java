@@ -192,7 +192,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     
     private void updateDatabaseWithUser(FirebaseUser mCurrentUser) {
         ModelUser user = new ModelUser(mCurrentUser.getDisplayName(), String.valueOf(mCurrentUser.getPhotoUrl())
-        , "20", null, null);
+        , "20", null, null, null);
         
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());

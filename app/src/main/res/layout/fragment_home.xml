@@ -35,8 +35,13 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="2dp"
                         android:text="DELHI, INDIA"
+                        android:textAllCaps="true"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="2dp"
                         android:textColor="#3b3b3b"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:layout_marginRight="2dp"
+                        android:layout_marginLeft="4dp" />
 
                     <ImageView
                         android:layout_width="95dp"

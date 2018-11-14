@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.testlabic.datenearu.R;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -33,6 +35,8 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         setContentView(R.layout.activity_questions);
         setupCardStackView();
         setupButton();
+        RelativeLayout rl = findViewById(R.id.rl);
+        rl.setEnabled(false);
     }
     
     @Override
@@ -56,10 +60,18 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     @Override
     public void onCardSwiped(Direction direction) {
         Log.d("CardStackView", "onCardSwiped: p = " + manager.getTopPosition() + ", d = " + direction);
-        if (manager.getTopPosition() == adapter.getItemCount() - 5) {
+       /* if (manager.getTopPosition() == adapter.getItemCount() - 5) {
             adapter.addSpots(createSpots());
             adapter.notifyDataSetChanged();
+        }*/
+    
+        TextView quesNumber = findViewById(R.id.quesNumber);
+        if(manager.getTopPosition()>=10)
+        {
+            finish();
         }
+        quesNumber.setText(String.valueOf((manager.getTopPosition()+1) + "/10"));
+        
     }
     
     @Override
@@ -70,6 +82,8 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     @Override
     public void onCardRewound() {
         Log.d("CardStackView", "onCardRewound: " + manager.getTopPosition());
+        TextView quesNumber = findViewById(R.id.quesNumber);
+        quesNumber.setText(String.valueOf((manager.getTopPosition()+1) + "/10"));
     }
     
     @Override
@@ -134,10 +148,12 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         manager.setSwipeThreshold(0.3f);
         manager.setMaxDegree(20.0f);
         manager.setDirections(Direction.HORIZONTAL);
-        manager.setCanScrollHorizontal(true);
-        manager.setCanScrollVertical(true);
+        
+       // manager.setCanScrollHorizontal(true);
+       // manager.setCanScrollVertical(true);
         adapter = new CardStackAdapter(this, createSpots());
         cardStackView = findViewById(R.id.card_stack_view);
+        cardStackView.setEnabled(false);
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
     }

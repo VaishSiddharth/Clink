@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.testlabic.datenearu.ProfileUtils.AboutEditor;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.R;
 
@@ -64,6 +65,20 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 }
             });
            
+        }
+        
+        if(position==2)
+        {
+            /*
+            Open about editor and make changes..
+             */
+            holder.profileItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, AboutEditor.class));
+                }
+            });
+            
         }
 
     }

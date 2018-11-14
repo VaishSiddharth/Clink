@@ -7,13 +7,25 @@ public class ModelUser {
     String age;
     LatLong location;
     String cityLocation;
+    String about;
+    String cityLabel;
     
-    public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation) {
+    public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
+    , String about) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
         this.location = location;
         this.cityLocation = cityLocation;
+        this.about = about;
+    }
+    
+    public String getAbout() {
+        return about;
+    }
+    
+    public String getCityLabel() {
+        return cityLabel;
     }
     
     public String getCityLocation() {
