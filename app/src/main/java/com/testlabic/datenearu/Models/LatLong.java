@@ -14,7 +14,11 @@ public class LatLong {
         return latitude;
     }
     
+    public LatLong() {
+    }
+    
     public Double getLongitude() {
+    
         return longitude;
     }
 }

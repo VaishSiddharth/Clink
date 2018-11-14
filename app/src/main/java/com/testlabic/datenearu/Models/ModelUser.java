@@ -10,6 +10,9 @@ public class ModelUser {
     String about;
     String cityLabel;
     
+    public ModelUser() {
+    }
+    
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
     , String about) {
         this.userName = userName;

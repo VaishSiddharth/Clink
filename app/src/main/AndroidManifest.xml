@@ -49,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Profile" />
-        <activity android:name=".ProductPage" />
+        <activity android:name=".ClickedUser" />
         <activity android:name=".Messages_fliply" />
         <activity android:name=".Search_Results_fliply" />
         <activity android:name=".Chat_fliply" />

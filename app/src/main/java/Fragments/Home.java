@@ -9,6 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +28,11 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.locationUpdater;
 
+import java.util.ArrayList;
+
+import adapter.Home_Adapter;
 import adapter.TablayoutAdapter_Home;
+import model.Home_Model;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,11 +43,18 @@ public class Home extends Fragment {
         // Required empty public constructor
     }
     
-    ViewPager viewPager1;
-    TabLayout tabLayout1;
-    
     TextView changeLocation;
     View rootView;
+    private Home_Adapter home_adapter;
+    private RecyclerView recyclerview;
+    private ArrayList<Home_Model> home_modelArrayList;
+    
+    Integer bitmap1[]={R.drawable.bitmap1,R.drawable.bitmap2,R.drawable.bitmap4,R.drawable.bitmap3};
+    Integer imagers[]={R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee};
+    String textdji[]={"Christine Miss","Marissa Williams","Teresa Duss","Rachel Moss"};
+    String textprice[]={"24 yrs","22 yrs","22 yrs","23 yrs"};
+    
+    
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,73 +79,29 @@ public class Home extends Fragment {
                 
             }
         });
-        viewPager1 = rootView.findViewById(R.id.viewpager1);
-        tabLayout1 = rootView.findViewById(R.id.tablayout1);
-        
-        tabLayout1.setTabGravity(TabLayout.GRAVITY_FILL);
-        
-        tabLayout1.addTab(tabLayout1.newTab().setText("All"));
-        tabLayout1.addTab(tabLayout1.newTab().setText("Cars"));
-        tabLayout1.addTab(tabLayout1.newTab().setText("Electronics"));
-        tabLayout1.addTab(tabLayout1.newTab().setText("Clothing"));
-        tabLayout1.addTab(tabLayout1.newTab().setText("MainActivity"));
-        
-        TablayoutAdapter_Home adapter = new TablayoutAdapter_Home(getFragmentManager(), tabLayout1.getTabCount());
-        viewPager1.setAdapter(adapter);
-        
-        wrapTabIndicatorToTitle(tabLayout1, 50, 50);
-        viewPager1.setOffscreenPageLimit(5);
-        viewPager1.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout1));
-        
-        for (int i = 0; i < tabLayout1.getTabCount(); i++) {
-            
-            TabLayout.Tab tab = tabLayout1.getTabAt(i);
-            if (tab != null) {
-                
-                TextView tabTextView = new TextView(getContext());
-                tab.setCustomView(tabTextView);
-                
-                tabTextView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                tabTextView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                
-                tabTextView.setText(tab.getText());
-                tabTextView.setTextColor(Color.parseColor("#acacac"));
-                
-                // First tab is the selected tab, so if i==0 then set BOLD typeface
-                if (i == 0) {
-                    tabTextView.setTypeface(null, Typeface.BOLD);
-                    tabTextView.setTextColor(Color.parseColor("#000000"));
-                }
-                
-            }
-            
-        }
-        
-        tabLayout1.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager1.setCurrentItem(tab.getPosition());
-                TextView text = (TextView) tab.getCustomView();
-                
-                text.setTextColor(Color.parseColor("#000000"));
-                text.setTypeface(null, Typeface.BOLD);
-            }
-            
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                TextView text = (TextView) tab.getCustomView();
-                text.setTextColor(Color.parseColor("#acacac"));
-                text.setTypeface(null, Typeface.NORMAL);
-                
-            }
-            
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            
-            }
-        });
+    
+        recyclerview = rootView.findViewById(R.id.recycler5);
+        setUpRecyclerView();
         
         return rootView;
+    }
+    
+    private void setUpRecyclerView() {
+      
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerview.setLayoutManager(layoutManager);
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+    
+        home_modelArrayList = new ArrayList<>();
+    
+        for (int i = 0; i < bitmap1.length; i++) {
+            Home_Model view1 = new Home_Model(bitmap1[i],imagers[i],textdji[i],textprice[i]);
+            home_modelArrayList.add(view1);
+        }
+        home_adapter = new Home_Adapter(getContext(),home_modelArrayList);
+        recyclerview.setAdapter(home_adapter);
+    
+        
     }
     
     private void putValueInchangeLocation() {
@@ -160,47 +130,5 @@ public class Home extends Fragment {
         putValueInchangeLocation();
     }
     
-    public void wrapTabIndicatorToTitle(TabLayout tabLayout, int externalMargin, int internalMargin) {
-        View tabStrip = tabLayout.getChildAt(0);
-        if (tabStrip instanceof ViewGroup) {
-            ViewGroup tabStripGroup = (ViewGroup) tabStrip;
-            int childCount = ((ViewGroup) tabStrip).getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View tabView = tabStripGroup.getChildAt(i);
-                //set minimum width to 0 for instead for small texts, indicator is not wrapped as expected
-                tabView.setMinimumWidth(0);
-                // set padding to 0 for wrapping indicator as title
-                tabView.setPadding(0, tabView.getPaddingTop(), 0, tabView.getPaddingBottom());
-                // setting custom margin between tabs
-                if (tabView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                    ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) tabView.getLayoutParams();
-                    if (i == 0) {
-                        // left
-                        settingMargin(layoutParams, externalMargin, internalMargin);
-                    } else if (i == childCount - 1) {
-                        // right
-                        settingMargin(layoutParams, internalMargin, externalMargin);
-                    } else {
-                        // internal
-                        settingMargin(layoutParams, internalMargin, internalMargin);
-                    }
-                }
-            }
-            
-            tabLayout.requestLayout();
-        }
-    }
-    
-    private void settingMargin(ViewGroup.MarginLayoutParams layoutParams, int start, int end) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            layoutParams.setMarginStart(start);
-            layoutParams.setMarginEnd(end);
-            layoutParams.leftMargin = start;
-            layoutParams.rightMargin = end;
-        } else {
-            layoutParams.leftMargin = start;
-            layoutParams.rightMargin = end;
-        }
-    }
     
 }

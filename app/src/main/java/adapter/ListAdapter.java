@@ -12,7 +12,7 @@ import com.testlabic.datenearu.Chat_fliply;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Login;
 import com.testlabic.datenearu.Messages_fliply;
-import com.testlabic.datenearu.ProductPage;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Profile;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Search_Results_fliply;
@@ -60,7 +60,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     Intent i = new Intent(context, MainActivity.class);
                     context.startActivity(i);}
                 if(position==3){
-                    Intent i = new Intent(context, ProductPage.class);
+                    Intent i = new Intent(context, ClickedUser.class);
                     context.startActivity(i);}
                 if(position==4){
                     Intent i = new Intent(context, Chat_fliply.class);

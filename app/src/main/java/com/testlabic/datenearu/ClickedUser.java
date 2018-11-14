@@ -1,0 +1,102 @@
+package com.testlabic.datenearu;
+
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.Html;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.Utils.Constants;
+
+import adapter.View_Pager_Adapter;
+import me.relex.circleindicator.CircleIndicator;
+
+
+public class ClickedUser extends AppCompatActivity implements View.OnClickListener {
+
+
+    ImageView f1;
+    boolean first = true;
+    
+    private TextView name, about, age;
+    private ViewPager viewPager;
+    private CircleIndicator circleIndicator;
+    private View_Pager_Adapter view_pager_adapter;
+    private String clickedUid;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_clicked_user);
+
+
+        f1 = findViewById(R.id.f1);
+        f1.setOnClickListener(this);
+        clickedUid = getIntent().getStringExtra(Constants.clickedUid);
+
+        setUpDetails();
+        
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        circleIndicator = (CircleIndicator) findViewById(R.id.circleindicator);
+        name = findViewById(R.id.name);
+        about = findViewById(R.id.about);
+        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager());
+        viewPager.setAdapter(view_pager_adapter);
+        circleIndicator.setViewPager(viewPager);
+        view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
+
+
+    }
+    
+    private void setUpDetails() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(clickedUid);
+        
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null)
+                {
+                    ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                    if (user != null && user.getUserName() != null)
+                        name.setText(user.getUserName());
+    
+                    if (user != null && user.getAbout() != null) {
+                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                      about.setText(Html.fromHtml(user.getAbout(), Html.FROM_HTML_MODE_COMPACT));
+                    } else {
+                    about.setText(Html.fromHtml(user.getAbout()));
+                     }
+                    }
+                }
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+    }
+    
+    @Override
+    public void onClick(View view) {
+        if (first) {
+            f1.setBackgroundResource(R.drawable.ic_like_1);
+            first = false;
+        } else {
+            f1.setBackgroundResource(R.drawable.ic_like_heart_outline);
+            first = true;
+        }
+    }
+}
