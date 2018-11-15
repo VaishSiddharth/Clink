@@ -107,7 +107,7 @@
                     android:layout_marginBottom="15dp"
                     android:text="@string/match_instruction"
                     android:textColor="#3b3b3b"
-                    android:textSize="12.3sp" />
+                    android:textSize="13sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                         android:id="@+id/attempt_match"
                         android:text="Attempt Match"
                         android:textColor="#ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
 
                 </LinearLayout>

@@ -1,31 +1,35 @@
 package com.testlabic.datenearu.QuestionUtils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.testlabic.datenearu.R;
 
 import java.util.List;
 
 public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.ViewHolder> {
-
+    
+    private static final String TAG = CardStackAdapter.class.getSimpleName();
     private LayoutInflater inflater;
-    private List<Spot> spots;
+    private List<ModelQuestion> questions;
     private Boolean clickedOptA = false,
             clickedOptB = false, clickedOptC = false, clickedOptD  = false;
     private Context context;
+    private static int score;
+    private int currentPos = -1;
+    private boolean subOnce = false;
+    boolean selectedSomethingElse = false;
     
-    public CardStackAdapter(Context context, List<Spot> spots) {
+    public CardStackAdapter(Context context, List<ModelQuestion> questions) {
         this.inflater = LayoutInflater.from(context);
-        this.spots = spots;
+        this.questions = questions;
         this.context = context;
     }
 
@@ -36,13 +40,22 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        /*Spot spot = spots.get(position);
-        holder.name.setText(spot.name);
-        holder.city.setText(spot.city);
-        Glide.with(holder.image)
-                .load(spot.url)
-                .into(holder.image);*/
+    public void onBindViewHolder(@NonNull final ViewHolder holder,  int position) {
+        ModelQuestion question = questions.get(position);
+        holder.question.setText(question.getQuestion());
+        holder.optA.setText(question.getOptA());
+        holder.optB.setText(question.getOptB());
+        holder.optC.setText(question.getOptC());
+        holder.optD.setText(question.getOptD());
+        
+        /*
+        Uncolor all options explicitly
+         */
+        
+        unColorOpt(holder.optB);
+        unColorOpt(holder.optA);
+        unColorOpt(holder.optC);
+        unColorOpt(holder.optD);
         
         holder.optA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +65,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                  */
                 if(!clickedOptA)
                 {
-                    colorOpt(holder.optA);
+                    colorOpt(holder.optA, holder.getAdapterPosition());
                     unColorOpt(holder.optB);
                     unColorOpt(holder.optC);
                     unColorOpt(holder.optD);
@@ -80,7 +93,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                  */
                 if(!clickedOptB)
                 {
-                    colorOpt(holder.optB);
+                    colorOpt(holder.optB, holder.getAdapterPosition());
                     unColorOpt(holder.optA);
                     unColorOpt(holder.optC);
                     unColorOpt(holder.optD);
@@ -108,7 +121,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                  */
                 if(!clickedOptC)
                 {
-                    colorOpt(holder.optC);
+                    colorOpt(holder.optC, holder.getAdapterPosition());
                     unColorOpt(holder.optB);
                     unColorOpt(holder.optA);
                     unColorOpt(holder.optD);
@@ -136,7 +149,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                  */
                 if(!clickedOptD)
                 {
-                    colorOpt(holder.optD);
+                    colorOpt(holder.optD, holder.getAdapterPosition());
                     unColorOpt(holder.optB);
                     unColorOpt(holder.optC);
                     unColorOpt(holder.optA);
@@ -166,22 +179,55 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
        
     }
     
-    private void colorOpt(TextView opt) {
+    private void colorOpt(TextView opt, int position) {
+    
+       
+        
+        if(currentPos!=position)
+            subOnce = false;
+        
         opt.setTextColor(context.getResources().getColor(R.color.white));
         opt.setBackground(context.getResources().getDrawable(R.drawable.solid_color_background));
     
         Log.e("CardStackAdapter", "Colored! opt "+opt.getText().toString());
+        
+        String optedOption = opt.getText().toString();
+        
+        /*
+        Match option and calculate marks;
+         */
+        
+        if(optedOption.equals(questions.get(position).correctOption)) {
+    
+          
+            if(currentPos!=position|| selectedSomethingElse)
+            score++;
+            currentPos = position;
+            subOnce = false;
+        }else
+        {
+           
+            if(currentPos==position&!subOnce) {
+                score--;
+                subOnce = true;
+                selectedSomethingElse = true;
+            }
+        }
+        
+        Log.e(TAG, "Score is " + score*10+"%");
+        
+        if(score>=8) {
+            Intent i = new Intent(context, MatchSuccess.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+        }
     }
     
     @Override
     public int getItemCount() {
-        return spots.size();
+        return questions.size();
     }
-
-    public void addSpots(List<Spot> spots) {
-        this.spots.addAll(spots);
-    }
-
+    
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView optA;
         TextView optB;

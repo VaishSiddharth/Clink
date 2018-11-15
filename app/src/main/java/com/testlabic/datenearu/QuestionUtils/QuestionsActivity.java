@@ -1,6 +1,8 @@
 package com.testlabic.datenearu.QuestionUtils;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,7 +13,15 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -27,12 +37,15 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     
     private CardStackLayoutManager manager;
     private CardStackAdapter adapter;
+    private GoogleProgressBar progressBar;
     private CardStackView cardStackView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
+        progressBar = findViewById(R.id.google_progress);
+        progressBar.setVisibility(View.VISIBLE);
         setupCardStackView();
         setupButton();
         RelativeLayout rl = findViewById(R.id.rl);
@@ -147,30 +160,71 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         manager.setScaleInterval(0.95f);
         manager.setSwipeThreshold(0.3f);
         manager.setMaxDegree(20.0f);
-        manager.setDirections(Direction.HORIZONTAL);
-        
+        manager.setDirections(Direction.FREEDOM);
+        downloadQuestions();
        // manager.setCanScrollHorizontal(true);
        // manager.setCanScrollVertical(true);
-        adapter = new CardStackAdapter(this, createSpots());
-        cardStackView = findViewById(R.id.card_stack_view);
-        cardStackView.setEnabled(false);
-        cardStackView.setLayoutManager(manager);
-        cardStackView.setAdapter(adapter);
+       
     }
     
-    private List<Spot> createSpots() {
-        List<Spot> spots = new ArrayList<>();
-        spots.add(new Spot("Yasaka Shrine", "Kyoto", "https://source.unsplash.com/Xq1ntWruZQI/600x800"));
-        spots.add(new Spot("Fushimi Inari Shrine", "Kyoto", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
-        spots.add(new Spot("Bamboo Forest", "Kyoto", "https://source.unsplash.com/buF62ewDLcQ/600x800"));
-        spots.add(new Spot("Brooklyn Bridge", "New York", "https://source.unsplash.com/THozNzxEP3g/600x800"));
-        spots.add(new Spot("Empire State Building", "New York", "https://source.unsplash.com/USrZRcRS2Lw/600x800"));
-        spots.add(new Spot("The statue of Liberty", "New York", "https://source.unsplash.com/PeFk7fzxTdk/600x800"));
-        spots.add(new Spot("Louvre Museum", "Paris", "https://source.unsplash.com/LrMWHKqilUw/600x800"));
-        spots.add(new Spot("Eiffel Tower", "Paris", "https://source.unsplash.com/HN-5Z6AmxrM/600x800"));
-        spots.add(new Spot("Big Ben", "London", "https://source.unsplash.com/CdVAUADdqEc/600x800"));
-        spots.add(new Spot("Great Wall of China", "China", "https://source.unsplash.com/AWh9C-QjhE4/600x800"));
-        return spots;
+    private void downloadQuestions() {
+        final List<ModelQuestion> questions = new ArrayList<>();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.userInfo).child(Constants.uid)
+                                .child(Constants.questions);
+        
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+                if(dataSnapshot.getValue()!=null)
+                {
+                    ModelQuestion item = dataSnapshot.getValue(ModelQuestion.class);
+                    if(item!=null)
+                        questions.add(item);
+                }
+            }
+    
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+            }
+    
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                /*
+                populate adapter...
+                 */
+                progressBar.setVisibility(View.GONE);
+                adapter = new CardStackAdapter(getApplicationContext(), questions);
+                cardStackView = findViewById(R.id.card_stack_view);
+                cardStackView.setEnabled(false);
+                cardStackView.setLayoutManager(manager);
+                cardStackView.setAdapter(adapter);
+                
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
     }
     
 }

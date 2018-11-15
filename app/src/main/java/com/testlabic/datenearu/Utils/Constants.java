@@ -7,4 +7,5 @@ public class Constants {
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();
     public static String clickedUid = "clickedUid";
+    public static String questions = "questions";
 }

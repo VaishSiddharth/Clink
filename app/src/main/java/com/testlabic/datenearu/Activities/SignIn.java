@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.Activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -40,6 +41,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -277,6 +279,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         }
     }
     
+    
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -315,6 +319,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 
                                 ManualFix();
                                 
+                                
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
@@ -323,10 +328,17 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 //   checkAndUpdateUserInfo(user);
                                 FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                                 if (isnewUser) {
+                                    
+                                   
+                                    
                                     /*
                                     move to setup the account/profile
                                      */
-                                    updateDatabaseWithUser(mCurrentUser);
+                                    
+                                    if (mCurrentUser != null) {
+                                        updateDatabaseWithUser(mCurrentUser);
+                                        uploadQuestions(mCurrentUser.getUid());
+                                    }
                                     startActivity(new Intent(SignIn.this, MainActivity.class));
                                     finish();
                                     
@@ -348,6 +360,18 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                         }
                     });
         }
+    }
+    
+    private void uploadQuestions(String uid) {
+       
+        for(int i = 0; i<10; i++) {
+            ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bannana", "Apple");
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo).child(uid).child(Constants.questions)
+                    .child(String.valueOf(i));
+                reference.setValue(question);
+        }
+        
     }
     
     @Override

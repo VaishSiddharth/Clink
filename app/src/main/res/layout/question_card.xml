@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardUseCompatPadding="true"
+    android:background="#EE7600"
     card_view:cardBackgroundColor="@android:color/white"
     card_view:cardCornerRadius="8dp">
 
@@ -14,7 +15,6 @@
         android:layout_height="match_parent">
 
         <customfonts.MyTextView_SF_Pro_Display_Light
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -23,11 +23,12 @@
             android:layout_marginTop="34dp"
             android:gravity="center"
             android:padding="16dp"
+            android:visibility="visible"
             android:text="@string/question_instruction"
             android:textSize="14sp" />
 
 
-        <customfonts.MyTextView_SF_Pro_Display_Semibold
+        <customfonts.MyTextView_SF_Pro_Display_Medium
             android:id="@+id/questionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

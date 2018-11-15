@@ -61,7 +61,7 @@ public class Home extends Fragment {
     
     Integer bitmap1[]={R.drawable.bitmap1,R.drawable.bitmap2,R.drawable.bitmap4,R.drawable.bitmap3};
     Integer imagers[]={R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee};
-    String textdji[]={"Christine Miss","Marissa Williams","Teresa Duss","Rachel Moss"};
+    String textdji[]={"Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss"};
     String textprice[]={"24 yrs","22 yrs","22 yrs","23 yrs"};
     
     
@@ -80,7 +80,7 @@ public class Home extends Fragment {
         
         putValueInchangeLocation();
         
-        testApiCall();
+        //testApiCall();
         
         changeLocation.setOnClickListener(new View.OnClickListener() {
             @Override

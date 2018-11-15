@@ -1,5 +1,9 @@
 package com.testlabic.datenearu.Models;
 
+import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
+
+import java.util.ArrayList;
+
 public class ModelUser {
     
     String userName;
@@ -9,6 +13,7 @@ public class ModelUser {
     String cityLocation;
     String about;
     String cityLabel;
+    ArrayList<ModelQuestion> questions;
     
     public ModelUser() {
     }
@@ -21,6 +26,10 @@ public class ModelUser {
         this.location = location;
         this.cityLocation = cityLocation;
         this.about = about;
+    }
+    
+    public ArrayList<ModelQuestion> getQuestions() {
+        return questions;
     }
     
     public String getAbout() {

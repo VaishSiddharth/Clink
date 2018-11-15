@@ -6,13 +6,22 @@ public class ModelQuestion {
     String optB;
     String optC;
     String optD;
+    String correctOption;
     
-    public ModelQuestion(String question, String optA, String optB, String optC, String optD) {
+    public ModelQuestion() {
+    }
+    
+    public ModelQuestion(String question, String optA, String optB, String optC, String optD, String correctOption) {
         this.question = question;
         this.optA = optA;
         this.optB = optB;
         this.optC = optC;
         this.optD = optD;
+        this.correctOption = correctOption;
+    }
+    
+    public String getCorrectOption() {
+        return correctOption;
     }
     
     public String getQuestion() {

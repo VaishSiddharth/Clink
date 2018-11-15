@@ -72,7 +72,8 @@
         <activity
             android:name=".Utils.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ProfileUtils.AboutEditor"></activity>
+        <activity android:name=".ProfileUtils.AboutEditor" />
+        <activity android:name=".QuestionUtils.MatchSuccess"></activity>
     </application>
 
 </manifest>

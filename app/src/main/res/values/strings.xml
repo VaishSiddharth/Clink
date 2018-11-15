@@ -12,5 +12,6 @@
         <i>For free users, there is only one chance in a day for three days.\n\n
     Go premium to unleash!</i></string>
     <string name="question_instruction">Tap on an option and swipe the card for next question!</string>
+    <string name="matchSuccess"><b>Match Success!</b>\nCongrats we believe you will be make it work!, We will notify the other person and you can then connect if she agrees!</string>
 
 </resources>
