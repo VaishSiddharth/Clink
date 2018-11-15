@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import Fragments.ClickedUserImage1;
+import Fragments.ClickedUserImage2;
 import fragment.Product_Fragment;
 
 public class View_Pager_Adapter extends FragmentStatePagerAdapter {
@@ -18,17 +20,14 @@ public class View_Pager_Adapter extends FragmentStatePagerAdapter {
         switch (position)
         {
             case 0:
-                Product_Fragment tab1 = new Product_Fragment();
+                ClickedUserImage1 tab1 = new ClickedUserImage1();
                 return tab1;
             case 1:
                 Product_Fragment tab2 = new Product_Fragment();
                 return  tab2;
             case 2:
-                Product_Fragment tab3 = new Product_Fragment();
+                ClickedUserImage2 tab3 = new ClickedUserImage2();
                 return tab3;
-            case 3:
-                Product_Fragment tab4 = new Product_Fragment();
-                return tab4;
 
                 default:
                     return null;
@@ -38,6 +37,6 @@ public class View_Pager_Adapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 }

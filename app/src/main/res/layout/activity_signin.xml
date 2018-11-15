@@ -46,6 +46,7 @@
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
                 android:paddingTop="10dp"
+                android:id="@+id/facebook"
                 android:paddingBottom="10dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rect_white"
@@ -63,7 +64,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="1dp"
                     android:textSize="12sp"
-                    android:id="@+id/facebook"
+
                     android:text="Continue with Facebook"
                     android:textColor="#3b3b3b" />
             </LinearLayout>
@@ -75,6 +76,7 @@
                 android:layout_marginTop="22dp"
                 android:paddingLeft="38dp"
                 android:paddingRight="38dp"
+                android:id="@+id/gmail"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:background="@drawable/rect_white"
@@ -92,7 +94,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="1dp"
                     android:textSize="12sp"
-                    android:id="@+id/gmail"
+
                     android:text="Continue with Google"
                     android:textColor="#3b3b3b" />
 

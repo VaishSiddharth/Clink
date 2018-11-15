@@ -11,5 +11,6 @@
     <string name="match_instruction">Looks interesting?\n\nYou can attempt match to know if you would go togethor.\n\n
         <i>For free users, there is only one chance in a day for three days.\n\n
     Go premium to unleash!</i></string>
+    <string name="question_instruction">Tap on an option and swipe the card for next question!</string>
 
 </resources>

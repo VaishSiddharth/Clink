@@ -18,7 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +45,9 @@ import model.Home_Model;
  * A simple {@link Fragment} subclass.
  */
 public class Home extends Fragment {
+    
+    private static final String TAG = Home.class.getSimpleName();
+    private String facebookUserId;
     
     public Home() {
         // Required empty public constructor
@@ -70,11 +80,12 @@ public class Home extends Fragment {
         
         putValueInchangeLocation();
         
+        testApiCall();
+        
         changeLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-    
-                Log.e("Home", "click received ");
+                
                 startActivity(new Intent(getActivity(), locationUpdater.class));
                 
             }
@@ -85,6 +96,39 @@ public class Home extends Fragment {
         
         return rootView;
     }
+    
+    private void testApiCall() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+               /* make the API call */
+                Bundle params  = new Bundle();
+                params.putString("fields","images");
+    
+                for (UserInfo profile : user.getProviderData()) {
+                    // check if the provider id matches "facebook.com"
+                    if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+                       
+                        facebookUserId = profile.getUid();
+                        Log.e(TAG, "The f id "+facebookUserId);
+                    }
+                }
+    
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/"+facebookUserId+"/photos",
+                        params,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                /* handle the result */
+                                /* You can parse this response using Json  */
+                                Log.e(TAG, "Response is "+ response);
+                            }
+                        }
+                ).executeAsync();
+            }
+        }
+    
     
     private void setUpRecyclerView() {
       
@@ -105,29 +149,32 @@ public class Home extends Fragment {
     }
     
     private void putValueInchangeLocation() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo).child(Constants.uid).child("cityLabel");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        
-                if(dataSnapshot.getValue()!=null)
-                {
-                    String value = dataSnapshot.getValue(String.class);
-                    changeLocation.setText(value);
+    
+        if (Constants.uid != null) {
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo).child(Constants.uid).child("cityLabel");
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                    if (dataSnapshot.getValue() != null) {
+                        String value = dataSnapshot.getValue(String.class);
+                        changeLocation.setText(value);
+                    }
                 }
-            }
-    
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-        
-            }
-        });
+            
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+        }
     }
-    
     @Override
     public void onResume() {
-        super.onResume();
+      
         putValueInchangeLocation();
+        super.onResume();
+        Log.e(TAG, "On resume called!");
     }
     
     

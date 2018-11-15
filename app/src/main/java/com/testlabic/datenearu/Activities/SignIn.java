@@ -2,6 +2,7 @@ package com.testlabic.datenearu.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.testlabic.datenearu.Models.ModelUser;
@@ -47,8 +51,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
-    TextView googleSignIn;
-    TextView facebookSignIn;
+    LinearLayout googleSignIn;
+    LinearLayout facebookSignIn;
     ProgressDialog progressDialog;
     CallbackManager callbackManager;
     LoginButton loginButton;
@@ -60,9 +64,9 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference();
         mAuth = FirebaseAuth.getInstance();
-    
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
         
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
@@ -117,7 +121,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
              */
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions("email", "public_profile", "photos");
         // If using in a fragment
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -154,6 +158,12 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            
+                            /*
+                            Call manual fix to update the photo of user
+                             */
+                            
+                            ManualFix();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             Boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
@@ -192,7 +202,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     
     private void updateDatabaseWithUser(FirebaseUser mCurrentUser) {
         ModelUser user = new ModelUser(mCurrentUser.getDisplayName(), String.valueOf(mCurrentUser.getPhotoUrl())
-        , "20", null, null, null);
+                , "20", null, null, null);
         
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
@@ -203,6 +213,68 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    
+    private void ManualFix() {
+    
+        /*
+        update user's profile first
+         */
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+                Log.e(TAG, "THe providerID is " + user.getProviderId());
+                if (user.getProviderId().equals("google.com")) {
+                    String modifiedImageUrl = null;
+                    assert currentUser != null;
+                    if (currentUser.getPhotoUrl() != null) {
+                        String url = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString();
+                        modifiedImageUrl = url.replace("/s96-c/", "/s300-c/");
+                    }
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setPhotoUri(Uri.parse(modifiedImageUrl))
+                            .build();
+                    currentUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.e(TAG, "User profile updated.");
+                                    }
+                                }
+                            });
+                } else if (user.getProviderId().equals("facebook.com")) {
+                    String modifiedImageUrl = null;
+                    String facebookUserId = "";
+                    // find the Facebook profile and get the user's id
+                    for (UserInfo profile : currentUser.getProviderData()) {
+                        // check if the provider id matches "facebook.com"
+                        if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+                            facebookUserId = profile.getUid();
+                        }
+                    }
+                    // construct the URL to the profile picture, with a custom height
+                    // alternatively, use '?type=small|medium|large' instead of ?height=
+                    String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+                    if (currentUser.getPhotoUrl() != null) {
+                        modifiedImageUrl = photoUrl;
+                        Log.e(TAG, "The photo url is " + modifiedImageUrl);
+                    }
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setPhotoUri(Uri.parse(modifiedImageUrl))
+                            .build();
+                    currentUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.e(TAG, "User profile updated.");
+                                    }
+                                }
+                            });
+                }
+            }
+        }
     }
     
     @Override
@@ -236,6 +308,13 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                    
+                                    /*
+                            Call manual fix to update the photo of user
+                             */
+                                
+                                ManualFix();
+                                
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
                                 FirebaseUser user = mAuth.getCurrentUser();

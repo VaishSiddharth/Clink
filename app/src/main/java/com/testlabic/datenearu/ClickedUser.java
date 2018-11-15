@@ -1,5 +1,6 @@
 package com.testlabic.datenearu;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.Utils.Constants;
 
 import adapter.View_Pager_Adapter;
@@ -33,6 +35,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private CircleIndicator circleIndicator;
     private View_Pager_Adapter view_pager_adapter;
     private String clickedUid;
+    private TextView attemptMatch;
 
 
     @Override
@@ -45,10 +48,12 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
 
+        if(clickedUid!=null)
         setUpDetails();
         
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         circleIndicator = (CircleIndicator) findViewById(R.id.circleindicator);
+        attemptMatch = findViewById(R.id.attempt_match);
         name = findViewById(R.id.name);
         about = findViewById(R.id.about);
         view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager());
@@ -56,7 +61,12 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         circleIndicator.setViewPager(viewPager);
         view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
 
-
+        attemptMatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ClickedUser.this, QuestionsActivity.class));
+            }
+        });
     }
     
     private void setUpDetails() {

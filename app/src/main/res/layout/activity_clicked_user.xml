@@ -162,6 +162,7 @@
                         android:background="@drawable/rect_blue"
                         android:gravity="center"
                         android:padding="8dp"
+                        android:id="@+id/attempt_match"
                         android:text="Attempt Match"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
