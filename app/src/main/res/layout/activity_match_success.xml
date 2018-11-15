@@ -7,11 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".QuestionUtils.MatchSuccess">
 
-    <customfonts.MyTextView_SF_Pro_Display_Medium
+    <customfonts.MyTextView_SF_Pro_Display_Light
         android:layout_width="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/matchSuccess"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:layout_margin="16dp"
+        android:padding="16dp"
         android:layout_height="wrap_content" />
 
 </RelativeLayout>

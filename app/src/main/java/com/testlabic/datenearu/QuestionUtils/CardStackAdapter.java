@@ -25,7 +25,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     private static int score;
     private int currentPos = -1;
     private boolean subOnce = false;
-    boolean selectedSomethingElse = false;
+    private boolean selectedSomethingElse = false;
     
     public CardStackAdapter(Context context, List<ModelQuestion> questions) {
         this.inflater = LayoutInflater.from(context);
@@ -47,7 +47,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         holder.optB.setText(question.getOptB());
         holder.optC.setText(question.getOptC());
         holder.optD.setText(question.getOptD());
-        
+        holder.inst.setText(context.getResources().getString(R.string.question_instruction));
         /*
         Uncolor all options explicitly
          */
@@ -56,6 +56,10 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         unColorOpt(holder.optA);
         unColorOpt(holder.optC);
         unColorOpt(holder.optD);
+                clickedOptA = false;
+                clickedOptB = false;
+                clickedOptC = false;
+                clickedOptD  = false;
         
         holder.optA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,6 +239,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         TextView optD;
         TextView question;
         View completeItem;
+        TextView inst;
         ViewHolder(View view) {
             super(view);
             this.optA = view.findViewById(R.id.optA);
@@ -242,7 +247,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             this.optC = view.findViewById(R.id.optC);
             this.optD = view.findViewById(R.id.optD);
             this.question = view.findViewById(R.id.questionText);
-    
+            this.inst = view.findViewById(R.id.instruction);
             this.completeItem = view;
         }
     }
