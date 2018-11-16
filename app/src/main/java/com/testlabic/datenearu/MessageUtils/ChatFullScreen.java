@@ -1,15 +1,15 @@
-package fragment;
+package com.testlabic.datenearu.MessageUtils;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -17,42 +17,37 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.testlabic.datenearu.MessageUtils.MessagesAdapter;
 import com.testlabic.datenearu.Models.ModelMessage;
-import com.testlabic.datenearu.QuestionUtils.CardStackAdapter;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import adapter.AllAdapter;
-import model.AllModel;
-
-/**
- * Created by wolfsoft4 on 21/9/18.
- */
-
-public class Archived extends Fragment {
-    private MessagesAdapter adapter;
-    private RecyclerView recyclerview;
+public class ChatFullScreen extends AppCompatActivity {
     
-    @Nullable
+    String chatName;
+    RecyclerView recyclerview;
+    ChatAdapter adapter;
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recycler_all, container, false);
-        
-        recyclerview = (view).findViewById(R.id.recycler4);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat_full_screen);
+        chatName = getIntent().getStringExtra(Constants.chatName);
+        TextView chatter = findViewById(R.id.chatName);
+        recyclerview = findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
-        
+        ImageView bk = findViewById(R.id.back);
+        bk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        chatter.setText(chatName);
         downloadRequests();
-        return view;
-        
     }
-    
     private void downloadRequests() {
         final ArrayList<ModelMessage> requests = new ArrayList<>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
@@ -97,7 +92,7 @@ public class Archived extends Fragment {
                 populate adapter...
                  */
                 
-                adapter = new MessagesAdapter(getContext(), requests);
+                adapter = new ChatAdapter(ChatFullScreen.this, requests);
                 recyclerview.setAdapter(adapter);
             }
             

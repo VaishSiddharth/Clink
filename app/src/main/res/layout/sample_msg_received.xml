@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/receivingImage"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+             />
+
+        <customfonts.MyTextView_SF_Pro_Display_Semibold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rect_white_border"
+            android:lineSpacingExtra="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="13dp"
+            android:paddingRight="25dp"
+            android:paddingBottom="13dp"
+            android:text="----------"
+            android:id="@+id/receivingText"
+            android:textColor="#3b3b3b"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <customfonts.TextViewSFProDisplayRegular
+        android:id="@+id/receivingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="8dp"
+        android:text="--"
+        android:textColor="#a9a9b0"
+        android:textSize="10sp" />
+</LinearLayout>

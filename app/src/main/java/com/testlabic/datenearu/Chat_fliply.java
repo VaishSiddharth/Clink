@@ -34,22 +34,8 @@ public class Chat_fliply extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         tabLayout.addTab(tabLayout.newTab().setText("All"));
-        tabLayout.addTab(tabLayout.newTab().setText("Archived"));
-        tabLayout.addTab(tabLayout.newTab().setText("Closed"));
-
-//        Typeface mTypeface = Typeface.createFromAsset(getAssets(), "fonts/SF-Pro-Display-Bold.otf");
-//        ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
-//        int tabsCount = vg.getChildCount();
-//        for (int j = 0; j < tabsCount; j++) {
-//            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
-//            int tabChildsCount = vgTab.getChildCount();
-//            for (int i = 0; i < tabChildsCount; i++) {
-//                View tabViewChild = vgTab.getChildAt(i);
-//                if (tabViewChild instanceof TextView) {
-//                    ((TextView) tabViewChild).setTypeface(mTypeface, Typeface.BOLD);
-//                }
-//            }
-//        }
+        tabLayout.addTab(tabLayout.newTab().setText("Requests"));
+      //  tabLayout.addTab(tabLayout.newTab().setText("Closed"));
 
 
         TablayoutAdapter adapter = new TablayoutAdapter(getSupportFragmentManager(), tabLayout.getTabCount());

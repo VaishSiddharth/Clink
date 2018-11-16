@@ -8,6 +8,16 @@ public class ModelQuestion {
     String optD;
     String correctOption;
     
+    public String getSelectedOption() {
+        return selectedOption;
+    }
+    
+    public void setSelectedOption(String selectedOption) {
+        this.selectedOption = selectedOption;
+    }
+    
+    String selectedOption;
+    
     public ModelQuestion() {
     }
     

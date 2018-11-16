@@ -16,7 +16,8 @@
     <customfonts.MyTextView_SF_Pro_Display_Semibold
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Keith Mills"
+        android:text="----"
+        android:id="@+id/chatName"
         android:layout_gravity="center"
         android:textSize="13sp"
         android:textColor="#4a4a4a"/>

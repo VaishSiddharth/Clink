@@ -74,7 +74,8 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".ProfileUtils.AboutEditor" />
         <activity android:name=".QuestionUtils.MatchSuccess" />
-        <activity android:name=".QuestionUtils.MatchCalculator"></activity>
+        <activity android:name=".QuestionUtils.MatchCalculator" />
+        <activity android:name=".MessageUtils.ChatFullScreen"></activity>
     </application>
 
 </manifest>

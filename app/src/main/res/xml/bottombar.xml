@@ -1,4 +1,4 @@
-<tabs>
+<tabs xmlns:app="http://schemas.android.com/apk/res-auto">
     <tab
         id="@+id/tab_home"
         icon="@drawable/ic_home"
@@ -8,20 +8,16 @@
     <tab
         id="@+id/tab_message"
         icon="@drawable/ic_message_square"
+        barColorWhenSelected="#fff"
         inActiveColor="#4De9e9e9"
         activeColor="#118df0"/>
 
-    <tab
+  <!--  <tab
         id="@+id/tab_photo"
         icon="@drawable/ic_camera"
         inActiveColor="#4De9e9e9"
         activeColor="#118df0"/>
-
-    <tab
-        id="@+id/tab_tag"
-        icon="@drawable/ic_tag"
-        inActiveColor="#4De9e9e9"
-        activeColor="#118df0"/>
+        -->
 
     <tab
         id="@+id/tab_profile"

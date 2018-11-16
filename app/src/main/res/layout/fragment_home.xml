@@ -53,12 +53,28 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginRight="20dp"
+                    android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/notification"
                     android:src="@drawable/ic_notification" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10"
+                        android:visibility="gone"
+                        android:id="@+id/notifCount"
+                        android:textColor="#FFF"
+                        android:textSize="6dp"
+                        android:textStyle="bold"
+                        android:background="@drawable/badge_circle"/>
+                </RelativeLayout>
 
 
             </android.support.v7.widget.Toolbar>
@@ -78,7 +94,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:padding="4dp"
-                    android:text="What are you looking for?"
+                    android:hint="What are you looking for?"
                     android:textColor="#a9a9b0"
                     android:textSize="12sp" />
 

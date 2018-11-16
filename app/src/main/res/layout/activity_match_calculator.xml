@@ -11,8 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:id="@+id/statusMatch"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="193dp"
+        android:padding="16dp"
         android:text="Calculating Match, Crunching numbers..."
         android:textColor="#212121"
         android:textSize="18sp" />

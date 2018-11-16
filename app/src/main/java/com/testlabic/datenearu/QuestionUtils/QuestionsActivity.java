@@ -112,6 +112,10 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         quesNumber.setText(String.valueOf((manager.getTopPosition()+1) + "/10"));
         manager.setSwipeThreshold(0.3f);
         skip.setEnabled(true);
+        quesNumber.setVisibility(View.VISIBLE);
+        /*if(adapter!=null)
+            adapter.notifyItemChanged(manager.getTopPosition());*/
+        
     }
     
     @Override

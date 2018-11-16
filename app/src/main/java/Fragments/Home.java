@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -26,11 +28,13 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.locationUpdater;
@@ -48,7 +52,9 @@ public class Home extends Fragment {
     
     private static final String TAG = Home.class.getSimpleName();
     private String facebookUserId;
-    
+    private TextView notifCount;
+    int count =0;
+    ImageView notification;
     public Home() {
         // Required empty public constructor
     }
@@ -75,9 +81,11 @@ public class Home extends Fragment {
            /*
         refresh current location when change location is tapped.
          */
-        
+        notification = rootView.findViewById(R.id.notification);
+        if(Constants.uid!=null)
+        checkForNotification();
         changeLocation = rootView.findViewById(R.id.changeLocation);
-        
+        notifCount = rootView.findViewById(R.id.notifCount);
         putValueInchangeLocation();
         
         //testApiCall();
@@ -87,14 +95,69 @@ public class Home extends Fragment {
             public void onClick(View v) {
                 
                 startActivity(new Intent(getActivity(), locationUpdater.class));
-                
             }
         });
-    
         recyclerview = rootView.findViewById(R.id.recycler5);
         setUpRecyclerView();
         
         return rootView;
+    }
+    
+    private void checkForNotification() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Notifications)
+                .child(Constants.uid).child(Constants.unread);
+        
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if(dataSnapshot.getValue(ModelNotification.class)!=null)
+                    {
+                        count++;
+                    }
+            }
+    
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+            }
+    
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                /*
+                        change the notification icon.
+                         */
+                if(count>0)
+                {
+                    notifCount.setVisibility(View.VISIBLE);
+                    notifCount.setText(String.valueOf(count));
+    
+                }
+                
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
     }
     
     private void testApiCall() {

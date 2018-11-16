@@ -72,14 +72,18 @@
                 android:orientation="horizontal">
 
 
-            <customfonts.MyTextView_SF_Pro_Display_Medium
-                android:id="@+id/txt"
-                android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hey, would you be interested in ..."
-                android:textColor="#3b3b3b"
-                android:textSize="13sp"/>
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:id="@+id/txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:layout_marginEnd="32dp"
+                    android:maxLines="1"
+                    android:text="Hey, would you be interested in ..."
+                    android:textColor="#3b3b3b"
+                    android:textSize="13sp"
+                    android:layout_marginRight="32dp" />
 
                 <ImageView
                     android:id="@+id/n2"

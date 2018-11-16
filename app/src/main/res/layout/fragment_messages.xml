@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,31 +14,31 @@
         android:orientation="vertical">
 
 
-        <include layout="@layout/toolbar_home"/>
+        <include layout="@layout/toolbar_home" />
 
 
         <android.support.design.widget.TabLayout
-            app:tabTextAppearance="@style/MyCustomTextAppearance"
+            android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            app:tabMode="scrollable"
             app:tabGravity="fill"
-            app:tabTextColor="#a9a9b0"
-            app:tabSelectedTextColor="#3b3b3b"
             app:tabIndicatorColor="#118df0"
-            android:id="@+id/tablayout"/>
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="#3b3b3b"
+            app:tabTextAppearance="@style/MyCustomTextAppearance"
+            app:tabTextColor="#a9a9b0" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.7dp"
-            android:background="#efefef"/>
+            android:background="#efefef" />
 
         <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:id="@+id/viewpager">
+            android:clipToPadding="false">
 
         </android.support.v4.view.ViewPager>
 

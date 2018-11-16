@@ -31,15 +31,10 @@ public class TablayoutAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                All tab1 = new All();
-                return tab1;
+                return new All();
             case 1:
-                Archived tab2 = new Archived();
-                return tab2;
-
-            case 2:
-                Closed tab3 = new Closed();
-                return tab3;
+                return new Archived();
+                
 
     default:
             return null;
@@ -48,6 +43,6 @@ public class TablayoutAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 }

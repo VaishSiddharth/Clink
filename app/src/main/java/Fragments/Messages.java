@@ -42,11 +42,11 @@ public class Messages extends Fragment {
         tabLayout = rootView.findViewById(R.id.tablayout);
 
 //        setCustomFontAndStyle(tabLayout, 0);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
         
         tabLayout.addTab(tabLayout.newTab().setText("All"));
-        tabLayout.addTab(tabLayout.newTab().setText("Archived"));
-        tabLayout.addTab(tabLayout.newTab().setText("Closed"));
+        tabLayout.addTab(tabLayout.newTab().setText("Requests"));
+       
 
 //
         
@@ -77,9 +77,7 @@ public class Messages extends Fragment {
                 }
                 
             }
-            
         }
-        
         
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -104,33 +102,8 @@ public class Messages extends Fragment {
             
             }
         });
-    
         return rootView;
-    
     }
-
-//    private void setCustomFontAndStyle(TabLayout tabLayout, Integer position) {
-//
-//
-//        mTypeface = Typeface.createFromAsset(getAssets(), "fonts/SF-Pro-Display-Medium.otf");
-//        mTypefaceBold = Typeface.createFromAsset(getAssets(), "fonts/SF-Pro-Display-Bold.otf");
-//        ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
-//        int tabsCount = vg.getChildCount();
-//        for (int j = 0; j < tabsCount; j++) {
-//            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
-//            int tabChildsCount = vgTab.getChildCount();
-//            for (int i = 0; i < tabChildsCount; i++) {
-//                View tabViewChild = vgTab.getChildAt(i);
-//                if (tabViewChild instanceof TextView) {
-//                    if (j == position) {
-//                        ((TextView) tabViewChild).setTypeface(mTypefaceBold, Typeface.NORMAL);
-//                    } else {
-//                        ((TextView) tabViewChild).setTypeface(mTypeface, Typeface.BOLD);
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     public void wrapTabIndicatorToTitle(TabLayout tabLayout, int externalMargin, int internalMargin) {
         View tabStrip = tabLayout.getChildAt(0);

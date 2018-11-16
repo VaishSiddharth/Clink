@@ -34,10 +34,14 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Models.LatLong;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 
 import java.io.IOException;
@@ -52,6 +56,8 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     private static final String TAG = locationUpdater.class.getSimpleName();
     private static final int REQUEST_CHECK_SETTINGS = 47;
     private GoogleApiClient mGoogleApiClient;
+    String cityLabel;
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +117,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 String cityName = addresses.get(0).getLocality();
                 String stateName = addresses.get(0).getAdminArea();
                 String countryName = addresses.get(0).getCountryName();
-                String cityLabel = cityName+", "+stateName+", "+countryName;
+                cityLabel = cityName+", "+stateName+", "+countryName;
     
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.userInfo).child(uid);
@@ -120,6 +126,8 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 updateCityLabel.put("cityLabel", cityLabel);
                 
                 reference.updateChildren(updateCityLabel);
+                
+                
                // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
                
                 
@@ -138,6 +146,11 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful())
                     {
+                          /*
+                            Duplicate user under the cityLabel node
+                             */
+                        cityLabel = cityLabel.replace(", ", "_");
+                        DuplicateUserInfoToCityLabelNode(cityLabel);
                         finish();
                         Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
                         /*
@@ -148,11 +161,37 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
             });
         }
         else
-            if(location!=null&&location.getAccuracy()>100)
+            if(location!=null&&location.getAccuracy()>1000)
             {
                 Toast.makeText(locationUpdater.this, "Waiting for accurate location...", Toast.LENGTH_SHORT).show();
             }
         
+    }
+    
+    private void DuplicateUserInfoToCityLabelNode(final String cityLabel) {
+        
+        if(cityLabel!=null)
+        {
+            DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
+                    .child(Constants.uid);
+            refInit.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.getValue(ModelUser.class)!=null)
+                    {
+                        DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
+                                .child(cityLabel).child(Constants.uid);
+                        refFin.setValue(dataSnapshot.getValue(ModelUser.class));
+                    }
+        
+                }
+    
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                }
+            });
+        }
     }
     
     private void displayLocationSettingsRequest(final Context context) {

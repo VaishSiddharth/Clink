@@ -12,8 +12,9 @@
         <i>For free users, there is only one chance in a day for three days.\n\n
     Go premium to unleash!</i></string>
     <string name="question_instruction">Tap on an option and swipe the card for next question!</string>
-    <string name="matchSuccess"><b>Match Success!</b>\n\nCongrats we believe you will be make it work!\n\n We will notify the other person and you can then connect if she agrees!</string>
+    <string name="matchSuccess"><b>Match Success!</b>\n\nCongrats we believe you will be able to make it work!\n\n We will notify the other person and you can then connect if she agrees!</string>
     <string name="confirmation">Continue match analysis?</string>
-    <string name="rewind_msg">Or rewind to choose different answers or check unanswered questions by tapping on left arrow below!</string>
+    <string name="rewind_msg">Or rewind to reanswer by tapping on left arrow below!</string>
+    <string name="matchFailed"><b>Sorry Match Failed</b>\n\nYou guys have different tastes, we don\'t think it would be a very good idea!</string>
 
 </resources>
