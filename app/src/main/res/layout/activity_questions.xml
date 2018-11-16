@@ -105,11 +105,24 @@
         android:clickable="false"
         android:clipToPadding="false"
         android:clipChildren="false">
+        <customfonts.MyTextView_SF_Pro_Display_Light
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:id="@+id/instruction"
+            android:padding="16dp"
+            android:textColor="#fff"
+            android:text="@string/question_instruction"
+            android:textSize="14sp"
+            android:layout_alignParentLeft="true" />
 
         <com.yuyakaido.android.cardstackview.CardStackView
             android:id="@+id/card_stack_view"
             android:layout_width="match_parent"
-            android:layout_marginTop="32dp"
+            android:layout_below="@+id/instruction"
             android:layout_height="match_parent">
         </com.yuyakaido.android.cardstackview.CardStackView>
 

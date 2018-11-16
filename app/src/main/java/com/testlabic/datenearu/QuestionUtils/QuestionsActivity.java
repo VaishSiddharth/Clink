@@ -39,6 +39,7 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     private CardStackAdapter adapter;
     private GoogleProgressBar progressBar;
     private CardStackView cardStackView;
+    View skip;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         setContentView(R.layout.activity_questions);
         progressBar = findViewById(R.id.google_progress);
         progressBar.setVisibility(View.VISIBLE);
+        skip = findViewById(R.id.like_button);
         setupCardStackView();
         setupButton();
         RelativeLayout rl = findViewById(R.id.rl);
@@ -79,9 +81,20 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         }*/
     
         TextView quesNumber = findViewById(R.id.quesNumber);
-        if(manager.getTopPosition()>=10)
+        if(manager.getTopPosition()>9)
         {
-            finish();
+            skip.setEnabled(false);
+            quesNumber.setVisibility(View.GONE);
+            /*
+            Disable card switching
+             */
+            manager.setSwipeThreshold(1.0f);
+        }
+        else
+        {
+            skip.setEnabled(true);
+            quesNumber.setVisibility(View.VISIBLE);
+            manager.setSwipeThreshold(0.3f);
         }
         quesNumber.setText(String.valueOf((manager.getTopPosition()+1) + "/10"));
         
@@ -97,6 +110,8 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         Log.d("CardStackView", "onCardRewound: " + manager.getTopPosition());
         TextView quesNumber = findViewById(R.id.quesNumber);
         quesNumber.setText(String.valueOf((manager.getTopPosition()+1) + "/10"));
+        manager.setSwipeThreshold(0.3f);
+        skip.setEnabled(true);
     }
     
     @Override

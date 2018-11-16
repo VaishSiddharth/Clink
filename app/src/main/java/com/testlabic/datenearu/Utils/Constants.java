@@ -8,4 +8,5 @@ public class Constants {
     public static  String uid = FirebaseAuth.getInstance().getUid();
     public static String clickedUid = "clickedUid";
     public static String questions = "questions";
+    public static String score = "matchScore";
 }

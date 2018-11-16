@@ -2,8 +2,10 @@ package com.testlabic.datenearu.QuestionUtils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     private Boolean clickedOptA = false,
             clickedOptB = false, clickedOptC = false, clickedOptD  = false;
     private Context context;
-    private static int score;
+    private  int score = 0;
     private int currentPos = -1;
     private boolean subOnce = false;
     private boolean selectedSomethingElse = false;
@@ -41,13 +44,46 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder,  int position) {
+        
+        /*
+        Show confirmation screen for position == 10
+         */
+        if(position==10)
+        {
+            holder.question.setText(context.getResources().getString(R.string.confirmation));
+            
+            holder.optA.setText("Yes!");
+            
+            holder.optA.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+        
+                    Intent i = new Intent(context, MatchCalculator.class);
+                    i.putExtra(Constants.score, score);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                }
+            });
+            
+            holder.optB.setVisibility(View.GONE);
+            
+            holder.optC.setText(context.getResources().getString(R.string.rewind_msg));
+            holder.optC.setBackgroundDrawable(null);
+            holder.optC.setTextSize(14.0f);
+
+            holder.optC.setEnabled(false);
+            holder.optD.setVisibility(View.GONE);
+        }
+        else {
+        
+        
+        
         ModelQuestion question = questions.get(position);
         holder.question.setText(question.getQuestion());
         holder.optA.setText(question.getOptA());
         holder.optB.setText(question.getOptB());
         holder.optC.setText(question.getOptC());
         holder.optD.setText(question.getOptD());
-        holder.inst.setText(context.getResources().getString(R.string.question_instruction));
         /*
         Uncolor all options explicitly
          */
@@ -173,7 +209,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             }
         });
         
-    }
+    }}
     
     private void unColorOpt(TextView opt) {
     
@@ -184,8 +220,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     }
     
     private void colorOpt(TextView opt, int position) {
-    
-       
         
         if(currentPos!=position)
             subOnce = false;
@@ -220,11 +254,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         
         Log.e(TAG, "Score is " + score*10+"%");
         
-        if(score>=8) {
-            Intent i = new Intent(context, MatchSuccess.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
-        }
     }
     
     @Override
@@ -239,7 +268,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         TextView optD;
         TextView question;
         View completeItem;
-        TextView inst;
         ViewHolder(View view) {
             super(view);
             this.optA = view.findViewById(R.id.optA);
@@ -247,7 +275,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             this.optC = view.findViewById(R.id.optC);
             this.optD = view.findViewById(R.id.optD);
             this.question = view.findViewById(R.id.questionText);
-            this.inst = view.findViewById(R.id.instruction);
             this.completeItem = view;
         }
     }
