@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,8 +26,8 @@ import me.relex.circleindicator.CircleIndicator;
 
 
 public class ClickedUser extends AppCompatActivity implements View.OnClickListener {
-
-
+    
+    private static final String TAG = ClickedUser.class.getSimpleName();
     ImageView f1;
     boolean first = true;
     
@@ -47,7 +48,6 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         f1 = findViewById(R.id.f1);
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
-
         if(clickedUid!=null)
         setUpDetails();
         

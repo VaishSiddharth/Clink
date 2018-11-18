@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import fragment.All;
 import fragment.Archived;
-import fragment.Closed;
 
 /**
  * Created by wolfsoft4 on 21/9/18.

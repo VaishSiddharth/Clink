@@ -1,15 +1,12 @@
 package Fragments;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -35,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Models.ModelNotification;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.locationUpdater;
@@ -42,8 +40,6 @@ import com.testlabic.datenearu.Utils.locationUpdater;
 import java.util.ArrayList;
 
 import adapter.Home_Adapter;
-import adapter.TablayoutAdapter_Home;
-import model.Home_Model;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,13 +59,13 @@ public class Home extends Fragment {
     View rootView;
     private Home_Adapter home_adapter;
     private RecyclerView recyclerview;
-    private ArrayList<Home_Model> home_modelArrayList;
+    private ArrayList<ModelUser> displayArrayList;
     
-    Integer bitmap1[]={R.drawable.bitmap1,R.drawable.bitmap2,R.drawable.bitmap4,R.drawable.bitmap3};
-    Integer imagers[]={R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee};
-    String textdji[]={"Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss"};
-    String textprice[]={"24 yrs","22 yrs","22 yrs","23 yrs"};
-    
+   /* Integer bitmap1[]={R.drawable.bitmap1,R.drawable.bitmap2,R.drawable.bitmap4,R.drawable.bitmap3, R.drawable.bitmap6,R.drawable.bitmap5,R.drawable.bitmap8,R.drawable.bitmap7,R.drawable.bitmap1,R.drawable.bitmap2,R.drawable.bitmap4,R.drawable.bitmap3};
+    Integer imagers[]={R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee};
+    String textdji[]={"Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss","Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss","Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss"};
+    String textprice[]={"24 yrs","22 yrs","22 yrs","23 yrs","24 yrs","22 yrs","22 yrs","23 yrs","24 yrs","22 yrs","22 yrs","23 yrs"};
+    */
     
     
     @Override
@@ -98,6 +94,10 @@ public class Home extends Fragment {
             }
         });
         recyclerview = rootView.findViewById(R.id.recycler5);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerview.setLayoutManager(layoutManager);
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+    
         setUpRecyclerView();
         
         return rootView;
@@ -194,19 +194,65 @@ public class Home extends Fragment {
     
     
     private void setUpRecyclerView() {
-      
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerview.setLayoutManager(layoutManager);
-        recyclerview.setItemAnimator(new DefaultItemAnimator());
+        
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+       String city= preferences.getString(Constants.cityLabel, "Gwalior_Madhya Pradesh_India");
     
-        home_modelArrayList = new ArrayList<>();
+        displayArrayList = new ArrayList<>();
+        
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.cityLabels).child(city);
     
-        for (int i = 0; i < bitmap1.length; i++) {
-            Home_Model view1 = new Home_Model(bitmap1[i],imagers[i],textdji[i],textprice[i]);
-            home_modelArrayList.add(view1);
-        }
-        home_adapter = new Home_Adapter(getContext(),home_modelArrayList);
-        recyclerview.setAdapter(home_adapter);
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            
+                if(dataSnapshot.getValue()!=null)
+                {
+                    ModelUser item = dataSnapshot.getValue(ModelUser.class);
+                    if(item!=null)
+                        displayArrayList.add(item);
+                }
+            }
+        
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    home_adapter.notifyDataSetChanged();
+            }
+        
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                home_adapter.notifyDataSetChanged();
+            }
+        
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                /*
+                populate adapter...
+                 */
+                home_adapter = new Home_Adapter(getContext(),displayArrayList);
+                recyclerview.setAdapter(home_adapter);
+            
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        
+       
     
         
     }

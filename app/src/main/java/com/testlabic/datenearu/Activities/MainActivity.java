@@ -1,35 +1,28 @@
 package com.testlabic.datenearu.Activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 
 import Fragments.Home;
 import Fragments.Messages;
 import Fragments.Profile;
-import adapter.TablayoutAdapter_Home;
 
 public class MainActivity extends AppCompatActivity {
     
     private FirebaseAuth mAuth;
     private BottomBar bottomBar;
+    private boolean refresh = false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+        
+        refresh = getIntent().getBooleanExtra(Constants.refresh, false);
        
         /*
         on create switch to the home fragment
@@ -93,7 +87,11 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
-        
+        refresh = getIntent().getBooleanExtra(Constants.refresh, false);
+        if(refresh)
+        {
+            changeFragment(new Home());
+        }
     }
     
     @Override

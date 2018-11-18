@@ -10,13 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.testlabic.datenearu.ClickedUser;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.ArrayList;
-
-import model.Home_Model;
 
 /**
  * Created by wolfsoft4 on 21/9/18.
@@ -24,58 +28,101 @@ import model.Home_Model;
 
 public class Home_Adapter extends RecyclerView.Adapter<Home_Adapter.ViewHolder> {
     private Context context;
-    private ArrayList<Home_Model> home_modelArrayList;
-
-    public Home_Adapter(Context context, ArrayList<Home_Model> home_modelArrayList) {
+    private ArrayList<ModelUser> displayArrayList;
+    private String uid;
+    public Home_Adapter(Context context, ArrayList<ModelUser> home_modelArrayList) {
         this.context = context;
-        this.home_modelArrayList = home_modelArrayList;
+        this.displayArrayList = home_modelArrayList;
     }
-
+    
     @NonNull
     @Override
     public Home_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all_home,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.all_home, parent, false);
         return new ViewHolder(view);
     }
-
+    
     @Override
-    public void onBindViewHolder(@NonNull Home_Adapter.ViewHolder holder, int position) {
-        holder.bitmap1.setImageResource(home_modelArrayList.get(position).getBitmap1());
-        holder.imagers.setImageResource(home_modelArrayList.get(position).getImagers());
-        holder.textdji.setText(home_modelArrayList.get(position).getTextdji());
-        holder.textprice.setText(home_modelArrayList.get(position).getTextprice());
+    public void onBindViewHolder(@NonNull final Home_Adapter.ViewHolder holder, final int position) {
+        
+        final ModelUser user = displayArrayList.get(holder.getAdapterPosition());
+        
+        Glide.with(context).load(getBiggerImage(user.getImageUrl())).into(holder.image);
+        holder.name.setText(user.getUserName());
+        holder.age.setText(String.valueOf(user.getAge() + " yr"));
+        
         holder.completeItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            
+        
                 //TODO: Remember to do respective changes..
                 Intent i = new Intent(context, ClickedUser.class);
-                i.putExtra(Constants.clickedUid, Constants.uid);
+                i.putExtra(Constants.clickedUid, user.getUid());
                 context.startActivity(i);
-            
+        
             }
         });
     }
-
+    
+    private String getBiggerImage(String url) {
+        String modifiedImageUrl = null;
+        if (url != null) {
+        /*
+        update user's profile first
+         */
+            
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+                    if (user.getProviderId().equals("google.com")) {
+                        
+                        assert currentUser != null;
+                        {
+                            modifiedImageUrl = url.replace("/s96-c/", "/s300-c/");
+                        }
+                        
+                    } else if (user.getProviderId().equals("facebook.com")) {
+                        
+                        String facebookUserId = "";
+                        // find the Facebook profile and get the user's id
+                        for (UserInfo profile : currentUser.getProviderData()) {
+                            // check if the provider id matches "facebook.com"
+                            if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+                                facebookUserId = profile.getUid();
+                            }
+                        }
+                        // construct the URL to the profile picture, with a custom height
+                        // alternatively, use '?type=small|medium|large' instead of ?height=
+                        String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+                        {
+                            modifiedImageUrl = photoUrl;
+                        }
+                    }
+                }
+            }
+        }
+        return modifiedImageUrl;
+        
+    }
+    
     @Override
     public int getItemCount() {
-        return home_modelArrayList.size();
+        return displayArrayList.size();
     }
-
+    
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView  bitmap1,imagers;
-        TextView textdji,textprice;
+        ImageView image;
+        TextView age, name;
         View completeItem;
-
+        
         public ViewHolder(View itemView) {
             super(itemView);
-            bitmap1=itemView.findViewById(R.id.bitmap1);
-            imagers=itemView.findViewById(R.id.imagers);
-            textdji=itemView.findViewById(R.id.textdji);
-            textprice=itemView.findViewById(R.id.textprice);
+            image = itemView.findViewById(R.id.image);
+            age = itemView.findViewById(R.id.age);
+            name = itemView.findViewById(R.id.name);
             completeItem = itemView;
-           
-
+            
+            
         }
     }
 }

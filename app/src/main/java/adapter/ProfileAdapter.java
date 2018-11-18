@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.testlabic.datenearu.Activities.Settings;
 import com.testlabic.datenearu.ProfileUtils.AboutEditor;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.R;
@@ -79,6 +80,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 }
             });
             
+        }
+        
+        if(position==3)
+        {
+            context.startActivity(new Intent(context, Settings.class));
         }
 
     }

@@ -15,15 +15,18 @@
         android:orientation="vertical">
 
 
-        <ImageView
-            android:id="@+id/bitmap1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/bitmap1"/>
+        <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/image"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="16dp"
+            android:src="@drawable/bitmap1"
+            app:riv_mutate_background="true"
+            android:layout_height="190dp"
+            android:layout_width="175dp" />
 
         <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/textdji"
+            android:id="@+id/name"
             android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +51,7 @@
                 android:src="@drawable/ic_rupee"/>
 
             <customfonts.MyTextView_SF_Pro_Display_Bold
-                android:id="@+id/textprice"
+                android:id="@+id/age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"

@@ -1,169 +1,162 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="Fragments.Home">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="17dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_placeholder" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:id="@+id/changeLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:text="Tap to change"
+                    android:textAllCaps="true"
+                    android:textColor="#3b3b3b"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="95dp"
+                    android:layout_height="1.5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/rect_dotted"
+                    android:layerType="software" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:id="@+id/notification"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_notification" />
+
+                <TextView
+                    android:id="@+id/notifCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/badge_circle"
+                    android:text="10"
+                    android:textColor="#FFF"
+                    android:textSize="6dp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+
+        </android.support.v7.widget.Toolbar>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rect_bg"
+            android:orientation="horizontal">
 
-            <android.support.v7.widget.Toolbar
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="17dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_placeholder" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-                    <customfonts.MyTextView_SF_Pro_Display_Medium
-                        android:id="@+id/changeLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="2dp"
-                        android:text="Tap to change"
-                        android:textAllCaps="true"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="2dp"
-                        android:textColor="#3b3b3b"
-                        android:textSize="12sp"
-                        android:layout_marginRight="2dp"
-                        android:layout_marginLeft="4dp" />
-
-                    <ImageView
-                        android:layout_width="95dp"
-                        android:layout_height="1.5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="6dp"
-                        android:background="@drawable/rect_dotted"
-                        android:layerType="software" />
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="20dp"
-                    android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:id="@+id/notification"
-                    android:src="@drawable/ic_notification" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="10"
-                        android:visibility="gone"
-                        android:id="@+id/notifCount"
-                        android:textColor="#FFF"
-                        android:textSize="6dp"
-                        android:textStyle="bold"
-                        android:background="@drawable/badge_circle"/>
-                </RelativeLayout>
-
-
-            </android.support.v7.widget.Toolbar>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="17dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/rect_bg"
-                android:orientation="horizontal">
-
-                <customfonts.EditText__SF_Pro_Display_Regular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:padding="4dp"
-                    android:hint="What are you looking for?"
-                    android:textColor="#a9a9b0"
-                    android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/arrow"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_search_black_24dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
-
-                <customfonts.MyTextView_SF_Pro_Display_Bold
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:text="Best picks"
-                    android:textColor="#3b3b3b"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="4dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/sort" />
-
-            </LinearLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:scrollbars="none">
-
-            <LinearLayout
+            <customfonts.EditText__SF_Pro_Display_Regular
                 android:layout_width="wrap_content"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:hint="What are you looking for?"
+                android:padding="4dp"
+                android:textColor="#a9a9b0"
+                android:textSize="12sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.7dp"
-                    android:background="#efefef" />
-
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="27dp"
-                    android:clipToPadding="false"
-                    android:id="@+id/recycler5"/>
-
-
-            </LinearLayout>
-            </ScrollView>
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_search_black_24dp" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <customfonts.MyTextView_SF_Pro_Display_Bold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:text="Best picks"
+                android:textColor="#3b3b3b"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/sort" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#efefef" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 
 </FrameLayout>

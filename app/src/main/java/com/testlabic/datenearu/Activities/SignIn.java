@@ -179,7 +179,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 
                                 updateDatabaseWithUser(mCurrentUser);
                                 
-                                startActivity(new Intent(SignIn.this, MainActivity.class));
+                                startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                 finish();
                                 
                             } else {
@@ -187,7 +187,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     move to main activity
                                      */
                                 
-                                startActivity(new Intent(SignIn.this, MainActivity.class));
+                                startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                 finish();
                                 
                             }
@@ -204,7 +204,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     
     private void updateDatabaseWithUser(FirebaseUser mCurrentUser) {
         ModelUser user = new ModelUser(mCurrentUser.getDisplayName(), String.valueOf(mCurrentUser.getPhotoUrl())
-                , "20", null, null, null);
+                , "20", null, null, null, mCurrentUser.getUid());
         
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
@@ -339,7 +339,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                         updateDatabaseWithUser(mCurrentUser);
                                         uploadQuestions(mCurrentUser.getUid());
                                     }
-                                    startActivity(new Intent(SignIn.this, MainActivity.class));
+                                    startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                     finish();
                                     
                                 } else {
@@ -347,7 +347,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     move to main activity
                                      */
                                     
-                                    startActivity(new Intent(SignIn.this, MainActivity.class));
+                                    startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                     finish();
                                 }
                             } else {

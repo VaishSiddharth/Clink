@@ -52,6 +52,16 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         /*
         Show confirmation screen for position == 10
          */
+    
+        unColorOpt(holder.optB);
+        unColorOpt(holder.optA);
+        unColorOpt(holder.optC);
+        unColorOpt(holder.optD);
+        clickedOptA = false;
+        clickedOptB = false;
+        clickedOptC = false;
+        clickedOptD = false;
+        
         if (position == 10) {
             holder.question.setText(context.getResources().getString(R.string.confirmation));
             
@@ -93,7 +103,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         Color the option if previously chosen
          */
             String savedColoredOpt = question.getSelectedOption();
-            if(savedColoredOpt!=null) {
+            /*if(savedColoredOpt!=null) {
     
                 Log.e(TAG, "The saved colored option is " + savedColoredOpt);
                 if (savedColoredOpt.equals(question.getOptA()))
@@ -105,15 +115,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                 if (savedColoredOpt.equals(question.getOptD()))
                     colorOpt(holder.optD, holder.getAdapterPosition(), question);
     
-            }
-            unColorOpt(holder.optB);
-            unColorOpt(holder.optA);
-            unColorOpt(holder.optC);
-            unColorOpt(holder.optD);
-            clickedOptA = false;
-            clickedOptB = false;
-            clickedOptC = false;
-            clickedOptD = false;
+            }*/
+           
             
             holder.optA.setOnClickListener(new View.OnClickListener() {
                 @Override

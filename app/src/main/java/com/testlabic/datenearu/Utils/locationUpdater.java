@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -108,7 +109,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         }
         final Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
        String uid =  FirebaseAuth.getInstance().getUid();
-        if(location!=null && location.getAccuracy()<100&& uid!=null) {
+        if(location!=null && location.getAccuracy()<3000&& uid!=null) {
     
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = null;
@@ -151,7 +152,6 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                              */
                         cityLabel = cityLabel.replace(", ", "_");
                         DuplicateUserInfoToCityLabelNode(cityLabel);
-                        finish();
                         Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
                         /*
                         change the city label on main screen
@@ -181,14 +181,17 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                     {
                         DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
                                 .child(cityLabel).child(Constants.uid);
-                        refFin.setValue(dataSnapshot.getValue(ModelUser.class));
+                        refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                            }
+                        });
                     }
-        
                 }
     
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-        
                 }
             });
         }

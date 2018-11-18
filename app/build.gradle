@@ -55,5 +55,6 @@ dependencies {
     implementation 'jp.wasabeef:richeditor-android:1.2.2'
     implementation "com.yuyakaido.android:card-stack-view:2+"
     implementation 'com.jpardogo.googleprogressbar:library:1+'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }
 apply plugin: 'com.google.gms.google-services'

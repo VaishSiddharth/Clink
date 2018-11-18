@@ -14,18 +14,25 @@ public class ModelUser {
     String about;
     String cityLabel;
     ArrayList<ModelQuestion> questions;
+    String uid;
     
     public ModelUser() {
     }
     
+    public String getUid() {
+        return uid;
+    }
+    
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
-    , String about) {
+    , String about, String uid) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
         this.location = location;
         this.cityLocation = cityLocation;
         this.about = about;
+        this.uid = uid;
+        
     }
     
     public ArrayList<ModelQuestion> getQuestions() {
