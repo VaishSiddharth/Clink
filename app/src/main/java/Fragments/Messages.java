@@ -44,13 +44,10 @@ public class Messages extends Fragment {
 //        setCustomFontAndStyle(tabLayout, 0);
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
         
+        tabLayout.addTab(tabLayout.newTab().setText("Messages"));
         tabLayout.addTab(tabLayout.newTab().setText("All"));
-        tabLayout.addTab(tabLayout.newTab().setText("Requests"));
-       
-
+        
 //
-        
-        
         TablayoutAdapter adapter = new TablayoutAdapter(getFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         wrapTabIndicatorToTitle(tabLayout, 50, 50);
@@ -85,7 +82,6 @@ public class Messages extends Fragment {
                 viewPager.setCurrentItem(tab.getPosition());
                 
                 TextView text = (TextView) tab.getCustomView();
-                
                 text.setTextColor(Color.parseColor("#000000"));
                 text.setTypeface(null, Typeface.BOLD);
             }

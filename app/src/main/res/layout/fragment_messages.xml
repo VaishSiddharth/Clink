@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
         <include layout="@layout/toolbar_home" />
-
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout"

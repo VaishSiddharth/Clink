@@ -62,13 +62,6 @@ public class Home extends Fragment {
     private Home_Adapter home_adapter;
     private RecyclerView recyclerview;
     private ArrayList<ModelUser> displayArrayList;
-    
-   /* Integer bitmap1[]={R.drawable.bitmap1,R.drawable.bitmap2,R.drawable.bitmap4,R.drawable.bitmap3, R.drawable.bitmap6,R.drawable.bitmap5,R.drawable.bitmap8,R.drawable.bitmap7,R.drawable.bitmap1,R.drawable.bitmap2,R.drawable.bitmap4,R.drawable.bitmap3};
-    Integer imagers[]={R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee};
-    String textdji[]={"Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss","Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss","Christine Miss","Mother Teresa","Teresa Duss","Rachel Moss"};
-    String textprice[]={"24 yrs","22 yrs","22 yrs","23 yrs","24 yrs","22 yrs","22 yrs","23 yrs","24 yrs","22 yrs","22 yrs","23 yrs"};
-    */
-    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -286,8 +279,9 @@ public class Home extends Fragment {
     public void onResume() {
         
         putValueInchangeLocation();
+        checkForNotification();
         super.onResume();
-        Log.e(TAG, "On resume called!");
+       // Log.e(TAG, "On resume called!");
     }
     
 }
