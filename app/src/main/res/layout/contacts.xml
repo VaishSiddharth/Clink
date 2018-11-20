@@ -10,15 +10,15 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:paddingBottom="0dp">
+        android:paddingBottom="60dp">
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler4"
+        <ListView
+            android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+        </ListView>
 
     </LinearLayout>
 

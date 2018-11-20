@@ -45,7 +45,7 @@
         android:id="@+id/line"
         android:layout_below="@+id/toolbar"
         android:background="#efefef" />
-    <ListView
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_below="@+id/line"
         android:id="@+id/listView"
         tools:listitem="@layout/sample_notif"

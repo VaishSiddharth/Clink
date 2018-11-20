@@ -39,14 +39,6 @@
             android:textColor="#a9a9b0"
             android:textSize="12sp" />
 
-        <LinearLayout
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="7dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
             <customfonts.MyTextView_SF_Pro_Display_Bold
                 android:id="@+id/age"
                 android:layout_width="wrap_content"
@@ -56,8 +48,6 @@
                 android:textColor="#3b3b3b"
                 android:textSize="12sp" />
 
-
-        </LinearLayout>
 
 
         <View

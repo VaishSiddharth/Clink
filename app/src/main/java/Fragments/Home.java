@@ -279,6 +279,7 @@ public class Home extends Fragment {
     public void onResume() {
         
         putValueInchangeLocation();
+        if (Constants.uid != null)
         checkForNotification();
         super.onResume();
        // Log.e(TAG, "On resume called!");

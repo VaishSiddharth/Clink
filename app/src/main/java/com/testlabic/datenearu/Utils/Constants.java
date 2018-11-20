@@ -21,4 +21,5 @@ public class Constants {
     public static String imageUrl = "imageUrl";
     public static String read = "read";
     public static String notifCount = "notifCount";
+    public static String contacts = "contacts";
 }
