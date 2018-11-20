@@ -18,4 +18,7 @@ public class Constants {
     public static String chatName = "chatName";
     public static String cityLabel = "cityLabel";
     public static String refresh = "refresh";
+    public static String imageUrl = "imageUrl";
+    public static String read = "read";
+    public static String notifCount = "notifCount";
 }

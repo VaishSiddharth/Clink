@@ -62,11 +62,14 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/recyclerView"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginBottom="26dp"
         android:gravity="center"
         android:padding="16dp"
         android:text="Send a message to accept request and move to messages list"
-        android:textSize="13sp"
-        android:layout_alignParentLeft="true" />
+        android:textSize="13sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

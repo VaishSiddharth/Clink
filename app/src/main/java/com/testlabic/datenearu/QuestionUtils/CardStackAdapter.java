@@ -31,11 +31,13 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     private int currentPos = -1;
     private boolean subOnce = false;
     private boolean selectedSomethingElse = false;
+    private String clickedUid;
     
-    public CardStackAdapter(Context context, List<ModelQuestion> questions) {
+    public CardStackAdapter(Context context, List<ModelQuestion> questions, String clickedUid) {
         this.inflater = LayoutInflater.from(context);
         this.questions = questions;
         this.context = context;
+        this.clickedUid = clickedUid;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         editor = sharedPreferences.edit();
     }
@@ -73,7 +75,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                     
                     Intent i = new Intent(context, MatchCalculator.class);
                     i.putExtra(Constants.score, score);
-                    i.putExtra(Constants.clickedUid, Constants.uid);
+                    i.putExtra(Constants.clickedUid, clickedUid);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }

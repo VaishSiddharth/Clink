@@ -84,7 +84,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         
         if(position==3)
         {
-            context.startActivity(new Intent(context, Settings.class));
+            holder.profileItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, Settings.class));
+                }
+            });
+          
         }
 
     }

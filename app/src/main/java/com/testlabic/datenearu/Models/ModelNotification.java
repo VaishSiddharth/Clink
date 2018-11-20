@@ -6,11 +6,17 @@ public class ModelNotification {
     String message;
     String sendersUid;
     long timeStamp;
+    String imageUrl;
     
-    public ModelNotification(String message, String sendersUid, long timeStamp) {
+    public ModelNotification(String message, String sendersUid, long timeStamp, String imageUrl) {
         this.message = message;
         this.sendersUid = sendersUid;
         this.timeStamp = timeStamp;
+        this.imageUrl =imageUrl;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
     }
     
     public ModelNotification() {

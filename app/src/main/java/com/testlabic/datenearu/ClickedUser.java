@@ -30,15 +30,19 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private static final String TAG = ClickedUser.class.getSimpleName();
     ImageView f1;
     boolean first = true;
-    
+    String imageUrl;
     private TextView name, about, age;
     private ViewPager viewPager;
     private CircleIndicator circleIndicator;
     private View_Pager_Adapter view_pager_adapter;
     private String clickedUid;
     private TextView attemptMatch;
+    private onImageUrlReceivedListener listener;
 
-
+    public interface onImageUrlReceivedListener{
+        void onDataReceived(String imageUrl);
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         f1 = findViewById(R.id.f1);
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
+        imageUrl = getIntent().getStringExtra(Constants.imageUrl);
         if(clickedUid!=null)
         setUpDetails();
         
@@ -56,7 +61,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         attemptMatch = findViewById(R.id.attempt_match);
         name = findViewById(R.id.name);
         about = findViewById(R.id.about);
-        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager());
+        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(),imageUrl);
         viewPager.setAdapter(view_pager_adapter);
         circleIndicator.setViewPager(viewPager);
         view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
@@ -64,7 +69,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         attemptMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ClickedUser.this, QuestionsActivity.class));
+                startActivity(new Intent(ClickedUser.this, QuestionsActivity.class).putExtra(Constants.clickedUid, clickedUid));
             }
         });
     }

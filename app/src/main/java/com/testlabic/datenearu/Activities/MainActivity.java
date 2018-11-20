@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
         refresh = getIntent().getBooleanExtra(Constants.refresh, false);
         if(refresh)
         {
-            changeFragment(new Home());
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
     

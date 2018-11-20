@@ -51,6 +51,9 @@ public class Home_Adapter extends RecyclerView.Adapter<Home_Adapter.ViewHolder> 
         holder.name.setText(user.getUserName());
         holder.age.setText(String.valueOf(user.getAge() + " yr"));
         
+        if(holder.getAdapterPosition()%2!=0)
+            holder.upperSpace.setVisibility(View.VISIBLE);
+        
         holder.completeItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +61,7 @@ public class Home_Adapter extends RecyclerView.Adapter<Home_Adapter.ViewHolder> 
                 //TODO: Remember to do respective changes..
                 Intent i = new Intent(context, ClickedUser.class);
                 i.putExtra(Constants.clickedUid, user.getUid());
+                i.putExtra(Constants.imageUrl, user.getImageUrl());
                 context.startActivity(i);
         
             }
@@ -113,15 +117,16 @@ public class Home_Adapter extends RecyclerView.Adapter<Home_Adapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView age, name;
-        View completeItem;
+        View completeItem, upperSpace, lowerSpace;
         
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             age = itemView.findViewById(R.id.age);
             name = itemView.findViewById(R.id.name);
+            upperSpace = itemView.findViewById(R.id.upperSpace);
+            lowerSpace = itemView.findViewById(R.id.lowerSpace);
             completeItem = itemView;
-            
             
         }
     }

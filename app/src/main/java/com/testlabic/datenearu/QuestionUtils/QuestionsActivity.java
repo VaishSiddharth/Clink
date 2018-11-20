@@ -39,6 +39,7 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     private CardStackAdapter adapter;
     private GoogleProgressBar progressBar;
     private CardStackView cardStackView;
+    private String clickedUid;
     View skip;
     
     @Override
@@ -48,6 +49,9 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         progressBar = findViewById(R.id.google_progress);
         progressBar.setVisibility(View.VISIBLE);
         skip = findViewById(R.id.like_button);
+        clickedUid = getIntent().getStringExtra(Constants.clickedUid);
+        if(clickedUid==null||clickedUid.equals(""))
+            clickedUid = Constants.uid;
         setupCardStackView();
         setupButton();
         RelativeLayout rl = findViewById(R.id.rl);
@@ -70,8 +74,6 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         return super.onOptionsItemSelected(item);
     }
     
-    
-    
     @Override
     public void onCardSwiped(Direction direction) {
         Log.d("CardStackView", "onCardSwiped: p = " + manager.getTopPosition() + ", d = " + direction);
@@ -79,24 +81,21 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
             adapter.addSpots(createSpots());
             adapter.notifyDataSetChanged();
         }*/
-    
+        
         TextView quesNumber = findViewById(R.id.quesNumber);
-        if(manager.getTopPosition()>9)
-        {
+        if (manager.getTopPosition() > 9) {
             skip.setEnabled(false);
             quesNumber.setVisibility(View.GONE);
             /*
             Disable card switching
              */
             manager.setSwipeThreshold(1.0f);
-        }
-        else
-        {
+        } else {
             skip.setEnabled(true);
             quesNumber.setVisibility(View.VISIBLE);
             manager.setSwipeThreshold(0.3f);
         }
-        quesNumber.setText(String.valueOf((manager.getTopPosition()+1) + "/10"));
+        quesNumber.setText(String.valueOf((manager.getTopPosition() + 1) + "/10"));
         
     }
     
@@ -109,7 +108,7 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     public void onCardRewound() {
         Log.d("CardStackView", "onCardRewound: " + manager.getTopPosition());
         TextView quesNumber = findViewById(R.id.quesNumber);
-        quesNumber.setText(String.valueOf((manager.getTopPosition()+1) + "/10"));
+        quesNumber.setText(String.valueOf((manager.getTopPosition() + 1) + "/10"));
         manager.setSwipeThreshold(0.3f);
         skip.setEnabled(true);
         quesNumber.setVisibility(View.VISIBLE);
@@ -181,47 +180,48 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         manager.setMaxDegree(20.0f);
         manager.setDirections(Direction.FREEDOM);
         downloadQuestions();
-       // manager.setCanScrollHorizontal(true);
-       // manager.setCanScrollVertical(true);
-       
+        // manager.setCanScrollHorizontal(true);
+        // manager.setCanScrollVertical(true);
+        
     }
     
     private void downloadQuestions() {
+        if (clickedUid != null) {
+        
         final List<ModelQuestion> questions = new ArrayList<>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                                .child(Constants.userInfo).child(Constants.uid)
-                                .child(Constants.questions);
+                .child(Constants.userInfo).child(clickedUid)
+                .child(Constants.questions);
         
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
-                if(dataSnapshot.getValue()!=null)
-                {
+                
+                if (dataSnapshot.getValue() != null) {
                     ModelQuestion item = dataSnapshot.getValue(ModelQuestion.class);
-                    if(item!=null)
+                    if (item != null)
                         questions.add(item);
                 }
             }
-    
+            
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+            
             }
-    
+            
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        
+            
             }
-    
+            
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+            
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -231,19 +231,20 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
                 populate adapter...
                  */
                 progressBar.setVisibility(View.GONE);
-                adapter = new CardStackAdapter(getApplicationContext(), questions);
+                adapter = new CardStackAdapter(getApplicationContext(), questions, clickedUid);
                 cardStackView = findViewById(R.id.card_stack_view);
                 cardStackView.setEnabled(false);
                 cardStackView.setLayoutManager(manager);
                 cardStackView.setAdapter(adapter);
                 
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
     }
+}
     
 }

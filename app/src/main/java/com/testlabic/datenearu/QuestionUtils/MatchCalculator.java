@@ -79,7 +79,6 @@ public class MatchCalculator extends AppCompatActivity {
             long timeStamp = new java.util.Date().getTime();
             String txt = "Hey! We seem to have a lot of similarities, do you wish to talk?";
             ModelMessage message = new ModelMessage(photoUrl, name, timeStamp,txt );
-            
             reference.setValue(message);
         }
     }
@@ -93,10 +92,11 @@ public class MatchCalculator extends AppCompatActivity {
          */
         
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        String message = userName + " attempted match with you, we believe you guys will have a lot in common to talk about! \nConnect with him by accepting the request.";
+        String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.";
         
         long timeStamp = new java.util.Date().getTime();
-        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp);
+        String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp,url );
         
         reference.setValue(notification);
     }
