@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context="com.testlabic.datenearu.Messages_fliply">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="----"
-            android:id="@+id/chatName"
+            android:id="@+id/sendToName"
             android:layout_gravity="center"
             android:textSize="13sp"
             android:textColor="#4a4a4a"/>
@@ -47,27 +46,35 @@
     </android.support.v7.widget.Toolbar>
 
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
+        android:id="@+id/chat_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerView"
+        android:paddingTop="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:scrollbars="none"
         android:layout_below="@+id/toolbar"
+        android:paddingBottom="4dp"
+        android:divider="@drawable/chat_divider"
+        android:layout_marginBottom="4dp"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
         android:layout_above="@+id/bottom"
-        >
-
-    </android.support.v7.widget.RecyclerView>
+        android:stackFromBottom="true"
+        android:transcriptMode="normal"/>
 
     <customfonts.TextViewSFProDisplayRegular
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/recyclerView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/chat_list_view"
+       android:layout_centerInParent="true"
         android:layout_marginStart="1dp"
         android:layout_marginLeft="1dp"
         android:layout_marginBottom="26dp"
         android:gravity="center"
         android:padding="16dp"
+        android:id="@+id/emptyView"
         android:text="Send a message to accept request and move to messages list"
         android:textSize="13sp" />
 
@@ -85,7 +92,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal">
@@ -93,6 +100,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:id="@+id/attach"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/ic_plus" />
 
@@ -101,6 +109,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
+                android:padding="16dp"
+                android:id="@+id/chat_edit_text1"
                 android:background="#00000000"
                 android:hint="Type something..."
                 android:textColor="#a9a9b0"
@@ -112,11 +122,12 @@
                 android:layout_marginRight="20dp"
                 android:src="@drawable/ic_smile" />
 
-            <ImageView
+            <ImageButton
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="20dp"
-                android:src="@drawable/ic_send" />
+                android:id="@+id/enter_chat1"
+                android:src="@drawable/ic_dont_send" />
 
 
         </LinearLayout>

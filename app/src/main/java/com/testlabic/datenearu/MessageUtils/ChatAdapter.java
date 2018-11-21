@@ -70,8 +70,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             super(itemView);
             
             image=itemView.findViewById(R.id.receivingImage);
-            time=itemView.findViewById(R.id.receivingTime);
-            txt=itemView.findViewById(R.id.receivingText);
             
         }
     }

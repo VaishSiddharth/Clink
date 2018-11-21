@@ -1,5 +1,6 @@
 package fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Activities.Notifications;
+import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.MessageUtils.MessagesAdapter;
 import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelMessage;
@@ -61,11 +65,11 @@ public class Archived extends Fragment {
     }
     
     private void setUpListView() {
-    
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid).child(Constants.contacts);
-    
+
         FirebaseListOptions<ModelContact> options = new FirebaseListOptions.Builder<ModelContact>()
                 .setQuery(ref, ModelContact.class)
                 .setLayout(R.layout.sample_contacts)
@@ -80,46 +84,35 @@ public class Archived extends Fragment {
             }
         };
         listView.setAdapter(adapter);
-    
+        
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent i = new Intent(getActivity(), chatFullScreen.class);
+
+                i.putExtra(Constants.sendToUid, adapter.getItem(position).getUid());
+                
+                i.putExtra(Constants.sendToName, adapter.getItem(position).getName());
+                
+                startActivity(i);
+            }
+        });
     }
     
     private String getBiggerImage(String url) {
-        String modifiedImageUrl = null;
+        String modifiedImageUrl = url;
         if (url != null) {
-        /*
-        update user's profile first
-         */
+            /*
+            update user's profile first
+            */
+            if (url.contains("/s96-c/"))
+                modifiedImageUrl = url.replace("/s96-c/", "/s300-c/");
             
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-                    if (user.getProviderId().equals("google.com")) {
-                        
-                        assert currentUser != null;
-                        {
-                            modifiedImageUrl = url.replace("/s96-c/", "/s300-c/");
-                        }
-                        
-                    } else if (user.getProviderId().equals("facebook.com")) {
-                        
-                        String facebookUserId = "";
-                        // find the Facebook profile and get the user's id
-                        for (UserInfo profile : currentUser.getProviderData()) {
-                            // check if the provider id matches "facebook.com"
-                            if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
-                                facebookUserId = profile.getUid();
-                            }
-                        }
-                        // construct the URL to the profile picture, with a custom height
-                        // alternatively, use '?type=small|medium|large' instead of ?height=
-                        String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
-                        {
-                            modifiedImageUrl = photoUrl;
-                        }
-                    }
-                }
-            }
+            /*else if (url.contains("facebook.com"))
+                modifiedImageUrl = url.replace("picture", "picture?height=500");*/
         }
+
         return modifiedImageUrl;
         
     }
@@ -127,15 +120,15 @@ public class Archived extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(adapter!=null)
+        if (adapter != null)
             adapter.startListening();
     }
     
     @Override
     public void onStop() {
         super.onStop();
-    
-        if(adapter!=null)
+
+        if (adapter != null)
             adapter.stopListening();
     }
 }

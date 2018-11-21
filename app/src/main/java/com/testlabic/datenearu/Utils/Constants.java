@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Constants {
     public static final String Notifications = "Notifications";
     public static final String Messages = "Messages";
+    public static final String CHATS = "chats";
+    public static final String FIREBASE_PROPERTY_TIMESTAMP = "timeStamp";
     public static String userInfo = "userInfo";
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();
@@ -22,4 +24,6 @@ public class Constants {
     public static String read = "read";
     public static String notifCount = "notifCount";
     public static String contacts = "contacts";
+    public static String sendToUid = "sendToUid";
+    public static String sendToName = "sendToName";
 }

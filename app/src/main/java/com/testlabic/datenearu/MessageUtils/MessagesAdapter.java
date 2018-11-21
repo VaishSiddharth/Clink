@@ -84,9 +84,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             @Override
             public void onClick(View v) {
     
-                Intent i = new Intent(context, ChatFullScreen.class);
+               /* Intent i = new Intent(context, ChatFullScreen.class);
                 i.putExtra(Constants.chatName, message.getSendersName());
-                context.startActivity(i);
+                context.startActivity(i);*/
             }
         });
         

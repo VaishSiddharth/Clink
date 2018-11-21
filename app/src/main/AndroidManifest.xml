@@ -75,9 +75,9 @@
         <activity android:name=".ProfileUtils.AboutEditor" />
         <activity android:name=".QuestionUtils.MatchSuccess" />
         <activity android:name=".QuestionUtils.MatchCalculator" />
-        <activity android:name=".MessageUtils.ChatFullScreen" />
         <activity android:name=".Activities.Settings" />
         <activity android:name=".Activities.Notifications"></activity>
+        <activity android:name=".ChatUtils.chatFullScreen" />
     </application>
 
 </manifest>
