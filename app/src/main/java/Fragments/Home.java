@@ -31,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.testlabic.datenearu.Activities.Notifications;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
@@ -72,8 +71,8 @@ public class Home extends Fragment {
         refresh current location when change location is tapped.
          */
         notification = rootView.findViewById(R.id.notification);
-        if (Constants.uid != null)
-            checkForNotification();
+       /* if (Constants.uid != null)
+            checkForNotification();*/
         
         changeLocation = rootView.findViewById(R.id.changeLocation);
         notifCount = rootView.findViewById(R.id.notifCount);
@@ -96,69 +95,6 @@ public class Home extends Fragment {
         setUpRecyclerView();
         
         return rootView;
-    }
-    
-    private void checkForNotification() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Notifications)
-                .child(Constants.uid).child(Constants.unread);
-        
-        reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getValue(ModelNotification.class) != null) {
-                    count++;
-                }
-            }
-            
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            
-            }
-            
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
-        
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                /*
-                        change the notification icon.
-                         */
-                if (count > 0) {
-                    notifCount.setVisibility(View.VISIBLE);
-                    notifCount.setText(String.valueOf(count));
-                    
-                }
-                
-                notification.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        
-                        startActivity(new Intent(getActivity(), Notifications.class).putExtra(Constants.notifCount, count));
-                    }
-                });
-                
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
     }
     
     private void testApiCall() {
@@ -280,7 +216,7 @@ public class Home extends Fragment {
         
         putValueInchangeLocation();
         if (Constants.uid != null)
-        checkForNotification();
+        //checkForNotification();
         super.onResume();
        // Log.e(TAG, "On resume called!");
     }

@@ -1,16 +1,16 @@
-package com.testlabic.datenearu.Activities;
+package Fragments;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,9 +39,13 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class Notifications extends AppCompatActivity {
-    
-    private static final String TAG = Notifications.class.getSimpleName();
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class NotificationFragment extends Fragment {
+    private static final String TAG = NotificationFragment.class.getSimpleName();
     FirebaseListAdapter<ModelNotification> adapter;
     GoogleProgressBar bar;
     DatabaseReference reference;
@@ -49,122 +53,128 @@ public class Notifications extends AppCompatActivity {
     SwipeMenuListView listView;
     private ChildEventListener listener;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("h:mm a", Locale.getDefault());
+    View rootView;
+    public NotificationFragment() {
+        // Required empty public constructor
+    }
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notifications);
-        bar = findViewById(R.id.progress_bar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        rootView =  inflater.inflate(R.layout.fragment_notification, container, false);
+        bar = rootView.findViewById(R.id.progress_bar);
         bar.setVisibility(View.VISIBLE);
-        listView = findViewById(R.id.listView);
-        notifCount = getIntent().getIntExtra(Constants.notifCount, -1);
+        listView = rootView.findViewById(R.id.listView);
+        //notifCount = getIntent().getIntExtra(Constants.notifCount, -1);
         
         /*
         Mark all notifications read and then display
          */
         MoveNotifToRead();
+        return rootView;
     }
     
-    private void MoveNotifToRead() {
-        
-        reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Notifications)
-                .child(Constants.uid).child(Constants.unread);
-        listener =  reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getValue() != null) {
-                    ModelNotification notification = dataSnapshot.getValue(ModelNotification.class);
-                    String pushKey = dataSnapshot.getKey();
-                    if (notification != null) {
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                                .child(Constants.Notifications)
-                                .child(Constants.uid).child(Constants.read).child(pushKey);
-                        
-                        reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                
-                                dataSnapshot.getRef().setValue(null);
-                                
-                            }
-                        });
-                    }
-                }
-                
-            }
-            
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            
-            }
-            
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
-        
-            reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    
-                    bar.setVisibility(View.GONE);
-                    
-                    Query query = FirebaseDatabase.getInstance().getReference()
+ private void MoveNotifToRead() {
+    
+    reference = FirebaseDatabase.getInstance().getReference()
+            .child(Constants.Notifications)
+            .child(Constants.uid).child(Constants.unread);
+    listener =  reference.addChildEventListener(new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
+            if (dataSnapshot.getValue() != null) {
+                ModelNotification notification = dataSnapshot.getValue(ModelNotification.class);
+                String pushKey = dataSnapshot.getKey();
+                if (notification != null) {
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.Notifications)
-                            .child(Constants.uid)
-                            .child(Constants.read);
-                    FirebaseListOptions<ModelNotification> options = new FirebaseListOptions.Builder<ModelNotification>()
-                            .setQuery(query, ModelNotification.class)
-                            .setLayout(R.layout.sample_notif)
-                            .build();
-                    adapter = new FirebaseListAdapter<ModelNotification>(options) {
+                            .child(Constants.uid).child(Constants.read).child(pushKey);
+                    
+                    reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        protected void populateView(View v, ModelNotification model, int position) {
+                        public void onSuccess(Void aVoid) {
                             
-                          
+                            dataSnapshot.getRef().setValue(null);
                             
-                            TextView txt = v.findViewById(R.id.txt);
-                            TextView time = v.findViewById(R.id.time);
-                            ImageView photo = v.findViewById(R.id.image);
-                            if(position<notifCount)
-                                txt.setTextColor(getResources().getColor(R.color.shade_black));
-                            else
-                                txt.setTextColor(getResources().getColor(R.color.read_color));
-                            txt.setText(model.getMessage());
-                            time.setText(SIMPLE_DATE_FORMAT.format(model.getTimeStamp()));
-                            Glide.with(Notifications.this).load(model.getImageUrl()).into(photo);
                         }
-                    };
-                    listView.setAdapter(adapter);
-                    setSwipeMenu();
-                    adapter.startListening();
+                    });
                 }
-                
+            }
+            
+        }
+        
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+        }
+        
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+        }
+        
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+        }
+        
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+        }
+    });
+    
+    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            
+            bar.setVisibility(View.GONE);
+            
+            Query query = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Notifications)
+                    .child(Constants.uid)
+                    .child(Constants.read);
+            FirebaseListOptions<ModelNotification> options = new FirebaseListOptions.Builder<ModelNotification>()
+                    .setQuery(query, ModelNotification.class)
+                    .setLayout(R.layout.sample_notif)
+                    .build();
+            adapter = new FirebaseListAdapter<ModelNotification>(options) {
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                
+                protected void populateView(View v, ModelNotification model, int position) {
+                    
+                    
+                    
+                    TextView txt = v.findViewById(R.id.txt);
+                    TextView time = v.findViewById(R.id.time);
+                    ImageView photo = v.findViewById(R.id.image);
+                    if(position<notifCount)
+                        txt.setTextColor(getResources().getColor(R.color.shade_black));
+                    else
+                        txt.setTextColor(getResources().getColor(R.color.read_color));
+                    txt.setText(model.getMessage());
+                    time.setText(SIMPLE_DATE_FORMAT.format(model.getTimeStamp()));
+                    Glide.with(getActivity()).load(model.getImageUrl()).into(photo);
                 }
-            });
+            };
+            listView.setAdapter(adapter);
+            setSwipeMenu();
+            adapter.startListening();
+        }
         
-
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
         
-    }
+        }
+    });
+    
+    
+    
+}
     
     private void setSwipeMenu() {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
-        
+            
             @Override
             public void create(SwipeMenu menu) {
                 // create "open" item
@@ -183,7 +193,7 @@ public class Notifications extends AppCompatActivity {
                 openItem.setTitleColor(Color.WHITE);
                 // add to menu
                 menu.addMenuItem(openItem);
-            
+                
                 // create "delete" item
                 SwipeMenuItem deleteItem = new SwipeMenuItem(
                         getApplicationContext());
@@ -202,14 +212,14 @@ public class Notifications extends AppCompatActivity {
 // set creator
         listView.setMenuCreator(creator);
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
-    
+        
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
                         // open
-                        Toast.makeText(Notifications.this, "Accepting request!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Accepting request!", Toast.LENGTH_SHORT).show();
                         acceptRequest(adapter.getItem(position));
                         break;
                     case 1:
@@ -225,7 +235,7 @@ public class Notifications extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 listView.smoothOpenMenu(position);
-    
+                
             }
         });
         
@@ -233,7 +243,7 @@ public class Notifications extends AppCompatActivity {
     
     private void acceptRequest(ModelNotification item) {
         if(item.getSendersUid()!=null)
-
+        
         {
             final DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
@@ -256,27 +266,62 @@ public class Notifications extends AppCompatActivity {
                             ref.setValue(contact);
                         }
                     }
-        
+                    
                 }
-    
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+                
                 }
             });
             
+            /*
+            
+            Similarly setup contact for the other user
+             */
+            
+            
+            final DatabaseReference ref2  = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(item.getSendersUid())
+                    .child(Constants.contacts)
+                    .child(Constants.uid);
+            
+            DatabaseReference receiver2 = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(Constants.uid);
+            receiver2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    
+                    if(dataSnapshot.getValue()!=null)
+                    {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid());
+                            ref2.setValue(contact);
+                        }
+                    }
+                    
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
         }
     }
     
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (adapter != null)
             adapter.startListening();
     }
     
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         if (adapter != null)
             adapter.stopListening();

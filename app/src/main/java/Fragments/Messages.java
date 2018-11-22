@@ -45,7 +45,7 @@ public class Messages extends Fragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
         
         tabLayout.addTab(tabLayout.newTab().setText("Messages"));
-        tabLayout.addTab(tabLayout.newTab().setText("All"));
+        tabLayout.addTab(tabLayout.newTab().setText("Connections"));
         
 //
         TablayoutAdapter adapter = new TablayoutAdapter(getFragmentManager(), tabLayout.getTabCount());

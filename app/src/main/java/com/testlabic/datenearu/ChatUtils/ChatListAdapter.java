@@ -72,7 +72,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder1 = (ViewHolder1) v.getTag();
 
                 }
-                      holder1.sendersName.setVisibility(View.GONE);
+                      //holder1.sendersName.setVisibility(View.GONE);
                 holder1.messageTextView.setText(Html.fromHtml(Emoji.replaceEmoji(message.getMessage(),
                         holder1.messageTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16))
                         + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"));

@@ -61,6 +61,7 @@
                 <ImageView
                     android:id="@+id/notification"
                     android:layout_width="24dp"
+                    android:visibility="gone"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_notification" />
 
@@ -85,6 +86,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="17dp"
             android:layout_marginRight="10dp"
+            android:visibility="gone"
             android:background="@drawable/rect_bg"
             android:orientation="horizontal">
 

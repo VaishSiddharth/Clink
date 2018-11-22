@@ -17,7 +17,6 @@ public class Chat_fliply extends AppCompatActivity {
 
     ViewPager viewPager;
     TabLayout tabLayout;
-
     private Typeface mTypeface;
     private Typeface mTypefaceBold;
 
