@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import fragment.All;
-import fragment.Archived;
+import fragment.Connections;
 
 /**
  * Created by wolfsoft4 on 21/9/18.
@@ -32,7 +32,7 @@ public class TablayoutAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return new All();
             case 1:
-                return new Archived();
+                return new Connections();
                 
 
     default:

@@ -27,7 +27,7 @@ import com.testlabic.datenearu.Utils.Constants;
  * Created by wolfsoft4 on 21/9/18.
  */
 
-public class Archived extends Fragment {
+public class Connections extends Fragment {
     private ListView listView;
     private FirebaseListAdapter<ModelContact> adapter;
     

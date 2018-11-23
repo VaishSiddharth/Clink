@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.testlabic.datenearu.Models.ModelLastMessage;
 import com.testlabic.datenearu.R;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class All  extends Fragment{
     private AllAdapter allAdapter;
     private RecyclerView recyclerview;
     private ArrayList<AllModel> allModelArrayList;
+    private ArrayList<ModelLastMessage> list;
 
     Integer image[]={R.drawable.profile,R.drawable.profile1,R.drawable.profile2,R.drawable.profile1,R.drawable.profile,R.drawable.profile2,R.drawable.profile1};
     String name[]={"Keith Mills","Hannah Chavez","Ann Bates","Martha Grant","Alexander Scott","Betty Lynch","Debra Martin"};

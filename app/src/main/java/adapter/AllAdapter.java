@@ -43,9 +43,7 @@ public class AllAdapter extends RecyclerView.Adapter<AllAdapter.ViewHolder> {
         holder.name.setText(allModelArrayList.get(position).getName());
         holder.time.setText(allModelArrayList.get(position).getTime());
         holder.txt.setText(allModelArrayList.get(position).getTxt());
-
-
-
+        
         holder.linear.setBackgroundResource(R.drawable.rect_white_border);
         if (position==0){
             holder.linear.setBackgroundResource(R.drawable.rect_white_border);
@@ -72,10 +70,7 @@ public class AllAdapter extends RecyclerView.Adapter<AllAdapter.ViewHolder> {
         }else if (position==4){
             holder.n4.setVisibility(View.VISIBLE);
         }
-
-
-
-
+        
     }
 
     @Override
@@ -102,11 +97,7 @@ public class AllAdapter extends RecyclerView.Adapter<AllAdapter.ViewHolder> {
             n2=itemView.findViewById(R.id.n2);
             n3=itemView.findViewById(R.id.n3);
             n4=itemView.findViewById(R.id.n4);
-
-
-
-
-
+            
         }
     }
 }

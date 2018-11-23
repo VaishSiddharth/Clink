@@ -50,7 +50,7 @@ public class MatchCalculator extends AppCompatActivity {
                 if (score > 7) {
                     if (clickedUsersId != null) {
                         SendNotification();
-                        SendRequestMessage();
+                        //SendRequestMessage();
                     }
                     progressBar.setVisibility(View.GONE);
                     statusMatch.setText(getResources().getString(R.string.matchSuccess));
