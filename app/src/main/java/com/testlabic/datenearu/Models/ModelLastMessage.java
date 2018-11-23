@@ -1,19 +1,17 @@
 package com.testlabic.datenearu.Models;
 
-import java.util.HashMap;
-
 public class ModelLastMessage {
     
     String name;
     String imageUrl;
     String uid;
     String lastMessage;
-    HashMap<String, Object> timeStamp;
+    long timeStamp;
     
     public ModelLastMessage() {
     }
     
-    public ModelLastMessage(String name, String imageUrl, String uid, String lastMessage, HashMap<String, Object> timeStamp) {
+    public ModelLastMessage(String name, String imageUrl, String uid, String lastMessage, long timeStamp) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.uid = uid;
@@ -37,7 +35,7 @@ public class ModelLastMessage {
         return lastMessage;
     }
     
-    public HashMap<String, Object> getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 }

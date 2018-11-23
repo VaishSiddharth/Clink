@@ -77,8 +77,7 @@ public class ChatListAdapter extends BaseAdapter {
                         holder1.messageTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16))
                         + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"));
                 holder1.timeTextView.setText(SIMPLE_DATE_FORMAT.format(message.getSendingTime()));
-
-
+                
             } else if (message.getSentFrom().equals(myUid)) {
 
                 if (convertView == null) {
@@ -113,9 +112,7 @@ public class ChatListAdapter extends BaseAdapter {
                 /*
                 compare dates here
                  */
-
-
-
+                
             }
 
             long previousTs = 0;

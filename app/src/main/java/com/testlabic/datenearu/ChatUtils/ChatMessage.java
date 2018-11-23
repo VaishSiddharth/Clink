@@ -4,7 +4,7 @@ package com.testlabic.datenearu.ChatUtils;
  * Created by root on 8/1/18.
  */
 
-class ChatMessage {
+ public class ChatMessage {
 
     private String message;
 
