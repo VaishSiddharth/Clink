@@ -105,22 +105,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         
         public ViewHolder(View itemView) {
             super(itemView);
-            
-            image=itemView.findViewById(R.id.image);
-            name=itemView.findViewById(R.id.name);
-            time=itemView.findViewById(R.id.time);
-            txt=itemView.findViewById(R.id.txt);
-            linear =itemView.findViewById(R.id.linear);
-            
-            n1=itemView.findViewById(R.id.n1);
-            n2=itemView.findViewById(R.id.n2);
-            n3=itemView.findViewById(R.id.n3);
-            n4=itemView.findViewById(R.id.n4);
-            
-            
-            
-            
-            
+    
+            image = itemView.findViewById(R.id.image);
+            name = itemView.findViewById(R.id.name);
+            time = itemView.findViewById(R.id.time);
+            txt = itemView.findViewById(R.id.txt);
+            linear = itemView.findViewById(R.id.linear);
+    
         }
     }
 }

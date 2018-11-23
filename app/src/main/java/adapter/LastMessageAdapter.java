@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import model.AllModel;
  */
 
 public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.ViewHolder> {
+    private static final String TAG = LastMessageAdapter.class.getSimpleName();
     Context context;
     private ArrayList<ModelLastMessage> allModelArrayList;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("h:mm a", Locale.getDefault());
@@ -55,6 +57,20 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         holder.txt.setText(allModelArrayList.get(position).getLastMessage());
     
         Glide.with(context).load(lastMessage.getImageUrl()).into(holder.image);
+        if(lastMessage.getSendersUid().equals(Constants.uid))
+        {
+            /*
+            For own message show delivered status
+             */
+            holder.readStat.setVisibility(View.VISIBLE);
+            if(lastMessage.getDelivered())
+                holder.readStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check));
+            else
+                holder.readStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_grey));
+    
+        }
+        else
+            holder.readStat.setVisibility(View.GONE);
         
        /* holder.linear.setBackgroundResource(R.drawable.rect_white_border);
         if (position==0){
@@ -86,7 +102,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image,n2,n3,n4;
+        ImageView image,readStat,n3,n4;
         TextView name,time,txt,n1;
         LinearLayout linear;
 
@@ -100,9 +116,8 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             txt=itemView.findViewById(R.id.txt);
             linear =itemView.findViewById(R.id.linear);
 
-            n1=itemView.findViewById(R.id.n1);
-            n2=itemView.findViewById(R.id.n2);
-            n3=itemView.findViewById(R.id.n3);
+           
+            readStat=itemView.findViewById(R.id.readStat);
             n4=itemView.findViewById(R.id.n4);
             
         }

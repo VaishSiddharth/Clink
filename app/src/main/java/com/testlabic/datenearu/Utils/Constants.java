@@ -26,4 +26,5 @@ public class Constants {
     public static String contacts = "contacts";
     public static String sendToUid = "sendToUid";
     public static String sendToName = "sendToName";
+    public static String messageDelivered = "messageDelivered";
 }

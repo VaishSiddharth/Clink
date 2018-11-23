@@ -89,9 +89,6 @@ public class All extends Fragment {
                         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String ref = dataSnapshot.getKey();
-                                Log.e(TAG, "The ref is "+ref);
-                                
                                 for(DataSnapshot one: dataSnapshot.getChildren())
                                 {
                                     if(one.getValue(ChatMessage.class)!=null) {
@@ -99,9 +96,11 @@ public class All extends Fragment {
                                         {
                                             String lastMessage = one.getValue(ChatMessage.class).getMessage();
                                             long timeStamp = one.getValue(ChatMessage.class).getSendingTime();
+                                            Boolean isDelivered = one.getValue(ChatMessage.class).getMessageDelivered();
+                                            String sendersUid = one.getValue(ChatMessage.class).getSentFrom();
                                             if(lastMessage!=null) {
                                                 ModelLastMessage message = new ModelLastMessage(name, imageUrl
-                                                        , uid, lastMessage, timeStamp);
+                                                        , uid, lastMessage, timeStamp, isDelivered, sendersUid);
                                                 list.add(message);
                                                 adapter = new LastMessageAdapter(getActivity(), list);
                                                 recyclerview.setAdapter(adapter);

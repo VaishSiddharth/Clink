@@ -159,16 +159,16 @@ public class MainActivity extends AppCompatActivity {
                 if (firebaseAuth.getCurrentUser() == null) {
                     startActivity(new Intent(MainActivity.this, SignIn.class));
                     finish();
-                } else
-                    checkForNotification();
+                }
                 
             }
         });
-        refresh = getIntent().getBooleanExtra(Constants.refresh, false);
-        if (refresh) {
-            startActivity(new Intent(this, MainActivity.class));
+        if (FirebaseAuth.getInstance().getUid() == null) {
+            startActivity(new Intent(MainActivity.this, SignIn.class));
             finish();
-        }
+        } else
+            checkForNotification();
+        
     }
     
     @Override

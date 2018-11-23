@@ -42,13 +42,11 @@ public class chatFullScreen extends AppCompatActivity {
     private TextView toolbarName;
     private String sendToUid;
     private String myUid;
-    private TextView emptyView;
     private String sendersName;
     private ChatListAdapter listAdapter;
-    
+    private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
+    private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
-    
-    private Boolean isAGroup = false;
     
     ImageView imageView;
     
@@ -171,8 +169,8 @@ public class chatFullScreen extends AppCompatActivity {
         });
         
         chatEditText1 = findViewById(R.id.chat_edit_text1);
-        
-        emptyView = findViewById(R.id.emptyView);
+    
+        TextView emptyView = findViewById(R.id.emptyView);
         
         enterChatView1 = (ImageView) findViewById(R.id.enter_chat1);
         
@@ -180,7 +178,7 @@ public class chatFullScreen extends AppCompatActivity {
         
         chatListView.setEmptyView(emptyView);
         
-        listAdapter = new ChatListAdapter(messages, this);
+        listAdapter = new ChatListAdapter(msgReferenceListUsersCopy, msgReferenceList, messages, this);
         
         scrollMyListViewToBottom();
         
@@ -253,7 +251,7 @@ public class chatFullScreen extends AppCompatActivity {
                 .child(sendToUid);
         if (message.getRefKey() != null) {
             reference = reference.child(message.getRefKey());
-            Log.e(TAG, "Reference about to be deleted is " + reference);
+            //Log.e(TAG, "Reference about to be deleted is " + reference);
             reference.setValue(null);
             if (listAdapter != null) {
                 if (sendToUid != null && myUid != null)
@@ -264,7 +262,7 @@ public class chatFullScreen extends AppCompatActivity {
         
     }
     
-    private void fillMessageArray(String sendToUid, String myUid) {
+    private void fillMessageArray(final String sendToUid, final String myUid) {
         if (sendToUid != null) {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.CHATS).child(myUid).child(sendToUid);
@@ -273,11 +271,20 @@ public class chatFullScreen extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     messages.clear();
+                    msgReferenceList.clear();
+                    msgReferenceListUsersCopy.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ChatMessage message = snapshot.getValue(ChatMessage.class);
                         
-                        if (message != null)
+                        if (message != null) {
                             messages.add(message);
+                            String key = snapshot.getKey();
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                    .child(Constants.CHATS).child(sendToUid).child(myUid)
+                                    .child(key);
+                            msgReferenceList.add(reference);
+                            msgReferenceListUsersCopy.add(snapshot.getRef());
+                        }
                         
                     }
                     
@@ -307,7 +314,8 @@ public class chatFullScreen extends AppCompatActivity {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.CHATS).child(sendToUid).child(myUid).push();
         String refK = ref.getKey();
-        
+    
+        Boolean isAGroup = false;
         final ChatMessage message = new ChatMessage(messageText, null, refK, myUid,
                 sendToUid, false, new Date().getTime(), isAGroup, myName, sendToName);
         

@@ -213,11 +213,10 @@ public class Home extends Fragment {
     
     @Override
     public void onResume() {
-        
-        putValueInchangeLocation();
-        if (Constants.uid != null)
-        //checkForNotification();
         super.onResume();
+        putValueInchangeLocation();
+        //checkForNotification();
+        
        // Log.e(TAG, "On resume called!");
     }
     

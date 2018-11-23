@@ -67,7 +67,8 @@
             android:layout_marginLeft="7dp"
             android:layout_width="17dp"
             android:layout_height="17dp"
-            android:src="@drawable/ic_check"/>
+            android:id="@+id/readStat"
+            android:src="@drawable/ic_check_grey"/>
     </LinearLayout>
 
 </LinearLayout>

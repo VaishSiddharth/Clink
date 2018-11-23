@@ -96,11 +96,11 @@
 
 
                 <ImageView
-                    android:id="@+id/n3"
+                    android:id="@+id/readStat"
                     android:layout_marginLeft="10dp"
-                    android:layout_width="18dp"
+                    android:layout_width="20dp"
                     android:layout_height="18dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:src="@drawable/ic_check"/>
 
                 <ImageView
@@ -119,12 +119,12 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/n1"
+            android:id="@+id/numberOfNewMessages"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:textSize="11sp"
             android:text="1"
             android:gravity="center"

@@ -7,16 +7,26 @@ public class ModelLastMessage {
     String uid;
     String lastMessage;
     long timeStamp;
+    Boolean isDelivered;
+    String sendersUid;
     
     public ModelLastMessage() {
     }
     
-    public ModelLastMessage(String name, String imageUrl, String uid, String lastMessage, long timeStamp) {
+    public Boolean getDelivered() {
+        return isDelivered;
+    }
+    
+    public ModelLastMessage(String name, String imageUrl, String uid, String lastMessage, long timeStamp,
+                            Boolean isDelivered, String sendersUid) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.uid = uid;
         this.lastMessage = lastMessage;
         this.timeStamp = timeStamp;
+        this.isDelivered = isDelivered;
+        this.sendersUid = sendersUid;
+        
     }
     
     public String getName() {
@@ -25,6 +35,10 @@ public class ModelLastMessage {
     
     public String getImageUrl() {
         return imageUrl;
+    }
+    
+    public String getSendersUid() {
+        return sendersUid;
     }
     
     public String getUid() {

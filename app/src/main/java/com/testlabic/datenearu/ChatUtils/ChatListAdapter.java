@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +12,32 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class ChatListAdapter extends BaseAdapter {
-
+    
+    private static final String TAG = ChatListAdapter.class.getSimpleName();
     private ArrayList<ChatMessage> chatMessages;
     private Context context;
     private String myUid;
+    private ArrayList<DatabaseReference> messageReferences;
+    private ArrayList<DatabaseReference> messageReferencesUsersCopy;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("h:mm a", Locale.getDefault());
 
-    public ChatListAdapter(ArrayList<ChatMessage> chatMessages, Context context) {
+    public ChatListAdapter(ArrayList<DatabaseReference> msgReferenceListUsersCopy, ArrayList<DatabaseReference> msgReferenceList, ArrayList<ChatMessage> chatMessages, Context context) {
         this.chatMessages = chatMessages;
         this.context = context;
+        this.messageReferences = msgReferenceList;
+        this.messageReferencesUsersCopy = msgReferenceListUsersCopy;
         myUid = FirebaseAuth.getInstance().getUid();
     }
 
@@ -59,6 +70,11 @@ public class ChatListAdapter extends BaseAdapter {
                 /*
                 Other party's message came
                  */
+                /*
+                Mark the message delivered/seen
+                 */
+                if(!message.getMessageDelivered())
+                checkMessageDelivered(messageReferences.get(position), messageReferencesUsersCopy.get(position));
 
                 if (convertView == null) {
                     v = LayoutInflater.from(context).inflate(R.layout.sample_msg_received, null, false);
@@ -86,7 +102,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder2 = new ViewHolder2();
                     holder2.messageTextView = (TextView) v.findViewById(R.id.textview_message);
                     holder2.timeTextView = (TextView) v.findViewById(R.id.textview_time);
-                   // holder2.messageStatus = (ImageView) v.findViewById(R.id.user_reply_status);
+                    holder2.messageStatus = (ImageView) v.findViewById(R.id.readStat);
                     v.setTag(holder2);
 
                 } else {
@@ -103,11 +119,11 @@ public class ChatListAdapter extends BaseAdapter {
                  holder2.timeTextView.setText(SIMPLE_DATE_FORMAT.format(message.getSendingTime()));
 
 
-              /*  if (!message.getMessageDelivered()) {
-                    holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.message_got_receipt_from_target));
+                if (!message.getMessageDelivered()) {
+                    holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check_grey));
                 } else if (message.getMessageDelivered()) {
-                    holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.message_got_receipt_from_server));
-                }*/
+                    holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check));
+                }
 
                 /*
                 compare dates here
@@ -130,7 +146,15 @@ public class ChatListAdapter extends BaseAdapter {
 
         return v;
     }
-
+    
+    private void checkMessageDelivered(DatabaseReference s, DatabaseReference databaseReference) {
+        //Log.e(TAG, "The reference is "+s);
+        HashMap<String, Object> updateMap = new HashMap<>();
+        updateMap.put(Constants.messageDelivered, true);
+        s.updateChildren(updateMap);
+        databaseReference.updateChildren(updateMap);
+    }
+    
     private String getDate(long time) {
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(time);
