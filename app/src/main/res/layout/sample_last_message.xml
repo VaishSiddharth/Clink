@@ -97,11 +97,13 @@
 
                 <ImageView
                     android:id="@+id/readStat"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="20dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_width="18dp"
+                    android:paddingEnd="2dp"
                     android:layout_height="18dp"
                     android:visibility="visible"
-                    android:src="@drawable/ic_check"/>
+                    android:src="@drawable/ic_check"
+                    android:paddingRight="2dp" />
 
                 <ImageView
                     android:id="@+id/n4"
@@ -109,7 +111,7 @@
                     android:layout_width="11dp"
                     android:layout_height="13dp"
                     android:layout_marginTop="7dp"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:src="@drawable/ic_credit_card"/>
 
 

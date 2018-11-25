@@ -5,6 +5,11 @@ import android.os.Handler;
 
 import com.facebook.FacebookSdk;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.testlabic.datenearu.Utils.Constants;
+
+import java.util.HashMap;
 
 public class application extends Application {
     private static application Instance;
@@ -20,7 +25,10 @@ public class application extends Application {
     
         FirebaseApp.initializeApp(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        
     }
+    
+   
     
     public static application getInstance()
     {

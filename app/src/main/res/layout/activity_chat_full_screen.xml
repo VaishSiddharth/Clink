@@ -78,6 +78,13 @@
         android:text="Send a message to accept request and move to messages list"
         android:textSize="13sp" />
 
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+        android:layout_width="wrap_content"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -122,9 +129,10 @@
                 android:layout_marginRight="20dp"
                 android:src="@drawable/ic_smile" />
 
-            <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="4dp"
                 android:layout_marginRight="20dp"
                 android:id="@+id/enter_chat1"
                 android:src="@drawable/ic_dont_send" />

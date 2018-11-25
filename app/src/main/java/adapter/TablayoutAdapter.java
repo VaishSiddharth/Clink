@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import fragment.All;
+import Fragments.AllMessagesList;
 import fragment.Connections;
 
 /**
@@ -30,7 +30,7 @@ public class TablayoutAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return new All();
+                return new AllMessagesList();
             case 1:
                 return new Connections();
                 

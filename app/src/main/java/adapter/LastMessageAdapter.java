@@ -13,6 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.Models.ModelLastMessage;
 import com.testlabic.datenearu.R;
@@ -21,8 +26,6 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import model.AllModel;
 
 /**
  * Created by wolfsoft4 on 21/9/18.
@@ -44,10 +47,14 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     @Override
     public LastMessageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.sample_last_message,parent,false);
         return new ViewHolder(view);
     }
-
+    
+    private void checkUsersStatus() {
+        
+    
+    }
     @Override
     public void onBindViewHolder(final LastMessageAdapter.ViewHolder holder, final int position) {
         
@@ -55,8 +62,33 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         holder.name.setText(allModelArrayList.get(position).getName());
         holder.time.setText(SIMPLE_DATE_FORMAT.format(lastMessage.getTimeStamp()));
         holder.txt.setText(allModelArrayList.get(position).getLastMessage());
-    
+        
         Glide.with(context).load(lastMessage.getImageUrl()).into(holder.image);
+        
+        /*
+        Get unread messages and display the number of messages unread
+         */
+    
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS+Constants.unread)
+                .child(Constants.uid+Constants.unread)
+                .child(lastMessage.getSendersUid());
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int unreads = (int) dataSnapshot.getChildrenCount();
+                    
+                    if(unreads>0) {
+                        holder.numberOfNewMesssages.setVisibility(View.VISIBLE);
+                        holder.numberOfNewMesssages.setText(String.valueOf(unreads));
+                    }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
         if(lastMessage.getSendersUid().equals(Constants.uid))
         {
             /*
@@ -103,7 +135,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image,readStat,n3,n4;
-        TextView name,time,txt,n1;
+        TextView name,time,txt,numberOfNewMesssages;
         LinearLayout linear;
 
 
@@ -118,7 +150,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
 
            
             readStat=itemView.findViewById(R.id.readStat);
-            n4=itemView.findViewById(R.id.n4);
+            numberOfNewMesssages=itemView.findViewById(R.id.numberOfNewMessages);
             
         }
     }

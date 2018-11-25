@@ -69,7 +69,7 @@ public class NotificationFragment extends Fragment {
         //notifCount = getIntent().getIntExtra(Constants.notifCount, -1);
         
         /*
-        Mark all notifications read and then display
+        Mark sample_last_message notifications read and then display
          */
         MoveNotifToRead();
         return rootView;

@@ -27,4 +27,8 @@ public class Constants {
     public static String sendToUid = "sendToUid";
     public static String sendToName = "sendToName";
     public static String messageDelivered = "messageDelivered";
+    public static String status = "status";
+    public static String online = "online";
+    public static String offline = "offline";
+    public static String usersStatus = "usersStatus";
 }

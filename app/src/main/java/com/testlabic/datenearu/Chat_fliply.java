@@ -32,7 +32,7 @@ public class Chat_fliply extends AppCompatActivity {
 //        setCustomFontAndStyle(tabLayout, 0);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        tabLayout.addTab(tabLayout.newTab().setText("All"));
+        tabLayout.addTab(tabLayout.newTab().setText("AllMessagesList"));
         tabLayout.addTab(tabLayout.newTab().setText("Requests"));
       //  tabLayout.addTab(tabLayout.newTab().setText("Closed"));
 

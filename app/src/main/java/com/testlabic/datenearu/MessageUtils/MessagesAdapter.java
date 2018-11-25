@@ -1,7 +1,6 @@
 package com.testlabic.datenearu.MessageUtils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,13 +13,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.testlabic.datenearu.Models.ModelMessage;
 import com.testlabic.datenearu.R;
-import com.testlabic.datenearu.Utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import model.AllModel;
 
 /**
  * Created by wolfsoft4 on 21/9/18.
@@ -40,7 +36,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     @Override
     public MessagesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.sample_last_message,parent,false);
         return new ViewHolder(view);
     }
     

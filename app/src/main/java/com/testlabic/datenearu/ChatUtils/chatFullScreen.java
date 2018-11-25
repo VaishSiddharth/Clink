@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -43,6 +45,8 @@ public class chatFullScreen extends AppCompatActivity {
     private String sendToUid;
     private String myUid;
     private String sendersName;
+    private GoogleProgressBar bar;
+    private Boolean isOnlineForCurrentUser = false;
     private ChatListAdapter listAdapter;
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
@@ -65,7 +69,7 @@ public class chatFullScreen extends AppCompatActivity {
                 EditText editText = (EditText) v;
                 
                 if (v == chatEditText1) {
-                    sendMessage(editText.getText().toString());
+                    sendMessage(editText.getText().toString(), isOnlineForCurrentUser);
                 }
                 
                 chatEditText1.setText("");
@@ -82,7 +86,7 @@ public class chatFullScreen extends AppCompatActivity {
         public void onClick(View v) {
             
             if (v == enterChatView1) {
-                sendMessage(chatEditText1.getText().toString());
+                sendMessage(chatEditText1.getText().toString(), isOnlineForCurrentUser);
             }
             
             chatEditText1.setText("");
@@ -132,7 +136,8 @@ public class chatFullScreen extends AppCompatActivity {
         setContentView(R.layout.activity_chat_full_screen);
         
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        
+        bar = findViewById(R.id.progress_bar);
+        bar.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -169,7 +174,7 @@ public class chatFullScreen extends AppCompatActivity {
         });
         
         chatEditText1 = findViewById(R.id.chat_edit_text1);
-    
+        
         TextView emptyView = findViewById(R.id.emptyView);
         
         enterChatView1 = (ImageView) findViewById(R.id.enter_chat1);
@@ -263,6 +268,14 @@ public class chatFullScreen extends AppCompatActivity {
     }
     
     private void fillMessageArray(final String sendToUid, final String myUid) {
+        
+        /*
+       Delete unreads
+         */
+        DatabaseReference delRef =  FirebaseDatabase.getInstance().getReference()
+                .child(Constants.CHATS + Constants.unread).child(Constants.uid + Constants.unread).child(sendToUid);
+        delRef.setValue(null);
+        
         if (sendToUid != null) {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.CHATS).child(myUid).child(sendToUid);
@@ -298,9 +311,41 @@ public class chatFullScreen extends AppCompatActivity {
                 }
             });
         }
+        if(bar!=null)
+            bar.setVisibility(View.GONE);
     }
     
-    private void sendMessage(final String messageText) {
+    private void checkUsersStatus() {
+          /*
+        Before sending message check if user is on your chat screen and online, else move the messages to unread node!
+         */
+        //Querying database to check status
+        
+        DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.usersStatus)
+                .child(sendToUid)
+                .child(Constants.status + sendToUid);
+        statusCheckRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //check if user is online for current user
+                if (dataSnapshot.getValue(String.class) != null) {
+                    isOnlineForCurrentUser = true;
+                }
+                Log.e(TAG, "User is offline move to unread");
+                    isOnlineForCurrentUser = false;
+                // send message to unread
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        
+    }
+    
+    private void sendMessage(final String messageText, boolean isOnlineOtherUser) {
         
         if (messageText.trim().length() == 0)
             return;
@@ -310,17 +355,28 @@ public class chatFullScreen extends AppCompatActivity {
         timeStamp.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         
         String myName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference ref;
+        DatabaseReference refUnread = null;
+        ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.CHATS).child(sendToUid).child(myUid).push();
+        if (!isOnlineOtherUser) {
+            //increment the unread list
+            
+            refUnread = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.CHATS + Constants.unread).child(sendToUid + Constants.unread).child(myUid).push();
+        }
+        
         String refK = ref.getKey();
-    
+        
         Boolean isAGroup = false;
         final ChatMessage message = new ChatMessage(messageText, null, refK, myUid,
                 sendToUid, false, new Date().getTime(), isAGroup, myName, sendToName);
         
         ref.setValue(message);
-        
+        if (refUnread != null) {
+            refUnread.setValue(message);
+        }
+    
         final String pushKey = ref.getKey();
         
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference()
@@ -329,5 +385,35 @@ public class chatFullScreen extends AppCompatActivity {
         myRef.setValue(message);
         //message.setMessageStatus(Constants.DELIVERED);
         
+    }
+    
+    private void updateStatus(String key, String status) {
+        HashMap<String, Object> updateStatus = new HashMap<>();
+        updateStatus.put(key, status);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
+                .child(Constants.uid);
+        reference.updateChildren(updateStatus);
+        
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        updateStatus(Constants.status + sendToUid, Constants.offline);
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        updateStatus(Constants.status + sendToUid, Constants.offline);
+        
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateStatus(Constants.status, Constants.online);
+        updateStatus(Constants.status + sendToUid, Constants.online);
+        checkUsersStatus();
     }
 }

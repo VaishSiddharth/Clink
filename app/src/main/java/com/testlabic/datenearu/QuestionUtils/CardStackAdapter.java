@@ -98,7 +98,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             holder.optC.setText(question.getOptC());
             holder.optD.setText(question.getOptD());
         /*
-        Uncolor all options explicitly
+        Uncolor sample_last_message options explicitly
          */
         
         /*

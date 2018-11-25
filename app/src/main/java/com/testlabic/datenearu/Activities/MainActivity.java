@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,9 +22,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+
+import java.util.HashMap;
 
 import Fragments.Home;
 import Fragments.Messages;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomBar bottomBar;
     private boolean refresh = false;
     private int count = 0;
+    private int messagesUnread = 0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 if (tabId == R.id.tab_message) {
                     // switch to messages fragment
                     changeFragment(new Messages());
+                    BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
+                    nearby.removeBadge();
                 } else if (tabId == R.id.tab_home) {
                     // switch to messages fragment
                     changeFragment(new Home());
@@ -166,8 +173,108 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getUid() == null) {
             startActivity(new Intent(MainActivity.this, SignIn.class));
             finish();
-        } else
+        } else {
             checkForNotification();
+            checkForNewMessages();
+            updateStatus(Constants.online);
+        }
+        
+    }
+    
+    private void checkForNewMessages() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
+                .child(Constants.uid + Constants.unread);
+        
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.getValue(ChatMessage.class) != null) {
+                    messagesUnread++;
+                }
+            }
+            
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            
+            }
+            
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            
+            }
+            
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int unreads = (int) dataSnapshot.getChildrenCount();
+                
+                if (unreads > 0) {
+                    BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
+                    if (messagesUnread > 0) {
+        
+                        nearby.setBadgeCount(messagesUnread);
+
+// Remove the badge when you're done with it.
+                    } else
+                        nearby.removeBadge();
+                }
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+    }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        updateStatus(Constants.offline);
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+       // updateStatus(Constants.offline);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        updateStatus(Constants.offline);
+    }
+    
+    private void updateStatus(final String status) {
+        HashMap<String, Object> updateStatus = new HashMap<>();
+        updateStatus.put(Constants.status, status);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
+                .child(Constants.uid);
+        reference.updateChildren(updateStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                if(status.equals(Constants.online))
+                {
+                
+                }
+            }
+        });
         
     }
     

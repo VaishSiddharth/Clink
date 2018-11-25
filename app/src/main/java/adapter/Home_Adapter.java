@@ -86,21 +86,10 @@ public class Home_Adapter extends RecyclerView.Adapter<Home_Adapter.ViewHolder> 
                         }
                         
                     } else if (user.getProviderId().equals("facebook.com")) {
+                        modifiedImageUrl = url;
+                        if(!url.contains("/picture?height=500"))
+                           modifiedImageUrl=  url.replace("/picture", "/picture?height=500");
                         
-                        String facebookUserId = "";
-                        // find the Facebook profile and get the user's id
-                        for (UserInfo profile : currentUser.getProviderData()) {
-                            // check if the provider id matches "facebook.com"
-                            if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
-                                facebookUserId = profile.getUid();
-                            }
-                        }
-                        // construct the URL to the profile picture, with a custom height
-                        // alternatively, use '?type=small|medium|large' instead of ?height=
-                        String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
-                        {
-                            modifiedImageUrl = photoUrl;
-                        }
                     }
                 }
             }

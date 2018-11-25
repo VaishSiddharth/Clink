@@ -1,4 +1,4 @@
-package fragment;
+package Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelLastMessage;
-import com.testlabic.datenearu.Models.ModelMessage;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -34,33 +33,32 @@ import adapter.LastMessageAdapter;
  * Created by wolfsoft4 on 21/9/18.
  */
 
-public class All extends Fragment {
+public class AllMessagesList extends Fragment {
     
-    private static final String TAG = All.class.getSimpleName();
+    private static final String TAG = AllMessagesList.class.getSimpleName();
     private LastMessageAdapter adapter;
+    private GoogleProgressBar bar;
     private RecyclerView recyclerview;
     private ArrayList<ModelLastMessage> list;
-    
-    Integer image[] = {R.drawable.profile, R.drawable.profile1, R.drawable.profile2, R.drawable.profile1, R.drawable.profile, R.drawable.profile2, R.drawable.profile1};
-    String name[] = {"Keith Mills", "Hannah Chavez", "Ann Bates", "Martha Grant", "Alexander Scott", "Betty Lynch", "Debra Martin"};
-    String time[] = {"24m ago", "40m ago", "1h ago", "2d ago", "4d ago", "5d ago", "1w ago"};
-    String text[] = {"Hey, would you be interested in ...", "How about PayPal? Let me kn ...", "My final price would be 5k. Not m ...", "Let’s do this. Meet me at Starbucks", "Paid for the order", "Was great dealing with you. Thanks!", "Awesome. Thanks for this!"};
     
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recycler_all, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_messages_list, container, false);
         recyclerview = (view).findViewById(R.id.recycler4);
+        bar = view.findViewById(R.id.progress_bar);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
-        downloadDataAndSetAdapter();
+        //downloadDataAndSetAdapter();
+        bar.setVisibility(View.VISIBLE);
         return view;
         
     }
     
     private void downloadDataAndSetAdapter() {
         list = new ArrayList<>();
+        list.clear();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
@@ -76,15 +74,23 @@ public class All extends Fragment {
                         final String imageUrl = contact.getImage();
                         final String uid = contact.getUid();
                         
-                        /*
-                        Now fetch the last message and time and setup adapter
-                         */
-    
                         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.CHATS)
                                 .child(Constants.uid)
                                 .child(uid)
                                 ;
+                        
+                         /*
+                        Check For unread messages and put label
+                         */
+                        
+                        Query unreadLabelQ = databaseReference.orderByKey().limitToLast(6);
+                        
+                        /*
+                        Now fetch the last message and time and setup adapter
+                         */
+                        
+                        
                         Query lastQuery = databaseReference.orderByKey().limitToLast(1);
                         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -104,20 +110,21 @@ public class All extends Fragment {
                                                 list.add(message);
                                                 adapter = new LastMessageAdapter(getActivity(), list);
                                                 recyclerview.setAdapter(adapter);
+                                                if(bar!=null)
+                                                    bar.setVisibility(View.GONE);
                                             }
                                         }
                                         
                                     }
                                 }
-                                
-                                
                             }
-        
+                            
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 //Handle possible errors.
                             }
                         });
+                        
                     }
                 }
             }
@@ -142,5 +149,11 @@ public class All extends Fragment {
             
             }
         });
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        downloadDataAndSetAdapter();
     }
 }
