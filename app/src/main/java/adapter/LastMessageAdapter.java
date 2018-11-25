@@ -50,11 +50,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.sample_last_message,parent,false);
         return new ViewHolder(view);
     }
-    
-    private void checkUsersStatus() {
-        
-    
-    }
+
     @Override
     public void onBindViewHolder(final LastMessageAdapter.ViewHolder holder, final int position) {
         
@@ -69,9 +65,18 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         Get unread messages and display the number of messages unread
          */
     
+      //  Log.e(TAG, "uid "+ lastMessage.getUid()+ " status "+lastMessage.getStatus());
+        if(lastMessage.getStatus()!=null)
+        {
+            if(lastMessage.getStatus().equals(Constants.online))
+                holder.onlineStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_online));
+            else
+                holder.onlineStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_brightness_1_black));
+    
+        }
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS+Constants.unread)
                 .child(Constants.uid+Constants.unread)
-                .child(lastMessage.getSendersUid());
+                .child(lastMessage.getUid());
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -134,7 +139,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image,readStat,n3,n4;
+        ImageView image,readStat,onlineStat,n4;
         TextView name,time,txt,numberOfNewMesssages;
         LinearLayout linear;
 
@@ -148,7 +153,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             txt=itemView.findViewById(R.id.txt);
             linear =itemView.findViewById(R.id.linear);
 
-           
+           onlineStat= itemView.findViewById(R.id.onlineStatus);
             readStat=itemView.findViewById(R.id.readStat);
             numberOfNewMesssages=itemView.findViewById(R.id.numberOfNewMessages);
             

@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_message_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_brightness_1_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -44,10 +44,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="C:\Users\velox\Desktop\ic_profile.png" />
-                                      <entry key="outputName" value="ic_profiles" />
-                                      <entry key="themeColor" value="a6a6a6" />
+                                      <entry key="outputName" value="ic_online" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="16e535" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -59,7 +59,6 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
                                       <entry key="foregroundImage" value="C:\Users\velox\Desktop\logo-preview-4c5e74bf-411c-4029-8d63-bf81fddce6da.jpg" />
                                     </map>
                                   </option>

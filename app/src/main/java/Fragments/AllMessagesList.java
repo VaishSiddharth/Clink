@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class AllMessagesList extends Fragment {
     private GoogleProgressBar bar;
     private RecyclerView recyclerview;
     private ArrayList<ModelLastMessage> list;
+    private String status= null;
     
     @Nullable
     @Override
@@ -65,8 +67,9 @@ public class AllMessagesList extends Fragment {
                 .child(Constants.contacts);
         reference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable final String s) {
+                if(bar!=null)
+                    bar.setVisibility(View.GONE);
                 if (dataSnapshot.getValue(ModelContact.class) != null) {
                     ModelContact contact = dataSnapshot.getValue(ModelContact.class);
                     if (contact != null) {
@@ -77,41 +80,61 @@ public class AllMessagesList extends Fragment {
                         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.CHATS)
                                 .child(Constants.uid)
-                                .child(uid)
-                                ;
-                        
+                                .child(uid);
                          /*
-                        Check For unread messages and put label
-                         */
-                        
-                        Query unreadLabelQ = databaseReference.orderByKey().limitToLast(6);
-                        
-                        /*
                         Now fetch the last message and time and setup adapter
                          */
-                        
                         
                         Query lastQuery = databaseReference.orderByKey().limitToLast(1);
                         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for(DataSnapshot one: dataSnapshot.getChildren())
-                                {
-                                    if(one.getValue(ChatMessage.class)!=null) {
-                                        if(one.getValue(ChatMessage.class)!=null)
-                                        {
-                                            String lastMessage = one.getValue(ChatMessage.class).getMessage();
-                                            long timeStamp = one.getValue(ChatMessage.class).getSendingTime();
-                                            Boolean isDelivered = one.getValue(ChatMessage.class).getMessageDelivered();
-                                            String sendersUid = one.getValue(ChatMessage.class).getSentFrom();
-                                            if(lastMessage!=null) {
-                                                ModelLastMessage message = new ModelLastMessage(name, imageUrl
-                                                        , uid, lastMessage, timeStamp, isDelivered, sendersUid);
-                                                list.add(message);
-                                                adapter = new LastMessageAdapter(getActivity(), list);
-                                                recyclerview.setAdapter(adapter);
-                                                if(bar!=null)
-                                                    bar.setVisibility(View.GONE);
+                                for (DataSnapshot one : dataSnapshot.getChildren()) {
+                                    if (one.getValue(ChatMessage.class) != null) {
+                                        if (one.getValue(ChatMessage.class) != null) {
+                                            final String lastMessage = one.getValue(ChatMessage.class).getMessage();
+                                            final long timeStamp = one.getValue(ChatMessage.class).getSendingTime();
+                                            final Boolean isDelivered = one.getValue(ChatMessage.class).getMessageDelivered();
+                                            final String sendersUid = one.getValue(ChatMessage.class).getSentFrom();
+                                            if (lastMessage != null) {
+                                                
+                                                /*
+                                                Check online status
+                                                 */
+                                                
+                                                //Querying database to check status
+                                                
+                                                DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.usersStatus)
+                                                        .child(uid)
+                                                        .child(Constants.status);
+                                                statusCheckRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        //check if user is online for current user
+                                                        if (dataSnapshot.getValue(String.class) != null) {
+                                                            String stat = dataSnapshot.getValue(String.class);
+                                                            if (stat != null && stat.equals(Constants.online))
+                                                                status = Constants.online;
+                                                            else
+                                                                status = Constants.offline;
+                                                            
+                                                        }
+                                                       // Log.e(TAG, "Status for "+uid + " "+status);
+                                                        ModelLastMessage message = new ModelLastMessage(name, imageUrl
+                                                                , uid, lastMessage, timeStamp, isDelivered, sendersUid, status);
+                                                        list.add(message);
+                                                        adapter = new LastMessageAdapter(getActivity(), list);
+                                                        recyclerview.setAdapter(adapter);
+                                                       
+                                                    }
+                                                    
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    
+                                                    }
+                                                });
+                                                
                                             }
                                         }
                                         

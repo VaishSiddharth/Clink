@@ -9,7 +9,7 @@ public class ModelLastMessage {
     long timeStamp;
     Boolean isDelivered;
     String sendersUid;
-    
+    String status;
     public ModelLastMessage() {
     }
     
@@ -17,8 +17,12 @@ public class ModelLastMessage {
         return isDelivered;
     }
     
+    public String getStatus() {
+        return status;
+    }
+    
     public ModelLastMessage(String name, String imageUrl, String uid, String lastMessage, long timeStamp,
-                            Boolean isDelivered, String sendersUid) {
+                            Boolean isDelivered, String sendersUid, String status) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.uid = uid;
@@ -26,6 +30,7 @@ public class ModelLastMessage {
         this.timeStamp = timeStamp;
         this.isDelivered = isDelivered;
         this.sendersUid = sendersUid;
+        this.status = status;
         
     }
     

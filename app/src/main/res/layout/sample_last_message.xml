@@ -53,8 +53,9 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_marginTop="9dp"
-                android:layout_width="5dp"
-                android:layout_height="5dp"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/onlineStatus"
                 android:background="@drawable/ic_brightness_1_black"/>
 
             <customfonts.TextViewSFProDisplayRegular
