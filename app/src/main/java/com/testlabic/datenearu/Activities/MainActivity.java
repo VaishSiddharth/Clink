@@ -177,11 +177,13 @@ public class MainActivity extends AppCompatActivity {
             checkForNotification();
             checkForNewMessages();
             updateStatus(Constants.online);
+           // giveXPoints();
         }
         
     }
     
     private void checkForNewMessages() {
+        messagesUnread = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
                 .child(Constants.uid + Constants.unread);
         
@@ -258,12 +260,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(Constants.uid!=null)
         updateStatus(Constants.offline);
     }
     
     private void updateStatus(final String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(Constants.status, status);
+        if(Constants.uid==null)
+            return;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
                 .child(Constants.uid);
         reference.updateChildren(updateStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -286,6 +291,17 @@ public class MainActivity extends AppCompatActivity {
         move to home fragment if on any other fragment, else exit
          */
         
+    }
+    
+    public void giveXPoints()
+    {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+        HashMap<String, Object> updatePoints = new HashMap<>();
+        updatePoints.put(Constants.xPoints, 1000);
+        reference.updateChildren(updatePoints);
+    
     }
 }
 

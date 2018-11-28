@@ -41,6 +41,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewUserSetupUtils.Name;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -123,7 +124,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
              */
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile", "photos");
+        loginButton.setReadPermissions("email", "public_profile", "photos", "user_photos");
         // If using in a fragment
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -179,7 +180,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 
                                 updateDatabaseWithUser(mCurrentUser);
                                 
-                                startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
+                                startActivity(new Intent(SignIn.this, Name.class));
                                 finish();
                                 
                             } else {
@@ -329,17 +330,16 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                                 if (isnewUser) {
                                     
-                                   
-                                    
                                     /*
                                     move to setup the account/profile
                                      */
+                                    
                                     
                                     if (mCurrentUser != null) {
                                         updateDatabaseWithUser(mCurrentUser);
                                         uploadQuestions(mCurrentUser.getUid());
                                     }
-                                    startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
+                                    startActivity(new Intent(SignIn.this, Name.class));
                                     finish();
                                     
                                 } else {
@@ -364,7 +364,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     
     private void uploadQuestions(String uid) {
        
-        for(int i = 0; i<10; i++) {
+        for(int i = 0; i<11; i++) {
             ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bannana", "Apple");
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo).child(uid).child(Constants.questions)

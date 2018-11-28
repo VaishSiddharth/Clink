@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import com.testlabic.datenearu.ProfileUtils.UploadPhotos;
 import com.testlabic.datenearu.R;
 
 import java.util.ArrayList;
@@ -53,6 +56,14 @@ public class Profile extends Fragment {
         /*
         fill profile details
          */
+        
+        displayImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), UploadPhotos.class);
+                startActivity(i);
+            }
+        });
         
         fillProfile();
         

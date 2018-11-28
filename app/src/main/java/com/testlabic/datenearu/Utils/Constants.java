@@ -7,6 +7,8 @@ public class Constants {
     public static final String Messages = "Messages";
     public static final String CHATS = "chats";
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timeStamp";
+    public static final String FEMALE = "Female";
+    public static final String MALE = "Male";
     public static String userInfo = "userInfo";
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();
@@ -31,4 +33,5 @@ public class Constants {
     public static String online = "online";
     public static String offline = "offline";
     public static String usersStatus = "usersStatus";
+    public static String xPoints = "XPoints";
 }

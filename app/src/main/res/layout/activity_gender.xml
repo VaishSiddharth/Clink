@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+    <customfonts.MyTextView_SF_Pro_Display_Bold
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="119dp"
+        android:padding="16dp"
+        android:textColor="#000"
+        android:gravity="center"
+        android:text="Setting you up...(2/3)"
+        android:textSize="20sp"
+        android:id="@+id/robotoBold"
+        android:layout_alignParentLeft="true" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/robotoBold"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp" />
+
+    <customfonts.TextViewSFProDisplayRegular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/robotoBold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:text="Your Gender?"
+        android:textSize="18sp"
+        android:id="@+id/whatCanICallYou" />
+
+    <Button
+        android:id="@+id/male"
+        android:background="@drawable/border_color_box"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/female"
+        android:layout_below="@+id/female"
+        android:layout_marginTop="48dp"
+        android:text="male"
+        android:layout_alignLeft="@+id/female" />
+
+    <Button
+        android:id="@+id/female"
+        android:background="@drawable/border_color_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="200dp"
+        android:layout_below="@+id/whatCanICallYou"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp"
+        android:text="female" />
+
+
+</RelativeLayout>

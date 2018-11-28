@@ -13,6 +13,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -31,7 +33,12 @@ import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import br.com.joinersa.oooalertdialog.Animation;
+import br.com.joinersa.oooalertdialog.OnClickListener;
+import br.com.joinersa.oooalertdialog.OoOAlertDialog;
 
 public class QuestionsActivity extends AppCompatActivity implements CardStackListener {
     
@@ -39,7 +46,11 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     private CardStackAdapter adapter;
     private GoogleProgressBar progressBar;
     private CardStackView cardStackView;
+    private boolean rewindPointEnable = false;
     private String clickedUid;
+    
+    private TextView xPoints;
+    private TextView rewindPenalty;
     View skip;
     
     @Override
@@ -47,6 +58,10 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
         progressBar = findViewById(R.id.google_progress);
+        rewindPenalty= findViewById(R.id.rewindPenalty);
+        xPoints = findViewById(R.id.xpoints);
+        fillXPoints();
+        rewindPenalty.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         skip = findViewById(R.id.like_button);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
@@ -56,6 +71,30 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         setupButton();
         RelativeLayout rl = findViewById(R.id.rl);
         rl.setEnabled(false);
+    }
+    
+    private void fillXPoints() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                    if(modelSubscr!=null)
+                    {
+                        int current = modelSubscr.getXPoints();
+                         xPoints.setText(String.valueOf(current)+"x's");
+                    }
+                }
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
     }
     
     @Override
@@ -81,7 +120,12 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
             adapter.addSpots(createSpots());
             adapter.notifyDataSetChanged();
         }*/
-        
+       
+       if(manager.getTopPosition()>0) {
+           rewindPointEnable= true;
+           rewindPenalty.setVisibility(View.VISIBLE);
+       }
+       
         TextView quesNumber = findViewById(R.id.quesNumber);
         if (manager.getTopPosition() > 9) {
             skip.setEnabled(false);
@@ -91,6 +135,7 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
              */
             manager.setSwipeThreshold(1.0f);
         } else {
+            
             skip.setEnabled(true);
             quesNumber.setVisibility(View.VISIBLE);
             manager.setSwipeThreshold(0.3f);
@@ -114,7 +159,15 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         quesNumber.setVisibility(View.VISIBLE);
         /*if(adapter!=null)
             adapter.notifyItemChanged(manager.getTopPosition());*/
-        
+        if(manager.getTopPosition()>0) {
+            rewindPointEnable= true;
+            rewindPenalty.setVisibility(View.VISIBLE);
+        }
+        else if(manager.getTopPosition()==0){
+            rewindPointEnable= false;
+            rewindPenalty.setVisibility(View.GONE);
+    
+        }
     }
     
     @Override
@@ -141,17 +194,18 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
             }
         });
         
-        View rewind = findViewById(R.id.rewind_button);
+        final View rewind = findViewById(R.id.rewind_button);
         rewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RewindAnimationSetting setting = new RewindAnimationSetting.Builder()
-                        .setDirection(Direction.Bottom)
-                        .setDuration(200)
-                        .setInterpolator(new DecelerateInterpolator())
-                        .build();
-                manager.setRewindAnimationSetting(setting);
-                cardStackView.rewind();
+                /*
+                Show a dialog to deduce 50 x points and then if confirmed continue
+                 */
+                if(rewindPointEnable)
+                showDialog();
+                
+                else
+                    rewindCard();
             }
         });
         
@@ -168,6 +222,68 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
                 cardStackView.swipe();
             }
         });
+    }
+    
+    private void showDialog() {
+        new OoOAlertDialog.Builder(QuestionsActivity.this)
+                .setTitle("Rewind")
+                .setMessage("Rewind will cost you 500 points continue?")
+                .setAnimation(Animation.POP)
+                .setPositiveButton("Yes", new OnClickListener() {
+                    @Override
+                    public void onClick() {
+                        /*
+                        Update the points in database and rewind!
+                         */
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.xPoints)
+                                .child(Constants.uid);
+                        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() != null) {
+                                    ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                                    if(modelSubscr!=null)
+                                    {
+                                        int current = modelSubscr.getXPoints();
+                                        current -= 50;
+                                        HashMap<String, Object> updatePoints = new HashMap<>();
+                                        updatePoints.put(Constants.xPoints, current);
+                                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                rewindCard();
+                                            }
+                                        });
+    
+                                    }
+                                }
+                            }
+    
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton("No", new OnClickListener() {
+                    @Override
+                    public void onClick() {
+                    
+                    }
+                })
+                .build();
+    }
+    
+    private void rewindCard() {
+        RewindAnimationSetting setting = new RewindAnimationSetting.Builder()
+                .setDirection(Direction.Bottom)
+                .setDuration(200)
+                .setInterpolator(new DecelerateInterpolator())
+                .build();
+        manager.setRewindAnimationSetting(setting);
+        cardStackView.rewind();
     }
     
     private void refresh() {

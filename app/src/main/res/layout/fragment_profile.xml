@@ -9,12 +9,6 @@
     tools:context="com.testlabic.datenearu.Profile">
 
 
-    <!--<android.support.v4.widget.NestedScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:scrollbars="none">-->
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -115,13 +109,13 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4.6"
+                    android:text="400"
                     android:textSize="12sp"
                     android:textColor="#3b3b3b"/>
                 <customfonts.TextViewSFProDisplayRegular
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Avg. Rating"
+                    android:text="X Points"
                     android:textSize="13sp"
                     android:textColor="#a9a9b0"/>
             </LinearLayout>
@@ -132,6 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 android:paddingBottom="13dp">
                 <customfonts.MyTextView_SF_Pro_Display_Medium
                     android:paddingTop="13dp"

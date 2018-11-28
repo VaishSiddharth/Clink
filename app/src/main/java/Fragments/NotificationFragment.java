@@ -48,11 +48,11 @@ public class NotificationFragment extends Fragment {
     private static final String TAG = NotificationFragment.class.getSimpleName();
     FirebaseListAdapter<ModelNotification> adapter;
     GoogleProgressBar bar;
-    DatabaseReference reference;
+    Query reference;
     int notifCount =-1;
     SwipeMenuListView listView;
     private ChildEventListener listener;
-    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("h:mm a", Locale.getDefault());
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
     View rootView;
     public NotificationFragment() {
         // Required empty public constructor
@@ -134,7 +134,7 @@ public class NotificationFragment extends Fragment {
             Query query = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Notifications)
                     .child(Constants.uid)
-                    .child(Constants.read);
+                    .child(Constants.read).orderByChild("timeStamp");
             FirebaseListOptions<ModelNotification> options = new FirebaseListOptions.Builder<ModelNotification>()
                     .setQuery(query, ModelNotification.class)
                     .setLayout(R.layout.sample_notif)
@@ -142,8 +142,6 @@ public class NotificationFragment extends Fragment {
             adapter = new FirebaseListAdapter<ModelNotification>(options) {
                 @Override
                 protected void populateView(View v, ModelNotification model, int position) {
-                    
-                    
                     
                     TextView txt = v.findViewById(R.id.txt);
                     TextView time = v.findViewById(R.id.time);
@@ -153,7 +151,7 @@ public class NotificationFragment extends Fragment {
                     else
                         txt.setTextColor(getResources().getColor(R.color.read_color));
                     txt.setText(model.getMessage());
-                    time.setText(SIMPLE_DATE_FORMAT.format(model.getTimeStamp()));
+                    time.setText(SIMPLE_DATE_FORMAT.format(model.getTimeStamp()*-1));
                     Glide.with(getActivity()).load(model.getImageUrl()).into(photo);
                 }
             };

@@ -94,7 +94,7 @@ public class MatchCalculator extends AppCompatActivity {
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.";
         
-        long timeStamp = new java.util.Date().getTime();
+        long timeStamp = -1*new java.util.Date().getTime();
         String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
         ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp,url );
         

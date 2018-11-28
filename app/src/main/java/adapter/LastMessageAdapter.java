@@ -66,7 +66,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
          */
     
       //  Log.e(TAG, "uid "+ lastMessage.getUid()+ " status "+lastMessage.getStatus());
-        if(lastMessage.getStatus()!=null)
+     /*   if(lastMessage.getStatus()!=null)
         {
             if(lastMessage.getStatus().equals(Constants.online))
                 holder.onlineStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_online));
@@ -74,6 +74,8 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
                 holder.onlineStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_brightness_1_black));
     
         }
+        */
+        holder.linear.setBackgroundResource(R.drawable.rect_white_border);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS+Constants.unread)
                 .child(Constants.uid+Constants.unread)
                 .child(lastMessage.getUid());
@@ -85,7 +87,12 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
                     if(unreads>0) {
                         holder.numberOfNewMesssages.setVisibility(View.VISIBLE);
                         holder.numberOfNewMesssages.setText(String.valueOf(unreads));
+                            holder.linear.setBackgroundResource(R.drawable.rect_white_border);
+                            
+                        
                     }
+                    else
+                        holder.linear.setBackgroundResource(R.drawable.ract);
             }
     
             @Override
