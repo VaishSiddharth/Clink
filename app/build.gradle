@@ -59,5 +59,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.2.71"
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.github.Joinersa:OoOAlertDialog:1.0.3'
+    implementation 'com.github.f0ris.sweetalert:library:1.5.1'
 }
 apply plugin: 'com.google.gms.google-services'

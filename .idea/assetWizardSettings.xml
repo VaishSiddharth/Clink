@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_brightness_1_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,9 +45,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="C:\Users\velox\Desktop\ic_profile.png" />
-                                      <entry key="outputName" value="ic_online" />
-                                      <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="16e535" />
+                                      <entry key="outputName" value="ic_action_tick" />
+                                      <entry key="themeColor" value="212121" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -78,6 +77,11 @@
                 </map>
               </option>
             </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState />
           </value>
         </entry>
       </map>

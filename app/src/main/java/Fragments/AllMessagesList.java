@@ -96,6 +96,7 @@ public class AllMessagesList extends Fragment {
                                             final long timeStamp = one.getValue(ChatMessage.class).getSendingTime();
                                             final Boolean isDelivered = one.getValue(ChatMessage.class).getMessageDelivered();
                                             final String sendersUid = one.getValue(ChatMessage.class).getSentFrom();
+                                            final Boolean successfullySent = one.getValue(ChatMessage.class).getSuccessfullySent();
                                             if (lastMessage != null) {
                                                 
                                                 /*
@@ -120,13 +121,13 @@ public class AllMessagesList extends Fragment {
                                                                 status = Constants.offline;
                                                             
                                                         }
-                                                       // Log.e(TAG, "Status for "+uid + " "+status);
+                                                        // Log.e(TAG, "Status for "+uid + " "+status);
                                                         ModelLastMessage message = new ModelLastMessage(name, imageUrl
-                                                                , uid, lastMessage, timeStamp, isDelivered, sendersUid, status);
+                                                                , uid, lastMessage, timeStamp, isDelivered, sendersUid, status, successfullySent);
                                                         list.add(message);
                                                         adapter = new LastMessageAdapter(getActivity(), list);
                                                         recyclerview.setAdapter(adapter);
-                                                       
+                                                        
                                                     }
                                                     
                                                     @Override

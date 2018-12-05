@@ -14,7 +14,7 @@
 
     <tab
         id="@+id/tab_notif"
-        icon="@drawable/ic_notification"
+        icon="@drawable/ic_notif"
         inActiveColor="#4De9e9e9"
         activeColor="#118df0"/>
         >

@@ -18,6 +18,8 @@ package com.testlabic.datenearu.ChatUtils;
 
     private String sendersName;
 
+    private Boolean successfullySent;
+
     private Boolean messageDelivered;
 
     private String sendToName;
@@ -31,10 +33,14 @@ package com.testlabic.datenearu.ChatUtils;
         return refKey;
     }
 
+    public Boolean getSuccessfullySent() {
+        return successfullySent;
+    }
+
     public ChatMessage(String message, String sentPhotoUrl,
                        String refKey, String sentFrom, String sentTo,
-                       Boolean messageDelivered, long sendingTime, Boolean isACircle,
-                       String sendersName, String sendToName) {
+                       Boolean messageDelivered, long sendingTime,
+                       String sendersName, String sendToName, Boolean successfullySent) {
         this.message = message;
         this.sentPhotoUrl = sentPhotoUrl;
         this.refKey = refKey;
@@ -44,6 +50,8 @@ package com.testlabic.datenearu.ChatUtils;
         this.sendingTime = sendingTime;
         this.sendersName = sendersName;
         this.sendToName = sendToName;
+        this.successfullySent = successfullySent;
+
     }
 
     public String getSendToName() {

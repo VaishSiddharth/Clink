@@ -2,6 +2,7 @@ package adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,14 +46,14 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
 
     @NonNull
     @Override
-    public LastMessageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.sample_last_message,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final LastMessageAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         
         final ModelLastMessage lastMessage = allModelArrayList.get(position);
         holder.name.setText(allModelArrayList.get(position).getName());
@@ -88,11 +89,14 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
                         holder.numberOfNewMesssages.setVisibility(View.VISIBLE);
                         holder.numberOfNewMesssages.setText(String.valueOf(unreads));
                             holder.linear.setBackgroundResource(R.drawable.rect_white_border);
-                            
+                        Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/SF-Pro-Display-Bold.otf");
+                        holder.name.setTypeface(tf);
+                        holder.name.setTextColor(context.getResources().getColor(R.color.shade_black));
                         
                     }
-                    else
+                    else {
                         holder.linear.setBackgroundResource(R.drawable.ract);
+                    }
             }
     
             @Override
@@ -107,6 +111,14 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             For own message show delivered status
              */
             holder.readStat.setVisibility(View.VISIBLE);
+            if(lastMessage.getSuccessfullySent()!=null&& lastMessage.getSuccessfullySent())
+            {
+                // single tick for sent message!
+                holder.readStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_grey));
+            }
+            else
+                holder.readStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_tick));
+
             if(lastMessage.getDelivered())
                 holder.readStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check));
             else

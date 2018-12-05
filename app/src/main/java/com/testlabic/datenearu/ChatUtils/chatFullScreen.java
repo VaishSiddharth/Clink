@@ -22,6 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -355,7 +357,7 @@ public class chatFullScreen extends AppCompatActivity {
         timeStamp.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         
         String myName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        DatabaseReference ref;
+        final DatabaseReference ref;
         DatabaseReference refUnread = null;
         ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.CHATS).child(sendToUid).child(myUid).push();
@@ -368,21 +370,41 @@ public class chatFullScreen extends AppCompatActivity {
         
         String refK = ref.getKey();
         
-        Boolean isAGroup = false;
+        final HashMap<String, Object> sentSuccessupdate = new HashMap<>();
+        sentSuccessupdate.put(Constants.successfullySent, true);
         final ChatMessage message = new ChatMessage(messageText, null, refK, myUid,
-                sendToUid, false, new Date().getTime(), isAGroup, myName, sendToName);
+                sendToUid, false, new Date().getTime(), myName, sendToName, false);
         
-        ref.setValue(message);
+        ref.setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    ref.updateChildren(sentSuccessupdate);
+                }
+            }
+        });
         if (refUnread != null) {
             refUnread.setValue(message);
         }
     
         final String pushKey = ref.getKey();
-        
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.CHATS).child(myUid).child(sendToUid).child(pushKey);
-        
-        myRef.setValue(message);
+
+        final DatabaseReference myRef;
+        if (pushKey != null) {
+            myRef = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.CHATS).child(myUid).child(sendToUid).child(pushKey);
+
+
+            myRef.setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        myRef.updateChildren(sentSuccessupdate);
+                    }
+                }
+            });
+        }
         //message.setMessageStatus(Constants.DELIVERED);
         
     }

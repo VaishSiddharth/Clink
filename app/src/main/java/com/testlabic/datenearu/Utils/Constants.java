@@ -34,4 +34,5 @@ public class Constants {
     public static String offline = "offline";
     public static String usersStatus = "usersStatus";
     public static String xPoints = "XPoints";
+    public static String successfullySent = "successfullySent";
 }

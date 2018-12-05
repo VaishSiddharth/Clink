@@ -77,6 +77,33 @@
     </android.support.v7.widget.Toolbar>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:id="@+id/bestPicks"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <customfonts.MyTextView_SF_Pro_Display_Bold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:text="Best picks"
+            android:textColor="#3b3b3b"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sort" />
+
+    </LinearLayout>
+
     <!--1. 中间可滑动的viewPager-->
 
     <android.support.v4.view.ViewPager
@@ -86,10 +113,10 @@
         android:layout_alignParentBottom="true"
         android:clipToPadding="false"
         android:paddingEnd="48dp"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/bestPicks"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:paddingStart="48dp">
+        >
 
     </android.support.v4.view.ViewPager>
 

@@ -38,8 +38,11 @@ public class CustPagerTransformer implements ViewPager.PageTransformer {
      * dp和像素转换
      */
     private int dp2px(Context context, float dipValue) {
+        if(context!=null)
+        {
         float m = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * m + 0.5f);
+    }   return 0;
     }
 
 }

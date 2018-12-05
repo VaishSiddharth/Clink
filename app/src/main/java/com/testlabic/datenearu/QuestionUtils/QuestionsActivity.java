@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.QuestionUtils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -39,6 +41,7 @@ import java.util.List;
 import br.com.joinersa.oooalertdialog.Animation;
 import br.com.joinersa.oooalertdialog.OnClickListener;
 import br.com.joinersa.oooalertdialog.OoOAlertDialog;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class QuestionsActivity extends AppCompatActivity implements CardStackListener {
     
@@ -225,13 +228,15 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     }
     
     private void showDialog() {
-        new OoOAlertDialog.Builder(QuestionsActivity.this)
-                .setTitle("Rewind")
-                .setMessage("Rewind will cost you 500 points continue?")
-                .setAnimation(Animation.POP)
-                .setPositiveButton("Yes", new OnClickListener() {
+    
+        new SweetAlertDialog(this)
+                .setTitleText("Rewind?")
+                .setContentText("Rewind will cost you 500 points continue?")
+                .setConfirmText("Yes!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onClick() {
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
                         /*
                         Update the points in database and rewind!
                          */
@@ -255,25 +260,18 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
                                                 rewindCard();
                                             }
                                         });
-    
+                    
                                     }
                                 }
                             }
-    
+        
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
                             }
                         });
                     }
-                })
-                .setNegativeButton("No", new OnClickListener() {
-                    @Override
-                    public void onClick() {
-                    
-                    }
-                })
-                .build();
+                }).showCancelButton(true).show();
     }
     
     private void rewindCard() {
