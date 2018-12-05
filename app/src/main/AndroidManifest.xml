@@ -88,6 +88,8 @@
         <activity android:name=".NewUserSetupUtils.AboutYouEditor" />
         <activity android:name=".NewUserSetupUtils.Name" />
         <activity android:name=".ProfileUtils.UploadPhotos" />
+        <activity android:name=".TransitionUtils.pagerTransition" />
+        <activity android:name=".TransitionUtils.DetailActivity" />
     </application>
 
 </manifest>

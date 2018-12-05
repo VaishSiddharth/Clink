@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefef"
+    >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_placeholder" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <customfonts.MyTextView_SF_Pro_Display_Medium
+                android:id="@+id/changeLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:text="Tap to change"
+                android:textAllCaps="true"
+                android:textColor="#3b3b3b"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:layout_width="95dp"
+                android:layout_height="1.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/rect_dotted"
+                android:layerType="software" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginRight="20dp">
+
+            <ImageView
+                android:id="@+id/notification"
+                android:layout_width="24dp"
+                android:visibility="gone"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_notification" />
+
+            <TextView
+                android:id="@+id/notifCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/badge_circle"
+                android:text="10"
+                android:textColor="#FFF"
+                android:textSize="6dp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <!--1. 中间可滑动的viewPager-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:clipToPadding="false"
+        android:paddingEnd="48dp"
+        android:layout_below="@+id/toolbar"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:paddingStart="48dp">
+
+    </android.support.v4.view.ViewPager>
+
+    <!--2. 底部的三个图标按钮-->
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/icon1" />
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon2" />
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/icon3" />
+
+    </RelativeLayout>
+
+    <!--3. viewPager的指示器-->
+    <!--注意！！此处指示器的高度，需要跟DragLayout协商好(card_extra_height)-->
+    <TextView
+        android:id="@+id/indicator_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/card_extra_height"
+        android:layout_above="@+id/bottom_layout"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="1/199"
+        android:visibility="gone"
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
+
+    <!--4. 顶部的titleBar-->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <View
+            android:id="@+id/position_view"
+            android:layout_width="1px"
+            android:layout_height="1px" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

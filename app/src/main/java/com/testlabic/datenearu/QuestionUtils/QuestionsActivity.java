@@ -85,7 +85,7 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
                     if(modelSubscr!=null)
                     {
                         int current = modelSubscr.getXPoints();
-                         xPoints.setText(String.valueOf(current)+"x's");
+                         xPoints.setText(String.valueOf(current)+" x's");
                     }
                 }
             }

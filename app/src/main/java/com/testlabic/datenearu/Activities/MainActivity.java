@@ -25,6 +25,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         on create switch to the home fragment
          */
         
-        changeFragment(new Home());
+        changeFragment(new pagerTransition());
         
         //setCustomFontAndStyle(tabLayout1, 0);
         
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     nearby.removeBadge();
                 } else if (tabId == R.id.tab_home) {
                     // switch to messages fragment
-                    changeFragment(new Home());
+                    changeFragment(new pagerTransition());
                 } else if (tabId == R.id.tab_profile) {
                     // switch to messages fragment
                     changeFragment(new Profile());
