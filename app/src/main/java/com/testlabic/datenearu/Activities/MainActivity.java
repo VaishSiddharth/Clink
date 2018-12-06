@@ -127,9 +127,10 @@ public class MainActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                /*
+                        /*
                         change the notification icon.
                          */
+                bottomBar = findViewById(R.id.bottomBar);
                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                 if (count > 0) {
                     
