@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -335,7 +336,7 @@ public class chatFullScreen extends AppCompatActivity {
                     isOnlineForCurrentUser = true;
                 }
                 Log.e(TAG, "User is offline move to unread");
-                    isOnlineForCurrentUser = false;
+                isOnlineForCurrentUser = false;
                 // send message to unread
             }
             
@@ -372,7 +373,9 @@ public class chatFullScreen extends AppCompatActivity {
         
         final HashMap<String, Object> sentSuccessupdate = new HashMap<>();
         sentSuccessupdate.put(Constants.successfullySent, true);
-        final ChatMessage message = new ChatMessage(messageText, null, refK, myUid,
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String imageUrl = String.valueOf(user.getPhotoUrl());
+        final ChatMessage message = new ChatMessage(messageText, imageUrl, refK, myUid,
                 sendToUid, false, new Date().getTime(), myName, sendToName, false);
         
         ref.setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -387,15 +390,15 @@ public class chatFullScreen extends AppCompatActivity {
         if (refUnread != null) {
             refUnread.setValue(message);
         }
-    
+        
         final String pushKey = ref.getKey();
-
+        
         final DatabaseReference myRef;
         if (pushKey != null) {
             myRef = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.CHATS).child(myUid).child(sendToUid).child(pushKey);
-
-
+            
+            
             myRef.setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {

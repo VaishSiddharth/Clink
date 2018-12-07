@@ -15,24 +15,26 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/receivingImage"
-            android:layout_width="49dp"
-            android:visibility="gone"
-            android:layout_height="49dp"
-            android:layout_gravity="center"
+            android:id="@+id/image"
+            android:layout_width="36dp"
+            android:padding="2dp"
+            android:layout_marginStart="8dp"
+            android:visibility="visible"
+            android:layout_height="40dp"
             android:layout_marginTop="2dp"
+            android:src="@drawable/profile"
              />
 
         <customfonts.MyTextView_SF_Pro_Display_Semibold
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:background="@drawable/rect_white_border"
             android:lineSpacingExtra="5dp"
             android:paddingLeft="15dp"

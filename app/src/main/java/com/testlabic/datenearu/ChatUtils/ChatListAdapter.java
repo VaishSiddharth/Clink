@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -81,6 +83,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder1 = new ViewHolder1();
                     holder1.messageTextView = (TextView) v.findViewById(R.id.textview_message);
                     holder1.timeTextView = (TextView) v.findViewById(R.id.textview_time);
+                    holder1.imageView = v.findViewById(R.id.image);
                     //holder1.sendersName = v.findViewById(R.id.sendersName);
                     v.setTag(holder1);
                 } else {
@@ -93,6 +96,8 @@ public class ChatListAdapter extends BaseAdapter {
                         holder1.messageTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16))
                         + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"));
                 holder1.timeTextView.setText(SIMPLE_DATE_FORMAT.format(message.getSendingTime()));
+                if(message.getSentPhotoUrl()!=null)
+                Glide.with(context).load(message.getSentPhotoUrl()).into(holder1.imageView);
                 
             } else if (message.getSentFrom().equals(myUid)) {
 
@@ -103,6 +108,10 @@ public class ChatListAdapter extends BaseAdapter {
                     holder2.messageTextView = (TextView) v.findViewById(R.id.textview_message);
                     holder2.timeTextView = (TextView) v.findViewById(R.id.textview_time);
                     holder2.messageStatus = (ImageView) v.findViewById(R.id.readStat);
+                    holder2.imageView = v.findViewById(R.id.image);
+                    if(message.getSentPhotoUrl()!=null)
+                    Glide.with(context).load(message.getSentPhotoUrl()).into(holder2.imageView);
+    
                     v.setTag(holder2);
 
                 } else {
@@ -117,13 +126,21 @@ public class ChatListAdapter extends BaseAdapter {
 
                 //holder2.messageTextView.setText(message.getMessageText());
                  holder2.timeTextView.setText(SIMPLE_DATE_FORMAT.format(message.getSendingTime()));
-
-
-                if (!message.getMessageDelivered()) {
-                    holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check_grey));
-                } else if (message.getMessageDelivered()) {
-                    holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check));
+    
+                if(message.getSuccessfullySent()!=null&& message.getSuccessfullySent())
+                {
+                    // single tick for sent message!
+                    holder2.messageStatus.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_grey));
+        
+                    if (!message.getMessageDelivered()) {
+                        holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check_grey));
+                    } else if (message.getMessageDelivered()) {
+                        holder2.messageStatus.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check));
+                    }
                 }
+                else
+                    holder2.messageStatus.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_tick));
+
 
                 /*
                 compare dates here
@@ -212,11 +229,13 @@ public class ChatListAdapter extends BaseAdapter {
         public TextView messageTextView;
         public TextView timeTextView;
         public TextView sendersName;
+        public ImageView imageView;
     }
 
     private class ViewHolder2 {
         public ImageView messageStatus;
         public TextView messageTextView;
         public TextView timeTextView;
+        public ImageView imageView;
     }
 }

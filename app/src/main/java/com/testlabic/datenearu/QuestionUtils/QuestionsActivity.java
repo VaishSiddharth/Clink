@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,10 +52,14 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     private CardStackView cardStackView;
     private boolean rewindPointEnable = false;
     private String clickedUid;
-    
     private TextView xPoints;
     private TextView rewindPenalty;
     View skip;
+    
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -350,6 +355,12 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
                 cardStackView.setEnabled(false);
                 cardStackView.setLayoutManager(manager);
                 cardStackView.setAdapter(adapter);
+                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onChanged() {
+                        super.onChanged();
+                    }
+                });
                 
             }
             
