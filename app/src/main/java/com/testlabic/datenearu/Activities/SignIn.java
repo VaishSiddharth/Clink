@@ -117,8 +117,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                      */
             }
         });
-
-
             /*
             Facebook
              */
@@ -166,19 +164,20 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                             Call manual fix to update the photo of user
                              */
                             
-                            ManualFix();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             Boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                             Log.e(TAG, "The user is a new user or not " + isnewUser);
                             FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                             if (isnewUser) {
-                                /*
+                                    /*
                                     move to setup the account/profile
                                      */
                                 // for now update users database
-                                
-                                updateDatabaseWithUser(mCurrentUser);
+                                if (mCurrentUser != null) {
+                                    updateDatabaseWithUser(mCurrentUser);
+                                    uploadQuestions(mCurrentUser.getUid());
+                                }
                                 
                                 startActivity(new Intent(SignIn.this, Name.class));
                                 finish();
@@ -204,7 +203,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     }
     
     private void updateDatabaseWithUser(FirebaseUser mCurrentUser) {
-        ModelUser user = new ModelUser(mCurrentUser.getDisplayName(), String.valueOf(mCurrentUser.getPhotoUrl())
+        ModelUser user = new ModelUser(mCurrentUser.getDisplayName(), String.valueOf(modifiedImageUrl())
                 , "20", null, null, null, mCurrentUser.getUid());
         
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
@@ -218,17 +217,18 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     
-    private void ManualFix() {
+    private String modifiedImageUrl() {
     
         /*
         update user's profile first
          */
+        String modifiedImageUrl = null;
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
                 Log.e(TAG, "THe providerID is " + user.getProviderId());
                 if (user.getProviderId().equals("google.com")) {
-                    String modifiedImageUrl = null;
+                    
                     assert currentUser != null;
                     if (currentUser.getPhotoUrl() != null) {
                         String url = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString();
@@ -247,7 +247,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 }
                             });
                 } else if (user.getProviderId().equals("facebook.com")) {
-                    String modifiedImageUrl = null;
+                  
                     String facebookUserId = "";
                     // find the Facebook profile and get the user's id
                     for (UserInfo profile : currentUser.getProviderData()) {
@@ -261,7 +261,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
                     if (currentUser.getPhotoUrl() != null) {
                         modifiedImageUrl = photoUrl;
-                        Log.e(TAG, "The photo url is " + modifiedImageUrl);
+                        //Log.e(TAG, "The photo url is " + modifiedImageUrl);
                     }
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setPhotoUri(Uri.parse(modifiedImageUrl))
@@ -278,9 +278,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 }
             }
         }
+        return modifiedImageUrl;
     }
-    
-    
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -313,13 +312,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                    
-                                    /*
-                            Call manual fix to update the photo of user
-                             */
-                                
-                                ManualFix();
-                                
                                 
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
@@ -333,6 +325,9 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     /*
                                     move to setup the account/profile
                                      */
+                                           /*
+                            Call manual fix to update the photo of user
+                             */
                                     
                                     
                                     if (mCurrentUser != null) {
@@ -363,13 +358,13 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     }
     
     private void uploadQuestions(String uid) {
-       
-        for(int i = 0; i<11; i++) {
+        
+        for (int i = 0; i < 11; i++) {
             ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bannana", "Apple");
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo).child(uid).child(Constants.questions)
                     .child(String.valueOf(i));
-                reference.setValue(question);
+            reference.setValue(question);
         }
         
     }

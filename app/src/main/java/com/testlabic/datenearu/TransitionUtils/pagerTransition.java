@@ -11,11 +11,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,13 +48,19 @@ import java.util.List;
  */
 public class pagerTransition extends Fragment {
     
+    private static final String TAG = pagerTransition.class.getSimpleName();
     private TextView indicatorTv;
     private View positionView;
     private ViewPager viewPager;
     View rootView;
+    SharedPreferences preferences;
+    
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
     private ArrayList<ModelUser> displayArrayList;
     private TextView changeLocation;
+    private FragmentStatePagerAdapter adapter;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     
     public pagerTransition() {
         // Required empty public constructor
@@ -62,7 +73,8 @@ public class pagerTransition extends Fragment {
         // 1. 沉浸式状态栏
         
         rootView = inflater.inflate(R.layout.activity_pager_transition, viewPager, false);
-        
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        editor = sharedPreferences.edit();
         positionView = rootView.findViewById(R.id.position_view);
         changeLocation = rootView.findViewById(R.id.changeLocation);
         changeLocation.setOnClickListener(new View.OnClickListener() {
@@ -72,10 +84,32 @@ public class pagerTransition extends Fragment {
             }
         });
         initImageLoader();
-        
+        preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         downloadList();
-        
+
+        if(!sharedPreferences.getBoolean(Constants.shownShowCaser, false))
+        setupShowCaser();
         return rootView;
+    }
+    
+    private void setupShowCaser() {
+        new ShowcaseView.Builder(getActivity())
+                //.withMaterialShowcase()
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .setTarget(new ViewTarget(changeLocation))
+                .hideOnTouchOutside()
+                .setContentTitle("Your current city")
+                .setContentText("To change your city tap here, and then you can see profiles from your city")
+                .setShowcaseEventListener(new SimpleShowcaseEventListener() {
+            
+                    @Override
+                    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                        //onHiddenFirstShowcase();
+                    }
+            
+                })
+                .withHoloShowcase()
+                .build();
     }
     
     /**
@@ -88,53 +122,52 @@ public class pagerTransition extends Fragment {
         indicatorTv = (TextView) rootView.findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         
-        // 1. viewPager添加parallax效果，使用PageTransformer就足够了
         viewPager.setPageTransformer(false, new CustPagerTransformer(getActivity()));
         
-        // 2. viewPager添加adapter
         for (int i = 0; i < displayArrayList.size(); i++) {
-            // 预先准备10个fragment
             fragments.add(new CommonFragment());
         }
         
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                CommonFragment fragment = fragments.get(position % 10);
-                fragment.bindData(displayArrayList.get(position % displayArrayList.size()));
-                return fragment;
-            }
-            
-            @Override
-            public int getCount() {
-                return displayArrayList.size();
-            }
-        });
+        if(getActivity()!=null) {
+            adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
+                @Override
+                public Fragment getItem(int position) {
+                    CommonFragment fragment = fragments.get(position % 10);
+                    fragment.bindData(displayArrayList.get(position % displayArrayList.size()));
+                    return fragment;
+                }
         
-        // 3. viewPager滑动时，调整指示器
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-            
-            @Override
-            public void onPageSelected(int position) {
-                updateIndicatorTv();
-            }
-            
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            
-            }
-        });
+                @Override
+                public int getCount() {
+                    return displayArrayList.size();
+                }
+            };
+    
+            viewPager.setAdapter(adapter);
+    
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
         
-        updateIndicatorTv();
+                @Override
+                public void onPageSelected(int position) {
+                    updateIndicatorTv();
+                }
+        
+                @Override
+                public void onPageScrollStateChanged(int state) {
+            
+                }
+            });
+            updateIndicatorTv();
+        }
+        
     }
     
     private void downloadList() {
         displayArrayList = new ArrayList<>();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String city = preferences.getString(Constants.cityLabel, "Gwalior_Madhya Pradesh_India");
+        String city = preferences.getString(Constants.cityLabel, "Lucknow_Uttar Pradesh_India");
         
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.cityLabels).child(city);
@@ -152,11 +185,14 @@ public class pagerTransition extends Fragment {
             
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
+                Log.e(TAG, "The child changed");
+                downloadList();
+    
             }
             
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                downloadList();
             }
             
             @Override
@@ -278,9 +314,9 @@ public class pagerTransition extends Fragment {
     public void onResume() {
         super.onResume();
         putValueInchangeLocation();
+        //downloadList();
         //checkForNotification();
-        
-        // Log.e(TAG, "On resume called!");
+         // Log.e(TAG, "On resume called!");
     }
     
 }

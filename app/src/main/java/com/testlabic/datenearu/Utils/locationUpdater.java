@@ -3,6 +3,8 @@ package com.testlabic.datenearu.Utils;
 import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -109,7 +112,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         }
         final Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
        String uid =  FirebaseAuth.getInstance().getUid();
-        if(location!=null && location.getAccuracy()<3000&& uid!=null) {
+        if(location!=null && location.getAccuracy()<5000&& uid!=null) {
     
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = null;
@@ -120,14 +123,49 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 String countryName = addresses.get(0).getCountryName();
                 cityLabel = cityName+", "+stateName+", "+countryName;
     
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.userInfo).child(uid);
                 
-                HashMap<String, Object> updateCityLabel = new HashMap<>();
+                final HashMap<String, Object> updateCityLabel = new HashMap<>();
                 updateCityLabel.put("cityLabel", cityLabel);
                 
-                reference.updateChildren(updateCityLabel);
+                /*
+                Check for previous cityLabel, remove from previous city and transfer to new city
+                 */
                 
+                reference.child(Constants.cityLabel).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        
+                        if(dataSnapshot.getValue()==null)
+                        {
+                            // do nothing else just update the city label;
+                            reference.updateChildren(updateCityLabel);
+                        }
+                        else
+                        {
+                            String previousCityLabel = dataSnapshot.getValue(String.class);
+                            if(previousCityLabel!=null&&!(previousCityLabel.equals(""))&&!previousCityLabel.equals(cityLabel))
+                            {
+                                previousCityLabel = previousCityLabel.replace(", ", "_");
+                                DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
+                                        .child(Constants.cityLabels).child(previousCityLabel).child(Constants.uid);
+                                prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+    
+                                        reference.updateChildren(updateCityLabel);
+                                        
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                    }
+                });
                 
                // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
                
@@ -184,6 +222,9 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                         refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(locationUpdater.this);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString(Constants.cityLabel, cityLabel).apply();
                                 finish();
                             }
                         });
@@ -207,7 +248,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         locationRequest.setFastestInterval(1500);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+        PendingResult<LocationSettingsResult> result = LocationServices.    SettingsApi.checkLocationSettings(googleApiClient, builder.build());
         result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
             @Override
             public void onResult(LocationSettingsResult result) {
