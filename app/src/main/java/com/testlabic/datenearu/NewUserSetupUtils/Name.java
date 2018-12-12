@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,7 +20,7 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.HashMap;
 public class Name extends AppCompatActivity {
     EditText inputName;
-    Button nextButton;
+    ImageView next;
     DatabaseReference reference;
     
     @Override
@@ -28,7 +29,7 @@ public class Name extends AppCompatActivity {
         setContentView(R.layout.activity_name);
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
-        nextButton = findViewById(R.id.next_button);
+        next = findViewById(R.id.next);
         inputName = findViewById(R.id.input_name);
         @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
         if (uid != null) {
@@ -38,7 +39,7 @@ public class Name extends AppCompatActivity {
            String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
            inputName.setText(userName);
         }
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 
@@ -50,21 +51,20 @@ public class Name extends AppCompatActivity {
                 else {
                     if(reference!=null)
                     {
-                        final ProgressBar bar = findViewById(R.id.progress_bar);
-                        bar.setVisibility(View.VISIBLE);
-                        nextButton.setEnabled(false);
+                        
+                     
+                        
                         HashMap<String, Object> userNameToUpdate = new HashMap<>();
                         userNameToUpdate.put("userName", name);
                         reference.updateChildren(userNameToUpdate)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        bar.setVisibility(View.GONE);
+
                                         /*
                                         move to gender activity
                                          */
-                                        nextButton.setEnabled(true);
-                                        startActivity(new Intent(Name.this, Gender.class));
+                                        startActivity(new Intent(Name.this, Age.class));
                                     }
                                 });
                         

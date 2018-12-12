@@ -15,6 +15,16 @@ public class ModelUser {
     String cityLabel;
     ArrayList<ModelQuestion> questions;
     String uid;
+    String interestedIn;
+    String dateOfBirth;
+    
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+    
+    public String getInterestedIn() {
+        return interestedIn;
+    }
     
     public ModelUser() {
     }

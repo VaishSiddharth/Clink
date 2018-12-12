@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +34,7 @@ public class AboutYouEditor extends AppCompatActivity {
     
     private RichEditor mEditor;
     ProgressBar progressBar;
-    Button continu;
+    ImageView next;
     TextView mPreview;
     DatabaseReference reference;
     
@@ -42,13 +43,13 @@ public class AboutYouEditor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_you);
         
-        continu = findViewById(R.id.continu);
+        next = findViewById(R.id.next);
         mPreview = findViewById(R.id.preview);
         mEditor = findViewById(R.id.editor);
         setupEditor();
         @SuppressLint("RestrictedApi") String uid = FirebaseAuth.getInstance().getUid();
        
-        continu.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /*

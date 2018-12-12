@@ -341,9 +341,10 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     /*
                                     move to main activity
                                      */
-                                    
-                                    startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
+                                    startActivity(new Intent(SignIn.this, Name.class));
                                     finish();
+                                    //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
+                                   // finish();
                                 }
                             } else {
                                 // If sign in fails, display a message to the user.

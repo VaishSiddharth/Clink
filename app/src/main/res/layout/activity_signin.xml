@@ -15,7 +15,6 @@
         android:gravity="center"
         android:orientation="vertical">
 
-
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="74.7dp"

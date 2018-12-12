@@ -176,9 +176,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, SignIn.class));
             finish();
         } else {
-            checkForNotification();
-            checkForNewMessages();
-            updateStatus(Constants.online);
+            if(Constants.uid!=null)
+            {
+                checkForNotification();
+                checkForNewMessages();
+                updateStatus(Constants.online);
+            }
+            
            // giveXPoints();
         }
         
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        
+       // startActivity(new Intent(MainActivity.this, SignIn.class));
     }
     
     @Override

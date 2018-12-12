@@ -101,12 +101,10 @@ public class pagerTransition extends Fragment {
                 .setContentTitle("Your current city")
                 .setContentText("To change your city tap here, and then you can see profiles from your city")
                 .setShowcaseEventListener(new SimpleShowcaseEventListener() {
-            
                     @Override
                     public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
                         //onHiddenFirstShowcase();
                     }
-            
                 })
                 .withHoloShowcase()
                 .build();

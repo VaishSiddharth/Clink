@@ -36,4 +36,5 @@ public class Constants {
     public static String xPoints = "XPoints";
     public static String successfullySent = "successfullySent";
     public static String shownShowCaser = "shownShowCaser";
+    public static String dateOfBirth = "dateOfBirth";
 }

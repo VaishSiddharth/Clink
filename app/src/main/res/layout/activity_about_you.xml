@@ -5,10 +5,19 @@
     android:layout_height="match_parent"
     >
 
+    <ImageView
+        android:id="@+id/next"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="16dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/next_icon" />
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:id="@+id/up"
         android:layout_height="wrap_content">
+
         <customfonts.MyTextView_SF_Pro_Display_Bold
             android:id="@+id/robotoBold4"
             android:layout_width="wrap_content"
@@ -328,6 +337,7 @@
       android:text="Continue"
       android:width="200dp"
       android:id="@+id/continu"
+      android:visibility="gone"
       android:layout_alignParentBottom="true"
       android:layout_centerHorizontal="true"
       android:layout_margin="16dp"
