@@ -16,5 +16,6 @@
     <string name="confirmation">Continue match analysis?</string>
     <string name="rewind_msg">Or rewind to reanswer by tapping on left arrow below!</string>
     <string name="matchFailed"><b>Sorry Match Failed</b>\n\nYou guys have different tastes, we don\'t think it would be a very good idea!</string>
+    <string name="confirmation2">You can do changes later, continue?</string>
 
 </resources>

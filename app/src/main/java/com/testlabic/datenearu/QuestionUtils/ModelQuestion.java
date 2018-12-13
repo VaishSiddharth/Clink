@@ -6,7 +6,7 @@ public class ModelQuestion {
     String optB;
     String optC;
     String optD;
-    String correctOption;
+    public String correctOption;
     
     public String getSelectedOption() {
         return selectedOption;
@@ -52,5 +52,29 @@ public class ModelQuestion {
     
     public String getOptD() {
         return optD;
+    }
+    
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+    
+    public void setOptA(String optA) {
+        this.optA = optA;
+    }
+    
+    public void setOptB(String optB) {
+        this.optB = optB;
+    }
+    
+    public void setOptC(String optC) {
+        this.optC = optC;
+    }
+    
+    public void setOptD(String optD) {
+        this.optD = optD;
+    }
+    
+    public void setCorrectOption(String correctOption) {
+        this.correctOption = correctOption;
     }
 }

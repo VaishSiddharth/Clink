@@ -294,8 +294,7 @@ public class AboutYouEditor extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful())
                     {
-                       startActivity(new Intent(AboutYouEditor.this, MainActivity.class));
-                       
+                       startActivity(new Intent(AboutYouEditor.this, QuestionsEnteringNewUser.class));
                     }
                 }
             });

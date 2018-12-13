@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/sour_yellow"
     android:layout_height="match_parent"
    >
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="64dp"
         app:cardCornerRadius="16dp"
@@ -27,7 +28,7 @@
         android:layout_alignParentEnd="true"
         android:src="@drawable/next_icon" />
 
-    <customfonts.MyTextView_SF_Pro_Display_Bold
+            <customfonts.MyTextView_SF_Pro_Display_Medium
         android:id="@+id/robotoBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,7 +61,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="31dp"
                 android:text="Your Gender?"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/ll1"
@@ -87,7 +88,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-
                     android:background="@drawable/border_black_box"
                     android:text="female" />
             </LinearLayout>
@@ -101,7 +101,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="191dp"
                 android:text="You're interested in?"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/ll2"
@@ -132,6 +132,32 @@
                     android:text="female" />
             </LinearLayout>
         </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:padding="16dp"
+            android:background="@drawable/gradation_sour_yellow">
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"/>
+
+            <TextView
+                android:id="@+id/item_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>

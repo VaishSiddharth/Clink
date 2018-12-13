@@ -11,4 +11,8 @@
     <color name="read_color">#3b3b3b</color>
     <color name="transparent">#00000000</color>
     <color name="light_black">#212121</color>
+    <color name="first_date">#fab1a0</color>
+    <color name="shy_moment">#a29bfe</color>
+    <color name="sour_yellow">#74b9ff</color>
+    <color name="pinky_glamour">#dfe6e9</color>
 </resources>

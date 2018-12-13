@@ -92,7 +92,8 @@
         <activity android:name=".ProfileUtils.UploadPhotos" />
         <activity android:name=".TransitionUtils.pagerTransition" />
         <activity android:name=".TransitionUtils.DetailActivity" />
-        <activity android:name=".NewUserSetupUtils.Age"></activity>
+        <activity android:name=".NewUserSetupUtils.Age" />
+        <activity android:name=".NewUserSetupUtils.QuestionsEnteringNewUser"></activity>
     </application>
 
 </manifest>
