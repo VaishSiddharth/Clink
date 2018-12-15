@@ -1,8 +1,11 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,7 +33,7 @@ public class Age extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_age);
         next = findViewById(R.id.next);
-        
+        setupWindowAnimations();
         LazyDatePicker lazyDatePicker = findViewById(R.id.lazyDatePicker);
         lazyDatePicker.setDateFormat(LazyDatePicker.DateFormat.MM_DD_YYYY);
         // lazyDatePicker.setMinDate(minDate);
@@ -73,5 +76,19 @@ public class Age extends AppCompatActivity {
                 
             }
         });
+        
+        
+    }
+    private void setupWindowAnimations() {
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Fade fade = new Fade();
+            fade.setDuration(1000);
+            getWindow().setEnterTransition(fade);
+            
+            Slide slide = new Slide();
+            slide.setDuration(1000);
+            getWindow().setReturnTransition(slide);
+        }
     }
 }

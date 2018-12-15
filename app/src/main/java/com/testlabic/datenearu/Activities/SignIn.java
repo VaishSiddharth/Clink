@@ -1,24 +1,24 @@
 package com.testlabic.datenearu.Activities;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -40,6 +40,7 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.Name;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
@@ -56,7 +57,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     private GoogleApiClient mGoogleApiClient;
     LinearLayout googleSignIn;
     LinearLayout facebookSignIn;
-    ProgressDialog progressDialog;
+   GoogleProgressBar progressBar;
     CallbackManager callbackManager;
     LoginButton loginButton;
     
@@ -64,10 +65,9 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference();
+        setupWindowAnimations();
         mAuth = FirebaseAuth.getInstance();
-        
+        progressBar = findViewById(R.id.google_progress);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -129,8 +129,10 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-                if (loginResult != null)
-                    handleFacebookAccessToken(loginResult.getAccessToken());
+                if (loginResult != null) {
+                    Profile profile = Profile.getCurrentProfile();
+                    handleFacebookAccessToken(loginResult.getAccessToken(), profile);
+                }
             }
             
             @Override
@@ -151,7 +153,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         });
     }
     
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(AccessToken token, final Profile profile) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
@@ -175,10 +177,11 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                      */
                                 // for now update users database
                                 if (mCurrentUser != null) {
-                                    updateDatabaseWithUser(mCurrentUser);
+                                    updateDatabaseWithUser(mCurrentUser, null, profile);
                                     uploadQuestions(mCurrentUser.getUid());
                                 }
-                                
+                                progressBar.setVisibility(View.INVISIBLE);
+    
                                 startActivity(new Intent(SignIn.this, Name.class));
                                 finish();
                                 
@@ -186,7 +189,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     /*
                                     move to main activity
                                      */
-                                
+                                progressBar.setVisibility(View.INVISIBLE);
+    
                                 startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                 finish();
                                 
@@ -202,9 +206,23 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 });
     }
     
-    private void updateDatabaseWithUser(FirebaseUser mCurrentUser) {
-        ModelUser user = new ModelUser(mCurrentUser.getDisplayName(), String.valueOf(modifiedImageUrl())
-                , "20", null, null, null, mCurrentUser.getUid());
+    private void updateDatabaseWithUser(FirebaseUser mCurrentUser, GoogleSignInAccount account, Profile profile) {
+        
+        String firstName = null;
+        String lastName = null;
+        
+        if(account!=null)
+        {
+            firstName = account.getGivenName();
+            lastName = account.getFamilyName();
+        }
+       if(profile!=null)
+        {
+            firstName = profile.getFirstName();
+            lastName = profile.getLastName();
+        }
+        ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
+                , "20", null, null, null, mCurrentUser.getUid(), lastName);
         
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
@@ -226,7 +244,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-                Log.e(TAG, "THe providerID is " + user.getProviderId());
+                Log.e(TAG, "The providerID is " + user.getProviderId());
                 if (user.getProviderId().equals("google.com")) {
                     
                     assert currentUser != null;
@@ -286,7 +304,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         callbackManager.onActivityResult(requestCode, resultCode, data);
         boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
         if (!loggedIn)
-            handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            handleFacebookAccessToken(AccessToken.getCurrentAccessToken(), null);
         Log.e(TAG, "Logged via facebook " + loggedIn);
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -300,11 +318,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         if (result.isSuccess()) {
             final GoogleSignInAccount account = result.getSignInAccount();
             assert account != null;
-            progressDialog = new ProgressDialog(SignIn.this);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage(getString(R.string.loading_message));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+           progressBar.setVisibility(View.VISIBLE);
             // Toast.makeText(LogInEmail.this , "The information received by the account is " + account.getDisplayName() , Toast.LENGTH_LONG).show();
             final AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             mAuth.signInWithCredential(credential)
@@ -326,14 +340,15 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     move to setup the account/profile
                                      */
                                            /*
-                            Call manual fix to update the photo of user
-                             */
-                                    
+                                        Call manual fix to update the photo of user
+                                            */
                                     
                                     if (mCurrentUser != null) {
-                                        updateDatabaseWithUser(mCurrentUser);
+                                        updateDatabaseWithUser(mCurrentUser, account, null);
                                         uploadQuestions(mCurrentUser.getUid());
                                     }
+                                    progressBar.setVisibility(View.INVISIBLE);
+    
                                     startActivity(new Intent(SignIn.this, Name.class));
                                     finish();
                                     
@@ -341,6 +356,14 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     /*
                                     move to main activity
                                      */
+                                    progressBar.setVisibility(View.INVISIBLE);
+    
+                                    String personName = account.getDisplayName();
+                                    String personGivenName = account.getGivenName();
+                                    String personFamilyName = account.getFamilyName();
+                                    
+                                    Log.e(TAG, personName+" "+personFamilyName+" "+personGivenName);
+                                    
                                     startActivity(new Intent(SignIn.this, Name.class));
                                     finish();
                                     //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
@@ -348,7 +371,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 }
                             } else {
                                 // If sign in fails, display a message to the user.
-                                progressDialog.cancel();
+                                progressBar.setVisibility(View.INVISIBLE);
+    
                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
                                 Toast.makeText(SignIn.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
@@ -385,6 +409,14 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         if (authStateListener != null)
             mAuth.removeAuthStateListener(authStateListener);
         super.onStop();
+    }
+    private void setupWindowAnimations() {
+        Slide slide = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            slide = new Slide();
+            slide.setDuration(1000);
+            getWindow().setExitTransition(slide);
+        }
     }
     
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class ModelUser {
     
     String userName;
+    String userLastName;
     String imageUrl;
     String age;
     LatLong location;
@@ -33,8 +34,12 @@ public class ModelUser {
         return uid;
     }
     
+    public String getUserLastName() {
+        return userLastName;
+    }
+    
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
-    , String about, String uid) {
+    , String about, String uid, String userLastName) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
@@ -42,6 +47,7 @@ public class ModelUser {
         this.cityLocation = cityLocation;
         this.about = about;
         this.uid = uid;
+        this.userLastName = userLastName;
         
     }
     

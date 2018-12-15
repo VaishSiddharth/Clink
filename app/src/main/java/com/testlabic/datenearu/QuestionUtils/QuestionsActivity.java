@@ -58,6 +58,9 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     
     @Override
     public void onBackPressed() {
+        Intent  i= new Intent(QuestionsActivity.this, ClickedUser.class);
+        i.putExtra(Constants.clickedUid, clickedUid);
+        startActivity(i);
         finish();
     }
     

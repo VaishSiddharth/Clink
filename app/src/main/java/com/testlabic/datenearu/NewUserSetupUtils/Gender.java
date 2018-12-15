@@ -1,8 +1,11 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -37,7 +40,7 @@ public class Gender extends AppCompatActivity {
         intr_female = findViewById(R.id.intr_female);
         intr_male = findViewById(R.id.intr_male);
         next = findViewById(R.id.next);
-        
+        setupWindowAnimations();
         @SuppressLint("RestrictedApi") String uid = FirebaseAuth.getInstance().getUid();
         if (uid != null) {
             reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
@@ -135,5 +138,16 @@ public class Gender extends AppCompatActivity {
         button.setBackground(getResources().getDrawable(R.drawable.full_black_box));
         button.setTextColor(getResources().getColor(R.color.white));
     }
-    
+    private void setupWindowAnimations() {
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Fade fade = new Fade();
+            fade.setDuration(1000);
+            getWindow().setEnterTransition(fade);
+            
+            Slide slide = new Slide();
+            slide.setDuration(1000);
+            getWindow().setReturnTransition(slide);
+        }
+    }
 }

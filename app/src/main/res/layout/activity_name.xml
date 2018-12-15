@@ -4,8 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="#fab1a0"
-
     android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/ic_action_back" />
+
+    <customfonts.TextViewSFProDisplayRegular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="16dp"
+        android:text="Quick Setup!"
+        android:textSize="22sp" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -53,7 +71,7 @@
         android:textSize="18sp" />
 
 
-        <customfonts.EditText__SF_Pro_Display_Light
+        <customfonts.EditText__SF_Pro_Display_Regular
             android:id="@+id/input_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,12 +80,10 @@
             android:hint="First Name"
             android:singleLine="true"
             android:padding="12dp"
-            android:textSize="15sp"
-            android:textColorHint="#e5e5e5" />
+            android:textSize="20sp"
+            />
 
-
-
-                <customfonts.EditText__SF_Pro_Display_Light
+                <customfonts.EditText__SF_Pro_Display_Regular
                     android:id="@+id/input_name_last"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="32dp"
@@ -76,9 +92,9 @@
                     android:layout_height="wrap_content"
                     android:hint="Last Name"
                     android:singleLine="true"
-                    android:textSize="15sp"
+                    android:textSize="20sp"
                     android:padding="12dp"
-                    android:textColorHint="#e5e5e5" />
+                   />
 
         </RelativeLayout>
         <LinearLayout
