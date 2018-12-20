@@ -25,24 +25,26 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.sql.Date;
 
+import ru.github.igla.ferriswheel.FerrisWheelView;
+
 public class MatchCalculator extends AppCompatActivity {
     
     private static final String TAG = MatchCalculator.class.getSimpleName();
     private String clickedUsersId;
     private TextView statusMatch;
-    private GoogleProgressBar progressBar;
+    private FerrisWheelView ferrisWheelView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_calculator);
         statusMatch = findViewById(R.id.statusMatch);
-        progressBar = findViewById(R.id.google_progress);
+        ferrisWheelView = findViewById(R.id.google_progress);
         final int score = getIntent().getIntExtra(Constants.score, 0);
         Log.e(TAG, "The score is " + String.valueOf(score));
         Toast.makeText(this, "The score is " + String.valueOf(score), Toast.LENGTH_SHORT).show();
         clickedUsersId = getIntent().getStringExtra(Constants.clickedUid);
-        
+        ferrisWheelView.startAnimation();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -52,17 +54,18 @@ public class MatchCalculator extends AppCompatActivity {
                         SendNotification();
                         //SendRequestMessage();
                     }
-                    progressBar.setVisibility(View.GONE);
+                    ferrisWheelView.stopAnimation();
+                    ferrisWheelView.setVisibility(View.GONE);
                     statusMatch.setText(getResources().getString(R.string.matchSuccess));
                 } else {
-                    progressBar.setVisibility(View.GONE);
+                    ferrisWheelView.stopAnimation();
+                    ferrisWheelView.setVisibility(View.GONE);
                     statusMatch.setText(getResources().getString(R.string.matchFailed));
-        
+                    
                 }
             }
-        }, 2500);
+        }, 8000);
         
-       
     }
     
     private void SendRequestMessage() {
@@ -70,15 +73,15 @@ public class MatchCalculator extends AppCompatActivity {
                 .child(Constants.Messages)
                 .child(clickedUsersId).child(Constants.requestMessages)
                 .child(Constants.uid);
-    
+        
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null) {
-    
+        if (user != null) {
+            
             String photoUrl = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
             String name = String.valueOf(user.getDisplayName());
             long timeStamp = new java.util.Date().getTime();
             String txt = "Hey! We seem to have a lot of similarities, do you wish to talk?";
-            ModelMessage message = new ModelMessage(photoUrl, name, timeStamp,txt );
+            ModelMessage message = new ModelMessage(photoUrl, name, timeStamp, txt);
             reference.setValue(message);
         }
     }
@@ -94,9 +97,9 @@ public class MatchCalculator extends AppCompatActivity {
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.";
         
-        long timeStamp = -1*new java.util.Date().getTime();
+        long timeStamp = -1 * new java.util.Date().getTime();
         String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
-        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp,url );
+        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url);
         
         reference.setValue(notification);
     }

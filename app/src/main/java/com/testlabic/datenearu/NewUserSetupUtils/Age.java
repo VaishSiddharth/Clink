@@ -1,7 +1,10 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mikhaellopez.lazydatepicker.LazyDatePicker;
@@ -20,12 +24,14 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
 public class Age extends AppCompatActivity {
     
     ImageView next;
+    int age = -1;
     private String outputDateStr = null;
     
     @Override
@@ -47,6 +53,25 @@ public class Age extends AppCompatActivity {
                  outputDateStr = outputFormat.format(dateSelected);
                 Log.e("Date is ", outputDateStr);
                 
+                int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    
+                if (outputDateStr.length() > 4) {
+                    int birthYear = Integer.parseInt(outputDateStr.substring(outputDateStr.length() - 4));
+                    age = currentYear - birthYear;
+                    String uid = FirebaseAuth.getInstance().getUid();
+                    HashMap<String, Object> updateAgeMap = new HashMap<>();
+                    updateAgeMap.put(Constants.numeralAge, age);
+                    if (uid != null) {
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.userInfo)
+                                .child(uid);
+                        reference.updateChildren(updateAgeMap);
+                    }
+                } else {
+                    // whatever is appropriate in this case
+                    throw new IllegalArgumentException("Invalid date");
+                }
+                
             }
         });
         
@@ -54,7 +79,8 @@ public class Age extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (outputDateStr != null) {
-                    String uid = Constants.uid;
+                    String uid = FirebaseAuth.getInstance().getUid();
+                    Log.e("Age", "uid is "+uid);
                     if (uid != null) {
                         HashMap<String, Object> updateAgeMap = new HashMap<>();
                         updateAgeMap.put(Constants.dateOfBirth, outputDateStr);
@@ -62,10 +88,16 @@ public class Age extends AppCompatActivity {
                                 .child(Constants.userInfo)
                                 .child(uid);
                         Log.e("Age", "Click received");
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Age.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        if(age!=-1)
+                            editor.putInt(Constants.age,age ).apply();
+                        startActivity(new Intent(Age.this, Gender.class));
                         reference.updateChildren(updateAgeMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                startActivity(new Intent(Age.this, Gender.class));
+                                // save age to preferences
+                                
                             }
                         });
                     }
@@ -90,5 +122,20 @@ public class Age extends AppCompatActivity {
             slide.setDuration(1000);
             getWindow().setReturnTransition(slide);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser()!=null)
+                {
+                    Constants.uid = firebaseAuth.getUid();
+                }
+            }
+        });
     }
 }

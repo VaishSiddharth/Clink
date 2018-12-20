@@ -60,6 +60,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     private static final String TAG = locationUpdater.class.getSimpleName();
     private static final int REQUEST_CHECK_SETTINGS = 47;
     private GoogleApiClient mGoogleApiClient;
+    String gender;
     String cityLabel;
     
     
@@ -67,6 +68,8 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_updater);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(locationUpdater.this);
+        gender = preferences.getString(Constants.userGender, null);
        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 assert manager != null;
                 if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
@@ -149,14 +152,12 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                             {
                                 previousCityLabel = previousCityLabel.replace(", ", "_");
                                 DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
-                                        .child(Constants.cityLabels).child(previousCityLabel).child(Constants.uid);
+                                        .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
                                 prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-    
                                         reference.updateChildren(updateCityLabel);
-                                        
-                                    }
+                                      }
                                 });
                             }
                         }

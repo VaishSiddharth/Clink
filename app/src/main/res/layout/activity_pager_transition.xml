@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#efefef"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#efefef">
 
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -95,12 +95,16 @@
             android:textColor="#3b3b3b"
             android:textSize="20sp" />
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="4dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/sort" />
+        <ImageButton
+            android:layout_width="30dp"
+            android:id="@+id/filter"
+            android:background="@drawable/rounded_corners"
+            android:src="@drawable/ic_sort"
+            android:layout_height="30dp"
+            android:layout_marginEnd="4dp"
+            android:layout_alignParentRight="true"
+             />
+
 
     </LinearLayout>
 

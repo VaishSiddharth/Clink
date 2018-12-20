@@ -37,4 +37,12 @@ public class Constants {
     public static String successfullySent = "successfullySent";
     public static String shownShowCaser = "shownShowCaser";
     public static String dateOfBirth = "dateOfBirth";
+    public static String userGender = "userGender";
+    public static String female = "female";
+    public static String male = "male";
+    public static String userIntrGender = "userIntrGender";
+    public static String userPreferences = "userPreferences";
+    public static String age = "age";
+    public static String numeralAge = "numeralAge";
+    public static String preferedGender = "preferedGender";
 }

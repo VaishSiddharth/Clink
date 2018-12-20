@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.github.Joinersa:OoOAlertDialog:1.0.3'
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
-
+    implementation 'ru.github.igla:ferriswheel:1.2'
     implementation 'com.mikhaellopez:lazydatepicker:1.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

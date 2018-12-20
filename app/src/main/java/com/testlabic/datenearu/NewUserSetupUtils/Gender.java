@@ -1,7 +1,9 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -16,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.testlabic.datenearu.Models.ModelPrefs;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -28,6 +31,8 @@ public class Gender extends AppCompatActivity {
     DatabaseReference reference;
     Boolean genderSelected = false;
     Boolean iGenderSelected =false;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     ImageView next;
    
     @Override
@@ -35,6 +40,8 @@ public class Gender extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gender);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Gender.this);
+        editor = sharedPreferences.edit();
         male = findViewById(R.id.male);
         female = findViewById(R.id.female);
         intr_female = findViewById(R.id.intr_female);
@@ -64,9 +71,8 @@ public class Gender extends AppCompatActivity {
                 reference.updateChildren(updateMale).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                       
-                       genderSelected = true;
-                       
+                        genderSelected = true;
+                        editor.putString(Constants.userGender, Constants.male).apply();
                     }
                 });
             }
@@ -82,6 +88,7 @@ public class Gender extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         genderSelected = true;
+                        editor.putString(Constants.userGender, Constants.female).apply();
                     }
                 });
             }
@@ -97,6 +104,7 @@ public class Gender extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         iGenderSelected = true;
+                        editor.putString(Constants.userIntrGender, Constants.male).apply();
                     }
                 });
             }
@@ -112,6 +120,7 @@ public class Gender extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         iGenderSelected = true;
+                        editor.putString(Constants.userIntrGender, Constants.female).apply();
                     }
                 });
             }
@@ -120,12 +129,39 @@ public class Gender extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(iGenderSelected&&genderSelected)
+                if(iGenderSelected&&genderSelected) {
+                    setUpDefaultUserPreferences();
                     startActivity(new Intent(Gender.this, AboutYouEditor.class));
-                else
+                } else
                     Toast.makeText(Gender.this, "Choose one from each first", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    
+    private void setUpDefaultUserPreferences() {
+        
+        Constants.uid = FirebaseAuth.getInstance().getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userPreferences)
+                .child(Constants.uid);
+        // calculate min Age, max age according to your algo
+        int userAge = sharedPreferences.getInt(Constants.age, -1);
+        int minAge =-1, maxAge =-1;
+        String gender = sharedPreferences.getString(Constants.userGender, null);
+        String preferredGender = sharedPreferences.getString(Constants.userIntrGender, null);
+        if(gender.equals(Constants.male)) {
+            minAge = userAge<23?18: userAge-5;
+            maxAge = userAge;
+        }
+        else
+        {
+            maxAge = userAge+5;
+            minAge = userAge;
+        }
+        ModelPrefs prefs = new ModelPrefs(15.0, minAge, maxAge, preferredGender );
+        reference.setValue(prefs);
+        
+        
     }
     
     private void unColor(Button button) {

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="16dp"
+    android:layout_height="match_parent">
+
+    <customfonts.TextViewSFProDisplayRegular
+        android:layout_width="wrap_content"
+        android:text="Show ?"
+        android:layout_margin="8dp"
+        android:id="@+id/below"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:id="@+id/genderRadio"
+        android:layout_below="@+id/below"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:id="@+id/maleRadio"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/femaleRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+
+    </RadioGroup>
+
+    <customfonts.TextViewSFProDisplayRegular
+        android:layout_width="wrap_content"
+        android:text="Age ?"
+        android:layout_below="@+id/genderRadio"
+        android:layout_margin="8dp"
+        android:id="@+id/age"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_below="@id/age"
+        android:layout_margin="16dp"
+        android:id="@+id/age_seekbar"
+        android:layout_height="wrap_content" />
+
+    <customfonts.TextViewSFProDisplayRegular
+        android:layout_width="wrap_content"
+        android:text="Distance ?"
+        android:layout_below="@+id/age_seekbar"
+        android:layout_margin="8dp"
+        android:id="@+id/distance"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_below="@id/distance"
+        android:layout_margin="16dp"
+        android:id="@+id/distance_seekbar"
+        android:layout_height="wrap_content" />
+
+    <customfonts.MyTextView_SF_Pro_Display_Light
+        android:layout_width="wrap_content"
+        android:text="10 km"
+        android:layout_below="@+id/distance_seekbar"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/distance_value"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

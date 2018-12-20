@@ -222,7 +222,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             lastName = profile.getLastName();
         }
         ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
-                , "20", null, null, null, mCurrentUser.getUid(), lastName);
+                , "20", null, null, null, mCurrentUser.getUid(), lastName, -1);
         
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
@@ -358,12 +358,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                      */
                                     progressBar.setVisibility(View.INVISIBLE);
     
-                                    String personName = account.getDisplayName();
-                                    String personGivenName = account.getGivenName();
-                                    String personFamilyName = account.getFamilyName();
-                                    
-                                    Log.e(TAG, personName+" "+personFamilyName+" "+personGivenName);
-                                    
                                     startActivity(new Intent(SignIn.this, Name.class));
                                     finish();
                                     //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
@@ -385,7 +379,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     private void uploadQuestions(String uid) {
         
         for (int i = 0; i < 11; i++) {
-            ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bannana", "Apple");
+            ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bananna", "Apple");
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo).child(uid).child(Constants.questions)
                     .child(String.valueOf(i));
@@ -406,8 +400,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     
     @Override
     protected void onStop() {
-        if (authStateListener != null)
-            mAuth.removeAuthStateListener(authStateListener);
+        //if (authStateListener != null)
+         //   mAuth.removeAuthStateListener(authStateListener);
         super.onStop();
     }
     private void setupWindowAnimations() {

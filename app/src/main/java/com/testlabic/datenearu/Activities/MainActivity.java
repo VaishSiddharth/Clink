@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
-        
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         refresh = getIntent().getBooleanExtra(Constants.refresh, false);
@@ -160,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         Log.e(TAG, "On resume from main activity fired!");
         super.onResume();
-        
+        Constants.uid = FirebaseAuth.getInstance().getUid();
         mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

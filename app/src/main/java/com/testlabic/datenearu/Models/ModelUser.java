@@ -16,6 +16,7 @@ public class ModelUser {
     String cityLabel;
     ArrayList<ModelQuestion> questions;
     String uid;
+    int numeralAge;
     String interestedIn;
     String dateOfBirth;
     
@@ -39,7 +40,7 @@ public class ModelUser {
     }
     
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
-    , String about, String uid, String userLastName) {
+    , String about, String uid, String userLastName, int numeralAge) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
@@ -48,7 +49,11 @@ public class ModelUser {
         this.about = about;
         this.uid = uid;
         this.userLastName = userLastName;
-        
+        this.numeralAge = numeralAge;
+    }
+    
+    public int getNumeralAge() {
+        return numeralAge;
     }
     
     public ArrayList<ModelQuestion> getQuestions() {
