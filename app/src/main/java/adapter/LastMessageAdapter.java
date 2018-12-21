@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -38,10 +40,17 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     private ArrayList<ModelLastMessage> allModelArrayList;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("h:mm a", Locale.getDefault());
     
-    
+    private String setTime(long timestampCreatedLong) {
+        Date dateObj = new Date(timestampCreatedLong);
+        long epoch = dateObj.getTime();
+        CharSequence teste = DateUtils.getRelativeTimeSpanString(epoch, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+        return (String) teste;
+    }
     public LastMessageAdapter(Context context, ArrayList<ModelLastMessage> allModelArrayList) {
         this.context = context;
         this.allModelArrayList = allModelArrayList;
+        //sort the list here
+        
     }
 
     @NonNull
@@ -57,7 +66,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         
         final ModelLastMessage lastMessage = allModelArrayList.get(position);
         holder.name.setText(allModelArrayList.get(position).getName());
-        holder.time.setText(SIMPLE_DATE_FORMAT.format(lastMessage.getTimeStamp()));
+        holder.time.setText(setTime(lastMessage.getTimeStamp()));
         holder.txt.setText(allModelArrayList.get(position).getLastMessage());
         
         Glide.with(context).load(lastMessage.getImageUrl()).into(holder.image);

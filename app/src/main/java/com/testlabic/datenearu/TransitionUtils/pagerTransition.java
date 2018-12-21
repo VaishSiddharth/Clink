@@ -409,14 +409,17 @@ public class pagerTransition extends Fragment {
     private void filterList(ModelUser item) {
         //pass the item through the filters and then add them to the list for adaper;
         //1. Age filter
-        if (item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge() && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit()) {
+        if (prefs!=null&&item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge() && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit()) {
             displayArrayList.add(item);
         }
     }
     
     private double distanceBetweenThem(LatLong location) {
         
+        if(currentUsersLatLong!=null)
         return distance(currentUsersLatLong.getLatitude(), currentUsersLatLong.getLongitude(), location.getLatitude(), location.getLongitude());
+        
+        return 0.0;
     }
     
           /*

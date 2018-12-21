@@ -27,6 +27,8 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import adapter.LastMessageAdapter;
 
@@ -50,8 +52,10 @@ public class AllMessagesList extends Fragment {
         recyclerview = (view).findViewById(R.id.recycler4);
         bar = view.findViewById(R.id.progress_bar);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+       // ((LinearLayoutManager) layoutManager).setReverseLayout(true);
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
+        
         //downloadDataAndSetAdapter();
         bar.setVisibility(View.VISIBLE);
         return view;
@@ -61,7 +65,7 @@ public class AllMessagesList extends Fragment {
     private void downloadDataAndSetAdapter() {
         list = new ArrayList<>();
         list.clear();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+        final Query reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
                 .child(Constants.contacts);
@@ -125,6 +129,15 @@ public class AllMessagesList extends Fragment {
                                                         ModelLastMessage message = new ModelLastMessage(name, imageUrl
                                                                 , uid, lastMessage, timeStamp, isDelivered, sendersUid, status, successfullySent);
                                                         list.add(message);
+                                                        //sort messages with time
+                                                        Collections.sort(list, new Comparator<ModelLastMessage>() {
+                                                            @Override
+                                                            public int compare(ModelLastMessage v1, ModelLastMessage v2) {
+
+                                                                long sub = v2.getTimeStamp() - (v1.getTimeStamp());
+                                                                return (int) sub;
+                                                            }
+                                                        });
                                                         adapter = new LastMessageAdapter(getActivity(), list);
                                                         recyclerview.setAdapter(adapter);
                                                         

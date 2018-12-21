@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -153,7 +155,7 @@ public class NotificationFragment extends Fragment {
                     else
                         txt.setTextColor(getResources().getColor(R.color.read_color));
                     txt.setText(model.getMessage());
-                    time.setText(SIMPLE_DATE_FORMAT.format(model.getTimeStamp()*-1));
+                    time.setText(setTime(model.getTimeStamp()*-1));
                     Glide.with(getActivity()).load(model.getImageUrl()).into(photo);
                 }
             };
@@ -161,7 +163,12 @@ public class NotificationFragment extends Fragment {
             setSwipeMenu();
             adapter.startListening();
         }
-        
+        private String setTime(long timestampCreatedLong) {
+            Date dateObj = new Date(timestampCreatedLong);
+            long epoch = dateObj.getTime();
+            CharSequence teste = DateUtils.getRelativeTimeSpanString(epoch, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+            return (String) teste;
+        }
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
         

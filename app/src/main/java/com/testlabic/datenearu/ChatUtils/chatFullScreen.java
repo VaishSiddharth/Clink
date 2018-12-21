@@ -54,11 +54,8 @@ public class chatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
-    
     ImageView imageView;
-    
     private ArrayList<ChatMessage> messages = new ArrayList<>();
-    
     private EditText chatEditText1;
     private EditText.OnKeyListener keyListener = new View.OnKeyListener() {
         @Override

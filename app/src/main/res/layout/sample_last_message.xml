@@ -56,6 +56,7 @@
                 android:layout_width="8dp"
                 android:layout_height="8dp"
                 android:id="@+id/onlineStatus"
+                android:visibility="invisible"
                 android:background="@drawable/ic_brightness_1_black"/>
 
             <customfonts.TextViewSFProDisplayRegular
