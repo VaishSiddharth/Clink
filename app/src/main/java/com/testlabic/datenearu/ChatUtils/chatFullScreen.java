@@ -13,15 +13,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseListOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
@@ -39,6 +44,8 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class chatFullScreen extends AppCompatActivity {
     
@@ -54,7 +61,7 @@ public class chatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
-    ImageView imageView;
+    ImageView imageView, help;
     private ArrayList<ChatMessage> messages = new ArrayList<>();
     private EditText chatEditText1;
     private EditText.OnKeyListener keyListener = new View.OnKeyListener() {
@@ -181,6 +188,8 @@ public class chatFullScreen extends AppCompatActivity {
         
         chatListView = (ListView) findViewById(R.id.chat_list_view);
         
+        help = findViewById(R.id.help);
+        
         chatListView.setEmptyView(emptyView);
         
         listAdapter = new ChatListAdapter(msgReferenceListUsersCopy, msgReferenceList, messages, this);
@@ -194,6 +203,15 @@ public class chatFullScreen extends AppCompatActivity {
         enterChatView1.setOnClickListener(clickListener);
         
         chatEditText1.addTextChangedListener(watcher1);
+        
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            
+                DisplayHelpDialog();
+                
+            }
+        });
         
         chatListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -213,6 +231,81 @@ public class chatFullScreen extends AppCompatActivity {
             }
         });
         
+    }
+    
+    private void DisplayHelpDialog() {
+        final LayoutInflater factory = LayoutInflater.from(this);
+        final View helpDialog = factory.inflate(R.layout.help_layout, null);
+    
+        final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+               // .setTitleText("Help for you")
+                .setCancelText("Cancel")
+                .setCustomView(helpDialog);
+        dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    sweetAlertDialog.dismissWithAnimation();
+            }
+        });
+        
+        TextView dateQuestions = helpDialog.findViewById(R.id.dateQuestions);
+        
+        dateQuestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                final View questionListDialog = factory.inflate(R.layout.date_questions, null);
+    
+                final SweetAlertDialog dialog = new SweetAlertDialog(chatFullScreen.this, SweetAlertDialog.NORMAL_TYPE)
+                        // .setTitleText("Help for you")
+                       // .setCancelText("Cancel")
+                        .setCustomView(questionListDialog);
+                
+                ListView listView = questionListDialog.findViewById(R.id.listView);
+    
+                Query databaseRef = FirebaseDatabase.getInstance().getReference().child("DatingHelp").child("DatingQuestions");
+                
+                FirebaseListOptions<String> options = new FirebaseListOptions.Builder<String>()
+                        .setLayout(R.layout.sample_date_question)
+                        .setQuery(databaseRef, String.class)
+                        .build();
+    
+                final FirebaseListAdapter<String> adapter = new FirebaseListAdapter<String>(options) {
+                    @Override
+                    protected void populateView(View v, final String model, int position) {
+                            TextView questionText = v.findViewById(R.id.questionText);
+                            questionText.setText(model);
+                            
+                            questionText.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                     String text = model.replace("\"", "");
+                                    chatEditText1.setText(text);
+                                    dialog.dismiss();
+                                }
+                            });
+                    }
+                };
+                
+                adapter.startListening();
+                
+                listView.setAdapter(adapter);
+                dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        adapter.stopListening();
+                        sweetAlertDialog.dismissWithAnimation();
+                        
+                    }
+                });
+                
+                
+                dialog.show();
+            }
+        });
+        
+        
+        dialog.show();
     }
     
     private void showDeleteMsgBox(final ChatMessage message) {

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <customfonts.TextViewSFProDisplayRegular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="We'll help you!"
+        android:layout_margin="16dp"
+        android:textSize="22sp" />
+
+    <customfonts.MyTextView_SF_Pro_Display_Medium
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="55dp"
+        android:id="@+id/dateQuestions"
+        android:padding="16dp"
+        android:text="Can't think of anything to ask your date? Tap to get some intersting questions!" />
+
+
+    <customfonts.MyTextView_SF_Pro_Display_Medium
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/place"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="145dp"
+        android:padding="16dp"
+        android:text="Ask him/her out! Tap to know convenient places to grab a bite!" />
+
+
+</RelativeLayout>

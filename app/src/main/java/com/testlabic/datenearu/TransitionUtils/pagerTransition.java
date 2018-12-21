@@ -57,6 +57,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 /**
  * Created by xmuSistone on 2016/9/18.
  */
@@ -67,6 +69,7 @@ public class pagerTransition extends Fragment {
     private View positionView;
     private ViewPager viewPager;
     View rootView;
+    HashMap<String, Object> updateMap = null;
     String interestedGender;
     SharedPreferences preferences;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
@@ -159,11 +162,17 @@ public class pagerTransition extends Fragment {
     }
     
     private void showFilterDialog() {
+        
         LayoutInflater factory = LayoutInflater.from(getContext());
         final View filterDialogView = factory.inflate(R.layout.filter_dialog, null);
-        final AlertDialog deleteDialog = new AlertDialog.Builder(getContext()).create();
+        /*final AlertDialog deleteDialog = new AlertDialog.Builder(getContext()).create();
         deleteDialog.setView(filterDialogView);
-        deleteDialog.show();
+        deleteDialog.show();*/
+    
+        final SweetAlertDialog dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("Filters")
+                .setConfirmText("Save")
+                .setCustomView(filterDialogView);
         
         RadioGroup genderGroup = filterDialogView.findViewById(R.id.genderRadio);
         RadioButton maleRButton = filterDialogView.findViewById(R.id.maleRadio);
@@ -192,7 +201,7 @@ public class pagerTransition extends Fragment {
     
                     HashMap<String, Object> updateMap= new HashMap<>();
                     updateMap.put(Constants.preferedGender, Constants.male);
-                    Toast.makeText(getActivity(), "Getting new results", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getActivity(), "Getting new results", Toast.LENGTH_SHORT).show();
                     refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -211,7 +220,7 @@ public class pagerTransition extends Fragment {
     
                     HashMap<String, Object> updateMap= new HashMap<>();
                     updateMap.put(Constants.preferedGender, Constants.female);
-                    Toast.makeText(getActivity(), "Getting new results", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getActivity(), "Getting new results", Toast.LENGTH_SHORT).show();
                     refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -240,7 +249,7 @@ public class pagerTransition extends Fragment {
             
             }
         });
-    
+       
         double dist=  prefs.getDistanceLimit();
         distance.setText(String.valueOf((int) dist)+" km");
         distance_seek.setProgress((int) dist);
@@ -251,20 +260,10 @@ public class pagerTransition extends Fragment {
     
                 distance.setText(String.valueOf((int) (double) progress +10)+" km");
                 // update the database
-                HashMap<String, Object> updateMap = new HashMap<>();
+               
+                updateMap = new HashMap<>();
                 updateMap.put("distanceLimit", (double) progress +10 );
-                DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.userPreferences)
-                        .child(Constants.uid);
                 
-                refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        
-                        downloadList();
-        
-                    }
-                });
             }
     
             @Override
@@ -277,6 +276,29 @@ public class pagerTransition extends Fragment {
         
             }
         });
+        dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(final SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismissWithAnimation();
+                if(updateMap!=null)
+                {
+                    DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.userPreferences)
+                            .child(Constants.uid);
+    
+                    refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            //sweetAlertDialog.dismissWithAnimation();
+                            downloadList();
+            
+                        }
+                    });
+                }
+                
+            }
+        });
+        dialog.show();
         
     }
     
