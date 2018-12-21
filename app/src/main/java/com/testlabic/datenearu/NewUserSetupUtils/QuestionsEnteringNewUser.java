@@ -137,8 +137,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
     private void showInstructionDialog() {
         new SweetAlertDialog(this)
                 .setTitleText("Last step!")
-                .setContentText("You have to answer these ten questions about yourself," +
-                        " these questions will then be used to get a match for you!")
+                .setContentText("You have to answer these ten questions about yourself, these questions will then be used to get a match for you!")
                 .setConfirmText("Yes, go ahead!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override

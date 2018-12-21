@@ -39,6 +39,8 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
@@ -217,8 +219,8 @@ public class NotificationFragment extends Fragment {
                 switch (index) {
                     case 0:
                         // open
-                        Toast.makeText(getActivity(), "Accepting request!", Toast.LENGTH_SHORT).show();
-                        acceptRequest(adapter.getItem(position));
+                        ShowAConfirmationDialog(position);
+                       // Toast.makeText(getActivity(), "Accepting request!", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
                         // delete
@@ -237,6 +239,27 @@ public class NotificationFragment extends Fragment {
             }
         });
         
+    }
+    
+    private void ShowAConfirmationDialog(final int position) {
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("You guys will be added as a connection to each other!")
+                .setConfirmText("Yes, go for it!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        acceptRequest(adapter.getItem(position));
+    
+                        sDialog
+                                .setTitleText("Success!")
+                                .setContentText("Go have a talk, get happy!")
+                                .setConfirmText("OK")
+                                .setConfirmClickListener(null)
+                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                    }
+                })
+                .show();
     }
     
     private void acceptRequest(ModelNotification item) {

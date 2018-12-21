@@ -257,7 +257,14 @@ public class pagerTransition extends Fragment {
                         .child(Constants.userPreferences)
                         .child(Constants.uid);
                 
-                refPrefs.updateChildren(updateMap);
+                refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        
+                        downloadList();
+        
+                    }
+                });
             }
     
             @Override
