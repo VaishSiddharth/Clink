@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -38,6 +37,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -249,6 +249,16 @@ public class chatFullScreen extends AppCompatActivity {
         });
         
         TextView dateQuestions = helpDialog.findViewById(R.id.dateQuestions);
+        TextView datePlaces = helpDialog.findViewById(R.id.place);
+        
+        datePlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //get the mid point, then get restaurants near you!
+                dialog.dismiss();
+                fetchMidPoint();
+            }
+        });
         
         dateQuestions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,6 +318,79 @@ public class chatFullScreen extends AppCompatActivity {
         dialog.show();
     }
     
+    public static LatLong midPoint(double lat1, double lon1, double lat2, double lon2){
+        
+        double dLon = Math.toRadians(lon2 - lon1);
+        
+        //convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+        lon1 = Math.toRadians(lon1);
+        
+        double Bx = Math.cos(lat2) * Math.cos(dLon);
+        double By = Math.cos(lat2) * Math.sin(dLon);
+        double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+        double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+        
+        //print out in degrees
+        return new LatLong(Math.toDegrees(lon3), Math.toDegrees(lat3));
+    }
+    
+    private void fetchMidPoint() {
+        //get midpoint if both people's cordinates are avalable, else get one set of cordinates anyways
+        
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(Constants.uid)
+                .child(Constants.location);
+    
+    
+        final DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(Constants.sendToUid)
+                .child(Constants.location);
+        
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                final LatLong latLong = dataSnapshot.getValue(LatLong.class);
+                if(latLong!=null)
+                {
+                    reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            
+                            LatLong latLong1 = dataSnapshot.getValue(LatLong.class);
+                            if (latLong1 != null) {
+                                LatLong midPoint = midPoint(latLong.getLatitude(), latLong.getLongitude(), latLong1.getLatitude(), latLong1.getLongitude());
+                                getPlaces(midPoint);
+                            }
+                        }
+    
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                        }
+                    });
+                }
+                
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
+    }
+    
+    private void getPlaces(LatLong midPoint) {
+    
+    
+    
+    }
+    
     private void showDeleteMsgBox(final ChatMessage message) {
         
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
@@ -336,7 +419,6 @@ public class chatFullScreen extends AppCompatActivity {
     }
     
     private void deleteMessage(ChatMessage message) {
-
         /*
         Delete message by getting the reference
          */
