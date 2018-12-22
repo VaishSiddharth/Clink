@@ -2,6 +2,8 @@ package com.testlabic.datenearu.HelpUtils;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
+
 public class NearbyRestaurant {
     
     @SerializedName("name")
@@ -17,16 +19,25 @@ public class NearbyRestaurant {
     @SerializedName("price_level")
     private String price_level;
     
+    @SerializedName("opening_hours")
+    private HashMap<String, Object> opening_hours;
+    
     public NearbyRestaurant() {
     }
     
-    public NearbyRestaurant(String name, String id, String icon, String vicinity, String rating, String price_level) {
+    public HashMap<String, Object> getOpening_hours() {
+        return opening_hours;
+    }
+    
+    public NearbyRestaurant(String name, String id, String icon, String vicinity, String rating, String price_level, HashMap<String, Object> opening_hours) {
+    
         this.name = name;
         this.id = id;
         this.icon = icon;
         this.vicinity = vicinity;
         this.rating = rating;
         this.price_level = price_level;
+        this.opening_hours = opening_hours;
     }
     
     public String getName() {

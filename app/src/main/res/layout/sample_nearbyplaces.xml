@@ -57,14 +57,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
-                    android:rating="4" />
+                    android:rating="0" />
 
                 <customfonts.MyTextView_Roboto_Regular
-                    android:id="@+id/Reviews_Id"
+                    android:id="@+id/open_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8.4dp"
-                    android:text="238 reviews"
+                    android:text="N/A"
                     android:textColor="#9b9b9b"
                     android:textSize="11.5sp" />
 

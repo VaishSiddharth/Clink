@@ -57,6 +57,18 @@ public class Adapter extends BaseAdapter {
             Glide.with(mContext).load(restaurant.getIcon()).into(imageView);
             if(restaurant.getRating()!=null)
             ratingBar.setNumStars(Math.round(Float.parseFloat(restaurant.getRating())));
+            if(restaurant.getOpening_hours()!=null)
+            {
+                Boolean isOpen = (Boolean) restaurant.getOpening_hours().get("open_now");
+    
+                TextView openClose = convertView.findViewById(R.id.open_close);
+                if(!isOpen)
+                    openClose.setText("CLOSED");
+                else
+                    openClose.setText("OPEN NOW");
+            }
+           
+            
     
         return convertView;
     }
