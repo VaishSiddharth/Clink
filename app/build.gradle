@@ -62,5 +62,9 @@ dependencies {
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'ru.github.igla:ferriswheel:1.2'
     implementation 'com.mikhaellopez:lazydatepicker:1.0.0'
+
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
 }
 apply plugin: 'com.google.gms.google-services'

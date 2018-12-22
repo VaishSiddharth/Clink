@@ -37,7 +37,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.HelpUtils.Adapter;
+import com.testlabic.datenearu.HelpUtils.ModelMainResults;
+import com.testlabic.datenearu.Models.ApiClient;
+import com.testlabic.datenearu.Models.ApiInterface;
 import com.testlabic.datenearu.Models.LatLong;
+import com.testlabic.datenearu.HelpUtils.NearbyRestaurant;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -46,10 +51,14 @@ import java.util.Date;
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class chatFullScreen extends AppCompatActivity {
     
     private static final String TAG = chatFullScreen.class.getSimpleName();
+    private static final String API_KEY = "AIzaSyBUNTTjP0e2dlmag-qAQR2H_CeLHpOApOo";
     private ListView chatListView;
     private TextView toolbarName;
     private String sendToUid;
@@ -255,6 +264,7 @@ public class chatFullScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //get the mid point, then get restaurants near you!
+                getPlaces(null);
                 dialog.dismiss();
                 fetchMidPoint();
             }
@@ -364,7 +374,7 @@ public class chatFullScreen extends AppCompatActivity {
                             LatLong latLong1 = dataSnapshot.getValue(LatLong.class);
                             if (latLong1 != null) {
                                 LatLong midPoint = midPoint(latLong.getLatitude(), latLong.getLongitude(), latLong1.getLatitude(), latLong1.getLongitude());
-                                getPlaces(midPoint);
+                                
                             }
                         }
     
@@ -387,8 +397,66 @@ public class chatFullScreen extends AppCompatActivity {
     
     private void getPlaces(LatLong midPoint) {
     
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+            
+        String location = "26.7824186,80.9285919";
+        
+        Call<ModelMainResults> call = apiService.getNearByResults(location, 5000, "restaurant", API_KEY);
+        Log.e(TAG, "Reached getPlaces ");
+        call.enqueue(new Callback<ModelMainResults>() {
+            @Override
+            public void onResponse(@NonNull Call<ModelMainResults> call, Response<ModelMainResults> response) {
+                if (response.body() != null) {
     
+                    ArrayList<NearbyRestaurant> restaurants = response.body().getResults();
+                    
+                    showRestaurantsInDialog(restaurants);
+                }
+            }
+            @Override
+            public void onFailure(Call<ModelMainResults> call, Throwable t) {
+                Log.e(TAG, t.toString());
+            }
+            
+        });
     
+    }
+    
+    private void showRestaurantsInDialog(final ArrayList<NearbyRestaurant> restaurants) {
+    
+        final LayoutInflater factory = LayoutInflater.from(this);
+        final View helpDialog = factory.inflate(R.layout.restaurants_layout, null);
+    
+        final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+                // .setTitleText("Help for you")
+                .setCancelText("Cancel")
+                .setCustomView(helpDialog);
+        dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismissWithAnimation();
+            }
+        });
+        
+        //show adapter
+    
+        ListView listView = helpDialog.findViewById(R.id.listView);
+        Adapter adapter = new Adapter(chatFullScreen.this, restaurants);
+        listView.setAdapter(adapter);
+        
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    NearbyRestaurant restaurant = restaurants.get(position);
+                    String text = "Wanna catch a bite at "+restaurant.getName()+"?";
+                    chatEditText1.setText(text);
+                    dialog.dismissWithAnimation();
+            }
+        });
+        
+        dialog.show();
+        
     }
     
     private void showDeleteMsgBox(final ChatMessage message) {
