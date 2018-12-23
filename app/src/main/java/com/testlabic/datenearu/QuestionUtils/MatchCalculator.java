@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ public class MatchCalculator extends AppCompatActivity {
     private String clickedUsersId;
     private TextView statusMatch;
     private FerrisWheelView ferrisWheelView;
+    private EditText editText;
+    private TextView sendAMessage;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,11 @@ public class MatchCalculator extends AppCompatActivity {
         setContentView(R.layout.activity_match_calculator);
         statusMatch = findViewById(R.id.statusMatch);
         ferrisWheelView = findViewById(R.id.google_progress);
+        editText = findViewById(R.id.editText);
+        sendAMessage = findViewById(R.id.send_a_message);
+        
+        editText.setVisibility(View.GONE);
+        sendAMessage.setVisibility(View.GONE);
         final int score = getIntent().getIntExtra(Constants.score, 0);
         Log.e(TAG, "The score is " + String.valueOf(score));
         Toast.makeText(this, "The score is " + String.valueOf(score), Toast.LENGTH_SHORT).show();
@@ -54,6 +62,8 @@ public class MatchCalculator extends AppCompatActivity {
                         SendNotification();
                         //SendRequestMessage();
                     }
+                    sendAMessage.setText(View.VISIBLE);
+                    editText.setText(View.VISIBLE);
                     ferrisWheelView.stopAnimation();
                     ferrisWheelView.setVisibility(View.GONE);
                     statusMatch.setText(getResources().getString(R.string.matchSuccess));

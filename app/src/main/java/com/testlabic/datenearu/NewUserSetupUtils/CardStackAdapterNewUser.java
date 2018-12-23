@@ -83,7 +83,6 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
             });
             
             holder.optB.setVisibility(View.GONE);
-            
             holder.optC.setText(context.getResources().getString(R.string.rewind_msg));
             holder.optC.setBackgroundDrawable(null);
             holder.optC.setTextSize(14.0f);
@@ -179,7 +178,6 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
         reference.updateChildren(updateCorrectAns);
         Log.e("CardStackAdapter", "Colored! opt " + opt.getText().toString() + " position: "+position);
         
-       
     }
     
     @Override

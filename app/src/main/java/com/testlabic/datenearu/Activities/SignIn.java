@@ -48,6 +48,7 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 48;
@@ -228,6 +229,14 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
         
         reference.setValue(user);
+        
+        // add 500 xPoints for a new user!
+        HashMap<String, Object> updatePoints = new HashMap<>();
+        updatePoints.put(Constants.xPoints, 500);
+        
+        DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
+                .child(mCurrentUser.getUid());
+        xPointsRef.updateChildren(updatePoints);
     }
     
     private void signIn() {

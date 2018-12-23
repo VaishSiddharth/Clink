@@ -22,7 +22,7 @@
         android:layout_marginTop="55dp"
         android:id="@+id/dateQuestions"
         android:padding="16dp"
-        android:text="Can't think of anything to ask your date? Tap to get some intersting questions!" />
+        android:text="Can't think of anything to ask your date? Tap to get some intersting questions! (costs 5 points)" />
 
 
     <customfonts.MyTextView_SF_Pro_Display_Medium
@@ -32,9 +32,9 @@
         android:layout_alignParentTop="true"
         android:id="@+id/place"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="120dp"
         android:padding="16dp"
-        android:text="Ask him/her out! Tap to know convenient places to grab a bite!" />
+        android:text="Ask him/her out! Tap to know convenient places to grab a bite! (costs 20 points)" />
 
 
 </RelativeLayout>

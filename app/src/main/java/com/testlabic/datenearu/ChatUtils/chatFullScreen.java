@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +44,8 @@ import com.testlabic.datenearu.Models.ApiClient;
 import com.testlabic.datenearu.Models.ApiInterface;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.HelpUtils.NearbyRestaurant;
+import com.testlabic.datenearu.Models.ModelSubscr;
+import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -264,9 +267,46 @@ public class chatFullScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //get the mid point, then get restaurants near you!
-                getPlaces(null);
-                dialog.dismiss();
-                fetchMidPoint();
+    
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.xPoints)
+                        .child(Constants.uid);
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                            if (modelSubscr != null) {
+                                int current = modelSubscr.getXPoints();
+                                if (current < Constants.datePlacePoints) {
+                                    Toast.makeText(chatFullScreen.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                    BuyPoints();
+                                } else {
+                        
+                                    current -= Constants.datePlacePoints;
+                                    HashMap<String, Object> updatePoints = new HashMap<>();
+                                    updatePoints.put(Constants.xPoints, current);
+                                    dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            getPlaces(null);
+                                            dialog.dismiss();
+                                            fetchMidPoint();
+                                        }
+                                    });
+                        
+                                }
+                            }
+                        }
+                    }
+        
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+                    }
+                });
+                
+               
             }
         });
         
@@ -274,58 +314,94 @@ public class chatFullScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                final View questionListDialog = factory.inflate(R.layout.date_questions, null);
     
-                final SweetAlertDialog dialog = new SweetAlertDialog(chatFullScreen.this, SweetAlertDialog.NORMAL_TYPE)
-                        // .setTitleText("Help for you")
-                       // .setCancelText("Cancel")
-                        .setCustomView(questionListDialog);
-                
-                ListView listView = questionListDialog.findViewById(R.id.listView);
-    
-                Query databaseRef = FirebaseDatabase.getInstance().getReference().child("DatingHelp").child("DatingQuestions");
-                
-                FirebaseListOptions<String> options = new FirebaseListOptions.Builder<String>()
-                        .setLayout(R.layout.sample_date_question)
-                        .setQuery(databaseRef, String.class)
-                        .build();
-    
-                final FirebaseListAdapter<String> adapter = new FirebaseListAdapter<String>(options) {
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.xPoints)
+                        .child(Constants.uid);
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    protected void populateView(View v, final String model, int position) {
-                            TextView questionText = v.findViewById(R.id.questionText);
-                            questionText.setText(model);
-                            
-                            questionText.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                     String text = model.replace("\"", "");
-                                    chatEditText1.setText(text);
-                                    dialog.dismiss();
-                                }
-                            });
-                    }
-                };
-                
-                adapter.startListening();
-                
-                listView.setAdapter(adapter);
-                dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        adapter.stopListening();
-                        sweetAlertDialog.dismissWithAnimation();
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                            if (modelSubscr != null) {
+                                int current = modelSubscr.getXPoints();
+                                if (current < Constants.dateQuestionPoints) {
+                                    Toast.makeText(chatFullScreen.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                    BuyPoints();
+                                } else {
                         
+                                    current -= Constants.dateQuestionPoints;
+                                    HashMap<String, Object> updatePoints = new HashMap<>();
+                                    updatePoints.put(Constants.xPoints, current);
+                                    dataSnapshot.getRef().updateChildren(updatePoints);
+    
+                                    final View questionListDialog = factory.inflate(R.layout.date_questions, null);
+    
+                                    final SweetAlertDialog dialog = new SweetAlertDialog(chatFullScreen.this, SweetAlertDialog.NORMAL_TYPE)
+                                            // .setTitleText("Help for you")
+                                            // .setCancelText("Cancel")
+                                            .setCustomView(questionListDialog);
+    
+                                    ListView listView = questionListDialog.findViewById(R.id.listView);
+    
+                                    Query databaseRef = FirebaseDatabase.getInstance().getReference().child("DatingHelp").child("DatingQuestions");
+    
+                                    FirebaseListOptions<String> options = new FirebaseListOptions.Builder<String>()
+                                            .setLayout(R.layout.sample_date_question)
+                                            .setQuery(databaseRef, String.class)
+                                            .build();
+    
+                                    final FirebaseListAdapter<String> adapter = new FirebaseListAdapter<String>(options) {
+                                        @Override
+                                        protected void populateView(View v, final String model, int position) {
+                                            TextView questionText = v.findViewById(R.id.questionText);
+                                            questionText.setText(model);
+            
+                                            questionText.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    String text = model.replace("\"", "");
+                                                    chatEditText1.setText(text);
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                        }
+                                    };
+    
+                                    adapter.startListening();
+    
+                                    listView.setAdapter(adapter);
+                                    dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            adapter.stopListening();
+                                            sweetAlertDialog.dismiss();
+            
+                                        }
+                                    });
+                                    dialog.show();
+                        
+                                }
+                            }
+                        }
+                    }
+        
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+            
                     }
                 });
                 
                 
-                dialog.show();
             }
         });
         
         
         dialog.show();
+    }
+    
+    private void BuyPoints() {
+    
     }
     
     public static LatLong midPoint(double lat1, double lon1, double lat2, double lon2){

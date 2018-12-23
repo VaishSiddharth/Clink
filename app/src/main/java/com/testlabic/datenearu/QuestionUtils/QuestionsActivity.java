@@ -14,6 +14,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -46,6 +47,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class QuestionsActivity extends AppCompatActivity implements CardStackListener {
     
+    private static final String TAG = QuestionsActivity.class.getSimpleName();
     private CardStackLayoutManager manager;
     private CardStackAdapter adapter;
     private GoogleProgressBar progressBar;
@@ -55,13 +57,13 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     private TextView xPoints;
     private TextView rewindPenalty;
     View skip;
+    List<ModelQuestion> questions;
     
     @Override
-    public void onBackPressed() {
-        Intent  i= new Intent(QuestionsActivity.this, ClickedUser.class);
-        i.putExtra(Constants.clickedUid, clickedUid);
-        startActivity(i);
-        finish();
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        Log.e(TAG, "Crashes before destroy!");
     }
     
     @Override
@@ -69,14 +71,14 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
         progressBar = findViewById(R.id.google_progress);
-        rewindPenalty= findViewById(R.id.rewindPenalty);
+        rewindPenalty = findViewById(R.id.rewindPenalty);
         xPoints = findViewById(R.id.xpoints);
         fillXPoints();
         rewindPenalty.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         skip = findViewById(R.id.like_button);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
-        if(clickedUid==null||clickedUid.equals(""))
+        if (clickedUid == null || clickedUid.equals(""))
             clickedUid = Constants.uid;
         setupCardStackView();
         setupButton();
@@ -93,14 +95,13 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
-                    if(modelSubscr!=null)
-                    {
+                    if (modelSubscr != null) {
                         int current = modelSubscr.getXPoints();
-                         xPoints.setText(String.valueOf(current)+" x's");
+                        xPoints.setText(String.valueOf(current) + " x's");
                     }
                 }
             }
-        
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
@@ -131,12 +132,12 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
             adapter.addSpots(createSpots());
             adapter.notifyDataSetChanged();
         }*/
-       
-       if(manager.getTopPosition()>0) {
-           rewindPointEnable= true;
-           rewindPenalty.setVisibility(View.VISIBLE);
-       }
-       
+        
+        if (manager.getTopPosition() > 0) {
+            rewindPointEnable = true;
+            rewindPenalty.setVisibility(View.VISIBLE);
+        }
+        
         TextView quesNumber = findViewById(R.id.quesNumber);
         if (manager.getTopPosition() > 9) {
             skip.setEnabled(false);
@@ -170,14 +171,13 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         quesNumber.setVisibility(View.VISIBLE);
         /*if(adapter!=null)
             adapter.notifyItemChanged(manager.getTopPosition());*/
-        if(manager.getTopPosition()>0) {
-            rewindPointEnable= true;
+        if (manager.getTopPosition() > 0) {
+            rewindPointEnable = true;
             rewindPenalty.setVisibility(View.VISIBLE);
-        }
-        else if(manager.getTopPosition()==0){
-            rewindPointEnable= false;
+        } else if (manager.getTopPosition() == 0) {
+            rewindPointEnable = false;
             rewindPenalty.setVisibility(View.GONE);
-    
+            
         }
     }
     
@@ -212,8 +212,8 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
                 /*
                 Show a dialog to deduce 50 x points and then if confirmed continue
                  */
-                if(rewindPointEnable)
-                showDialog();
+                if (rewindPointEnable)
+                    showDialog();
                 
                 else
                     rewindCard();
@@ -236,15 +236,16 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     }
     
     private void showDialog() {
-    
+        
         new SweetAlertDialog(this)
                 .setTitleText("Rewind?")
-                .setContentText("Rewind will cost you 500 points continue?")
+                .setContentText("Rewind will cost you 10 points continue?")
                 .setConfirmText("Yes!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
+                    public void onClick(final SweetAlertDialog sDialog) {
+                        
+                        sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                         /*
                         Update the points in database and rewind!
                          */
@@ -256,30 +257,42 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() != null) {
                                     ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
-                                    if(modelSubscr!=null)
-                                    {
+                                    if (modelSubscr != null) {
                                         int current = modelSubscr.getXPoints();
-                                        current -= 50;
-                                        HashMap<String, Object> updatePoints = new HashMap<>();
-                                        updatePoints.put(Constants.xPoints, current);
-                                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                rewindCard();
-                                            }
-                                        });
-                    
+                                        if (current < 10) {
+                                            Toast.makeText(QuestionsActivity.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                            BuyPoints();
+                                        } else {
+                                            
+                                            current -= 10;
+                                            HashMap<String, Object> updatePoints = new HashMap<>();
+                                            updatePoints.put(Constants.xPoints, current);
+                                            dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    sDialog.dismiss();
+                                                    rewindCard();
+                                                }
+                                            });
+                                            
+                                        }
                                     }
                                 }
                             }
-        
+                            
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+                            
                             }
                         });
                     }
                 }).showCancelButton(true).show();
+    }
+    
+    private void BuyPoints() {
+    
+    
+    
     }
     
     private void rewindCard() {
@@ -302,77 +315,95 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
         manager.setMaxDegree(20.0f);
         manager.setDirections(Direction.FREEDOM);
         downloadQuestions();
+        
+        adapter = new CardStackAdapter(getApplicationContext(), questions, clickedUid);
+        cardStackView = findViewById(R.id.card_stack_view);
+        cardStackView.setEnabled(false);
+        cardStackView.setLayoutManager(manager);
+        cardStackView.setAdapter(adapter);
         // manager.setCanScrollHorizontal(true);
         // manager.setCanScrollVertical(true);
         
     }
     
+    @Override
+    public void onBackPressed() {
+        showConfirmation();
+    }
+    
+    private void showConfirmation() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("Quit?")
+                .setConfirmText("Yes!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        finish();
+                    }
+                })
+                .show();
+    }
+    
     private void downloadQuestions() {
         if (clickedUid != null) {
-        
-        final List<ModelQuestion> questions = new ArrayList<>();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.userInfo).child(clickedUid)
-                .child(Constants.questions);
-        
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                
-                if (dataSnapshot.getValue() != null) {
-                    ModelQuestion item = dataSnapshot.getValue(ModelQuestion.class);
-                    if (item != null)
-                        questions.add(item);
+            
+            questions = new ArrayList<>();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo).child(clickedUid)
+                    .child(Constants.questions);
+            
+            ref.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    
+                    if (dataSnapshot.getValue() != null) {
+                        ModelQuestion item = dataSnapshot.getValue(ModelQuestion.class);
+                        if (item != null)
+                            questions.add(item);
+                        
+                        if (adapter != null)
+                            adapter.notifyDataSetChanged();
+                    }
                 }
-            }
-            
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            
-            }
-            
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                
+                }
+                
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                
+                }
+                
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 /*
                 populate adapter...
                  */
-                progressBar.setVisibility(View.GONE);
-                adapter = new CardStackAdapter(getApplicationContext(), questions, clickedUid);
-                cardStackView = findViewById(R.id.card_stack_view);
-                cardStackView.setEnabled(false);
-                cardStackView.setLayoutManager(manager);
-                cardStackView.setAdapter(adapter);
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onChanged() {
-                        super.onChanged();
-                    }
-                });
+                    progressBar.setVisibility(View.GONE);
+                    
+                }
                 
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+        }
     }
-}
     
 }

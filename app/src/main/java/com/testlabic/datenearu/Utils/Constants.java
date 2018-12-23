@@ -45,4 +45,6 @@ public class Constants {
     public static String age = "age";
     public static String numeralAge = "numeralAge";
     public static String preferedGender = "preferedGender";
+    public static int datePlacePoints = 20;
+    public static int dateQuestionPoints = 10;
 }

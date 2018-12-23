@@ -2,6 +2,7 @@ package com.testlabic.datenearu;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +34,6 @@ import br.com.joinersa.oooalertdialog.OoOAlertDialog;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.relex.circleindicator.CircleIndicator;
 
-
 public class ClickedUser extends AppCompatActivity implements View.OnClickListener {
     
     private static final String TAG = ClickedUser.class.getSimpleName();
@@ -47,7 +48,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private TextView attemptMatch;
     private onImageUrlReceivedListener listener;
     
-    public interface onImageUrlReceivedListener{
+    public interface onImageUrlReceivedListener {
         void onDataReceived(String imageUrl);
     }
     
@@ -56,12 +57,11 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_user);
         
-        
         f1 = findViewById(R.id.f1);
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
         imageUrl = getIntent().getStringExtra(Constants.imageUrl);
-        if(clickedUid!=null)
+        if (clickedUid != null)
             setUpDetails();
         
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -69,7 +69,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         attemptMatch = findViewById(R.id.attempt_match);
         name = findViewById(R.id.name);
         about = findViewById(R.id.about);
-        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(),imageUrl);
+        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl);
         viewPager.setAdapter(view_pager_adapter);
         circleIndicator.setViewPager(viewPager);
         // view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
@@ -77,28 +77,80 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         attemptMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
                 showDialog();
             }
         });
     }
     
     private void showDialog() {
-    
+        
         new SweetAlertDialog(this)
                 .setTitleText("Attempt match?")
                 .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 x points continue")
                 .setConfirmText("Yes!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                        startActivity(new Intent(ClickedUser.this, QuestionsActivity.class).putExtra(Constants.clickedUid, clickedUid));
+                    public void onClick(final SweetAlertDialog sDialog) {
+                        sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
+                        final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.xPoints)
+                                .child(Constants.uid);
+                        
+                        xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                
+                                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                                if (modelSubscr != null) {
+                                    int current = modelSubscr.getXPoints();
+                                    if (current < 100) {
+                                        Toast.makeText(ClickedUser.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                        BuyPoints();
+                                    } else {
+                                        current -= 100;
+                                        HashMap<String, Object> updatePoints = new HashMap<>();
+                                        updatePoints.put(Constants.xPoints, current);
+                                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                sDialog
+                                                        .setTitleText("Starting!")
+                                                        .setContentText("Best of luck!")
+                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                
+                                                Handler handler = new Handler();
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        startActivity(new Intent(ClickedUser.this, QuestionsActivity.class).putExtra(Constants.clickedUid, clickedUid));
+                                                        sDialog.dismiss();
+                                                    }
+                                                }, 2500);
+                                            }
+                                        });
+                                        
+                                    }
+                                }
+                                
+                            }
+                            
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            
+                            }
+                        });
+                        
+                        ///
                     }
                 })
                 .show();
         
     }
+    
+    private void BuyPoints() {
+    
+    }
+    
     
     private void setUpDetails() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(clickedUid);
@@ -106,8 +158,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()!=null)
-                {
+                if (dataSnapshot.getValue() != null) {
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null && user.getUserName() != null)
                         name.setText(user.getUserName());

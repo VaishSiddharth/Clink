@@ -54,7 +54,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         /*
         Show confirmation screen for position == 10
          */
-    
+        
+        Log.e(TAG, "Method called for position "+holder.getAdapterPosition());
+        
         unColorOpt(holder.optB);
         unColorOpt(holder.optA);
         unColorOpt(holder.optC);
@@ -63,6 +65,16 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         clickedOptB = false;
         clickedOptC = false;
         clickedOptD = false;
+        
+        position = holder.getAdapterPosition();
+        
+        if(position==9)
+        {
+            clickedOptA = false;
+            clickedOptB = false;
+            clickedOptC = false;
+            clickedOptD = false;
+        }
         
         if (position == 10) {
             holder.question.setText(context.getResources().getString(R.string.confirmation));
@@ -118,7 +130,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                     colorOpt(holder.optD, holder.getAdapterPosition(), question);
     
             }*/
-           
+            
             
             holder.optA.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -208,8 +220,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                         clickedOptB = false;
                         clickedOptC = false;
                         clickedOptA = false;
-                    } else if (clickedOptA) {
-                        unColorOpt(holder.optA);
+                    } else if (clickedOptD) {
+                        unColorOpt(holder.optD);
                         clickedOptD = false;
                     }
                     
@@ -232,8 +244,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         /*
         Save the value in shared preference to show it when user goes rewind!
          */
-       
-       question.setSelectedOption(opt.getText().toString());
+        
+        question.setSelectedOption(opt.getText().toString());
         if (currentPos != position)
             subOnce = false;
         
@@ -260,9 +272,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                 selectedSomethingElse = true;
             }
         }
-        
         Log.e(TAG, "Score is " + score * 10 + "%");
-        
     }
     
     @Override

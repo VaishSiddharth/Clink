@@ -9,7 +9,6 @@
     <ru.github.igla.ferriswheel.FerrisWheelView
         android:layout_width="match_parent"
         android:id="@+id/google_progress"
-
         android:layout_height="match_parent"
         android:layout_gravity="center"
         app:fwv_cabinsNumber="10"
@@ -27,16 +26,19 @@
         android:textSize="18sp" />
 
     <customfonts.MyTextView_SF_Pro_Display_Medium
-        android:layout_width="wrap_content"
-        android:text="Send a message! (25 points)"
-        android:textSize="22sp"
         android:id="@+id/send_a_message"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:text="Send a message! (25 points)"
+        android:textSize="16sp" />
 
     <customfonts.EditText__SF_Pro_Display_Light
         android:layout_width="wrap_content"
+        android:id="@+id/editText"
         android:layout_margin="16dp"
-
+        android:hint="Write a message, this will increase the likeliness of you getting accepted!"
         android:layout_below="@+id/send_a_message"
         android:layout_height="wrap_content" />
 

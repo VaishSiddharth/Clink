@@ -48,6 +48,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
     private GoogleProgressBar progressBar;
     private ArrayList<DatabaseReference> referenceList = new ArrayList<>();
     View skip;
+     List<ModelQuestion> questions;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,11 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
         manager.setMaxDegree(20.0f);
         manager.setDirections(Direction.FREEDOM);
         downloadQuestions();
+        adapter = new CardStackAdapterNewUser(getApplicationContext(), questions, Constants.uid, referenceList);
+        cardStackView = findViewById(R.id.card_stack_view);
+        cardStackView.setEnabled(false);
+        cardStackView.setLayoutManager(manager);
+        cardStackView.setAdapter(adapter);
         // manager.setCanScrollHorizontal(true);
         // manager.setCanScrollVertical(true);
         
@@ -194,7 +200,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
     private void downloadQuestions() {
         if (Constants.uid != null) {
             
-            final List<ModelQuestion> questions = new ArrayList<>();
+            questions = new ArrayList<>();
             referenceList = new ArrayList<>();
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo).child(Constants.uid)
@@ -210,6 +216,9 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
                             questions.add(item);
                             referenceList.add(dataSnapshot.getRef());
                         }
+                        
+                        if(adapter!=null)
+                            adapter.notifyDataSetChanged();
                     }
                 }
                 
@@ -240,17 +249,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
                 populate adapter...
                  */
                     progressBar.setVisibility(View.GONE);
-                    adapter = new CardStackAdapterNewUser(getApplicationContext(), questions, Constants.uid, referenceList);
-                    cardStackView = findViewById(R.id.card_stack_view);
-                    cardStackView.setEnabled(false);
-                    cardStackView.setLayoutManager(manager);
-                    cardStackView.setAdapter(adapter);
-                    adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                        @Override
-                        public void onChanged() {
-                            super.onChanged();
-                        }
-                    });
+                    
                     
                 }
                 

@@ -54,23 +54,17 @@
             android:layout_gravity="end"
             android:layout_marginRight="20dp">
 
-            <ImageView
-                android:id="@+id/notification"
-                android:layout_width="24dp"
-                android:visibility="gone"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_notification" />
-
-            <TextView
-                android:id="@+id/notifCount"
+            <customfonts.BrushFlowFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/badge_circle"
-                android:text="10"
-                android:textColor="#FFF"
-                android:textSize="6dp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:id="@+id/points"
+                android:text="NA"
+                android:textSize="12sp" />
         </RelativeLayout>
 
 
