@@ -4,11 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.transition.Slide;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,12 +23,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.stepstone.stepper.BlockingStep;
+import com.stepstone.stepper.Step;
+import com.stepstone.stepper.StepperLayout;
+import com.stepstone.stepper.VerificationError;
 import com.testlabic.datenearu.Models.ModelPrefs;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
-public class Gender extends AppCompatActivity {
+public class Gender extends Fragment implements BlockingStep {
     Button male;
     Button female;
     Button intr_male;
@@ -34,20 +43,19 @@ public class Gender extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     ImageView next;
-   
-    @Override
     
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gender);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Gender.this);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_gender, container, false);
+    
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         editor = sharedPreferences.edit();
-        male = findViewById(R.id.male);
-        female = findViewById(R.id.female);
-        intr_female = findViewById(R.id.intr_female);
-        intr_male = findViewById(R.id.intr_male);
-        next = findViewById(R.id.next);
-        setupWindowAnimations();
+        male = rootView.findViewById(R.id.male);
+        female = rootView.findViewById(R.id.female);
+        intr_female = rootView.findViewById(R.id.intr_female);
+        intr_male = rootView.findViewById(R.id.intr_male);
+        next = rootView.findViewById(R.id.next);
         @SuppressLint("RestrictedApi") String uid = FirebaseAuth.getInstance().getUid();
         if (uid != null) {
             reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
@@ -57,7 +65,7 @@ public class Gender extends AppCompatActivity {
         final HashMap<String, Object> updateFemale = new HashMap<>();
         updateFemale.put("gender", Constants.FEMALE);
         updateMale.put("gender", Constants.MALE);
-        
+    
         final HashMap<String, Object> updateMaleI = new HashMap<>();
         final HashMap<String, Object> updateFemaleI = new HashMap<>();
         updateFemaleI.put("interestedIn", Constants.FEMALE);
@@ -65,7 +73,7 @@ public class Gender extends AppCompatActivity {
         male.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               genderSelected = false;
+                genderSelected = false;
                 unColor(female);
                 color(male);
                 reference.updateChildren(updateMale).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -77,7 +85,7 @@ public class Gender extends AppCompatActivity {
                 });
             }
         });
-        
+    
         female.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,19 +133,12 @@ public class Gender extends AppCompatActivity {
                 });
             }
         });
-        
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(iGenderSelected&&genderSelected) {
-                    setUpDefaultUserPreferences();
-                    startActivity(new Intent(Gender.this, AboutYouEditor.class));
-                } else
-                    Toast.makeText(Gender.this, "Choose one from each first", Toast.LENGTH_SHORT).show();
-            }
-        });
+    
+      
+        return rootView;
     }
     
+   
     private void setUpDefaultUserPreferences() {
         
         Constants.uid = FirebaseAuth.getInstance().getUid();
@@ -174,16 +175,41 @@ public class Gender extends AppCompatActivity {
         button.setBackground(getResources().getDrawable(R.drawable.full_black_box));
         button.setTextColor(getResources().getColor(R.color.white));
     }
-    private void setupWindowAnimations() {
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Fade fade = new Fade();
-            fade.setDuration(1000);
-            getWindow().setEnterTransition(fade);
-            
-            Slide slide = new Slide();
-            slide.setDuration(1000);
-            getWindow().setReturnTransition(slide);
-        }
+  
+    
+    @Override
+    public void onNextClicked(StepperLayout.OnNextClickedCallback callback) {
+        if(iGenderSelected&&genderSelected) {
+            setUpDefaultUserPreferences();
+           callback.goToNextStep();
+        } else
+            Toast.makeText(getActivity(), "Choose one from each first", Toast.LENGTH_SHORT).show();
+    }
+    
+    @Override
+    public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
+    
+    
+    }
+    
+    @Override
+    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
+            callback.goToPrevStep();
+    }
+    
+    @Nullable
+    @Override
+    public VerificationError verifyStep() {
+        return null;
+    }
+    
+    @Override
+    public void onSelected() {
+    
+    }
+    
+    @Override
+    public void onError(@NonNull VerificationError error) {
+    
     }
 }

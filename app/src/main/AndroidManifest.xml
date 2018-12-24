@@ -94,7 +94,8 @@
         <activity android:name=".TransitionUtils.pagerTransition" />
         <activity android:name=".TransitionUtils.DetailActivity" />
         <activity android:name=".NewUserSetupUtils.Age" />
-        <activity android:name=".NewUserSetupUtils.QuestionsEnteringNewUser"></activity>
+        <activity android:name=".NewUserSetupUtils.QuestionsEnteringNewUser" />
+        <activity android:name=".NewUserSetupUtils.NewUserSetup"></activity>
     </application>
 
 </manifest>
