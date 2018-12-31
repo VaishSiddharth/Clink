@@ -24,15 +24,16 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
+import com.testlabic.datenearu.NewUserSetupUtils.LocationUpdateService;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
 
-import Fragments.Messages;
-import Fragments.NotificationFragment;
-import Fragments.Profile;
+import com.testlabic.datenearu.Fragments.Messages;
+import com.testlabic.datenearu.Fragments.NotificationFragment;
+import com.testlabic.datenearu.Fragments.Profile;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        //startService(new Intent(MainActivity.this, LocationUpdateService.class));
         //initialize the startappSDK
     
         StartAppSDK.init(this, "211455651", false);

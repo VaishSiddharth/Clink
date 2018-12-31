@@ -3,18 +3,32 @@ package com.testlabic.datenearu.NewUserSetupUtils;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-public class MyService extends Service
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.testlabic.datenearu.Models.LatLong;
+import com.testlabic.datenearu.Utils.Constants;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+public class LocationUpdateService extends Service
 {
     private static final String TAG = "BOOMBOOMTESTGPS";
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 10f;
+    String cityLabel;
 
     private class LocationListener implements android.location.LocationListener
     {
@@ -31,6 +45,7 @@ public class MyService extends Service
         {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
+            updateCordinates(location);
         }
 
         @Override
@@ -51,7 +66,41 @@ public class MyService extends Service
             Log.e(TAG, "onStatusChanged: " + provider);
         }
     }
-
+    
+    private void updateCordinates(Location location) {
+    
+        String uid =  FirebaseAuth.getInstance().getUid();
+        if(uid!=null) {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                String cityName = addresses.get(0).getLocality();
+                String stateName = addresses.get(0).getAdminArea();
+                String countryName = addresses.get(0).getCountryName();
+                cityLabel = cityName + ", " + stateName + ", " + countryName;
+        
+                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.userInfo).child(uid);
+        
+                final HashMap<String, Object> updateCityLabel = new HashMap<>();
+                updateCityLabel.put("cityLabel", cityLabel);
+                
+                reference.updateChildren(updateCityLabel);
+    
+                LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
+    
+                DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.userInfo).child(uid).child(Constants.location);
+    
+                reference2.setValue(latLong);
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     LocationListener[] mLocationListeners = new LocationListener[] {
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)

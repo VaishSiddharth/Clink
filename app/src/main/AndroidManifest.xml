@@ -61,8 +61,6 @@
         <activity android:name=".Messages_fliply" />
         <activity android:name=".Search_Results_fliply" />
         <activity android:name=".Chat_fliply" />
-        <activity android:name=".Activity_list" />
-        <activity android:name=".Splash_screen" />
         <activity android:name=".QuestionUtils.QuestionsActivity" />
         <activity android:name=".Utils.locationUpdater" />
         <!--
@@ -106,6 +104,8 @@
         <service android:name="com.startapp.android.publish.common.metaData.InfoEventService" />
         <service android:name="com.startapp.android.publish.common.metaData.PeriodicJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name=".NewUserSetupUtils.LocationUpdateService" />
+
         <receiver android:name="com.startapp.android.publish.common.metaData.BootCompleteListener" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

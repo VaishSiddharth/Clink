@@ -1,4 +1,4 @@
-package Fragments;
+package com.testlabic.datenearu.Fragments;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;

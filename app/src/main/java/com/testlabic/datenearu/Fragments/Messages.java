@@ -1,4 +1,4 @@
-package Fragments;
+package com.testlabic.datenearu.Fragments;
 
 import android.graphics.Color;
 import android.graphics.Typeface;

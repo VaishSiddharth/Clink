@@ -1,4 +1,4 @@
-package fragment;
+package com.testlabic.datenearu.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,7 +17,7 @@ import com.testlabic.datenearu.R;
  * Created by wolfsoft4 on 21/8/18.
  */
 
-public class Product_Fragment extends Fragment {
+public class multipleImages extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

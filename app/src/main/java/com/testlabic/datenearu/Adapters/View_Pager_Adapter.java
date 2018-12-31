@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.testlabic.datenearu.Utils.Constants;
 
-import Fragments.ClickedUserImage1;
-import Fragments.ClickedUserImage2;
-import fragment.Product_Fragment;
+import com.testlabic.datenearu.Fragments.ClickedUserImage1;
+import com.testlabic.datenearu.Fragments.ClickedUserImage2;
+import com.testlabic.datenearu.Fragments.multipleImages;
 
 public class View_Pager_Adapter extends FragmentStatePagerAdapter {
   
@@ -32,7 +32,7 @@ public class View_Pager_Adapter extends FragmentStatePagerAdapter {
                 tab1.setArguments(bundle);
                 return tab1;
             case 1:
-                Product_Fragment tab2 = new Product_Fragment();
+                multipleImages tab2 = new multipleImages();
                 return  tab2;
             case 2:
                 ClickedUserImage2 tab3 = new ClickedUserImage2();

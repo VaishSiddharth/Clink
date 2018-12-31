@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import Fragments.AllMessagesList;
-import fragment.Connections;
+import com.testlabic.datenearu.Fragments.AllMessagesList;
+import com.testlabic.datenearu.Fragments.Connections;
 
 /**
  * Created by wolfsoft4 on 21/9/18.
