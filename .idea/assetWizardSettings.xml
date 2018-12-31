@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_help_outline_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_cancel_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,9 +45,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="C:\Users\velox\Desktop\ic_profile.png" />
-                                      <entry key="outputName" value="ic_help" />
-                                      <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="212121" />
+                                      <entry key="outputName" value="ic_hide_ad" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -12,9 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Activities.MainActivity;
-import com.testlabic.datenearu.QuestionUtils.MatchCalculator;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -58,7 +64,7 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
         /*
         Show confirmation screen for position == 10
          */
-    
+        
         unColorOpt(holder.optB);
         unColorOpt(holder.optA);
         unColorOpt(holder.optC);
@@ -76,9 +82,9 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
             holder.optA.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(i);
+                    //duplicate the user info here.
+                    DuplicateUserInfoToCityLabelNode();
+                    UpdateXPoints();
                 }
             });
             
@@ -86,9 +92,11 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
             holder.optC.setText(context.getResources().getString(R.string.rewind_msg));
             holder.optC.setBackgroundDrawable(null);
             holder.optC.setTextSize(14.0f);
-            
             holder.optC.setEnabled(false);
             holder.optD.setVisibility(View.GONE);
+            
+            //show a sweet alert dialog here!
+           
         } else {
             
             final ModelQuestion question = questions.get(position);
@@ -109,7 +117,6 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
                     unColorOpt(holder.optC);
                     unColorOpt(holder.optD);
                     
-                   
                 }
             });
             
@@ -157,6 +164,15 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
         }
     }
     
+    private void UpdateXPoints() {
+        Constants.uid = FirebaseAuth.getInstance().getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+        HashMap<String, Object> updatePoints = new HashMap<>();
+        updatePoints.put(Constants.xPoints, 1000);
+        reference.updateChildren(updatePoints);
+    }
     
     private void unColorOpt(TextView opt) {
         
@@ -167,7 +183,6 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
     
     private void colorOpt(TextView opt, int position) {
         
-      
         opt.setTextColor(context.getResources().getColor(R.color.white));
         opt.setBackground(context.getResources().getDrawable(R.drawable.solid_color_background));
         
@@ -176,7 +191,7 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
         updateCorrectAns.put("correctOption", correctAnswer);
         DatabaseReference reference = referenceArrayList.get(position);
         reference.updateChildren(updateCorrectAns);
-        Log.e("CardStackAdapter", "Colored! opt " + opt.getText().toString() + " position: "+position);
+        Log.e("CardStackAdapter", "Colored! opt " + opt.getText().toString() + " position: " + position);
         
     }
     
@@ -201,6 +216,53 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
             this.optD = view.findViewById(R.id.optD);
             this.question = view.findViewById(R.id.questionText);
             this.completeItem = view;
+        }
+    }
+    
+    private void DuplicateUserInfoToCityLabelNode() {
+        
+        {
+            DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
+                    .child(Constants.uid);
+            refInit.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue(ModelUser.class) != null) {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            String gender = user.getGender();
+                            final String cityLabel = user.getCityLabel();
+                            if (cityLabel != null && gender != null) {
+                                DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
+                                        .child(cityLabel).child(gender).child(Constants.uid);
+                                refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString(Constants.cityLabel, cityLabel).apply();
+                
+                                        //show success message and then
+                                        //move to main activity now!
+                
+                                       /* sweetAlertDialog
+                                                .setTitleText("Done!")
+                                                .setContentText("Best of luck!")
+                                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);*/
+                                        Intent i = new Intent(context, MainActivity.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        context.startActivity(i);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
         }
     }
     

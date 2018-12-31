@@ -46,6 +46,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.startapp.android.publish.ads.banner.Banner;
 import com.testlabic.datenearu.Activities.SignIn;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelPrefs;
@@ -87,6 +88,7 @@ public class pagerTransition extends Fragment {
     private LatLong currentUsersLatLong;
     private ModelPrefs prefs;
     private TextView points;
+    private ImageView hideAd;
     
     public pagerTransition() {
         // Required empty public constructor
@@ -106,6 +108,7 @@ public class pagerTransition extends Fragment {
         editor =  sharedPreferences.edit();
         positionView = rootView.findViewById(R.id.position_view);
         filterList = rootView.findViewById(R.id.filter);
+        hideAd = rootView.findViewById(R.id.hideAd);
         changeLocation = rootView.findViewById(R.id.changeLocation);
         points = rootView.findViewById(R.id.points);
         Constants.uid = FirebaseAuth.getInstance().getUid();
@@ -128,6 +131,14 @@ public class pagerTransition extends Fragment {
             @Override
             public void onClick(View v) {
                 showFilterDialog();
+            }
+        });
+        
+        hideAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Banner banner =  rootView.findViewById(R.id.startAppBanner);
+                banner.hideBanner();
             }
         });
         

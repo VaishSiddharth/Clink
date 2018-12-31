@@ -59,7 +59,6 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
             @Override
             public void run() {
                 showInstructionDialog();
-    
             }
         }, 1000);
         skip = findViewById(R.id.like_button);

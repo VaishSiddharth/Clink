@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.startapp.android.publish.adsCommon.StartAppAd;
 import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
@@ -49,10 +50,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        //startService(new Intent(MainActivity.this, LocationUpdateService.class));
         //initialize the startappSDK
     
         StartAppSDK.init(this, "211455651", false);
+        
+        StartAppAd.disableSplash();
         
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
@@ -179,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     checkForNotification();
                     checkForNewMessages();
                     updateStatus(Constants.online);
+                    giveXPoints();
                 }
                 
             }

@@ -100,11 +100,11 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                 ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                                 if (modelSubscr != null) {
                                     int current = modelSubscr.getXPoints();
-                                    if (current < 100) {
+                                    if (current < Constants.attemptTestPoints) {
                                         Toast.makeText(ClickedUser.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
                                         BuyPoints();
                                     } else {
-                                        current -= 100;
+                                        current -= Constants.attemptTestPoints;
                                         HashMap<String, Object> updatePoints = new HashMap<>();
                                         updatePoints.put(Constants.xPoints, current);
                                         dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {

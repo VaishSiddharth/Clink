@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -67,9 +68,9 @@ public class LocationUpdateService extends Service
         }
     }
     
-    private void updateCordinates(Location location) {
+    private void updateCordinates(final Location location) {
     
-        String uid =  FirebaseAuth.getInstance().getUid();
+        final String uid =  FirebaseAuth.getInstance().getUid();
         if(uid!=null) {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = null;
@@ -86,14 +87,26 @@ public class LocationUpdateService extends Service
                 final HashMap<String, Object> updateCityLabel = new HashMap<>();
                 updateCityLabel.put("cityLabel", cityLabel);
                 
-                reference.updateChildren(updateCityLabel);
+                reference.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
     
-                LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
+                        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.userInfo).child(uid).child(Constants.location);
     
-                DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.userInfo).child(uid).child(Constants.location);
+                        reference2.setValue(latLong).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.e(TAG, "Killing the service here!");
+                                stopSelf();
     
-                reference2.setValue(latLong);
+                            }
+                        });
+                    }
+                });
+    
+              
                 
             } catch (IOException e) {
                 e.printStackTrace();

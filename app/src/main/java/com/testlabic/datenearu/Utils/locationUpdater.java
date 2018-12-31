@@ -69,7 +69,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_updater);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(locationUpdater.this);
-        gender = preferences.getString(Constants.userGender, null);
+        gender = preferences.getString(Constants.userGender, "male");
        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 assert manager != null;
                 if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {

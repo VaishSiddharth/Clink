@@ -51,4 +51,5 @@ public class Constants {
     public static String oneLine = "oneLine";
     public static int retryAttemptAmount = 150;
     public static int oneTimeMessageCost = 25;
+    public static int attemptTestPoints = 100;
 }

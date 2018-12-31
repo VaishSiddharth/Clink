@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.BillingUtils;
 
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.startapp.android.publish.adsCommon.StartAppAd;
+import com.startapp.android.publish.adsCommon.VideoListener;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -32,14 +35,54 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
     private static final String TAG = PurchasePacks.class.getSimpleName();
     public BillingClient mBillingClient;
     TextView pack1;
+    StartAppAd startAppAd;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_packs);
         pack1 = findViewById(R.id.firstPack);
+        TextView rewardAd = findViewById(R.id.rewardAd);
+        startAppAd = new StartAppAd(PurchasePacks.this);
+        rewardAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               
+                startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO);
+            }
+        });
+    
+        startAppAd.setVideoListener(new VideoListener() {
+            @Override
+            public void onVideoCompleted() {
+                // Grant user with the reward
+    
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.xPoints)
+                        .child(Constants.uid);
+                HashMap<String, Object> updatePoints = new HashMap<>();
+                updatePoints.put(Constants.xPoints, 10000);
+                reference.updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        new SweetAlertDialog(PurchasePacks.this)
+                                .setTitleText("Points updated!")
+                                .setContentText("Purchase Successful")
+                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                    finish();
+                            }
+                        }, 1500);
+                    }
+                });
+                
+            }
+        });
         // create new Person
-        testData();
+        //testData();
         
     }
     
