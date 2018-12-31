@@ -31,9 +31,9 @@ import org.w3c.dom.Text;
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
     private static final String TAG = CommonFragment.class.getSimpleName();
     private ImageView imageView;
-    private TextView name, age;
+    private TextView name, age, oneLine;
     private RatingBar ratingBar;
-    private String imageUrl, nameS, ageS , sendersUid;
+    private String imageUrl, nameS, ageS , sendersUid, oneLineS;
 
     @Nullable
     @Override
@@ -45,8 +45,11 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         Log.e(TAG, "imageUrl is"+ imageUrl);
         name = rootView.findViewById(R.id.name);
         age = rootView.findViewById(R.id.age);
+        oneLine = rootView.findViewById(R.id.oneLine);
         name.setText(nameS);
         age.setText(ageS);
+        if(oneLineS!=null)
+            oneLine.setText(oneLineS);
 
         dragLayout.setGotoDetailListener(this);
         return rootView;
@@ -66,5 +69,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.nameS = user.getUserName();
         this.ageS = ""+user.getAge()+" yrs";
         this.sendersUid = user.getUid();
+        this.oneLineS = user.getOneLine();
     }
 }

@@ -25,21 +25,11 @@
         android:textColor="#212121"
         android:textSize="18sp" />
 
-    <customfonts.MyTextView_SF_Pro_Display_Medium
-        android:id="@+id/send_a_message"
+    <com.startapp.android.publish.ads.banner.Banner
+        android:id="@+id/startAppBanner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:text="Send a message! (25 points)"
-        android:textSize="16sp" />
+        android:layout_centerHorizontal="true"/>
 
-    <customfonts.EditText__SF_Pro_Display_Light
-        android:layout_width="wrap_content"
-        android:id="@+id/editText"
-        android:layout_margin="16dp"
-        android:hint="Write a message, this will increase the likeliness of you getting accepted!"
-        android:layout_below="@+id/send_a_message"
-        android:layout_height="wrap_content" />
 
 </RelativeLayout>

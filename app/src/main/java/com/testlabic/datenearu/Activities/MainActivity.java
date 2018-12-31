@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.R;
@@ -30,7 +30,6 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
 
-import Fragments.Home;
 import Fragments.Messages;
 import Fragments.NotificationFragment;
 import Fragments.Profile;
@@ -48,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        //initialize the startappSDK
+    
+        StartAppSDK.init(this, "211455651", false);
+        
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -169,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
                 else {
+                    Constants.uid = firebaseAuth.getUid();
                     checkForNotification();
                     checkForNewMessages();
                     updateStatus(Constants.online);
@@ -239,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-       // startActivity(new Intent(MainActivity.this, SignIn.class));
+       // startActivity(new Intent(MainActivity.this, MatchSuccess.class));
     }
     
     @Override

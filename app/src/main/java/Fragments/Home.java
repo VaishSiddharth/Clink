@@ -31,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -39,7 +38,7 @@ import com.testlabic.datenearu.Utils.locationUpdater;
 
 import java.util.ArrayList;
 
-import adapter.Home_Adapter;
+import com.testlabic.datenearu.Adapters.Home_Adapter;
 
 /**
  * A simple {@link Fragment} subclass.

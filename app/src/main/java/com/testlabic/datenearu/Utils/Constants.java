@@ -7,8 +7,8 @@ public class Constants {
     public static final String Messages = "Messages";
     public static final String CHATS = "chats";
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timeStamp";
-    public static final String FEMALE = "Female";
-    public static final String MALE = "Male";
+    public static final String FEMALE = "female";
+    public static final String MALE = "male";
     public static String userInfo = "userInfo";
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();
@@ -47,4 +47,8 @@ public class Constants {
     public static String preferedGender = "preferedGender";
     public static int datePlacePoints = 20;
     public static int dateQuestionPoints = 10;
+    public static String firstPack = "firstPack";
+    public static String oneLine = "oneLine";
+    public static int retryAttemptAmount = 150;
+    public static int oneTimeMessageCost = 25;
 }

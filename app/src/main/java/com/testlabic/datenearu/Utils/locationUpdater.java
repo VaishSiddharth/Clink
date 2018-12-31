@@ -186,9 +186,8 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful())
                     {
-                          /*
-                            Duplicate user under the cityLabel node
-                             */
+                          // Duplicate user under the cityLabel node
+                          
                         cityLabel = cityLabel.replace(", ", "_");
                         DuplicateUserInfoToCityLabelNode(cityLabel);
                         Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
@@ -199,11 +198,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 }
             });
         }
-        else
-            if(location!=null&&location.getAccuracy()>1000)
-            {
-                Toast.makeText(locationUpdater.this, "Waiting for accurate location...", Toast.LENGTH_SHORT).show();
-            }
+
         
     }
     
@@ -218,8 +213,10 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getValue(ModelUser.class)!=null)
                     {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        String gender = user.getGender();
                         DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
-                                .child(cityLabel).child(Constants.uid);
+                                .child(cityLabel).child(gender).child(Constants.uid);
                         refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

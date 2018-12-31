@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -148,6 +149,12 @@ public class NotificationFragment extends Fragment {
                 protected void populateView(View v, ModelNotification model, int position) {
                     
                     TextView txt = v.findViewById(R.id.txt);
+                    if(model.getOneTimeMessage()!=null&&model.getOneTimeMessage())
+                    {
+                        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/SF-Pro-Display-Regular.otf");
+                        txt.setTypeface(tf);
+                        txt.setTextColor(getResources().getColor(R.color.black));
+                    }
                     TextView time = v.findViewById(R.id.time);
                     ImageView photo = v.findViewById(R.id.image);
                     if(position<notifCount)

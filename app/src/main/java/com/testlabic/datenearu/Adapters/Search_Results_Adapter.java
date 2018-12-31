@@ -1,4 +1,4 @@
-package adapter;
+package com.testlabic.datenearu.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

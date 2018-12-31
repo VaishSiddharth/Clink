@@ -9,11 +9,37 @@
 
     <customfonts.MyTextView_SF_Pro_Display_Light
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/matchSuccess"
-        android:textSize="16sp"
-        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+
+        android:layout_marginTop="72dp"
         android:padding="16dp"
-        android:layout_height="wrap_content" />
+        android:text="@string/matchSuccess"
+        android:textSize="16sp" />
+
+    <customfonts.MyTextView_SF_Pro_Display_Light
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+
+        android:layout_marginBottom="250dp"
+        android:text="Send a one-time message! (Takes 50 points)" />
+
+    <customfonts.EditText__SF_Pro_Display_Medium
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="13dp"
+        android:layout_marginBottom="181dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:visibility="gone"
+        android:text="We were school friends in college remebmber>"
+        android:textSize="15sp" />
 
 </RelativeLayout>

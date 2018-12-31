@@ -19,6 +19,16 @@ public class ModelUser {
     int numeralAge;
     String interestedIn;
     String dateOfBirth;
+    String gender;
+    String oneLine;
+    
+    public String getOneLine() {
+        return oneLine;
+    }
+    
+    public String getGender() {
+        return gender;
+    }
     
     public String getDateOfBirth() {
         return dateOfBirth;

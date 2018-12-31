@@ -8,7 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 
-import adapter.Search_Results_Adapter;
+import com.testlabic.datenearu.Adapters.Search_Results_Adapter;
 import model.Search_Results_Fliply_Model;
 
 public class Search_Results_fliply extends AppCompatActivity {

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.testlabic.datenearu.R;
 
-import adapter.TablayoutAdapter;
+import com.testlabic.datenearu.Adapters.TablayoutAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

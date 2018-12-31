@@ -1,4 +1,4 @@
-package adapter;
+package com.testlabic.datenearu.Adapters;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

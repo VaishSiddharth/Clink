@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,10 +26,8 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
 
-import adapter.View_Pager_Adapter;
-import br.com.joinersa.oooalertdialog.Animation;
-import br.com.joinersa.oooalertdialog.OnClickListener;
-import br.com.joinersa.oooalertdialog.OoOAlertDialog;
+import com.testlabic.datenearu.Adapters.View_Pager_Adapter;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.relex.circleindicator.CircleIndicator;
 
@@ -116,7 +113,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                                 sDialog
                                                         .setTitleText("Starting!")
                                                         .setContentText("Best of luck!")
-                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                                 
                                                 Handler handler = new Handler();
                                                 handler.postDelayed(new Runnable() {

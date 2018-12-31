@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import adapter.TablayoutAdapter;
+import com.testlabic.datenearu.Adapters.TablayoutAdapter;
 
 public class Chat_fliply extends AppCompatActivity {
 

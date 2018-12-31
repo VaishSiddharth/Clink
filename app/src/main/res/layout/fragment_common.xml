@@ -91,6 +91,7 @@
                        android:layout_width="wrap_content"
                        android:text="One liner god, works at Google"
                        android:textColor="#333"
+                       android:id="@+id/oneLine"
                        android:textSize="13sp"
                        android:layout_height="wrap_content" />
 

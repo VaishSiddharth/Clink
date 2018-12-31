@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import adapter.ListAdapter;
+import com.testlabic.datenearu.Adapters.ListAdapter;
 import model.ListModel;
 
 public class Activity_list extends AppCompatActivity {

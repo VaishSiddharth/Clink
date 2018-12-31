@@ -43,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.Name;
+import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -183,7 +184,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 }
                                 progressBar.setVisibility(View.INVISIBLE);
     
-                                startActivity(new Intent(SignIn.this, Name.class));
+                                startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                 finish();
                                 
                             } else {
@@ -358,7 +359,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     }
                                     progressBar.setVisibility(View.INVISIBLE);
     
-                                    startActivity(new Intent(SignIn.this, Name.class));
+                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                     finish();
                                     
                                 } else {
@@ -367,7 +368,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                      */
                                     progressBar.setVisibility(View.INVISIBLE);
     
-                                    startActivity(new Intent(SignIn.this, Name.class));
+                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                     finish();
                                     //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                    // finish();

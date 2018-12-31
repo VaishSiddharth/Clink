@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/shy_moment"
     android:layout_height="match_parent">
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,61 +24,67 @@
         android:layout_marginTop="16dp"
         android:text="Quick Setup!"
         android:textSize="22sp" />
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        app:cardCornerRadius="16dp"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="64dp"
+        app:cardCornerRadius="16dp"
         android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/next"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="16dp"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/next_icon" />
-         <customfonts.MyTextView_SF_Pro_Display_Medium
-        android:id="@+id/robotoBold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="66dp"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Setting you up...(2/5)"
-        android:textColor="#000"
-        android:textSize="20sp" />
 
-    <customfonts.TextViewSFProDisplayRegular
-        android:id="@+id/whatCanICallYou"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/robotoBold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp"
-        android:text="Your Birthday ?"
-        android:textSize="18sp" />
+            <ImageView
+                android:id="@+id/next"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="16dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/next_icon" />
 
-            <com.mikhaellopez.lazydatepicker.LazyDatePicker
-                android:id="@+id/lazyDatePicker"
+            <customfonts.MyTextView_SF_Pro_Display_Medium
+                android:id="@+id/robotoBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="95dp"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Setting you up...(4/5)"
+                android:textColor="#212121"
+                android:textSize="20sp" />
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/whatCanICallYou"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/whatCanICallYou"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/robotoBold"
                 android:layout_centerHorizontal="true"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="193dp"
-                app:ldp_date_format="mm-dd-yyyy" />
-        </RelativeLayout>
+                android:layout_marginTop="51dp"
+                android:text="Your one line about in 20 words ?"
+                android:textSize="18sp" />
 
+
+            <customfonts.EditText__SF_Pro_Display_Regular
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:layout_below="@id/whatCanICallYou"
+                android:hint="e.g Works at Froogle, One liner God"
+                android:singleLine="true"
+                android:maxLines="3"
+                android:padding="12dp"
+                android:textSize="16sp"
+                />
+
+        </RelativeLayout>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -105,5 +112,6 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
 
 </RelativeLayout>

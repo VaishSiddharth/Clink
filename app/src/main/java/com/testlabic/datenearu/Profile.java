@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import adapter.ProfileAdapter;
+import com.testlabic.datenearu.Adapters.ProfileAdapter;
 import model.ProfileModel;
 
 public class Profile extends AppCompatActivity {
@@ -20,6 +20,7 @@ public class Profile extends AppCompatActivity {
     private ArrayList<ProfileModel> profileModelArrayList;
     private TextView userName;
     private ImageView displayImage;
+    TextView buy, points;
 
     Integer inbox[]={R.drawable.ic_inbox,R.drawable.ic_headphones,R.drawable.ic_like,R.drawable.ic_star,R.drawable.ic_profile,R.drawable.ic_settings};
     Integer arrow[]={R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp};

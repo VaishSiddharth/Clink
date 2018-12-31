@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.mbieniek.facebookimagepicker.facebook.FacebookAlbumPickerActivity;
 import com.testlabic.datenearu.R;
-
-import static com.mbieniek.facebookimagepicker.facebook.FacebookAlbumPickerActivityKt.FACEBOOK_IMAGE_ACTIVITY_REQUEST_CODE;
 
 public class UploadPhotos extends AppCompatActivity {
     
@@ -22,8 +19,7 @@ public class UploadPhotos extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UploadPhotos.this, FacebookAlbumPickerActivity.class);
-                startActivityForResult(intent, FACEBOOK_IMAGE_ACTIVITY_REQUEST_CODE);
+            
             }
         });
     }

@@ -1,4 +1,4 @@
-package adapter;
+package com.testlabic.datenearu.Adapters;
 
 import android.content.Context;
 import android.content.Intent;

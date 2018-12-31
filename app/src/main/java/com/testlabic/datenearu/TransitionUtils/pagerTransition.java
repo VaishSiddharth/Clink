@@ -32,6 +32,7 @@ import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +46,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.testlabic.datenearu.Activities.SignIn;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelPrefs;
 import com.testlabic.datenearu.Models.ModelSubscr;
@@ -78,6 +80,7 @@ public class pagerTransition extends Fragment {
     private TextView changeLocation;
     private FragmentStatePagerAdapter adapter;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     private ImageButton filterList;
     private SeekBar age_seek;
     private SeekBar distance_seek;
@@ -99,13 +102,15 @@ public class pagerTransition extends Fragment {
         if(Constants.uid!=null)
         fetchPreferences();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        interestedGender = sharedPreferences.getString(Constants.userIntrGender, null);
-        sharedPreferences.edit();
+        interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
+        editor =  sharedPreferences.edit();
         positionView = rootView.findViewById(R.id.position_view);
         filterList = rootView.findViewById(R.id.filter);
         changeLocation = rootView.findViewById(R.id.changeLocation);
         points = rootView.findViewById(R.id.points);
-        setUpPoints();
+        Constants.uid = FirebaseAuth.getInstance().getUid();
+        if(Constants.uid!=null)
+            setUpPoints();
         changeLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +166,7 @@ public class pagerTransition extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     prefs = dataSnapshot.getValue(ModelPrefs.class);
+                    editor.putString(Constants.userIntrGender, prefs.getPreferedGender()).apply();
                 }
             }
             
@@ -232,6 +238,8 @@ public class pagerTransition extends Fragment {
                     refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                                
+                                editor.putString(Constants.userIntrGender, Constants.male).apply();
                                 downloadList();
                         }
                     });
@@ -251,6 +259,7 @@ public class pagerTransition extends Fragment {
                     refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            editor.putString(Constants.userIntrGender, Constants.female).apply();
                             downloadList();
                         }
                     });
@@ -277,7 +286,7 @@ public class pagerTransition extends Fragment {
             }
         });
        
-        double dist=  prefs.getDistanceLimit();
+        double dist= prefs!=null? prefs.getDistanceLimit(): 0.0;
         distance.setText(String.valueOf((int) dist)+" km");
         distance_seek.setProgress((int) dist);
         
@@ -398,13 +407,15 @@ public class pagerTransition extends Fragment {
     }
     
     private void downloadList() {
+        
         displayArrayList = new ArrayList<>();
         displayArrayList.clear();
         String city = preferences.getString(Constants.cityLabel, "Lucknow_Uttar Pradesh_India");
-        
+        interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.cityLabels).child(city);
-        
+                .child(Constants.cityLabels).child(city).child(interestedGender);
+    
+        //Log.e(TAG, "download list called "+ ref);
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -588,6 +599,13 @@ public class pagerTransition extends Fragment {
     public void onResume() {
         super.onResume();
         putValueInchangeLocation();
+        FirebaseAuth.AuthStateListener stateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    if(firebaseAuth.getCurrentUser()==null)
+                        startActivity(new Intent(getActivity(), SignIn.class));
+            }
+        };
         //downloadList();
         //checkForNotification();
         // Log.e(TAG, "On resume called!");

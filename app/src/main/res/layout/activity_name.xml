@@ -56,7 +56,7 @@
         android:layout_marginTop="95dp"
         android:gravity="center"
         android:padding="16dp"
-        android:text="Setting you up...(1/4)"
+        android:text="Setting you up...(1/5)"
         android:textColor="#212121"
         android:textSize="20sp" />
 

@@ -186,6 +186,7 @@
         android:id="@+id/google_progress"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:visibility="invisible"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
        />
