@@ -37,12 +37,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class Age extends Fragment implements BlockingStep {
     
     ImageView next;
     int age = -1;
     private String outputDateStr = null;
-    
+    private SweetAlertDialog dialog;
     
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -64,6 +66,10 @@ public class Age extends Fragment implements BlockingStep {
         // lazyDatePicker.setMinDate(minDate);
         // lazyDatePicker.setMaxDate(maxDate);
     
+        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("In progress")
+                .setContentText(".....");
+        
         lazyDatePicker.setOnDatePickListener(new LazyDatePicker.OnDatePickListener() {
             @Override
             public void onDatePick(Date dateSelected) {
@@ -101,6 +107,7 @@ public class Age extends Fragment implements BlockingStep {
    
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+        dialog.show();
         if (outputDateStr != null) {
             String uid = FirebaseAuth.getInstance().getUid();
             Log.e("Age", "uid is "+uid);
@@ -120,6 +127,7 @@ public class Age extends Fragment implements BlockingStep {
                     public void onSuccess(Void aVoid) {
                     
                     callback.goToNextStep();
+                    dialog.dismiss();
                     }
                 });
             }

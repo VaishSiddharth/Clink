@@ -26,6 +26,7 @@ import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.NewUserSetupUtils.LocationUpdateService;
+import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
@@ -181,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     checkForNotification();
                     checkForNewMessages();
                     updateStatus(Constants.online);
-                    giveXPoints();
+                    //giveXPoints();
                 }
                 
             }
@@ -249,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-       // startActivity(new Intent(MainActivity.this, MatchSuccess.class));
+      //  startActivity(new Intent(MainActivity.this, NewUserSetup.class));
     }
     
     @Override

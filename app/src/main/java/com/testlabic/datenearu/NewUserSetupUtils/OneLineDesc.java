@@ -23,10 +23,14 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class OneLineDesc extends Fragment implements BlockingStep {
+    
+    private SweetAlertDialog dialog;
     
     public OneLineDesc() {
         // Required empty public constructor
@@ -39,6 +43,9 @@ public class OneLineDesc extends Fragment implements BlockingStep {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_one_line_desc, container, false);
+        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("In progress")
+                .setContentText(".....");
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         
         return rootView;
@@ -46,6 +53,7 @@ public class OneLineDesc extends Fragment implements BlockingStep {
     
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+        dialog.show();
         EditText editText = rootView.findViewById(R.id.desc);
         String text = editText.getText().toString();
         
@@ -66,7 +74,9 @@ public class OneLineDesc extends Fragment implements BlockingStep {
                 reference.updateChildren(updateAgeMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                     
                             callback.goToNextStep();
+                        dialog.dismiss();
                     }
                 });
             }

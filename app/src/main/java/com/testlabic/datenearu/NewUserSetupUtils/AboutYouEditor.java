@@ -35,6 +35,7 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import jp.wasabeef.richeditor.RichEditor;
 
 public class AboutYouEditor extends Fragment implements BlockingStep {
@@ -45,12 +46,16 @@ public class AboutYouEditor extends Fragment implements BlockingStep {
     TextView mPreview;
     DatabaseReference reference;
     View rootView;
+    private SweetAlertDialog dialog;
     
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_about_you, container, false);
     
+        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("In progress")
+                .setContentText(".....");
         next = rootView.findViewById(R.id.next);
         mPreview = rootView.findViewById(R.id.preview);
         mEditor = rootView.findViewById(R.id.editor);
@@ -295,6 +300,7 @@ public class AboutYouEditor extends Fragment implements BlockingStep {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful())
                     {
+                        dialog.dismiss();
                        startActivity(new Intent(getActivity(), QuestionsEnteringNewUser.class));
                     }
                 }
@@ -310,6 +316,7 @@ public class AboutYouEditor extends Fragment implements BlockingStep {
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
       
+        dialog.show();
         String aboutHtmlText = mPreview.getText().toString();
         if(!aboutHtmlText.equals(""))
         {

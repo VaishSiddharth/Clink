@@ -32,6 +32,9 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class Gender extends Fragment implements BlockingStep {
     Button male;
     Button female;
@@ -43,12 +46,16 @@ public class Gender extends Fragment implements BlockingStep {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     ImageView next;
+    private SweetAlertDialog dialog;
     
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_gender, container, false);
     
+        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("In progress")
+                .setContentText(".....");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         editor = sharedPreferences.edit();
         male = rootView.findViewById(R.id.male);
@@ -180,8 +187,11 @@ public class Gender extends Fragment implements BlockingStep {
     @Override
     public void onNextClicked(StepperLayout.OnNextClickedCallback callback) {
         if(iGenderSelected&&genderSelected) {
+            dialog.show();
             setUpDefaultUserPreferences();
+           
            callback.goToNextStep();
+            dialog.dismiss();
         } else
             Toast.makeText(getActivity(), "Choose one from each first", Toast.LENGTH_SHORT).show();
     }

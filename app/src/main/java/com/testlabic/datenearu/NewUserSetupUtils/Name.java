@@ -33,11 +33,15 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class Name extends Fragment implements BlockingStep {
     EditText inputName, inputLastName;
     ImageView next;
     DatabaseReference reference;
     View rootView;
+    SweetAlertDialog dialog;
     
     @Nullable
     @Override
@@ -48,6 +52,11 @@ public class Name extends Fragment implements BlockingStep {
         next = rootView.findViewById(R.id.next);
         inputName = rootView.findViewById(R.id.input_name);
         inputLastName = rootView.findViewById(R.id.input_name_last);
+    
+        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("In progress")
+                .setContentText(".....");
+        
         @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
         if (uid != null) {
             reference = FirebaseDatabase.getInstance().getReference()
@@ -97,7 +106,9 @@ public class Name extends Fragment implements BlockingStep {
     
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-    
+
+        dialog.show();
+        callback.getStepperLayout().showProgress("Operation in progress, please wait...");
         String name = inputName.getText().toString();
         String lastName = inputLastName.getText().toString();
         if(name.matches("") && lastName.matches(""))
@@ -117,6 +128,7 @@ public class Name extends Fragment implements BlockingStep {
                             @Override
                             public void onSuccess(Void aVoid) {
                                      callback.goToNextStep();
+                                dialog.dismiss();
                             }
                         });
             }

@@ -231,16 +231,18 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
                             String gender = user.getGender();
-                            final String cityLabel = user.getCityLabel();
+                             String cityLabel = user.getCityLabel();
                             if (cityLabel != null && gender != null) {
+                                cityLabel = cityLabel.replace(", ", "_");
                                 DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
                                         .child(cityLabel).child(gender).child(Constants.uid);
+                                final String finalCityLabel = cityLabel;
                                 refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                                         SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putString(Constants.cityLabel, cityLabel).apply();
+                                        editor.putString(Constants.cityLabel, finalCityLabel).apply();
                 
                                         //show success message and then
                                         //move to main activity now!

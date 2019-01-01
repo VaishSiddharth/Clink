@@ -4,4 +4,8 @@
     android:id="@+id/stepperLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:ms_activeStepColor="#212121"
+    app:ms_inactiveStepColor="#a6a6a6"
+    app:ms_nextButtonColor="#212121"
+    app:ms_completeButtonColor="#212121"
     app:ms_stepperType="progress_bar" />

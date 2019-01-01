@@ -83,6 +83,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     @Override
     public void onStepSelected(int newStepPosition) {
     
+    
     }
     
     @Override
