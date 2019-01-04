@@ -9,6 +9,7 @@ public class Constants {
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timeStamp";
     public static final String FEMALE = "female";
     public static final String MALE = "male";
+    public static final String Questions = "Questions";
     public static String userInfo = "userInfo";
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();

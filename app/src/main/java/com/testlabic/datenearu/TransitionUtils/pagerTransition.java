@@ -26,6 +26,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.facebook.share.Share;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
@@ -56,6 +59,8 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.locationUpdater;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +79,9 @@ public class pagerTransition extends Fragment {
     private ViewPager viewPager;
     View rootView;
     HashMap<String, Object> updateMap = null;
+    HashMap<String , Object> updateMinAge;
+    HashMap<String , Object> updateMaxAge;
+    
     String interestedGender;
     SharedPreferences preferences;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
@@ -83,7 +91,7 @@ public class pagerTransition extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private ImageButton filterList;
-    private SeekBar age_seek;
+    private CrystalRangeSeekbar age_seek;
     private SeekBar distance_seek;
     private LatLong currentUsersLatLong;
     private ModelPrefs prefs;
@@ -279,21 +287,54 @@ public class pagerTransition extends Fragment {
         });
         age_seek = filterDialogView.findViewById(R.id.age_seekbar);
         distance_seek = filterDialogView.findViewById(R.id.distance_seekbar);
+    
+        final TextView tvMin = filterDialogView.findViewById(R.id.minAge);
+        final TextView tvMax = filterDialogView.findViewById(R.id.maxAge);
+        final TextView tvAgeRange = filterDialogView.findViewById(R.id.ageRange);
+        // set listener
+        age_seek.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                tvMin.setText(String.valueOf(minValue));
+                tvMax.setText(String.valueOf(maxValue));
+            }
+        });
+
+// set final value listener
+        if(prefs!=null)
+        {
+            int maxAge = prefs.getMaxAge();
+            int minAge = prefs.getMinAge();
+            String age_range = "("+minAge+" - "+maxAge+" yrs)";
+            tvAgeRange.setText(age_range);
+            tvMin.setText(String.valueOf(minAge));
+            tvMax.setText(String.valueOf(maxAge));
+            
+            
+           // age_seek.setMaxValue(maxAge);
+           // age_seek.setMinValue(minAge);
+        }
         
-        age_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        age_seek.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            
-            }
-            
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            
-            }
-            
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            
+            public void finalValue(Number minValue, Number maxValue) {
+                
+                updateMinAge = new HashMap<>();
+                updateMinAge.put("minAge", minValue.intValue());
+                
+                updateMaxAge = new HashMap<>();
+                updateMaxAge.put("maxAge", maxValue.intValue());
+                
+                Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
+                
+                //update the preferences
+    
+                final DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.userPreferences)
+                        .child(Constants.uid);
+                
+                refPrefs.updateChildren(updateMaxAge);
+                refPrefs.updateChildren(updateMinAge);
             }
         });
        
@@ -329,10 +370,9 @@ public class pagerTransition extends Fragment {
                 sweetAlertDialog.dismissWithAnimation();
                 if(updateMap!=null)
                 {
-                    DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
+                    final DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.userPreferences)
                             .child(Constants.uid);
-    
                     refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -341,7 +381,11 @@ public class pagerTransition extends Fragment {
             
                         }
                     });
+                    
+                   
                 }
+                else
+                    downloadList();
                 
             }
         });
@@ -480,7 +524,8 @@ public class pagerTransition extends Fragment {
     private void filterList(ModelUser item) {
         //pass the item through the filters and then add them to the list for adaper;
         //1. Age filter
-        if (prefs!=null&&item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge() && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit()) {
+        if (prefs!=null&&item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge()
+                && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit()) {
             displayArrayList.add(item);
         }
     }

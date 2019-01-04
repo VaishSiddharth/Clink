@@ -196,9 +196,9 @@ public class MatchCalculator extends AppCompatActivity {
                                                             public void onClick(final SweetAlertDialog sDialog) {
                                                                 
                                                                 //display edit text
-                                                                
-                                                               
-                                                                
+
+
+
                                                                 //complete transaction
     
                                                                 sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);

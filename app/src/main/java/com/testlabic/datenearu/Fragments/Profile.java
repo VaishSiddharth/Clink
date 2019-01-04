@@ -2,6 +2,7 @@ package com.testlabic.datenearu.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,11 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -26,12 +30,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.ProfileUtils.UploadPhotos;
+import com.testlabic.datenearu.QuestionUtils.MatchCalculator;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.testlabic.datenearu.Adapters.ProfileAdapter;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import model.ProfileModel;
 
 /**
@@ -47,7 +55,7 @@ public class Profile extends Fragment {
     private ArrayList<ProfileModel> profileModelArrayList;
     private  View rootView;
     private TextView username, desc;
-    private ImageView displayImage;
+    private ImageView displayImage, edit;
     private TextView points, buy;
     
     Integer inbox[]={R.drawable.ic_inbox,R.drawable.ic_like,R.drawable.ic_profile,R.drawable.ic_settings};
@@ -63,6 +71,7 @@ public class Profile extends Fragment {
         rootView =  inflater.inflate(R.layout.fragment_profile, container, false);
         username = rootView.findViewById(R.id.username);
         desc = rootView.findViewById(R.id.about);
+        edit = rootView.findViewById(R.id.edit);
         displayImage = rootView.findViewById(R.id.display_image);
         points = rootView.findViewById(R.id.points);
         buy = rootView.findViewById(R.id.buy);
@@ -105,7 +114,67 @@ public class Profile extends Fragment {
         profileAdapter = new ProfileAdapter(getActivity(),profileModelArrayList);
         recyclerview.setAdapter(profileAdapter);
         
+        
+        
         return rootView;
+    }
+    
+    private void showEditDialog(String text) {
+    
+        final LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View editTextDialog = factory.inflate(R.layout.dialog_edittext, null);
+        final EditText editText = editTextDialog.findViewById(R.id.ediText);
+        editText.setText(text);
+    
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                // .setTitleText("Send a one-time message (25 pts)?")
+                .setCustomView(editTextDialog)
+                .setConfirmButton("Update!", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(final SweetAlertDialog sDialog) {
+    
+                        //display edit text
+                        String text = editText.getText().toString();
+                        if(text.matches(""))
+                        {
+                            Toast.makeText(getActivity(), "Can't be empty!", Toast.LENGTH_SHORT).show();
+                        }
+                        
+                        else
+                        {
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
+                                    .child(Constants.uid);
+    
+                            HashMap<String, Object> updateMap = new HashMap<>();
+                            updateMap.put("oneLine", text);
+                            
+                            reference.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
+                                    sDialog
+                                            .setTitleText("Successful!")
+                                            .setContentText("Info updated!")
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            sDialog.dismissWithAnimation();
+                                        }
+                                    }, 2000);
+    
+                                }
+                            });
+                            //TODO: update other places also;
+                            
+                            
+                        }
+    
+                    }
+                })
+                .show();
+        ;
     }
     
     private void fillDesc() {
@@ -116,8 +185,16 @@ public class Profile extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
-                String text = dataSnapshot.getValue(String.class);
+                final String text = dataSnapshot.getValue(String.class);
                 desc.setText(text);
+    
+                edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showEditDialog( text);
+            
+                    }
+                });
              }
     
             @Override

@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -22,15 +25,29 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
+import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
+
+import java.util.ArrayList;
 
 public class NewUserSetup extends AppCompatActivity  implements StepperLayout.StepperListener{
     
     private static final String TAG = NewUserSetup.class.getSimpleName();
     private static final int REQUEST_CHECK_SETTINGS = 43;
     private StepperLayout mStepperLayout;
+    boolean proceedAhead;
+    ArrayList<ModelQuestion> questions;
      MyStepperAdapter adapter;
     
     @Override
@@ -45,8 +62,79 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         adapter.createStep(3);
         adapter.createStep(4);
         mStepperLayout.setAdapter(adapter);
+        downloadQuestions();
         setUpLocation();
     
+    }
+    
+    private void downloadQuestions() {
+        questions = new ArrayList<>();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Questions);
+        //do changes later..
+        
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if(dataSnapshot.getValue()!=null)
+                    {
+                        ModelQuestion question = dataSnapshot.getValue(ModelQuestion.class);
+                        if(question!=null)
+                            questions.add(question);
+                    }
+            }
+    
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+            }
+    
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                if(questions.size()==10)
+                {
+                    //push questions to node;
+                    Constants.uid = FirebaseAuth.getInstance().getUid();
+                    if(Constants.uid!=null)
+                    {
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.userInfo)
+                                .child(Constants.uid)
+                                .child(Constants.questions);
+                        userRef.setValue(questions).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            
+                            }
+                        });
+                    }
+                  
+                }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
     }
     
     private void setUpLocation() {
@@ -72,7 +160,12 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     
     @Override
     public void onCompleted(View completeButton) {
-    
+            if(proceedAhead)
+                completeButton.setEnabled(true);
+            else {
+                completeButton.setEnabled(false);
+                Toast.makeText(NewUserSetup.this, "Wait a while!", Toast.LENGTH_SHORT).show();
+            }
     }
     
     @Override
