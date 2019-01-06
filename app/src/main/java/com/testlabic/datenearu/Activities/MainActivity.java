@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     
     @Override
     protected void onResume() {
-        Log.e(TAG, "On resume from main activity fired!");
+        
         super.onResume();
         Constants.uid = FirebaseAuth.getInstance().getUid();
         mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {

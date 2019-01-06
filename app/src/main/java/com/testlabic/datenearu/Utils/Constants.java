@@ -53,4 +53,6 @@ public class Constants {
     public static int retryAttemptAmount = 150;
     public static int oneTimeMessageCost = 25;
     public static int attemptTestPoints = 100;
+    public static int rewardAdPoints = 20;
+    public static String blockList = "BlockList";
 }

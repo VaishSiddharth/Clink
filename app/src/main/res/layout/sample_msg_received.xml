@@ -5,8 +5,8 @@
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
         android:layout_width="match_parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
         android:id="@+id/date"
         android:gravity="center_horizontal"
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="3dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
 

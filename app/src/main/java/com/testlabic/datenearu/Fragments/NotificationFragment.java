@@ -296,7 +296,7 @@ public class NotificationFragment extends Fragment {
                     {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid());
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
                             ref.setValue(contact);
                         }
                     }
@@ -332,7 +332,7 @@ public class NotificationFragment extends Fragment {
                     {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid());
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
                             ref2.setValue(contact);
                         }
                     }

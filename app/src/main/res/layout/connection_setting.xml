@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<customfonts.Button_SF_Pro_Display_Medium
+    android:layout_width="wrap_content"
+    android:text="Block Connection"
+    android:id="@+id/block"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/round_green_button"
+    android:layout_margin="16dp"
+    android:padding="8dp"
+    android:textColor="#fff"
+
+    android:layout_height="wrap_content" />
+
+
+    <customfonts.Button_SF_Pro_Display_Medium
+        android:layout_width="wrap_content"
+        android:id="@+id/delete"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/round_green_button"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:textColor="#fff"
+        android:text="Delete Connection"
+        android:layout_height="wrap_content" />
+
+    <customfonts.Button_SF_Pro_Display_Medium
+        android:layout_width="wrap_content"
+        android:id="@+id/report"
+        android:textColor="#fff"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/round_green_button"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:text="Report Connection"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

@@ -109,7 +109,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
-                if(questions.size()==10)
+                if(questions.size()!=0)
                 {
                     //push questions to node;
                     Constants.uid = FirebaseAuth.getInstance().getUid();

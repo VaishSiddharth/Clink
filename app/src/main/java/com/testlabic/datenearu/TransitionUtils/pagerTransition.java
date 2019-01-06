@@ -51,6 +51,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.startapp.android.publish.ads.banner.Banner;
 import com.testlabic.datenearu.Activities.SignIn;
+import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelPrefs;
 import com.testlabic.datenearu.Models.ModelSubscr;
@@ -166,6 +167,14 @@ public class pagerTransition extends Fragment {
                     int current = modelSubscr.getXPoints();
                     String set = String.valueOf(current)+" points";
                     points.setText(set);
+                    
+                    points.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            
+                            startActivity(new Intent(getActivity(), PurchasePacks.class));
+                        }
+                    });
                 }
             }
     
@@ -307,12 +316,11 @@ public class pagerTransition extends Fragment {
             int minAge = prefs.getMinAge();
             String age_range = "("+minAge+" - "+maxAge+" yrs)";
             tvAgeRange.setText(age_range);
-            tvMin.setText(String.valueOf(minAge));
-            tvMax.setText(String.valueOf(maxAge));
+            tvMin.setText("18");
+            tvMax.setText("50");
             
-            
-           // age_seek.setMaxValue(maxAge);
-           // age_seek.setMinValue(minAge);
+            age_seek.setMaxStartValue(maxAge).apply();
+            age_seek.setMinStartValue(minAge).apply();
         }
         
         age_seek.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
@@ -381,8 +389,6 @@ public class pagerTransition extends Fragment {
             
                         }
                     });
-                    
-                   
                 }
                 else
                     downloadList();
@@ -532,8 +538,8 @@ public class pagerTransition extends Fragment {
     
     private double distanceBetweenThem(LatLong location) {
         
-        if(currentUsersLatLong!=null)
-        return distance(currentUsersLatLong.getLatitude(), currentUsersLatLong.getLongitude(), location.getLatitude(), location.getLongitude());
+      //  if(currentUsersLatLong!=null)
+       // return distance(currentUsersLatLong.getLatitude(), currentUsersLatLong.getLongitude(), location.getLatitude(), location.getLongitude());
         
         return 0.0;
     }

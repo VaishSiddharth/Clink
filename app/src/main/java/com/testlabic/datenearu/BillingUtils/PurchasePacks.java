@@ -1,12 +1,14 @@
 package com.testlabic.datenearu.BillingUtils;
 
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -18,10 +20,17 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.startapp.android.publish.adsCommon.Ad;
 import com.startapp.android.publish.adsCommon.StartAppAd;
 import com.startapp.android.publish.adsCommon.VideoListener;
+import com.startapp.android.publish.adsCommon.adListeners.AdEventListener;
+import com.testlabic.datenearu.ClickedUser;
+import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -30,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import static com.startapp.android.publish.adsCommon.StartAppAd.AdMode.VIDEO;
 
 public class PurchasePacks extends AppCompatActivity implements PurchasesUpdatedListener {
     private static final String TAG = PurchasePacks.class.getSimpleName();
@@ -48,39 +59,72 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
             @Override
             public void onClick(View v) {
                
-                startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO);
-            }
-        });
-    
-        startAppAd.setVideoListener(new VideoListener() {
-            @Override
-            public void onVideoCompleted() {
-                // Grant user with the reward
-    
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.xPoints)
-                        .child(Constants.uid);
-                HashMap<String, Object> updatePoints = new HashMap<>();
-                updatePoints.put(Constants.xPoints, 10000);
-                reference.updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+               // Log.e(TAG, "Click receied to play ad!");
+               // startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO);
+                startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO, new AdEventListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        new SweetAlertDialog(PurchasePacks.this)
-                                .setTitleText("Points updated!")
-                                .setContentText("Purchase Successful")
-                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                    finish();
-                            }
-                        }, 1500);
+                    public void onReceiveAd(Ad ad) {
+                        Log.i("startApp","rewarded Loaded");
+                        startAppAd.showAd();
+            
+                    }
+        
+                    @Override
+                    public void onFailedToReceiveAd(Ad ad) {
+            
+                        Toast.makeText(getApplicationContext(),ad.getErrorMessage(),Toast.LENGTH_LONG).show();
                     }
                 });
-                
+                startAppAd.setVideoListener(new VideoListener() {
+                    @Override
+                    public void onVideoCompleted() {
+                        Log.i("VideoWatched","watched");
+                        startAppAd.close();
+                        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.xPoints)
+                                .child(Constants.uid);
+                        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+    
+                                ModelSubscr subscr = dataSnapshot.getValue(ModelSubscr.class);
+                                if(subscr!=null)
+                                {
+                                    int current = subscr.getXPoints();
+                                    
+                                        current += Constants.rewardAdPoints;
+                                        HashMap<String, Object> updatePoints = new HashMap<>();
+                                        updatePoints.put(Constants.xPoints, current);
+    
+                                    reference.updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+            
+                                            Toast.makeText(PurchasePacks.this, "You received 20 points, watch again to get more!", Toast.LENGTH_SHORT).show();
+                                            Handler handler = new Handler();
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    finish();
+                                                }
+                                            }, 1500);
+                                        }
+                                    });
+                                }
+                            }
+    
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                            }
+                        });
+                        
+                       
+                    }
+                });
             }
         });
+        
         // create new Person
         //testData();
         
@@ -183,7 +227,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                         .child(Constants.xPoints)
                         .child(Constants.uid);
                 HashMap<String, Object> updatePoints = new HashMap<>();
-                updatePoints.put(Constants.xPoints, 110);
+                updatePoints.put(Constants.xPoints, 11000);
                 reference.updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

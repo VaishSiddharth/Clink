@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,6 +70,9 @@ public class chatFullScreen extends AppCompatActivity {
     private TextView toolbarName;
     private String sendToUid;
     private String myUid;
+    DatabaseReference reference;
+    private ChildEventListener listener;
+    private LinearLayout layout;
     private String sendersName;
     private GoogleProgressBar bar;
     private Boolean isOnlineForCurrentUser = false;
@@ -138,6 +145,7 @@ public class chatFullScreen extends AppCompatActivity {
         }
     };
     private ImageView enterChatView1;
+    private DatabaseReference reference2;
     
     private void scrollMyListViewToBottom() {
         chatListView.post(new Runnable() {
@@ -177,7 +185,10 @@ public class chatFullScreen extends AppCompatActivity {
         
         if (myUid == null)
             return;
-        
+    
+        checkBlockStatus();
+    
+    
         fillMessageArray(sendToUid, myUid);
         
         toolbarName = findViewById(R.id.sendToName);
@@ -193,6 +204,10 @@ public class chatFullScreen extends AppCompatActivity {
         });
         
         chatEditText1 = findViewById(R.id.chat_edit_text1);
+        
+        //hide chat box for blocked users and show snackbar
+        layout = findViewById(R.id.layout);
+        
         
         TextView emptyView = findViewById(R.id.emptyView);
         
@@ -240,6 +255,91 @@ public class chatFullScreen extends AppCompatActivity {
                 }
                 
                 return false;
+            }
+        });
+        
+    }
+    
+    private void checkBlockStatus() {
+        
+        //Check if the other person blocked me or I blocked the other user
+        reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.blockList)
+                .child(Constants.uid);
+       listener =  reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if(dataSnapshot.getValue(String.class)!=null)
+                    {
+                        String blockedUid = dataSnapshot.getValue(String.class);
+                        if(sendToUid.equals(blockedUid))
+                        {
+                            //hide the chat edit text
+                            layout.setVisibility(View.GONE);
+                            Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_INDEFINITE).show();
+                        }
+                    }
+            }
+    
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+            }
+    
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+      
+       //check another reference
+        reference2 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.blockList)
+                .child(sendToUid);
+        
+        reference2.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(dataSnapshot.getValue(String.class)!=null)
+                {
+                    String blockedUid = dataSnapshot.getValue(String.class);
+                    if(Constants.uid.equals(blockedUid))
+                    {
+                        //hide the chat edit text
+                        layout.setVisibility(View.GONE);
+                        Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_INDEFINITE).show();
+                    }
+                }
+            }
+    
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+            }
+    
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
             }
         });
         
@@ -741,6 +841,18 @@ public class chatFullScreen extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         updateStatus(Constants.status + sendToUid, Constants.offline);
+        
+        
+    }
+    
+    @Override
+    protected void onDestroy() {
+       
+        if(listener!=null)
+        {
+            reference.removeEventListener(listener);
+        }
+        super.onDestroy();
     }
     
     @Override
