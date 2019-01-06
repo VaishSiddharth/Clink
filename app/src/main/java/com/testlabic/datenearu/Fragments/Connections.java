@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -120,7 +121,9 @@ public class Connections extends Fragment {
         mainDialog.show();
     
         Button block = connectionSetting.findViewById(R.id.block);
-    
+        Button delete = connectionSetting.findViewById(R.id.delete);
+        Button report = connectionSetting.findViewById(R.id.report);
+        
         if (blockStatus!=null&&blockStatus) {
             block.setText("Unblock Connection");
             block.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +210,54 @@ public class Connections extends Fragment {
             });
         
         }
+        
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
     
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Delete Connection?")
+                        .setContentText("Any message sent to you by the connection will not reach you anymore!")
+                        .setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(final SweetAlertDialog sweetAlertDialog) {
+    
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                        .child(Constants.Messages)
+                                        .child(Constants.uid).child(Constants.contacts)
+                                        .child(uid);
+                                reference.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        mainDialog.dismiss();
+                                        sweetAlertDialog.dismiss();
+                                    }
+                                });
+    
+                            }
+                        }).show();
+            }
+        });
+        
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.reportedUsers)
+                            .child(uid)
+                            .child(Constants.uid)
+                            .push();
+                    String report = uid + " was reported by "+Constants.uid;
+                    
+                    reference.setValue(report).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(), "User reported!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    
+            }
+        });
+        
     }
     private String getBiggerImage(String url) {
         String modifiedImageUrl = url;
