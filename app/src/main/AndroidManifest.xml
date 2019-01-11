@@ -9,10 +9,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
@@ -82,35 +81,40 @@
         <activity android:name=".QuestionUtils.MatchCalculator" />
         <activity android:name=".Activities.Settings" />
         <activity android:name=".ChatUtils.chatFullScreen" />
-
         <activity android:name=".ProfileUtils.UploadPhotos" />
         <activity android:name=".TransitionUtils.DetailActivity" />
         <activity android:name=".NewUserSetupUtils.QuestionsEnteringNewUser" />
         <activity android:name=".NewUserSetupUtils.NewUserSetup" />
-        <activity android:name=".BillingUtils.PurchasePacks"></activity>
-
-        <activity android:name="com.startapp.android.publish.ads.list3d.List3DActivity"
+        <activity android:name=".BillingUtils.PurchasePacks" />
+        <activity
+            android:name="com.startapp.android.publish.ads.list3d.List3DActivity"
             android:theme="@android:style/Theme" />
-
-        <activity android:name="com.startapp.android.publish.adsCommon.activities.OverlayActivity"
-            android:theme="@android:style/Theme.Translucent"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
-
-        <activity android:name="com.startapp.android.publish.adsCommon.activities.FullScreenActivity"
-            android:theme="@android:style/Theme"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.startapp.android.publish.adsCommon.activities.OverlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.startapp.android.publish.adsCommon.activities.FullScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme" />
 
         <service android:name="com.startapp.android.publish.common.metaData.PeriodicMetaDataService" />
         <service android:name="com.startapp.android.publish.common.metaData.InfoEventService" />
-        <service android:name="com.startapp.android.publish.common.metaData.PeriodicJobService"
+        <service
+            android:name="com.startapp.android.publish.common.metaData.PeriodicJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name=".NewUserSetupUtils.LocationUpdateService" />
 
-        <receiver android:name="com.startapp.android.publish.common.metaData.BootCompleteListener" >
+        <receiver android:name="com.startapp.android.publish.common.metaData.BootCompleteListener">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".MatchAlgoUtils.SeriousOrCasual" />
+        <activity android:name=".MatchAlgoUtils.ArrangingItems" />
+        <activity android:name=".NewUserSetupUtils.SeriousItems" />
+        <activity android:name=".MatchAlgoUtils.CasualItems"></activity>
     </application>
 
 </manifest>

@@ -85,7 +85,7 @@ public class MatchCalculator extends AppCompatActivity {
         new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                 .setTitleText("Oops...")
                 .setContentText("You failed!")
-                .setConfirmButton("Try again? (150 points)", new SweetAlertDialog.OnSweetClickListener() {
+                .setConfirmButton("Try again? (100 points)", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
@@ -122,7 +122,8 @@ public class MatchCalculator extends AppCompatActivity {
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        startActivity(new Intent(MatchCalculator.this, QuestionsActivity.class).putExtra(Constants.clickedUid, clickedUsersId));
+                                                        startActivity(new Intent(MatchCalculator.this, QuestionsActivity.class).putExtra(Constants.clickedUid, clickedUsersId)
+                                                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK));
                                                         sweetAlertDialog.dismiss();
                                                         finish();
                                                     }

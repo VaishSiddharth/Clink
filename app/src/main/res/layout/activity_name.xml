@@ -96,6 +96,14 @@
                     android:padding="12dp"
                    />
 
+            <customfonts.MyTextView_Montserrat_Light
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/input_name_last"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="*Only first name will be displayed to other users"
+                android:layout_height="wrap_content" />
+
         </RelativeLayout>
         <LinearLayout
             android:orientation="vertical"

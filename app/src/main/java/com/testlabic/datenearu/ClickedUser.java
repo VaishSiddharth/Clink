@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
@@ -44,6 +45,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private String clickedUid;
     private TextView attemptMatch;
     private onImageUrlReceivedListener listener;
+    private Boolean comingFromNotif = false;
+    
     
     public interface onImageUrlReceivedListener {
         void onDataReceived(String imageUrl);
@@ -58,6 +61,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
         imageUrl = getIntent().getStringExtra(Constants.imageUrl);
+        comingFromNotif = getIntent().getBooleanExtra(Constants.comingFromNotif, false);
+        
         if (clickedUid != null)
             setUpDetails();
         
@@ -71,13 +76,135 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         circleIndicator.setViewPager(viewPager);
         // view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
         
-        attemptMatch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog();
-            }
-        });
+        if(!comingFromNotif)
+
+        {
+            attemptMatch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog();
+                }
+            });
+        }
+        else
+        {
+            attemptMatch.setText("Accept!");
+            attemptMatch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowAConfirmationDialog(clickedUid);
+                }
+            });
+        }
+        
     }
+    
+    
+    private void ShowAConfirmationDialog(final String uid) {
+        new SweetAlertDialog(ClickedUser.this, SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("You guys will be added as a connection to each other!")
+                .setConfirmText("Yes, go for it!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
+                        acceptRequest(uid, sDialog);
+                    }
+                })
+                .show();
+    }
+    
+    private void acceptRequest(String item, final SweetAlertDialog sDialog) {
+        if(item!=null)
+        
+        {
+            final DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(Constants.uid)
+                    .child(Constants.contacts)
+                    .child(item);
+            
+            DatabaseReference receiver = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(item);
+            receiver.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    
+                    if(dataSnapshot.getValue()!=null)
+                    {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
+                            ref.setValue(contact);
+                        }
+                    }
+                    
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+            
+            /*
+            
+            Similarly setup contact for the other user
+             */
+            
+            
+            final DatabaseReference ref2  = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(item)
+                    .child(Constants.contacts)
+                    .child(Constants.uid);
+            
+            DatabaseReference receiver2 = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(Constants.uid);
+            receiver2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    
+                    if(dataSnapshot.getValue()!=null)
+                    {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
+                            ref2.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sDialog
+                                            .setTitleText("Success!")
+                                            .setContentText("Go have a talk, get happy!")
+                                            .setConfirmText("OK")
+                                            .setConfirmClickListener(null)
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                    
+                                    Handler h= new Handler();
+                                    h.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            finish();
+                                        }
+                                    }, 1500);
+                                }
+                            });
+                        }
+                    }
+                    
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+        }
+    }
+    
     
     private void showDialog() {
         

@@ -61,8 +61,8 @@ public class Profile extends Fragment {
     Integer inbox[]={R.drawable.ic_inbox,R.drawable.ic_like,R.drawable.ic_profile,R.drawable.ic_settings};
     Integer arrow[]={R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,
             R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp};
-    String txttrades[]={"My Questions","Interests","About you","Settings"};
-    String txthistory[]={"Your questions for matches","Your interests","Tap to Edit","Settings"};
+    String txttrades[]={"My Questions","Interests","About you","Sign Out"};
+    String txthistory[]={"Your questions for matches","Your interests","Tap to Edit","Logout from app"};
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

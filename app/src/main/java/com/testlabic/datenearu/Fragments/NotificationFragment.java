@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelUser;
@@ -70,11 +72,9 @@ public class NotificationFragment extends Fragment {
         bar = rootView.findViewById(R.id.progress_bar);
         bar.setVisibility(View.VISIBLE);
         listView = rootView.findViewById(R.id.listView);
-        //notifCount = getIntent().getIntExtra(Constants.notifCount, -1);
         
-        /*
-        Mark sample_last_message notifications read and then display
-         */
+        //Mark sample_last_message notifications read and then display
+        
         MoveNotifToRead();
         return rootView;
     }
@@ -194,12 +194,11 @@ public class NotificationFragment extends Fragment {
                 SwipeMenuItem openItem = new SwipeMenuItem(
                         getApplicationContext());
                 // set item background
-                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
+                openItem.setBackground(new ColorDrawable(getResources().getColor(R.color.sweet_green)));
                 // set item width
                 openItem.setWidth((180));
                 // set item title
-                openItem.setTitle("Accept");
+                openItem.setTitle("See Profile");
                 // set item title fontsize
                 openItem.setTitleSize(18);
                 // set item title font color
@@ -231,8 +230,11 @@ public class NotificationFragment extends Fragment {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        // open
-                        ShowAConfirmationDialog(position);
+                        // show the profile of the request sender
+                        Intent i = new Intent(getActivity(), ClickedUser.class);
+                        i.putExtra(Constants.comingFromNotif, true);
+                        i.putExtra(Constants.clickedUid,adapter.getItem(position).getSendersUid());
+                        startActivity(i);
                        // Toast.makeText(getActivity(), "Accepting request!", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
@@ -252,99 +254,6 @@ public class NotificationFragment extends Fragment {
             }
         });
         
-    }
-    
-    private void ShowAConfirmationDialog(final int position) {
-        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
-                .setTitleText("Are you sure?")
-                .setContentText("You guys will be added as a connection to each other!")
-                .setConfirmText("Yes, go for it!")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        acceptRequest(adapter.getItem(position));
-    
-                        sDialog
-                                .setTitleText("Success!")
-                                .setContentText("Go have a talk, get happy!")
-                                .setConfirmText("OK")
-                                .setConfirmClickListener(null)
-                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                    }
-                })
-                .show();
-    }
-    
-    private void acceptRequest(ModelNotification item) {
-        if(item.getSendersUid()!=null)
-        
-        {
-            final DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.Messages)
-                    .child(Constants.uid)
-                    .child(Constants.contacts)
-                    .child(item.getSendersUid());
-            
-            DatabaseReference receiver = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.userInfo)
-                    .child(item.getSendersUid());
-            receiver.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    
-                    if(dataSnapshot.getValue()!=null)
-                    {
-                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                        if (user != null) {
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
-                            ref.setValue(contact);
-                        }
-                    }
-                    
-                }
-                
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                
-                }
-            });
-            
-            /*
-            
-            Similarly setup contact for the other user
-             */
-            
-            
-            final DatabaseReference ref2  = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.Messages)
-                    .child(item.getSendersUid())
-                    .child(Constants.contacts)
-                    .child(Constants.uid);
-            
-            DatabaseReference receiver2 = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.userInfo)
-                    .child(Constants.uid);
-            receiver2.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    
-                    if(dataSnapshot.getValue()!=null)
-                    {
-                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                        if (user != null) {
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
-                            ref2.setValue(contact);
-                        }
-                    }
-                    
-                }
-                
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                
-                }
-            });
-        }
     }
     
     @Override

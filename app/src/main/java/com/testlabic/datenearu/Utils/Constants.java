@@ -56,4 +56,6 @@ public class Constants {
     public static int rewardAdPoints = 20;
     public static String blockList = "BlockList";
     public static String reportedUsers = "reportedUser";
+    public static String comingFromNotif = "comingFromNotif";
+    public static String matchAlgo = "MatchAlgo";
 }

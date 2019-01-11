@@ -24,6 +24,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.startapp.android.publish.adsCommon.StartAppAd;
 import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
+import com.testlabic.datenearu.MatchAlgoUtils.SeriousOrCasual;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.NewUserSetupUtils.LocationUpdateService;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
@@ -250,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-      //  startActivity(new Intent(MainActivity.this, NewUserSetup.class));
+        startActivity(new Intent(MainActivity.this, NewUserSetup.class));
     }
     
     @Override

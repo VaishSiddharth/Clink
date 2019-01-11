@@ -20,6 +20,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,6 +47,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelUser;
@@ -62,6 +67,10 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     private GoogleApiClient mGoogleApiClient;
     String gender;
     String cityLabel;
+    ListView listView;
+    TextView updatingLocationLabel;
+    GoogleProgressBar googleProgressBar;
+    LinearLayout myCurrentLocation;
     
     
     @Override
@@ -69,24 +78,45 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_updater);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(locationUpdater.this);
+        myCurrentLocation = findViewById(R.id.my_location_ll);
+        googleProgressBar = findViewById(R.id.google_progress);
+        updatingLocationLabel = findViewById(R.id.updatingLocation);
+        listView = findViewById(R.id.listView);
+        populateListView();
+        myCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUpLocationService();
+            }
+        });
+        
         gender = preferences.getString(Constants.userGender, "male");
-       final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                assert manager != null;
-                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                    Log.e(TAG, "Displaying location settings...");
-                    displayLocationSettingsRequest(locationUpdater.this);
-                }
-                FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(locationUpdater.this);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(locationUpdater.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-                        buildGoogleApiClient();
-                    }
-                }
-                else buildGoogleApiClient();
+      
     }
     
+    private void populateListView() {
+    
+    }
+    
+    private void setUpLocationService() {
+        //
+        
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        assert manager != null;
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            Log.e(TAG, "Displaying location settings...");
+            displayLocationSettingsRequest(locationUpdater.this);
+        }
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(locationUpdater.this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(locationUpdater.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+            }
+        }
+        else buildGoogleApiClient();
+    }
     
     private synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)

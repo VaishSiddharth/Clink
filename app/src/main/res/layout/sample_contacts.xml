@@ -42,7 +42,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="Hey, would you be interested in ..."
                 android:textColor="@color/read_color"
-                android:textSize="14.5sp"
+                android:textSize="13sp"
                 android:layout_marginRight="32dp" />
 
             <customfonts.MyTextView_SF_Pro_Display_Light

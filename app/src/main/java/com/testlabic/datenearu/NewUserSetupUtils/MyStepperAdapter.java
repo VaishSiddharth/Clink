@@ -36,6 +36,9 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
                 return new OneLineDesc();
         else
             if(position==4)
+                return new SeriousItems();
+        else
+            if(position==5)
                 return new AboutYouEditor();
         
       //  Bundle b = new Bundle();
@@ -46,7 +49,7 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 6;
     }
 
     @NonNull

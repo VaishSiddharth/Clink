@@ -36,8 +36,9 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
     private List<ModelQuestion> questions;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private Boolean clickedOptA = false,
-            clickedOptB = false, clickedOptC = false, clickedOptD = false;
+    private Boolean clickedOptB = false;
+    private Boolean clickedOptC = false;
+    private Boolean clickedOptD = false;
     private Context context;
     private ArrayList<DatabaseReference> referenceArrayList;
     private String clickedUid;
@@ -61,15 +62,13 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         
-        /*
-        Show confirmation screen for position == 10
-         */
+        //Show confirmation screen for position == 10
         
         unColorOpt(holder.optB);
         unColorOpt(holder.optA);
         unColorOpt(holder.optC);
         unColorOpt(holder.optD);
-        clickedOptA = false;
+        Boolean clickedOptA = false;
         clickedOptB = false;
         clickedOptC = false;
         clickedOptD = false;
@@ -78,11 +77,12 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
             holder.question.setText(context.getResources().getString(R.string.confirmation2));
             
             holder.optA.setText("Yes!");
-            
             holder.optA.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //duplicate the user info here.
+                    holder.optA.setTextColor(context.getResources().getColor(R.color.white));
+                    holder.optA.setBackground(context.getResources().getDrawable(R.drawable.solid_color_background));
                     DuplicateUserInfoToCityLabelNode();
                     UpdateXPoints();
                 }
@@ -97,7 +97,8 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
             
             //show a sweet alert dialog here!
            
-        } else {
+        } else
+            {
             
             final ModelQuestion question = questions.get(position);
             holder.question.setText(question.getQuestion());
@@ -256,6 +257,13 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
                                         context.startActivity(i);
                                     }
                                 });
+                            }
+                            else
+                            {
+                                //move to Main activity anyway!
+                                Intent i = new Intent(context, MainActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                context.startActivity(i);
                             }
                         }
                     }

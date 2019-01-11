@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MatchAlgoUtils.SeriousOrCasual">
+
+    <customfonts.MyTextView_SF_Pro_Display_Medium
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="209dp"
+        android:text="Are you looking for a serious relationship?" />
+
+    <customfonts.Button_SF_Pro_Display_Medium
+        android:id="@+id/no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/yes"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="96dp"
+        android:text="No"
+        android:textAllCaps="false" />
+
+
+    <customfonts.Button_SF_Pro_Display_Medium
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="78dp"
+        android:layout_marginBottom="248dp"
+        android:id="@+id/yes"
+        android:text="Yes"
+        android:textAllCaps="false" />
+
+</RelativeLayout>
