@@ -21,6 +21,20 @@ public class ModelUser {
     String dateOfBirth;
     String gender;
     String oneLine;
+    String matchAlgo;
+    double matchIndex;
+    
+    public double getMatchIndex() {
+        return matchIndex;
+    }
+    
+    public void setMatchIndex(double matchIndex) {
+        this.matchIndex = matchIndex;
+    }
+    
+    public String getMatchAlgo() {
+        return matchAlgo;
+    }
     
     public String getOneLine() {
         return oneLine;

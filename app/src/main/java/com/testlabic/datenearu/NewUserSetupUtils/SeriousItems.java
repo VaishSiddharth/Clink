@@ -58,7 +58,7 @@ public class SeriousItems extends Fragment implements BlockingStep {
         rootView = inflater.inflate(R.layout.activity_arranging_items, container, false);
         choiceLL = rootView.findViewById(R.id.choiceLL);
        
-        bold = Typeface.createFromAsset(getContext().getAssets(), "fonts/SF-Pro-Display-Medium.otf");
+        bold = Typeface.createFromAsset(getContext().getAssets(), "fonts/SF-Pro-Display-Bold.otf");
         normal = Typeface.createFromAsset(getContext().getAssets(), "fonts/SF-Pro-Display-Light.otf");
         //get both sets of text views
         dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
@@ -117,20 +117,19 @@ public class SeriousItems extends Fragment implements BlockingStep {
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
         if(count==6) {
             dialog.show();
-            Toast.makeText(getActivity(), "All done go! "+count, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity(), "All done go! "+count, Toast.LENGTH_SHORT).show();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.matchAlgo)
-                    .child(Constants.uid);
-    
+                    .child(Constants.userInfo)
+                    .child(Constants.uid)
+                    .child("matchAlgo");
+                    
             String seq = "";
             //getting values from treemap
             for(int i=1; i<7; i++)
                 seq += order.get(i);
-    
-            HashMap<String, Object> updateMap = new HashMap<>();
-            updateMap.put("order", seq);
-            Log.e(TAG, "The sequence is "+seq);
-            reference.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            
+            //Log.e(TAG, "The sequence is "+seq);
+            reference.setValue(seq).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     dialog.hide();
@@ -149,7 +148,7 @@ public class SeriousItems extends Fragment implements BlockingStep {
     
     @Override
     public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
-    
+            callback.goToPrevStep();
     }
     
     @Nullable
@@ -233,7 +232,7 @@ public class SeriousItems extends Fragment implements BlockingStep {
                         char num = dropped.getText().charAt(0);
                         dropTarget.setText(dropped.getText().toString()+" - "+dropTarget.getText().toString());
                         order.put(Integer.parseInt(String.valueOf(num)), String.valueOf(alpha));
-                        Toast.makeText(getActivity(), "The match is "+num+" "+alpha,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "The match is "+num+" "+alpha,Toast.LENGTH_SHORT).show();
                         count++;
                         if(count==6)
                             choiceLL.setVisibility(View.GONE);
@@ -270,6 +269,7 @@ public class SeriousItems extends Fragment implements BlockingStep {
     
     public void reset()
     {
+        choiceLL.setVisibility(View.VISIBLE);
         count =0;
         option1.setVisibility(TextView.VISIBLE);
         option2.setVisibility(TextView.VISIBLE);

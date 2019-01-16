@@ -1,15 +1,11 @@
 package com.testlabic.datenearu.TransitionUtils;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -24,15 +20,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
-import com.facebook.share.Share;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,12 +51,12 @@ import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Levenshtein;
 import com.testlabic.datenearu.Utils.locationUpdater;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -512,9 +505,20 @@ public class pagerTransition extends Fragment {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                /*
-                populate adapter...
-                 */
+                //populate adapter
+                
+                //sort the arraylist here using LevenshteinDistance algorithm
+                
+                Log.e(TAG, "Called");
+                sortWithMatch();
+                Collections.sort(displayArrayList, new Comparator<ModelUser>() {
+                    @Override
+                    public int compare(ModelUser v1, ModelUser v2) {
+            
+                        double sub = v1.getMatchIndex() - (v2.getMatchIndex());
+                        return (int) sub;
+                    }
+                });
                 fillViewPager(displayArrayList);
                 
             }
@@ -524,6 +528,24 @@ public class pagerTransition extends Fragment {
             
             }
         });
+        
+    }
+    
+    private void sortWithMatch() {
+        
+        Levenshtein l = new Levenshtein();
+        
+        for( ModelUser user : displayArrayList)
+        {
+            String curUsersMatch = "DABFCE";
+            
+            if(user.getMatchAlgo()!=null)
+            {
+                double s = l.distance(curUsersMatch, user.getMatchAlgo());
+                user.setMatchIndex(s);
+                Log.e(TAG, "The match index is "+ s);
+            }
+        }
         
     }
     
@@ -540,7 +562,7 @@ public class pagerTransition extends Fragment {
         
       //  if(currentUsersLatLong!=null)
        // return distance(currentUsersLatLong.getLatitude(), currentUsersLatLong.getLongitude(), location.getLatitude(), location.getLongitude());
-        
+       // LevenshteinDistance.Compute(baseString, stringtoTest)
         return 0.0;
     }
     
@@ -570,6 +592,8 @@ public class pagerTransition extends Fragment {
         return (rad * 180.0 / Math.PI);
     }
     
+    
+    
     /**
      * 更新指示器
      */
@@ -579,34 +603,6 @@ public class pagerTransition extends Fragment {
         indicatorTv.setText(Html.fromHtml("<font color='#12edf0'>" + currentItem + "</font>  /  " + totalNum));
     }
     
-    /**
-     * 调整沉浸式菜单的title
-     */
-    private void dealStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-        }
-    }
-    
-    private int getStatusBarHeight() {
-        Class<?> c = null;
-        Object obj = null;
-        Field field = null;
-        int x = 0, statusBarHeight = 0;
-        try {
-            c = Class.forName("com.android.internal.R$dimen");
-            obj = c.newInstance();
-            field = c.getField("status_bar_height");
-            x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = getResources().getDimensionPixelSize(x);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        return statusBarHeight;
-    }
     
     @SuppressWarnings("deprecation")
     private void initImageLoader() {

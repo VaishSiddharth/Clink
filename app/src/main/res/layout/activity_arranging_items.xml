@@ -20,7 +20,7 @@
         android:textSize="16sp"
         android:layout_below="@+id/toolbar"
         android:textColor="#212121"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:padding="4dp"
         android:text="What is the best way of finding a partner(Drag the numbers to the options priority wise!)"
         android:layout_height="wrap_content" />
@@ -120,7 +120,7 @@
             android:layout_width="0dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="16dp"
             android:gravity="center"
             android:text="1" />
@@ -129,7 +129,7 @@
             android:id="@+id/option_2"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:textColor="@color/white"
             android:background="@drawable/option_background"
 
@@ -141,7 +141,7 @@
             android:id="@+id/option_3"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:textColor="@color/white"
             android:background="@drawable/option_background"
             android:layout_margin="5dp"
@@ -151,7 +151,7 @@
             android:id="@+id/option_4"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:textColor="@color/white"
             android:background="@drawable/option_background"
             android:layout_marginLeft="5dp"
@@ -166,7 +166,7 @@
             android:background="@drawable/option_background"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_margin="5dp"
             android:gravity="center"
             android:text="5" />
@@ -177,7 +177,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:background="@drawable/option_background"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_margin="5dp"
             android:gravity="center"
             android:text="6" />
@@ -194,6 +194,13 @@
         android:layout_marginTop="12dp"
         android:src="@drawable/ic_refresh" />
 
+    <customfonts.MyTextView_SF_Pro_Display_Light
+        android:layout_width="match_parent"
+        android:layout_below="@+id/reset"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="*1 being the highest priority and 6 the lowest"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
 </ScrollView>

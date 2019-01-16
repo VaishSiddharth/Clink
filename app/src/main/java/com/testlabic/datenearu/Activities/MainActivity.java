@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        startActivity(new Intent(MainActivity.this, NewUserSetup.class));
+       // startActivity(new Intent(MainActivity.this, MainActivity.class));
     }
     
     @Override

@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:visibility="gone"
         android:layout_marginStart="25dp"
         android:layout_marginTop="18dp"
         android:src="@drawable/ic_action_back" />
@@ -20,9 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="83dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
         android:text="Quick Setup!"
+        android:textColor="@color/white"
         android:textSize="22sp" />
 
     <android.support.v7.widget.CardView
@@ -96,11 +98,12 @@
                     android:padding="12dp"
                    />
 
-            <customfonts.MyTextView_Montserrat_Light
+            <customfonts.MyTextView_SF_Pro_Display_Light
                 android:layout_width="wrap_content"
                 android:layout_below="@+id/input_name_last"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:textSize="11dp"
                 android:text="*Only first name will be displayed to other users"
                 android:layout_height="wrap_content" />
 
