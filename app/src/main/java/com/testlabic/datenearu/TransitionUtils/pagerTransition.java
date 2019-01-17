@@ -20,7 +20,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
@@ -59,6 +58,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -514,8 +515,8 @@ public class pagerTransition extends Fragment {
                 Collections.sort(displayArrayList, new Comparator<ModelUser>() {
                     @Override
                     public int compare(ModelUser v1, ModelUser v2) {
-            
                         double sub = v1.getMatchIndex() - (v2.getMatchIndex());
+                        //Log.e(TAG, "The sub is "+ v1.getUserName() + " second name "+v2.getUserName()+" sum is " +sub);
                         return (int) sub;
                     }
                 });
