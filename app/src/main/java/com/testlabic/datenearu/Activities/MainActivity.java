@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
     private BottomBar bottomBar;
-    private boolean refresh = false;
     private int count = 0;
     private int messagesUnread = 0;
     
@@ -61,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        
-        refresh = getIntent().getBooleanExtra(Constants.refresh, false);
+    
+        boolean refresh = getIntent().getBooleanExtra(Constants.refresh, false);
        
         /*
         on create switch to the home fragment

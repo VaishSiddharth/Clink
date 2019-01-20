@@ -167,12 +167,19 @@ public class AllMessagesList extends Fragment {
             
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
+                
+                if(adapter!=null) {
+                    downloadDataAndSetAdapter();
+                    //adapter.notifyDataSetChanged();
+                }
             }
             
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            
+                if(adapter!=null) {
+                    downloadDataAndSetAdapter();
+                   // adapter.notifyDataSetChanged();
+                }
             }
             
             @Override
