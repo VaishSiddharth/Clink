@@ -58,13 +58,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
- * Created by xmuSistone on 2016/9/18.
+ * Created by Aviharsh on 2016/9/18.
  */
 public class pagerTransition extends Fragment {
     
@@ -92,7 +89,8 @@ public class pagerTransition extends Fragment {
     private ModelPrefs prefs;
     private TextView points;
     private ImageView hideAd;
-    
+    DatabaseReference ref;
+    private ChildEventListener childEventListener;
     public pagerTransition() {
         // Required empty public constructor
     }
@@ -462,16 +460,16 @@ public class pagerTransition extends Fragment {
     }
     
     private void downloadList() {
-        
+    
         displayArrayList = new ArrayList<>();
         displayArrayList.clear();
         String city = preferences.getString(Constants.cityLabel, "Lucknow_Uttar Pradesh_India");
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.cityLabels).child(city).child(interestedGender);
     
         //Log.e(TAG, "download list called "+ ref);
-        ref.addChildEventListener(new ChildEventListener() {
+        childEventListener = ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getValue() != null) {
@@ -481,23 +479,23 @@ public class pagerTransition extends Fragment {
                     }
                 }
             }
-            
+        
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.e(TAG, "The child changed");
-                downloadList();
+                adapter.notifyDataSetChanged();
             }
-            
+        
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 downloadList();
             }
-            
+        
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             
             }
-            
+        
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
@@ -507,9 +505,9 @@ public class pagerTransition extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //populate adapter
-                
+    
                 //sort the arraylist here using LevenshteinDistance algorithm
-                
+    
                 Log.e(TAG, "Called");
                 sortWithMatch();
                 Collections.sort(displayArrayList, new Comparator<ModelUser>() {
@@ -521,15 +519,13 @@ public class pagerTransition extends Fragment {
                     }
                 });
                 fillViewPager(displayArrayList);
-                
             }
-            
+    
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
             }
         });
-        
     }
     
     private void sortWithMatch() {
@@ -669,5 +665,16 @@ public class pagerTransition extends Fragment {
         //checkForNotification();
         // Log.e(TAG, "On resume called!");
     }
+    public void cleanup() {
+        // We're being destroyed, let go of our mListener and forget about all of the mModels
+        if(ref!=null&&childEventListener!=null)
+        ref.removeEventListener(childEventListener);
+        displayArrayList.clear();
+    }
     
+    @Override
+    public void onDestroy() {
+        cleanup();
+        super.onDestroy();
+    }
 }

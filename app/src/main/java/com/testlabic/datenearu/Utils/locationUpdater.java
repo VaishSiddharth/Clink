@@ -151,7 +151,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     
                     new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
-                            .setTitleText("Changing text")
+                            .setTitleText("Updating")
                             .setContentText(".......")
                             .show();
     
@@ -172,6 +172,8 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                                 {
                                     // do nothing else just update the city label;
                                     reference.updateChildren(updateCityLabel);
+                                    cityLabel[0] = cityLabel[0].replace(", ", "_");
+                                    DuplicateUserInfoToCityLabelNode(cityLabel[0]);
                                 }
                                 else
                                 {
