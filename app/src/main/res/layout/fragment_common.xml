@@ -30,18 +30,6 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <customfonts.MyTextView_SF_Pro_Display_Bold
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:paddingRight="10dp"
-                    android:text="La Crescenta-Montrose, CA91020 Glende And Way"
-                    android:textColor="#333"
-                    android:textSize="15sp" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -50,15 +38,6 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
-
-                    <customfonts.MyTextView_SF_Pro_Display_Medium
-                        android:id="@+id/age"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="NO. 7911847"
-                        android:textColor="#333"
-                        android:textSize="13sp" />
 
                     <RatingBar
                         android:id="@+id/rating"
@@ -87,14 +66,6 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                   <customfonts.TextViewSFProDisplayRegular
-                       android:layout_width="wrap_content"
-                       android:text="One liner god, works at Google"
-                       android:textColor="#333"
-                       android:id="@+id/oneLine"
-                       android:textSize="13sp"
-                       android:layout_height="wrap_content" />
-
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -117,17 +88,68 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/card_extra_height"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="6dp"
-            app:cardMaxElevation="6dp">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:cardMaxElevation="10dp">
 
-            <ImageView
-                android:id="@+id/image"
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_image_shadow"/>
+
+            </FrameLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp">
+
+                <customfonts.MyTextView_SF_Pro_Display_Bold
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingRight="10dp"
+                    android:text="Siddharth Vaish"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:shadowColor="@color/black"/>
+
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:id="@+id/age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="NO. 7911847"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:shadowColor="@color/black"/>
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="wrap_content"
+                    android:text="One liner god, works at Google"
+                    android:layout_gravity="bottom"
+                    android:textColor="#FFFFFF"
+                    android:id="@+id/oneLine"
+                    android:textSize="13sp"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@color/black"/>
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

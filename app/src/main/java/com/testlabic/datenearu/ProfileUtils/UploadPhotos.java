@@ -15,12 +15,5 @@ public class UploadPhotos extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Button button = findViewById(R.id.upload);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            
-            }
-        });
     }
 }
