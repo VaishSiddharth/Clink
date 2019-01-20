@@ -4,7 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+        <include
 
+            layout="@layout/toolbar_home"
+            android:id="@+id/toolbar"
+            />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_below="@+id/toolbar"
+            android:background="#efefef" />
+
+        
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cRecylerView"
+            android:layout_margin="4dp"
+            android:layout_below="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+        </android.support.v7.widget.RecyclerView>
 
         <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
             android:id="@+id/progress_bar"
@@ -16,6 +37,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler4"
+            android:layout_below="@+id/cRecylerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

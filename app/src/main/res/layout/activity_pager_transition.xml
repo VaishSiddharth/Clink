@@ -200,6 +200,7 @@
 
         <com.startapp.android.publish.ads.banner.Banner
             android:id="@+id/startAppBanner"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
         />
