@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,20 +20,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
-import com.startapp.android.publish.adsCommon.StartAppAd;
-import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
-import com.testlabic.datenearu.MatchAlgoUtils.SeriousOrCasual;
+import com.testlabic.datenearu.Fragments.AllMessagesList;
 import com.testlabic.datenearu.Models.ModelNotification;
-import com.testlabic.datenearu.NewUserSetupUtils.LocationUpdateService;
-import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
 
-import com.testlabic.datenearu.Fragments.Messages;
 import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.Profile;
 
@@ -53,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
         
         //initialize the startappSDK
     
-        StartAppSDK.init(this, "211455651", false);
+       // StartAppSDK.init(this, "211455651", false);
         
-        StartAppAd.disableSplash();
+       // StartAppAd.disableSplash();
         
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
@@ -77,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 if (tabId == R.id.tab_message) {
                     // switch to messages fragment
-                    changeFragment(new Messages());
+                    changeFragment(new AllMessagesList());
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
                     nearby.removeBadge();
                 } else if (tabId == R.id.tab_home) {

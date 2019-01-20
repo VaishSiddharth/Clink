@@ -59,7 +59,6 @@
         <activity android:name=".ClickedUser" />
         <activity android:name=".Messages_fliply" />
         <activity android:name=".Search_Results_fliply" />
-        <activity android:name=".Chat_fliply" />
         <activity android:name=".QuestionUtils.QuestionsActivity" />
         <activity android:name=".Utils.locationUpdater" />
         <!--
