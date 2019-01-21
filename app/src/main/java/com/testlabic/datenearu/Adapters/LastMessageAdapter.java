@@ -84,7 +84,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     
         }
         */
-        holder.linear.setBackgroundResource(R.drawable.rect_white_border);
+        //holder.linear.setBackgroundResource(R.drawable.rect_white_border);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS+Constants.unread)
                 .child(Constants.uid+Constants.unread)
                 .child(lastMessage.getUid());
@@ -96,7 +96,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
                     if(unreads>0) {
                         holder.numberOfNewMesssages.setVisibility(View.VISIBLE);
                         holder.numberOfNewMesssages.setText(String.valueOf(unreads));
-                            holder.linear.setBackgroundResource(R.drawable.rect_white_border);
+                        //holder.linear.setBackgroundResource(R.drawable.rect_white_border);
                         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/SF-Pro-Display-Bold.otf");
                         holder.name.setTypeface(tf);
                         holder.name.setTextColor(context.getResources().getColor(R.color.shade_black));
@@ -118,7 +118,8 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             /*
             For own message show delivered status
              */
-            holder.readStat.setVisibility(View.VISIBLE);
+            holder.replysymbol.setVisibility(View.GONE);
+            holder.readStat.setVisibility(View.GONE);
             if(lastMessage.getSuccessfullySent()!=null&& lastMessage.getSuccessfullySent())
             {
                 // single tick for sent message!
@@ -166,7 +167,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image,readStat,onlineStat,n4;
+        ImageView image,readStat,onlineStat,n4,replysymbol;
         TextView name,time,txt,numberOfNewMesssages;
         LinearLayout linear;
 
@@ -179,6 +180,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             time=itemView.findViewById(R.id.time);
             txt=itemView.findViewById(R.id.txt);
             linear =itemView.findViewById(R.id.linear);
+            replysymbol=itemView.findViewById(R.id.replysymbol);
 
            onlineStat= itemView.findViewById(R.id.onlineStatus);
             readStat=itemView.findViewById(R.id.readStat);
