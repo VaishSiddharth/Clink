@@ -540,7 +540,7 @@ public class pagerTransition extends Fragment {
             {
                 double s = l.distance(curUsersMatch, user.getMatchAlgo());
                 user.setMatchIndex(s);
-                Log.e(TAG, "The match index is "+ s);
+               // Log.e(TAG, "The match index is "+ s);
             }
         }
         

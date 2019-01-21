@@ -6,11 +6,11 @@
     android:background="#ffffff"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="2dp"
-        android:src="@drawable/grayline"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_below="@+id/toolbar"
+        android:background="#efefef" />
 
     <LinearLayout
         android:id="@+id/linear"
@@ -26,6 +26,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/image"
+            android:padding="6dp"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:src="@drawable/profile"/>
@@ -73,7 +74,7 @@
                 android:text="1"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:background="@drawable/circle_blue"/>
+                android:background="@drawable/gradient_image_shadow"/>
 
             <customfonts.TextViewSFProDisplayRegular
                 android:id="@+id/time"
@@ -141,7 +142,6 @@
                     android:layout_marginTop="7dp"
                     android:visibility="invisible"
                     android:src="@drawable/ic_credit_card"/>
-
 
 
             </LinearLayout>
