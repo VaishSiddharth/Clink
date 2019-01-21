@@ -64,6 +64,8 @@ public class AllMessagesList extends Fragment {
     private String status= null;
     private RecyclerView cRecyclerView;
     private FirebaseRecyclerAdapter cAdapter;
+    Query lastQuery;
+    ValueEventListener valueEventListener;
     
     @Nullable
     @Override
@@ -109,8 +111,8 @@ public class AllMessagesList extends Fragment {
                         Now fetch the last message and time and setup adapter
                          */
                         
-                        Query lastQuery = databaseReference.orderByKey().limitToLast(1);
-                        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        lastQuery = databaseReference.orderByKey().limitToLast(1);
+                       valueEventListener=  lastQuery.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot one : dataSnapshot.getChildren()) {
@@ -276,5 +278,8 @@ public class AllMessagesList extends Fragment {
         
         if (cAdapter != null)
             cAdapter.stopListening();
+        
+        if(valueEventListener!=null)
+            lastQuery.removeEventListener(valueEventListener);
     }
 }

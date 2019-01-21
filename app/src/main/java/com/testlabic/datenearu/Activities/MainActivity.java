@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -227,8 +226,7 @@ public class MainActivity extends AppCompatActivity {
                     if (messagesUnread > 0) {
         
                         nearby.setBadgeCount(messagesUnread);
-
-// Remove the badge when you're done with it.
+                        // Remove the badge when you're done with it.
                     } else
                         nearby.removeBadge();
                 }

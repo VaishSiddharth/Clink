@@ -33,7 +33,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private ImageView imageView;
     private TextView name, age, oneLine;
     private RatingBar ratingBar;
-    private String imageUrl, nameS, ageS , sendersUid, oneLineS;
+    private String imageUrl, nameS, ageS , sendersUid, oneLineS, gender;
 
     @Nullable
     @Override
@@ -47,7 +47,10 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         age = rootView.findViewById(R.id.age);
         oneLine = rootView.findViewById(R.id.oneLine);
         name.setText(nameS);
-        age.setText(ageS);
+        age.setText("'"+ageS);
+        //TODO: Add imageview for gender, next to age and show image likewise (as in
+        
+
         if(oneLineS!=null)
             oneLine.setText(oneLineS);
 
@@ -67,8 +70,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     public void bindData(ModelUser user) {
         this.imageUrl = user.getImageUrl();
         this.nameS = user.getUserName();
-        this.ageS = ""+user.getAge()+" yrs";
+        this.ageS = ""+user.getAge();
         this.sendersUid = user.getUid();
         this.oneLineS = user.getOneLine();
+        this.gender = user.getGender();
     }
 }
