@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.ClickedUser;
+import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
@@ -50,9 +53,12 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private ImageView imageView;
     private TextView name, age, oneLine;
     private RatingBar ratingBar;
-    FloatingActionButton message, report, match;
+    FloatingActionButton message, like, match;
     private String imageUrl, nameS, ageS , sendersUid, oneLineS, gender;
-
+    DatabaseReference referenceDMIds;
+    ChildEventListener childEventListener;
+    Boolean isDmAllowed = true;
+    
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,12 +71,22 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         age = rootView.findViewById(R.id.age);
         oneLine = rootView.findViewById(R.id.oneLine);
         message = rootView.findViewById(R.id.message_fab);
+        like = rootView.findViewById(R.id.like_fab);
+        
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Add to liked profiles", Toast.LENGTH_SHORT).show();
+            }
+        });
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Under Progress", Toast.LENGTH_SHORT).show();
+                showDmInfoDialog();
+                //Toast.makeText(getActivity(), "Under Progress", Toast.LENGTH_SHORT).show();
             }
         });
+        
         match = rootView.findViewById(R.id.attempt_match);
         match.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +105,84 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         dragLayout.setGotoDetailListener(this);
         return rootView;
     }
-
+    
+    private void showDmInfoDialog() {
+        
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("How does it work?")
+                .setContentText("You will be added as a connection temporarily and can send messages but if you do not receive a reply in 24 hours, you will lose the connection from your list!")
+                .setConfirmButton("Okay!", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(final SweetAlertDialog sweetAlertDialog) {
+                           //check if user is allowed to dm or not
+                        referenceDMIds = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.DMIds)
+                                .child(Constants.uid);
+                       childEventListener =  referenceDMIds.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                
+                                if(dataSnapshot.getValue(String.class)!=null&&dataSnapshot.getValue(String.class).equals(sendersUid))
+                                {
+                                    //show only one try available toast
+                                    isDmAllowed = false;
+                                    Toast.makeText(getActivity(), "You get only one try to direct message!", Toast.LENGTH_SHORT).show();
+                                }
+                                
+                            }
+    
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+                            }
+    
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+                            }
+    
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+                            }
+    
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                            }
+                        });
+                        referenceDMIds.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(isDmAllowed)
+                                {
+                                    removeListeners();
+                                    sweetAlertDialog.dismissWithAnimation();
+                                    acceptRequest(sendersUid, sweetAlertDialog);
+                                }
+                               else sweetAlertDialog.dismiss();
+                            }
+    
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                            }
+                        });
+                        
+                    }
+                }).show();
+    }
+    
+    private void moveToChatScreen() {
+        
+        Intent i = new Intent(getActivity(), chatFullScreen.class);
+        i.putExtra(Constants.sendToUid, sendersUid);
+        i.putExtra(Constants.sendToName, nameS);
+        i.putExtra(Constants.directConvo, true);
+        startActivity(i);
+        
+    }
+    
     @Override
     public void gotoDetail() {
      
@@ -171,6 +264,113 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 .show();
         
     }
+    private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
+        if(item!=null)
+        
+        {
+            final DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(Constants.uid)
+                    .child(Constants.contacts)
+                    .child(item);
+            
+            final DatabaseReference receiver = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(item);
+            receiver.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    
+                    if(dataSnapshot.getValue()!=null)
+                    {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
+                            ref.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    //on successful addition of contact move this uid to dmList of current user to prevent another tries!
+                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                            .child(Constants.DMIds)
+                                            .child(Constants.uid)
+                                            .push();
+                                    reference.setValue(item);
+                                }
+                            });
+                        }
+                    }
+                    
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+            
+            /*
+            
+            Similarly setup contact for the other user
+             */
+            
+            
+            final DatabaseReference ref2  = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(item)
+                    .child(Constants.contacts)
+                    .child(Constants.uid);
+            
+            DatabaseReference receiver2 = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(Constants.uid);
+            receiver2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    
+                    if(dataSnapshot.getValue()!=null)
+                    {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine());
+                            ref2.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sDialog
+                                            .setTitleText("Success!")
+                                            .setContentText("You are good, go say hi!")
+                                            .setConfirmText("OK")
+                                            .setConfirmClickListener(null)
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                    
+                                     moveToChatScreen();
+                                }
+                            });
+                        }
+                    }
+                    
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+        }
+    }
+    
+    @Override
+    public void onStop() {
+        removeListeners();
+        super.onStop();
+    }
+    
+    private void removeListeners()
+    {
+        if(childEventListener!=null)
+            referenceDMIds.removeEventListener(childEventListener);
+    }
+    
+    
     
     private void BuyPoints() {
         startActivity(new Intent(getActivity(), PurchasePacks.class));

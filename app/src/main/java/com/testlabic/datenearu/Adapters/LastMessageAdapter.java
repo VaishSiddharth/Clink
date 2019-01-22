@@ -118,7 +118,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             /*
             For own message show delivered status
              */
-            holder.replysymbol.setVisibility(View.GONE);
+            holder.replysymbol.setVisibility(View.VISIBLE);
             holder.readStat.setVisibility(View.GONE);
             if(lastMessage.getSuccessfullySent()!=null&& lastMessage.getSuccessfullySent())
             {
@@ -134,8 +134,11 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
                 holder.readStat.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_grey));
     
         }
-        else
+        else {
             holder.readStat.setVisibility(View.GONE);
+            holder.replysymbol.setVisibility(View.GONE);
+    
+        }
         
        /* holder.linear.setBackgroundResource(R.drawable.rect_white_border);
         if (position==0){

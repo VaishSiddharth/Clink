@@ -10,6 +10,7 @@ public class Constants {
     public static final String FEMALE = "female";
     public static final String MALE = "male";
     public static final String Questions = "Questions";
+    public static final String DMIds = "DMIds";
     public static String userInfo = "userInfo";
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();
@@ -58,4 +59,5 @@ public class Constants {
     public static String reportedUsers = "reportedUser";
     public static String comingFromNotif = "comingFromNotif";
     public static String matchAlgo = "MatchAlgo";
+    public static String directConvo = "directConvo";
 }
