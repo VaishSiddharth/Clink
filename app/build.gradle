@@ -74,6 +74,7 @@ dependencies {
     implementation 'com.github.mohammadatif:Animatoo:master'
     implementation 'net.jcip:jcip-annotations:1.0'
 
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 
 }
 apply plugin: 'com.google.gms.google-services'

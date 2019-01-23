@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/shy_moment"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -25,45 +23,31 @@
         <customfonts.TextViewSFProDisplayRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="16dp"
+            android:layout_margin="20dp"
             android:text="Quick Setup!"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="22sp" />
 
-        <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="64dp"
-        app:cardCornerRadius="16dp"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/next"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_margin="16dp"
-                android:layout_alignParentEnd="true"
+                android:layout_margin="20dp"
+                android:layout_gravity="right"
                 android:src="@drawable/next_icon" />
 
             <customfonts.MyTextView_SF_Pro_Display_Medium
                 android:id="@+id/robotoBold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="95dp"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:padding="16dp"
+                android:layout_margin="20dp"
                 android:text="Setting you up...(4/5)"
                 android:textColor="#212121"
                 android:textSize="20sp" />
@@ -72,59 +56,31 @@
                 android:id="@+id/whatCanICallYou"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/robotoBold"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="51dp"
+               android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_margin="20dp"
                 android:text="Your one line about in 20 words ?"
                 android:textSize="18sp" />
 
-
-            <customfonts.EditText__SF_Pro_Display_Regular
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="80dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginStart="32dp"
-                android:layout_below="@id/whatCanICallYou"
+                android:layout_margin="15dp"
                 android:hint="e.g Works at Froogle, One liner God"
                 android:singleLine="true"
                 android:maxLines="3"
-                android:padding="24dp"
                 android:textSize="16sp"
-                />
-
-        </RelativeLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:padding="16dp"
-            android:background="@drawable/gradation_shy_moment">
-
-            <TextView
-                android:id="@+id/item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:textSize="26sp"/>
-
-            <TextView
-                android:id="@+id/item_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"/>
+                app:met_underlineColor="@color/appcolor"
+                android:layout_gravity="left"
+                android:gravity="left"
+                app:met_floatingLabelText="About Yourself"
+                app:met_primaryColor="@color/appcolor"
+                app:met_floatingLabelTextColor="@color/appcolor"
+                app:met_floatingLabel="highlight"/>
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
-    </RelativeLayout>
+    </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

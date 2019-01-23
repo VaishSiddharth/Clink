@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#fab1a0"
     android:layout_height="match_parent"
-   >
+    android:orientation="vertical">
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,61 +24,49 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
         android:text="Quick Setup!"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="22sp" />
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="64dp"
-        app:cardCornerRadius="16dp"
-        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/next"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="16dp"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/next_icon" />
+            <ImageView
+                android:id="@+id/next"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="20dp"
+                android:layout_gravity="right"
+                android:src="@drawable/next_icon" />
 
             <customfonts.MyTextView_SF_Pro_Display_Medium
-        android:id="@+id/robotoBold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="37dp"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Setting you up...(3/5)"
-        android:textColor="#000"
-        android:textSize="20sp" />
+                android:id="@+id/robotoBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_margin="20dp"
+                android:text="Setting you up...(3/5)"
+                android:textColor="#000"
+                android:textSize="20sp" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/robotoBold"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="32dp" />
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/robotoBold"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp" />
 
             <customfonts.TextViewSFProDisplayRegular
                 android:id="@+id/your_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/robotoBold"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="31dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_margin="20dp"
                 android:text="Your Gender?"
                 android:textSize="14sp" />
 
@@ -88,9 +76,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/your_gender"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="21dp"
-                android:orientation="horizontal"
-                android:padding="24dp">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/male"
@@ -118,9 +105,9 @@
                 android:id="@+id/intersted_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/robotoBold"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="191dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_margin="20dp"
                 android:text="You're interested in?"
                 android:textSize="14sp" />
 
@@ -131,8 +118,7 @@
                 android:layout_below="@id/intersted_in"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:orientation="horizontal">
 
                 <Button
                     android:layout_width="0dp"
@@ -154,33 +140,6 @@
                     android:background="@drawable/border_black_box"
                     android:text="female" />
             </LinearLayout>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:padding="24dp"
-            android:background="@drawable/gradation_name">
-
-            <TextView
-                android:id="@+id/item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:textSize="26sp"/>
-
-            <TextView
-                android:id="@+id/item_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"/>
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-</RelativeLayout>
+</LinearLayout>
