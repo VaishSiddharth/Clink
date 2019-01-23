@@ -23,6 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <activity android:name=".Activities.EditActivity"></activity>
         <activity android:name=".Activities.SignIn" />
         <activity android:name=".Login" />
         <activity
@@ -55,7 +56,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Profile" />
         <activity android:name=".ClickedUser" />
         <activity android:name=".Messages_fliply" />
         <activity android:name=".Search_Results_fliply" />
@@ -113,7 +113,7 @@
         <activity android:name=".MatchAlgoUtils.SeriousOrCasual" />
         <activity android:name=".MatchAlgoUtils.ArrangingItems" />
         <activity android:name=".NewUserSetupUtils.SeriousItems" />
-        <activity android:name=".MatchAlgoUtils.CasualItems"></activity>
+        <activity android:name=".MatchAlgoUtils.CasualItems" />
     </application>
 
 </manifest>

@@ -48,6 +48,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private Boolean comingFromNotif = false;
     
     
+    
     public interface onImageUrlReceivedListener {
         void onDataReceived(String imageUrl);
     }

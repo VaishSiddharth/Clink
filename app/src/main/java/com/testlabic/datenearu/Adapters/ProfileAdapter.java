@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.testlabic.datenearu.Activities.EditActivity;
 import com.testlabic.datenearu.Activities.Settings;
 import com.testlabic.datenearu.ProfileUtils.AboutEditor;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
@@ -66,6 +67,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 }
             });
            
+        }
+        
+        if(position ==1)
+        {
+            holder.profileItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, EditActivity.class));
+                }
+            });
         }
         
         if(position==2)
