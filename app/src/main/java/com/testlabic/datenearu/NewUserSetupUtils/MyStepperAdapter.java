@@ -47,17 +47,56 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
         return new Age();
     }
 
-    @Override
-    public int getCount() {
-        return 6;
-    }
-
     @NonNull
     @Override
     public StepViewModel getViewModel(@IntRange(from = 0) int position) {
-        //Override this method to set Step title for the Tabs, not necessary for other stepper types
-        return new StepViewModel.Builder(context)
-                .setTitle(R.string.tab_title) //can be a CharSequence instead
-                .create();
+        StepViewModel.Builder builder = new StepViewModel.Builder(context)
+                .setTitle(R.string.tab_title);
+        switch (position) {
+            case 0:
+                builder
+                        .setEndButtonLabel("NEXT")
+                        .setBackButtonLabel("BACK")
+                        .setTitle("Name");
+                break;
+            case 1:
+                builder
+                        .setEndButtonLabel("NEXT")
+                        .setBackButtonLabel("BACK")
+                        .setTitle("Birthday");
+                break;
+            case 2:
+                builder
+                        .setEndButtonLabel("NEXT")
+                        .setBackButtonLabel("BACK")
+                        .setTitle("Intrest");
+                break;
+            case 3:
+                builder
+                        .setEndButtonLabel("NEXT")
+                        .setBackButtonLabel("BACK")
+                        .setTitle("About you");
+                break;
+            case 4:
+                builder
+                        .setEndButtonLabel("NEXT")
+                        .setBackButtonLabel("BACK")
+                        .setTitle("Fill to find");
+                break;
+            case 5:
+                builder
+                        .setEndButtonLabel("COMPLETE")
+                        .setBackButtonLabel("BACK")
+                        .setTitle("Everything about you");
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported position: " + position);
+        }
+        return builder.create();
+    }
+
+    @Override
+    public int getCount() {
+        return 6;
     }
 }
