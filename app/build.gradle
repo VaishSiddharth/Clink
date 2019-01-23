@@ -75,6 +75,7 @@ dependencies {
     implementation 'net.jcip:jcip-annotations:1.0'
 
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    implementation 'jp.wasabeef:blurry:3+'
 
 }
 apply plugin: 'com.google.gms.google-services'
