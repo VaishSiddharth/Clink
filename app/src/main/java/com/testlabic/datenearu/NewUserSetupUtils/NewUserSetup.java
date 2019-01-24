@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -57,11 +59,12 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user_setup);
         mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
+        }*/
+        setUpStatusbarColor();
         adapter = new MyStepperAdapter(getSupportFragmentManager(), this);
         adapter.createStep(0);
         adapter.createStep(1);
@@ -73,6 +76,14 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         downloadQuestions();
         setUpLocation();
     
+    }
+    
+    private void setUpStatusbarColor() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.white));
+        
+        }
     }
     
     private void downloadQuestions() {

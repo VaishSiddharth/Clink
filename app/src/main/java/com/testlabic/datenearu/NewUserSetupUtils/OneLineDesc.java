@@ -57,10 +57,10 @@ public class OneLineDesc extends Fragment implements BlockingStep {
         EditText editText = rootView.findViewById(R.id.desc);
         String text = editText.getText().toString();
         
-        if(text.matches(""))
+        if(text.matches("")) {
             Toast.makeText(getActivity(), "Write something please!", Toast.LENGTH_SHORT).show();
-        
-        else
+            dialog.dismiss();
+        } else
         {
             //update the database!
     

@@ -133,8 +133,10 @@ public class Age extends Fragment implements BlockingStep {
             }
         }
     
-        else
+        else {
+            dialog.dismiss();
             Toast.makeText(getActivity(), "Enter your date of birth first", Toast.LENGTH_SHORT).show();
+        }
     
     }
     

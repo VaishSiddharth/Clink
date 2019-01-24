@@ -322,8 +322,10 @@ public class AboutYouEditor extends Fragment implements BlockingStep {
         {
             updateDatabase(aboutHtmlText);
         }
-        else
+        else {
             Toast.makeText(getActivity(), "No changes made", Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+        }
     
     }
     

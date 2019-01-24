@@ -35,6 +35,7 @@
             <ImageView
                 android:id="@+id/next"
                 android:layout_width="32dp"
+                android:visibility="invisible"
                 android:layout_height="32dp"
                 android:layout_margin="20dp"
                 android:layout_gravity="right"
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:visibility="invisible"
                 android:layout_margin="20dp"
                 android:text="Setting you up...(3/5)"
                 android:textColor="#000"

@@ -38,6 +38,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_margin="20dp"
+                android:visibility="invisible"
                 android:layout_gravity="right"
                 android:src="@drawable/next_icon" />
 
@@ -48,6 +49,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="20dp"
+                android:visibility="invisible"
                 android:text="Setting you up...(4/5)"
                 android:textColor="#212121"
                 android:textSize="20sp" />

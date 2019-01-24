@@ -192,8 +192,10 @@ public class Gender extends Fragment implements BlockingStep {
            
            callback.goToNextStep();
             dialog.dismiss();
-        } else
+        } else {
             Toast.makeText(getActivity(), "Choose one from each first", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        }
     }
     
     @Override
