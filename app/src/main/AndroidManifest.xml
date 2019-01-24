@@ -114,6 +114,7 @@
         <activity android:name=".MatchAlgoUtils.ArrangingItems" />
         <activity android:name=".NewUserSetupUtils.SeriousItems" />
         <activity android:name=".MatchAlgoUtils.CasualItems" />
+        <activity android:name=".NewQuestionUtils.QuestionSetup" />
     </application>
 
 </manifest>
