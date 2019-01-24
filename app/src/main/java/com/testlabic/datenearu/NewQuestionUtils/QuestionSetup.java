@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.NewQuestionUtils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.Toast;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
+import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 
@@ -47,12 +49,7 @@ public class QuestionSetup extends AppCompatActivity implements StepperLayout.St
 
     @Override
     public void onCompleted(View completeButton) {
-        if(proceedAhead)
-            completeButton.setEnabled(true);
-        else {
-            completeButton.setEnabled(false);
-            Toast.makeText(QuestionSetup.this, "Wait a while!", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(this, "onCompleted!", Toast.LENGTH_SHORT).show();
 
     }
 

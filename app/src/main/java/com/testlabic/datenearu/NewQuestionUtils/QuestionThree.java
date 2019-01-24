@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.NewQuestionUtils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
+import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 
@@ -28,7 +30,7 @@ import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class QuestionOne extends Fragment implements BlockingStep {
+public class QuestionThree extends Fragment implements BlockingStep {
     View rootView;
     ImageView next;
     SweetAlertDialog dialog;
@@ -153,6 +155,7 @@ public class QuestionOne extends Fragment implements BlockingStep {
 
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
+        //getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
 
     }
 

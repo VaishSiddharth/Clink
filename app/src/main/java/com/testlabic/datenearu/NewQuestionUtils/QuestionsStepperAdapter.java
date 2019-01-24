@@ -20,28 +20,28 @@ public class QuestionsStepperAdapter extends AbstractFragmentStepAdapter {
         }
         else
         if(position==1)
-            return new QuestionOne();
+            return new QuestionTwo();
         else
         if(position==2)
-            return new QuestionOne();
+            return new QuestionThree();
         else
         if(position==3)
             return new QuestionOne();
         else
         if(position==4)
-            return new QuestionOne();
+            return new QuestionTwo();
         else
         if(position==6)
-            return new QuestionOne();
+            return new QuestionThree();
         else
         if(position==7)
             return new QuestionOne();
         else
         if(position==8)
-            return new QuestionOne();
+            return new QuestionTwo();
         else
         if(position==9)
-            return new QuestionOne();
+            return new QuestionThree();
 
         //  Bundle b = new Bundle();
         //  b.putInt(CURRENT_STEP_POSITION_KEY, position);

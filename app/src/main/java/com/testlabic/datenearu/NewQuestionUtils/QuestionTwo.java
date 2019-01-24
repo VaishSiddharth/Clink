@@ -28,7 +28,7 @@ import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class QuestionOne extends Fragment implements BlockingStep {
+public class QuestionTwo extends Fragment implements BlockingStep {
     View rootView;
     ImageView next;
     SweetAlertDialog dialog;
