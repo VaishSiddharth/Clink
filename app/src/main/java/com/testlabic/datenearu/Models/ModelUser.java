@@ -23,6 +23,11 @@ public class ModelUser {
     String oneLine;
     String matchAlgo;
     double matchIndex;
+    boolean isBlur;
+    
+    public boolean getIsBlur() {
+        return isBlur;
+    }
     
     public double getMatchIndex() {
         return matchIndex;

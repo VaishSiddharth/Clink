@@ -2,6 +2,8 @@ package com.testlabic.datenearu.TransitionUtils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BlurMaskFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -29,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.testlabic.datenearu.Activities.EditActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.ClickedUser;
@@ -44,6 +47,7 @@ import org.w3c.dom.Text;
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by xmuSistone on 2016/9/18.
@@ -52,12 +56,12 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private static final String TAG = CommonFragment.class.getSimpleName();
     private ImageView imageView;
     private TextView name, age, oneLine;
-    private RatingBar ratingBar;
     FloatingActionButton message, like, match;
     private String imageUrl, nameS, ageS , sendersUid, oneLineS, gender;
     DatabaseReference referenceDMIds;
     ChildEventListener childEventListener;
     Boolean isDmAllowed = true;
+    Boolean isBlur = false;
     
     @Nullable
     @Override
@@ -66,7 +70,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
         Glide.with(CommonFragment.this).load(imageUrl).into(imageView);
-        Log.e(TAG, "imageUrl is"+ imageUrl);
+        //Log.e(TAG, "imageUrl is"+ imageUrl);
         name = rootView.findViewById(R.id.name);
         age = rootView.findViewById(R.id.age);
         oneLine = rootView.findViewById(R.id.oneLine);
@@ -98,12 +102,24 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         age.setText("'"+ageS);
         //TODO: Add imageview for gender, next to age and show image likewise (as in
         
+        if(isBlur!=null&&isBlur)
+        {
+            blurData(imageView);
+        }
 
         if(oneLineS!=null)
             oneLine.setText(oneLineS);
 
         dragLayout.setGotoDetailListener(this);
         return rootView;
+    }
+    
+    private void blurData(ImageView imageView) {
+//        Blurry.with(imageView.getContext()).capture(imageView).into(imageView);
+        name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        float radius = name.getTextSize() / 3;
+        BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+        name.getPaint().setMaskFilter(filter);
     }
     
     private void showDmInfoDialog() {
@@ -199,6 +215,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.sendersUid = user.getUid();
         this.oneLineS = user.getOneLine();
         this.gender = user.getGender();
+        this.isBlur = user.getIsBlur();
     }
     private void showDialog() {
         

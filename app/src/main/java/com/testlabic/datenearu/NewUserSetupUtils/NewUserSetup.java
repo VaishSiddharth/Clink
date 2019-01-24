@@ -52,7 +52,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     private StepperLayout mStepperLayout;
     boolean proceedAhead;
     ArrayList<ModelQuestion> questions;
-     MyStepperAdapter adapter;
+    MyStepperAdapter adapter;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
