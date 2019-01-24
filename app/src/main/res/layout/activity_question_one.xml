@@ -43,10 +43,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <Button
                     android:id="@+id/ans1"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
@@ -55,38 +55,31 @@
                     android:text="ANS 1" />
                 <Button
                     android:id="@+id/ans2"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:textSize="12sp"
                     android:background="@drawable/border_black_box"
                     android:text="ANS 2" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <Button
-                android:id="@+id/ans3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:textSize="12sp"
-                android:background="@drawable/border_black_box"
-                android:text="ANS 3" />
-            <Button
-                android:id="@+id/ans4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:textSize="12sp"
-                android:background="@drawable/border_black_box"
-                android:text="ANS 4" />
+                <Button
+                    android:id="@+id/ans3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:background="@drawable/border_black_box"
+                    android:text="ANS 3" />
+                <Button
+                    android:id="@+id/ans4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:background="@drawable/border_black_box"
+                    android:text="ANS 4" />
             </LinearLayout>
 
         </LinearLayout>
