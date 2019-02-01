@@ -2,7 +2,6 @@ package com.testlabic.datenearu.Activities;
 
 import android.content.Intent;
 import android.graphics.BlurMaskFilter;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,9 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
-
 import java.util.HashMap;
-
 import jp.wasabeef.blurry.Blurry;
 
 public class EditActivity extends AppCompatActivity {
@@ -148,7 +144,6 @@ public class EditActivity extends AppCompatActivity {
                         }
                         else blur.setChecked(false);
                     }
-                   
                     
     
                     if (user != null && user.getAbout() != null) {

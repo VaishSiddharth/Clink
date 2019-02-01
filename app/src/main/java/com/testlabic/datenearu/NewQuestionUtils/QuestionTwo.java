@@ -23,7 +23,9 @@ import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -39,7 +41,10 @@ public class QuestionTwo extends Fragment implements BlockingStep {
     Button ans3;
     Button ans4;
     Boolean ansSelected = false;
-
+    HashMap<String, Object> correctOption;
+    DatabaseReference refInit;
+    private boolean skipSelection = false;
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,18 +52,20 @@ public class QuestionTwo extends Fragment implements BlockingStep {
         final int min = 0;
         final int max = 9;
         final int random = new Random().nextInt((max - min) + 1) + min;
-
+        
         dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("In progress")
                 .setContentText(".....");
-
+        
         question=rootView.findViewById(R.id.question1);
         ans1=rootView.findViewById(R.id.ans1);
         ans2=rootView.findViewById(R.id.ans2);
         ans3=rootView.findViewById(R.id.ans3);
         ans4=rootView.findViewById(R.id.ans4);
-        DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child("Questions")
-                .child(Integer.toString(random));
+        refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
+                .child(Constants.uid)
+                .child("questions")
+                .child(Integer.toString(1));
         refInit.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -69,21 +76,37 @@ public class QuestionTwo extends Fragment implements BlockingStep {
                     String ans2str=modelQuestion.getOptB();
                     String ans3str=modelQuestion.getOptC();
                     String ans4str=modelQuestion.getOptD();
-
-                    question.setText(questionstr.toString());
-                    ans1.setText(ans1str.toString());
-                    ans2.setText(ans2str.toString());
-                    ans3.setText(ans3str.toString());
-                    ans4.setText(ans4str.toString());
+                    
+                    question.setText(questionstr);
+                    ans1.setText(ans1str);
+                    ans2.setText(ans2str);
+                    ans3.setText(ans3str);
+                    ans4.setText(ans4str);
+                    String correctAnswer = modelQuestion.getCorrectOption();
+    
+                    if(correctAnswer!=null && !correctAnswer.equals(""))
+                    {
+                        skipSelection = true;
+                        if(correctAnswer.equals(ans1str))
+                            color(ans1);
+                        else
+                        if(correctAnswer.equals(ans2str))
+                            color(ans2);
+                        else if(correctAnswer.equals(ans3str))
+                            color(ans3);
+                        else if(correctAnswer.equals(ans4str))
+                            color(ans4);
+        
+                    }
                 }
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
         });
-
+    
         ans1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +115,7 @@ public class QuestionTwo extends Fragment implements BlockingStep {
                 unColor(ans4);
                 color(ans1);
                 ansSelected=true;
+                skipSelection = false;
             }
         });
         ans2.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +126,8 @@ public class QuestionTwo extends Fragment implements BlockingStep {
                 unColor(ans4);
                 color(ans2);
                 ansSelected=true;
+                skipSelection = false;
+            
             }
         });
         ans3.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +138,8 @@ public class QuestionTwo extends Fragment implements BlockingStep {
                 unColor(ans4);
                 color(ans3);
                 ansSelected=true;
+                skipSelection = false;
+            
             }
         });
         ans4.setOnClickListener(new View.OnClickListener() {
@@ -122,59 +150,80 @@ public class QuestionTwo extends Fragment implements BlockingStep {
                 unColor(ans1);
                 color(ans4);
                 ansSelected=true;
+                skipSelection = false;
+            
             }
         });
-
-
+    
+    
+    
         return rootView;
     }
-
+    
     private void unColor(Button button) {
         button.setBackground(getResources().getDrawable(R.drawable.border_black_box));
         button.setTextColor(getResources().getColor(R.color.light_black));
     }
-
+    
     private void color (Button button)
     {
+        String text = button.getText().toString();
+        correctOption = new HashMap<>();
+        
+        correctOption.put("correctOption", text );
+        
         button.setBackground(getResources().getDrawable(R.drawable.full_black_box));
         button.setTextColor(getResources().getColor(R.color.white));
     }
-
+    
     @Override
-    public void onNextClicked(StepperLayout.OnNextClickedCallback callback) {
-        if (ansSelected) {
+    public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+        if(skipSelection)
             callback.goToNextStep();
+        else
+        if (ansSelected) {
+            // show progress and update the question on the DB
+            
+            dialog.show();
+            refInit.updateChildren(correctOption).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    dialog.dismiss();
+                    callback.goToNextStep();
+                }
+            });
+            
         }
         else {
             Toast.makeText(getActivity(), "Please Answer", Toast.LENGTH_SHORT).show();
         }
-
+        
     }
-
+    
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
-
+    
     }
-
+    
     @Override
     public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
         callback.goToPrevStep();
-
+        
     }
-
+    
     @Nullable
     @Override
     public VerificationError verifyStep() {
         return null;
     }
-
+    
     @Override
     public void onSelected() {
-
+    
     }
-
+    
     @Override
     public void onError(@NonNull VerificationError error) {
-
+    
     }
 }

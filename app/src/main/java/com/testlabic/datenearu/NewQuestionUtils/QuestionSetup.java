@@ -14,6 +14,8 @@ import com.testlabic.datenearu.R;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class QuestionSetup extends AppCompatActivity implements StepperLayout.StepperListener {
 
     private StepperLayout mStepperLayout;
@@ -66,5 +68,20 @@ public class QuestionSetup extends AppCompatActivity implements StepperLayout.St
     @Override
     public void onReturn() {
 
+    }
+    
+    private void showInstructionDialog() {
+        new SweetAlertDialog(this)
+                .setTitleText("Last step!")
+                .setContentText("Answer these ten questions about yourself, these questions will then be used to get a match for you!")
+                .setConfirmText("Yes, go ahead!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                
+                .show();
     }
 }

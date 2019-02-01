@@ -21,7 +21,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.stepstone.stepper.StepperLayout;
+import com.stepstone.stepper.VerificationError;
 import com.testlabic.datenearu.ClickedUser;
+import com.testlabic.datenearu.NewQuestionUtils.QuestionsStepperAdapter;
 import com.testlabic.datenearu.QuestionUtils.CardStackAdapter;
 import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
@@ -40,103 +43,49 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class QuestionsEnteringNewUser extends AppCompatActivity implements CardStackListener {
+public class QuestionsEnteringNewUser extends AppCompatActivity implements StepperLayout.StepperListener {
     
-    private CardStackLayoutManager manager;
-    private CardStackAdapterNewUser adapter;
-    private CardStackView cardStackView;
-    private GoogleProgressBar progressBar;
-    private ArrayList<DatabaseReference> referenceList = new ArrayList<>();
-    View skip;
-     List<ModelQuestion> questions;
+    private StepperLayout mStepperLayout;
+    QuestionsStepperAdapter questionsStepperAdapter;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questions_entering_new_user);
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showInstructionDialog();
-            }
-        }, 1000);
-        skip = findViewById(R.id.like_button);
-        progressBar = findViewById(R.id.google_progress);
-        setupCardStackView();
-        setupButton();
+        setContentView(R.layout.activity_new_user_setup);
+        mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
+        showInstructionDialog();
+        questionsStepperAdapter = new QuestionsStepperAdapter(getSupportFragmentManager(), this);
+        questionsStepperAdapter.createStep(0);
+        questionsStepperAdapter.createStep(1);
+        questionsStepperAdapter.createStep(2);
+        questionsStepperAdapter.createStep(3);
+        questionsStepperAdapter.createStep(4);
+        questionsStepperAdapter.createStep(5);
+        questionsStepperAdapter.createStep(6);
+        questionsStepperAdapter.createStep(7);
+        questionsStepperAdapter.createStep(8);
+        questionsStepperAdapter.createStep(9);
+        mStepperLayout.setAdapter(questionsStepperAdapter);
     }
     
-    private void setupCardStackView() {
-        refresh();
+    @Override
+    public void onCompleted(View completeButton) {
+    
     }
     
-    private void rewindCard() {
-        RewindAnimationSetting setting = new RewindAnimationSetting.Builder()
-                .setDirection(Direction.Bottom)
-                .setDuration(200)
-                .setInterpolator(new DecelerateInterpolator())
-                .build();
-        manager.setRewindAnimationSetting(setting);
-        cardStackView.rewind();
+    @Override
+    public void onError(VerificationError verificationError) {
+    
     }
     
-    private void refresh() {
-        manager = new CardStackLayoutManager(getApplicationContext(), this);
-        manager.setStackFrom(StackFrom.None);
-        manager.setVisibleCount(3);
-        manager.setTranslationInterval(8.0f);
-        manager.setScaleInterval(0.95f);
-        manager.setSwipeThreshold(0.3f);
-        manager.setMaxDegree(20.0f);
-        manager.setDirections(Direction.FREEDOM);
-        downloadQuestions();
-        adapter = new CardStackAdapterNewUser(getApplicationContext(), questions, Constants.uid, referenceList);
-        cardStackView = findViewById(R.id.card_stack_view);
-        cardStackView.setEnabled(false);
-        cardStackView.setLayoutManager(manager);
-        cardStackView.setAdapter(adapter);
-        // manager.setCanScrollHorizontal(true);
-        // manager.setCanScrollVertical(true);
-        
+    @Override
+    public void onStepSelected(int newStepPosition) {
+    
     }
     
-    private void setupButton() {
-        View skip = findViewById(R.id.skip_button);
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
-                        .setDirection(Direction.Left)
-                        .setDuration(200)
-                        .setInterpolator(new AccelerateInterpolator())
-                        .build();
-                manager.setSwipeAnimationSetting(setting);
-                cardStackView.swipe();
-            }
-        });
-        
-        final View rewind = findViewById(R.id.rewind_button);
-        rewind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    rewindCard();
-            }
-        });
-        
-        View like = findViewById(R.id.like_button);
-        like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
-                        .setDirection(Direction.Right)
-                        .setDuration(200)
-                        .setInterpolator(new AccelerateInterpolator())
-                        .build();
-                manager.setSwipeAnimationSetting(setting);
-                cardStackView.swipe();
-            }
-        });
+    @Override
+    public void onReturn() {
+    
     }
     
     private void showInstructionDialog() {
@@ -149,117 +98,6 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements CardS
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
                     }
-                })
-               
-                .show();
+                }).show();
     }
-    
-    @Override
-    public void onCardDragging(Direction direction, float ratio) {
-    
-    }
-    
-    @Override
-    public void onCardSwiped(Direction direction) {
-    
-        Log.d("CardStackView", "onCardSwiped: p = " + manager.getTopPosition() + ", d = " + direction);
-       
-        TextView quesNumber = findViewById(R.id.quesNumber);
-        if (manager.getTopPosition() > 9) {
-            skip.setEnabled(false);
-            quesNumber.setVisibility(View.GONE);
-            /*
-            Disable card switching
-             */
-            manager.setSwipeThreshold(1.0f);
-        } else {
-        
-            skip.setEnabled(true);
-            quesNumber.setVisibility(View.VISIBLE);
-            manager.setSwipeThreshold(0.3f);
-        }
-        quesNumber.setText(String.valueOf((manager.getTopPosition() + 1) + "/10"));
-    }
-    
-    @Override
-    public void onCardRewound() {
-        Log.d("CardStackView", "onCardRewound: " + manager.getTopPosition());
-        TextView quesNumber = findViewById(R.id.quesNumber);
-        quesNumber.setText(String.valueOf((manager.getTopPosition() + 1) + "/10"));
-        manager.setSwipeThreshold(0.3f);
-        skip.setEnabled(true);
-        quesNumber.setVisibility(View.VISIBLE);
-    }
-    
-    @Override
-    public void onCardCanceled() {
-    
-    }
-    
-    private void downloadQuestions() {
-        if (Constants.uid != null) {
-            
-            questions = new ArrayList<>();
-            referenceList = new ArrayList<>();
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.userInfo).child(Constants.uid)
-                    .child(Constants.questions);
-            
-            ref.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    
-                    if (dataSnapshot.getValue() != null) {
-                        ModelQuestion item = dataSnapshot.getValue(ModelQuestion.class);
-                        if (item != null) {
-                            questions.add(item);
-                            referenceList.add(dataSnapshot.getRef());
-                        }
-                        
-                        if(adapter!=null)
-                            adapter.notifyDataSetChanged();
-                    }
-                }
-                
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                
-                }
-                
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                
-                }
-                
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                
-                }
-                
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                
-                }
-            });
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                /*
-                populate adapter...
-                 */
-                    progressBar.setVisibility(View.GONE);
-                    
-                    
-                }
-                
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                
-                }
-            });
-        }
-    }
-    
-    
-    
 }

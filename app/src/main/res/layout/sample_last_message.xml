@@ -74,7 +74,7 @@
                 android:text="1"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:background="@drawable/gradient_image_shadow"/>
+                android:background="@drawable/circle_blue"/>
 
             <customfonts.TextViewSFProDisplayRegular
                 android:id="@+id/time"
