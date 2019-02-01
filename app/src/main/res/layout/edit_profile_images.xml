@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:paddingRight="2dp"
+        android:paddingLeft="2dp"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:orientation="vertical">
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/image1"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:scaleType="centerCrop"
+        app:civ_border_color="@color/appcolor"
+        app:civ_border_width="3dp"
+        app:civ_shadow="true"
+        app:civ_shadow_radius="15"
+        app:civ_shadow_color="#C1BFBF"
+        app:civ_shadow_gravity="center"
+        android:src="@drawable/profile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/cross1"
+        android:scaleType="centerCrop"
+        app:civ_border_color="@color/appcolor"
+        app:civ_border_width="1dp"
+        app:civ_shadow="true"
+        app:civ_shadow_radius="5"
+        app:civ_shadow_color="#C1BFBF"
+        app:civ_shadow_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/image1"
+        app:layout_constraintEnd_toEndOf="@+id/image1"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toStartOf="@+id/image1"
+        app:layout_constraintTop_toTopOf="@+id/image1"
+        app:layout_constraintVertical_bias="0.93" />
+
+
+    </android.support.constraint.ConstraintLayout>
