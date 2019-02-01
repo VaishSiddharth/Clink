@@ -26,11 +26,30 @@
                 <LinearLayout
                     android:layout_below="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <de.hdodenhof.circleimageview.CircleImageView                    android:layout_width="150dp"
-                    android:layout_margin="32dp"
-                    android:id="@+id/image1"
-                    android:layout_height="150dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <include
+                            layout="@layout/edit_profile_images"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+                        <include
+                             layout="@layout/edit_profile_images"/>
+                        <include
+                             layout="@layout/edit_profile_images"/>
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -40,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <customfonts.TextViewSFProDisplayRegular
@@ -66,18 +85,20 @@
 
                     <Switch
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:id="@+id/blurProfile"
                         android:layout_marginEnd="16dp"
                         android:paddingEnd="16dp"
-                        android:layout_height="wrap_content" />
+                        />
 
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="0.7dp"
-                    android:background="#efefef" />
+                    android:layout_height="0.3dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/white"  />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -123,7 +144,9 @@
                     android:layout_marginTop="21dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="21dp"
-                    android:background="#1A979797" />
+                    android:elevation="4dp"
+                    android:outlineAmbientShadowColor="@color/appcolor"
+                    android:background="@drawable/gradient_setupuser" />
 
                 <customfonts.TextViewSFProDisplayRegular
                     android:id="@+id/about"

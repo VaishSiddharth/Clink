@@ -82,6 +82,7 @@ public class EditActivity extends AppCompatActivity {
                 ref2.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
                         startActivity(new Intent(EditActivity.this, EditActivity.class));
                         finish();
                     }
