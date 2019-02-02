@@ -80,8 +80,8 @@
                             android:hapticFeedbackEnabled="true"
                             android:visibility="visible"
                             app:fabSize="auto"
-                            android:src="@drawable/gradient_image_shadow"
-                            app:backgroundTint="@android:color/white"
+                            android:src="@drawable/logoapp4"
+                            app:backgroundTint="@color/appcolor"
                             app:rippleColor="#225BC9FA"/>
 
 
