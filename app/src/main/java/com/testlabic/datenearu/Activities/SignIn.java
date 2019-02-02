@@ -388,13 +388,13 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     
     private void uploadQuestions(String uid) {
         
-        for (int i = 0; i < 11; i++) {
+       /* for (int i = 0; i < 11; i++) {
             ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bananna", "Apple");
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo).child(uid).child(Constants.questions)
                     .child(String.valueOf(i));
             reference.setValue(question);
-        }
+        }*/
         
     }
     

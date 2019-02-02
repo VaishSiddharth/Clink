@@ -61,4 +61,5 @@ public class Constants {
     public static String matchAlgo = "MatchAlgo";
     public static String directConvo = "directConvo";
     public static String isBlur = "isBlur";
+    public static String setupQuestions = "setUpQuestions";
 }

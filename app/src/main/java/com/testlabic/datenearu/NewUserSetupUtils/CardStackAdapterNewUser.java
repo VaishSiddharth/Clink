@@ -171,7 +171,7 @@ public class CardStackAdapterNewUser extends RecyclerView.Adapter<CardStackAdapt
                 .child(Constants.xPoints)
                 .child(Constants.uid);
         HashMap<String, Object> updatePoints = new HashMap<>();
-        updatePoints.put(Constants.xPoints, 1000);
+        updatePoints.put(Constants.xPoints, 100000);
         reference.updateChildren(updatePoints);
     }
     

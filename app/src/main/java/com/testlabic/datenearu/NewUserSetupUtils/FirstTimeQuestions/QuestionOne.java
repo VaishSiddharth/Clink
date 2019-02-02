@@ -1,4 +1,4 @@
-package com.testlabic.datenearu.NewQuestionUtils;
+package com.testlabic.datenearu.NewUserSetupUtils.FirstTimeQuestions;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

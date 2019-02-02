@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.adapter.AbstractFragmentStepAdapter;
+import com.testlabic.datenearu.NewUserSetupUtils.FirstTimeQuestions.QuestionOne;
 
 public class QuestionsStepperAdapter extends AbstractFragmentStepAdapter {
     public QuestionsStepperAdapter(@NonNull FragmentManager fm, @NonNull Context context) {

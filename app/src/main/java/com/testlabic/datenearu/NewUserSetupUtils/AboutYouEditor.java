@@ -301,7 +301,7 @@ public class AboutYouEditor extends Fragment implements BlockingStep {
                     if(task.isSuccessful())
                     {
                         dialog.dismiss();
-                       startActivity(new Intent(getActivity(), QuestionsEnteringNewUser.class));
+                       startActivity(new Intent(getActivity(), QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
                     }
                 }
             });
