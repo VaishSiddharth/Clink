@@ -77,6 +77,7 @@ dependencies {
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'jp.wasabeef:blurry:3+'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
+    implementation 'com.github.wangjiegulu:rfab:2.0.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

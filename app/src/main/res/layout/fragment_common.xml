@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
-                    android:paddingBottom="12dp"
+                    android:paddingBottom="5dp"
                     android:clipChildren="false"
                     android:clipToPadding="false">
 
@@ -70,56 +70,74 @@
                         android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
 
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/attempt_match"
+                        <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton
+                            xmlns:rfab="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/activity_main_rfab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:hapticFeedbackEnabled="true"
-                            android:visibility="visible"
-                            app:fabSize="auto"
-                            android:src="@drawable/logoapp4"
-                            app:backgroundTint="@color/appcolor"
-                            app:rippleColor="#225BC9FA"/>
+                            android:clipToPadding="true"
+                            android:clipChildren="true"
+                            rfab:rfab_size="normal"
+                            rfab:rfab_drawable="@drawable/logoapp1"
+                            rfab:rfab_color_normal="@color/appcolor"
+                            rfab:rfab_shadow_radius="10dp"
+                            rfab:rfab_shadow_color="#997A5BFE"
+                            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/attempt_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:hapticFeedbackEnabled="true"
+            android:visibility="gone"
+            app:fabSize="auto"
+            android:src="@drawable/logoapp1"
+            app:backgroundTint="@color/appcolor"
+            app:rippleColor="#225BC9FA" />
 
 
-                    </RelativeLayout>
+    </RelativeLayout>
 
-                    <RelativeLayout
-                        android:orientation="horizontal"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:paddingLeft="16dp"
-                        android:paddingStart="16dp"
-                        android:clipToPadding="false">
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:clipToPadding="false">
 
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/like_fab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:hapticFeedbackEnabled="true"
-                            android:src="@drawable/like"
-                            app:backgroundTint="@android:color/white"
-                            app:fabSize="mini"
-                            app:rippleColor="#226FE2B3"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/like_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hapticFeedbackEnabled="true"
+            android:src="@drawable/like"
+            app:backgroundTint="@android:color/white"
+            app:fabSize="mini"
+            app:rippleColor="#226FE2B3"/>
 
-                    </RelativeLayout>
+    </RelativeLayout>
 
-                </LinearLayout>
+</LinearLayout>
 
 
 
-            </LinearLayout>
+</LinearLayout>
 
-        </FrameLayout>
+</FrameLayout>
 
-        <!--2. 頂層可滑动的View-->
+<!--2. 頂層可滑动的View-->
 
         <com.testlabic.datenearu.TransitionUtils.AspectRatioCardView
             android:layout_width="match_parent"
