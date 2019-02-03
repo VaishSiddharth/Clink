@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.testlabic.datenearu.Activities.EditActivity;
+import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.ClickedUser;
@@ -220,6 +221,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.oneLineS = user.getOneLine();
         this.gender = user.getGender();
         this.isBlur = user.getIsBlur();
+        //Log.e(TAG, "The user is "+user.getUid());
     }
     private void showDialog() {
 
@@ -230,6 +232,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sDialog) {
+                        sDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+                        sDialog.setContentText("Just a while, stay here!");
                         sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                         final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.xPoints)
@@ -261,7 +265,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        startActivity(new Intent(getActivity(), QuestionsActivity.class).putExtra(Constants.clickedUid, sendersUid));
+                                                        Log.e(TAG, "The sendersUid "+sendersUid);
+                                                        startActivity(new Intent(getActivity(), QuestionsAttemptActivity.class).putExtra(Constants.clickedUid, sendersUid));
                                                         sDialog.dismiss();
                                                     }
                                                 }, 2500);

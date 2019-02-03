@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
@@ -216,6 +217,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sDialog) {
+                        sDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+                        sDialog.setContentText("Just a while, stay here!");
                         sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                         final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.xPoints)
@@ -247,7 +250,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        startActivity(new Intent(ClickedUser.this, QuestionsActivity.class).putExtra(Constants.clickedUid, clickedUid));
+                                                        startActivity(new Intent(ClickedUser.this, QuestionsAttemptActivity.class).putExtra(Constants.clickedUid, clickedUid));
                                                         sDialog.dismiss();
                                                     }
                                                 }, 2500);

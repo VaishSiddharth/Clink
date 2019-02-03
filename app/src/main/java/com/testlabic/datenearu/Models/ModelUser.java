@@ -1,7 +1,5 @@
 package com.testlabic.datenearu.Models;
 
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
-
 import java.util.ArrayList;
 
 public class ModelUser {

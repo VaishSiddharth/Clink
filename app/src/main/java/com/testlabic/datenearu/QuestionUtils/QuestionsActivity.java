@@ -1,11 +1,9 @@
 package com.testlabic.datenearu.QuestionUtils;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
-import com.testlabic.datenearu.ClickedUser;
+import com.testlabic.datenearu.Models.ModelQuestion;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -40,9 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import br.com.joinersa.oooalertdialog.Animation;
-import br.com.joinersa.oooalertdialog.OnClickListener;
-import br.com.joinersa.oooalertdialog.OoOAlertDialog;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class QuestionsActivity extends AppCompatActivity implements CardStackListener {
@@ -62,8 +57,6 @@ public class QuestionsActivity extends AppCompatActivity implements CardStackLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        
-        Log.e(TAG, "Crashes before destroy!");
     }
     
     @Override

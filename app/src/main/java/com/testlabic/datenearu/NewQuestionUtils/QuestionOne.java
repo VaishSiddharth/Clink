@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
+import com.testlabic.datenearu.Models.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 

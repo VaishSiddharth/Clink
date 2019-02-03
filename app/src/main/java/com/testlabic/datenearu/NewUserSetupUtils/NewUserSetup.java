@@ -1,7 +1,6 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -16,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -39,7 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
+import com.testlabic.datenearu.Models.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 

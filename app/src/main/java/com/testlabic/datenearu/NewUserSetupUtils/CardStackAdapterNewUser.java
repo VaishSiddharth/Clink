@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Models.ModelUser;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
+import com.testlabic.datenearu.Models.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 

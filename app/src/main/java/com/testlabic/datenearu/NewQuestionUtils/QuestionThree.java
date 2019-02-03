@@ -1,6 +1,5 @@
 package com.testlabic.datenearu.NewQuestionUtils;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,8 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
-import com.testlabic.datenearu.Activities.MainActivity;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
+import com.testlabic.datenearu.Models.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 

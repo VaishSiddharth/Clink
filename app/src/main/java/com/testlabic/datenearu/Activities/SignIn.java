@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -43,9 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Models.ModelUser;
-import com.testlabic.datenearu.NewUserSetupUtils.Name;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 

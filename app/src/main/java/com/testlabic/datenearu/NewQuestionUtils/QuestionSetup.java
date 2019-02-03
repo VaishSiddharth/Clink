@@ -1,6 +1,5 @@
 package com.testlabic.datenearu.NewQuestionUtils;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,8 +7,7 @@ import android.widget.Toast;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
-import com.testlabic.datenearu.Activities.MainActivity;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
+import com.testlabic.datenearu.Models.ModelQuestion;
 import com.testlabic.datenearu.R;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class QuestionSetup extends AppCompatActivity implements StepperLayout.StepperListener {
 
     private StepperLayout mStepperLayout;
-    boolean proceedAhead;
     ArrayList<ModelQuestion> questions;
     QuestionsStepperAdapter questionsStepperAdapter;
 

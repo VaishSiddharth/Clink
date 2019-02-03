@@ -209,10 +209,8 @@ public class pagerTransition extends Fragment {
     }
 
     private void setAlpha(float alpha, View... views) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            for (View view : views) {
-                view.setAlpha(alpha);
-            }
+        for (View view : views) {
+            view.setAlpha(alpha);
         }
     }
 
@@ -496,8 +494,8 @@ public class pagerTransition extends Fragment {
             adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
                 @Override
                 public Fragment getItem(int position) {
-                    CommonFragment fragment = fragments.get(position % 10);
-                    fragment.bindData(displayArrayList.get(position % displayArrayList.size()));
+                    CommonFragment fragment = fragments.get(position );
+                    fragment.bindData(displayArrayList.get(position));
                     return fragment;
                 }
                 

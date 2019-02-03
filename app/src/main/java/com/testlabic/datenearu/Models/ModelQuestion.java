@@ -1,4 +1,4 @@
-package com.testlabic.datenearu.QuestionUtils;
+package com.testlabic.datenearu.Models;
 
 public class ModelQuestion {
     String question;

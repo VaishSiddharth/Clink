@@ -1,45 +1,13 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
-import android.content.Intent;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
-import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.NewQuestionUtils.QuestionsStepperAdapter;
-import com.testlabic.datenearu.QuestionUtils.CardStackAdapter;
-import com.testlabic.datenearu.QuestionUtils.ModelQuestion;
-import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.R;
-import com.testlabic.datenearu.Utils.Constants;
-import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
-import com.yuyakaido.android.cardstackview.CardStackListener;
-import com.yuyakaido.android.cardstackview.CardStackView;
-import com.yuyakaido.android.cardstackview.Direction;
-import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
-import com.yuyakaido.android.cardstackview.StackFrom;
-import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
