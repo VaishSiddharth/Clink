@@ -215,7 +215,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     public void bindData(ModelUser user) {
         this.imageUrl = user.getImageUrl();
         this.nameS = user.getUserName();
-        this.ageS = ""+user.getAge();
+        this.ageS = ""+user.getNumeralAge();
         this.sendersUid = user.getUid();
         this.oneLineS = user.getOneLine();
         this.gender = user.getGender();

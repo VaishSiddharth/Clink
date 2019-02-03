@@ -159,55 +159,53 @@ public class pagerTransition extends Fragment {
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
         Log.e(TAG, "Showcase working i "+isFirstRun);
-        if (true) {
-            //Log.e(TAG, "Showcase working " + isFirstRun);
-            if (!runOnce) {
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(getActivity()!=null) {
-                            showcaseView = new ShowcaseView.Builder(getActivity())
-                                    .setTarget(new ViewTarget(filterList))
-                                    .setStyle(R.style.CustomShowcaseTheme2)
-                                    .setContentTitle("PLANNER")
-                                    .hideOnTouchOutside()
-                                    .setContentText("SET REMINDER FOR EVENT")
-                                    .setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            switch (counter) {
-                                                case 0:
-                                                    showcaseView.setShowcase(new ViewTarget(changeLocation), true);
-                                                    showcaseView.setContentTitle("LOCATION");
-                                                    showcaseView.setContentText("FIND THE WAY TO REACH THE VENUE");
-                                                    break;
+        //Log.e(TAG, "Showcase working " + isFirstRun);
+        if (isFirstRun) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(getActivity()!=null) {
+                        showcaseView = new ShowcaseView.Builder(getActivity())
+                                .setTarget(new ViewTarget(filterList))
+                                .setStyle(R.style.CustomShowcaseTheme2)
+                                .setContentTitle("PLANNER")
+                                .hideOnTouchOutside()
+                                .setContentText("SET REMINDER FOR EVENT")
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        switch (counter) {
+                                            case 0:
+                                                showcaseView.setShowcase(new ViewTarget(changeLocation), true);
+                                                showcaseView.setContentTitle("LOCATION");
+                                                showcaseView.setContentText("FIND THE WAY TO REACH THE VENUE");
+                                                break;
 
-                                                case 1:
-                                                    showcaseView.setShowcase(new ViewTarget(viewPager), true);
-                                                    showcaseView.setContentTitle("OPEN CARD");
-                                                    showcaseView.setContentText("TAP TO SEE THE DETAILS OF THE EVENT");
-                                                    break;
+                                            case 1:
+                                                showcaseView.setShowcase(new ViewTarget(viewPager), true);
+                                                showcaseView.setContentTitle("OPEN CARD");
+                                                showcaseView.setContentText("TAP TO SEE THE DETAILS OF THE EVENT");
+                                                break;
 
-                                                case 2:
-                                                    showcaseView.hide();
-                                                    setAlpha(1.0f, filterList, changeLocation,viewPager);
-                                                    break;
-                                            }
-                                            counter++;
+                                            case 2:
+                                                showcaseView.hide();
+                                                setAlpha(1.0f, filterList, changeLocation,viewPager);
+                                                break;
                                         }
-                                    })
-                                    .build();
-                        }
+                                        counter++;
+                                    }
+                                })
+                                .build();
                     }
-                }, 2000);
-                runOnce = true;
-            }
-            // Code to run once
-            SharedPreferences.Editor editor = wmbPreference.edit();
-            editor.putBoolean("FIRSTRUN", true).apply();
+                }
+            }, 2000);
+           // runOnce = true;
         }
-
+        // Code to run once
+        SharedPreferences.Editor editor = wmbPreference.edit();
+        editor.putBoolean("FIRSTRUN", false).apply();
+    
     }
 
     private void setAlpha(float alpha, View... views) {

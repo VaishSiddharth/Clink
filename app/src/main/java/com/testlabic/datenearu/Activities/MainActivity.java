@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -22,6 +24,8 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Fragments.AllMessagesList;
 import com.testlabic.datenearu.Models.ModelNotification;
+import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
@@ -179,12 +183,46 @@ public class MainActivity extends AppCompatActivity {
                     checkForNotification();
                     checkForNewMessages();
                     updateStatus(Constants.online);
+                    checkForIncompleteData();
                     //giveXPoints();
                 }
                 
             }
         });
         
+    }
+    
+    private void checkForIncompleteData() {
+        DatabaseReference recoveryRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(Constants.uid);
+        
+        recoveryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+    
+                ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                if(user!=null) {
+                    if(user.getUserName()==null||user.getInterestedIn()==null||user.getGender()==null||user.getNumeralAge()<0)
+                    {
+                        //reRun Activity to fill info!
+                        Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, NewUserSetup.class));
+                    }
+                    if(user.getCityLabel()==null)
+                    {
+                        Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, locationUpdater.class));
+                    }
+                }
+                
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
     }
     
     private void checkForNewMessages() {

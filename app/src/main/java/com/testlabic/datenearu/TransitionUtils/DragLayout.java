@@ -2,6 +2,7 @@ package com.testlabic.datenearu.TransitionUtils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -74,7 +75,17 @@ public class DragLayout extends FrameLayout {
         super.onFinishInflate();
         bottomView = getChildAt(0);
         topView = getChildAt(1);
-
+    
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mDragHelper.smoothSlideViewTo(topView, originX, dragTopDest)) {
+                    ViewCompat.postInvalidateOnAnimation(DragLayout.this);
+                }
+            }
+        }, 500);
+        
         topView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
