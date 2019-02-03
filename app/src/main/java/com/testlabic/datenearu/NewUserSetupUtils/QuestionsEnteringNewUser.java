@@ -54,26 +54,6 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
         setContentView(R.layout.activity_new_user_setup);
         mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
         showInstructionDialog();
-        
-        //check for incomplete Db
-        
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
-                .child(Constants.uid)
-                .child("questions");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(!dataSnapshot.exists())
-                        //run recovery routine
-                        downloadQuestionsToRef();
-            }
-    
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-        
-            }
-        });
-        
         questionsStepperAdapter = new QuestionsStepperAdapter(getSupportFragmentManager(), this);
         questionsStepperAdapter.createStep(0);
         questionsStepperAdapter.createStep(1);
@@ -87,10 +67,6 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
         questionsStepperAdapter.createStep(9);
         mStepperLayout.setAdapter(questionsStepperAdapter);
         
-    }
-    
-    private void downloadQuestionsToRef() {
-    
     }
     
     @Override

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,7 +14,17 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -145,10 +156,11 @@ public class LocationUpdateService extends Service
         try {
             if (ContextCompat.checkSelfPermission(LocationUpdateService.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED)
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    mLocationListeners[1]);
+                    == PackageManager.PERMISSION_GRANTED) {
+                mLocationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
+                        mLocationListeners[1]);
+            }
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {
@@ -187,4 +199,7 @@ public class LocationUpdateService extends Service
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
+    
+    
+    
 }

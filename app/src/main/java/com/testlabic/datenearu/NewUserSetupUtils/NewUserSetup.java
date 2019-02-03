@@ -65,6 +65,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }*/
         setUpStatusbarColor();
+        downloadQuestions();
         adapter = new MyStepperAdapter(getSupportFragmentManager(), this);
         adapter.createStep(0);
         adapter.createStep(1);
@@ -73,7 +74,6 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         adapter.createStep(4);
         adapter.createStep(5);
         mStepperLayout.setAdapter(adapter);
-        downloadQuestions();
         setUpLocation();
     
     }
@@ -134,6 +134,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
                     Constants.uid = FirebaseAuth.getInstance().getUid();
                     if(Constants.uid!=null)
                     {
+                        Log.e(TAG,"Filling Questions!");
                         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.userInfo)
                                 .child(Constants.uid)
@@ -159,11 +160,12 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     private void setUpLocation() {
         if (ContextCompat.checkSelfPermission(NewUserSetup.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
+                != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(NewUserSetup.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     1);
-        else
+            displayLocationSettingsRequest(NewUserSetup.this);
+        } else
         {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -175,6 +177,50 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         }
     
     
+    }
+    
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    displayLocationSettingsRequest(NewUserSetup.this);
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(NewUserSetup.this, "Permission denied, enabling location services is mandatory to continue", Toast.LENGTH_SHORT).show();
+                    ActivityCompat.requestPermissions(NewUserSetup.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            1);
+                }
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == RESULT_OK) {
+                /*
+                start GPS Service here
+                 */
+                startService(new Intent(NewUserSetup.this, LocationUpdateService.class));
+              
+                
+            } else {
+                displayLocationSettingsRequest(NewUserSetup.this);
+                Toast.makeText(NewUserSetup.this, "It is mandatory to enable locations to continue", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
     }
     
     @Override
@@ -220,7 +266,6 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
                 final Status status = result.getStatus();
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
-                        startService(new Intent(NewUserSetup.this, LocationUpdateService.class));
                         Log.i(TAG, "All location settings are satisfied.");
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:

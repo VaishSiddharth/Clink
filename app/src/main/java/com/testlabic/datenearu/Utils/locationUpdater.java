@@ -235,10 +235,14 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
             if (ContextCompat.checkSelfPermission(locationUpdater.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
+                displayLocationSettingsRequest(locationUpdater.this);
                 buildGoogleApiClient();
             }
         }
-        else buildGoogleApiClient();
+        else {
+            displayLocationSettingsRequest(locationUpdater.this);
+            buildGoogleApiClient();
+        }
     }
     
     private synchronized void buildGoogleApiClient() {

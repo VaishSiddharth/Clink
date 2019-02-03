@@ -62,4 +62,5 @@ public class Constants {
     public static String directConvo = "directConvo";
     public static String isBlur = "isBlur";
     public static String setupQuestions = "setUpQuestions";
+    public static String moveToLocationActivity = "moveToLocationActivity";
 }

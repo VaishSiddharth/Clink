@@ -189,6 +189,7 @@ public class QuestionTen extends Fragment implements BlockingStep {
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
         if(skipSelection) {
+            if(getActivity()!=null)
             getActivity().finish();
         } else
         if (ansSelected) {
@@ -254,7 +255,6 @@ public class QuestionTen extends Fragment implements BlockingStep {
     
     
     private void DuplicateUserInfoToCityLabelNode() {
-        
         {
             DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
                     .child(Constants.uid);
@@ -295,6 +295,7 @@ public class QuestionTen extends Fragment implements BlockingStep {
                             {
                                 //move to Main activity anyway!
                                 Intent i = new Intent(getActivity(), MainActivity.class);
+                                i.putExtra(Constants.moveToLocationActivity, true);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(i);
                             }

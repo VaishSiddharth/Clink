@@ -29,6 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -229,7 +230,13 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
         
-        reference.setValue(user);
+        reference.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                finish();
+            }
+        });
         
         // add 500 xPoints for a new user!
         HashMap<String, Object> updatePoints = new HashMap<>();
@@ -355,12 +362,11 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     
                                     if (mCurrentUser != null) {
                                         updateDatabaseWithUser(mCurrentUser, account, null);
-                                        uploadQuestions(mCurrentUser.getUid());
-                                    }
+                                }
                                     progressBar.setVisibility(View.INVISIBLE);
     
-                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                                    finish();
+                                    //startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                                   // finish();
                                     
                                 } else {
                                     /*

@@ -30,6 +30,7 @@ import java.util.HashMap;
 
 import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.Profile;
+import com.testlabic.datenearu.Utils.locationUpdater;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomBar bottomBar;
     private int count = 0;
     private int messagesUnread = 0;
+    private Boolean moveToLocationActivity = false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
        // StartAppSDK.init(this, "211455651", false);
         
        // StartAppAd.disableSplash();
-        
+        moveToLocationActivity = getIntent().getBooleanExtra(Constants.moveToLocationActivity, false);
+        if(moveToLocationActivity)
+            startActivity(new Intent(this, locationUpdater.class));
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

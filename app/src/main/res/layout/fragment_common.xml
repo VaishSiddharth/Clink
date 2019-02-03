@@ -76,7 +76,7 @@
 
                         <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton
                             xmlns:rfab="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/activity_main_rfab"
+                            android:id="@+id/attempt_match"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
@@ -91,7 +91,7 @@
                             />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/attempt_match"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

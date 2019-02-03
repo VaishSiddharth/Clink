@@ -46,7 +46,6 @@ public class OneLineDesc extends Fragment implements BlockingStep {
         dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("In progress")
                 .setContentText(".....");
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         
         return rootView;
     }

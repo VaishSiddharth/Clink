@@ -41,6 +41,7 @@ import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 
 import org.w3c.dom.Text;
 
@@ -56,7 +57,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private static final String TAG = CommonFragment.class.getSimpleName();
     private ImageView imageView;
     private TextView name, age, oneLine;
-    FloatingActionButton message, like, match;
+    FloatingActionButton message, like;
+    RapidFloatingActionButton match;
     private String imageUrl, nameS, ageS , sendersUid, oneLineS, gender;
     DatabaseReference referenceDMIds;
     ChildEventListener childEventListener;
@@ -95,6 +97,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         match.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e(TAG, "Click received!");
                     showDialog();
             }
         });
