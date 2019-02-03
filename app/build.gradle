@@ -78,6 +78,7 @@ dependencies {
     implementation 'jp.wasabeef:blurry:3+'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'com.github.wangjiegulu:rfab:2.0.0'
+    implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
 
 }
 apply plugin: 'com.google.gms.google-services'

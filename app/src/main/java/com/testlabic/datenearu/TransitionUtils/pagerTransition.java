@@ -2,7 +2,9 @@ package com.testlabic.datenearu.TransitionUtils;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +44,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.startapp.android.publish.ads.banner.Banner;
+import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Activities.SignIn;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.LatLong;
@@ -58,6 +61,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
@@ -73,6 +78,9 @@ public class pagerTransition extends Fragment {
     HashMap<String, Object> updateMap = null;
     HashMap<String , Object> updateMinAge;
     HashMap<String , Object> updateMaxAge;
+    private ShowcaseView showcaseView;
+    private Boolean runOnce = false;
+    private int counter = 0;
     
     String interestedGender;
     SharedPreferences preferences;
@@ -100,7 +108,7 @@ public class pagerTransition extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         
         // 1. 沉浸式状态栏
-        
+        //viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         rootView = inflater.inflate(R.layout.activity_pager_transition, viewPager, false);
         if(Constants.uid!=null)
         fetchPreferences();
@@ -142,10 +150,74 @@ public class pagerTransition extends Fragment {
                 banner.hideBanner();
             }
         });
-        
+        setShowcaseView();
         return rootView;
+
     }
-    
+    public void setShowcaseView(){
+        //showcase view
+        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+        Log.e(TAG, "Showcase working i "+isFirstRun);
+        if (true) {
+            //Log.e(TAG, "Showcase working " + isFirstRun);
+            if (!runOnce) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(getActivity()!=null) {
+                            showcaseView = new ShowcaseView.Builder(getActivity())
+                                    .setTarget(new ViewTarget(filterList))
+                                    .setStyle(R.style.CustomShowcaseTheme2)
+                                    .setContentTitle("PLANNER")
+                                    .hideOnTouchOutside()
+                                    .setContentText("SET REMINDER FOR EVENT")
+                                    .setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            switch (counter) {
+                                                case 0:
+                                                    showcaseView.setShowcase(new ViewTarget(changeLocation), true);
+                                                    showcaseView.setContentTitle("LOCATION");
+                                                    showcaseView.setContentText("FIND THE WAY TO REACH THE VENUE");
+                                                    break;
+
+                                                case 1:
+                                                    showcaseView.setShowcase(new ViewTarget(viewPager), true);
+                                                    showcaseView.setContentTitle("OPEN CARD");
+                                                    showcaseView.setContentText("TAP TO SEE THE DETAILS OF THE EVENT");
+                                                    break;
+
+                                                case 2:
+                                                    showcaseView.hide();
+                                                    setAlpha(1.0f, filterList, changeLocation,viewPager);
+                                                    break;
+                                            }
+                                            counter++;
+                                        }
+                                    })
+                                    .build();
+                        }
+                    }
+                }, 2000);
+                runOnce = true;
+            }
+            // Code to run once
+            SharedPreferences.Editor editor = wmbPreference.edit();
+            editor.putBoolean("FIRSTRUN", true).apply();
+        }
+
+    }
+
+    private void setAlpha(float alpha, View... views) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            for (View view : views) {
+                view.setAlpha(alpha);
+            }
+        }
+    }
+
     private void setUpPoints() {
         DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.xPoints)

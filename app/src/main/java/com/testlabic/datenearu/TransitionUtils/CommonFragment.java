@@ -64,7 +64,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     ChildEventListener childEventListener;
     Boolean isDmAllowed = true;
     Boolean isBlur = false;
-    
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         oneLine = rootView.findViewById(R.id.oneLine);
         message = rootView.findViewById(R.id.message_fab);
         like = rootView.findViewById(R.id.like_fab);
-        
+
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,19 +92,20 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 //Toast.makeText(getActivity(), "Under Progress", Toast.LENGTH_SHORT).show();
             }
         });
-        
+
         match = rootView.findViewById(R.id.attempt_match);
         match.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e(TAG, "Click received!");
-                    showDialog();
+                showDialog();
             }
         });
         name.setText(nameS);
         age.setText("'"+ageS);
         //TODO: Add imageview for gender, next to age and show image likewise (as in
-        
+
+
         if(isBlur!=null&&isBlur)
         {
             blurData(imageView);
@@ -116,7 +117,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         dragLayout.setGotoDetailListener(this);
         return rootView;
     }
-    
+
     private void blurData(ImageView imageView) {
 //        Blurry.with(imageView.getContext()).capture(imageView).into(imageView);
         name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -124,50 +125,50 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
         name.getPaint().setMaskFilter(filter);
     }
-    
+
     private void showDmInfoDialog() {
-        
+
         new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("How does it work?")
                 .setContentText("You will be added as a connection temporarily and can send messages but if you do not receive a reply in 24 hours, you will lose the connection from your list!")
                 .setConfirmButton("Okay!", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {
-                           //check if user is allowed to dm or not
+                        //check if user is allowed to dm or not
                         referenceDMIds = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.DMIds)
                                 .child(Constants.uid);
-                       childEventListener =  referenceDMIds.addChildEventListener(new ChildEventListener() {
+                        childEventListener =  referenceDMIds.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                
+
                                 if(dataSnapshot.getValue(String.class)!=null&&dataSnapshot.getValue(String.class).equals(sendersUid))
                                 {
                                     //show only one try available toast
                                     isDmAllowed = false;
                                     Toast.makeText(getActivity(), "You get only one try to direct message!", Toast.LENGTH_SHORT).show();
                                 }
-                                
+
                             }
-    
+
                             @Override
                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+
                             }
-    
+
                             @Override
                             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        
+
                             }
-    
+
                             @Override
                             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+
                             }
-    
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+
                             }
                         });
                         referenceDMIds.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -179,32 +180,32 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                     sweetAlertDialog.dismissWithAnimation();
                                     acceptRequest(sendersUid, sweetAlertDialog);
                                 }
-                               else sweetAlertDialog.dismiss();
+                                else sweetAlertDialog.dismiss();
                             }
-    
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+
                             }
                         });
-                        
+
                     }
                 }).show();
     }
-    
+
     private void moveToChatScreen() {
-        
+
         Intent i = new Intent(getActivity(), chatFullScreen.class);
         i.putExtra(Constants.sendToUid, sendersUid);
         i.putExtra(Constants.sendToName, nameS);
         i.putExtra(Constants.directConvo, true);
         startActivity(i);
-        
+
     }
-    
+
     @Override
     public void gotoDetail() {
-     
+
         Intent i = new Intent(getActivity(), ClickedUser.class);
         i.putExtra(Constants.clickedUid, sendersUid);
         i.putExtra(Constants.imageUrl, imageUrl);
@@ -221,7 +222,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.isBlur = user.getIsBlur();
     }
     private void showDialog() {
-        
+
         new SweetAlertDialog(getActivity())
                 .setTitleText("Attempt match?")
                 .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue")
@@ -233,11 +234,11 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.xPoints)
                                 .child(Constants.uid);
-                        
+
                         xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                
+
                                 ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                                 if (modelSubscr != null) {
                                     int current = modelSubscr.getXPoints();
@@ -255,7 +256,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                                         .setTitleText("Starting!")
                                                         .setContentText("Best of luck!")
                                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                                                
+
                                                 Handler handler = new Handler();
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
@@ -266,41 +267,41 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                                 }, 2500);
                                             }
                                         });
-                                        
+
                                     }
                                 }
-                                
+
                             }
-                            
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                            
+
                             }
                         });
-                        
+
                         ///
                     }
                 })
                 .show();
-        
+
     }
     private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
         if(item!=null)
-        
+
         {
             final DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(Constants.uid)
                     .child(Constants.contacts)
                     .child(item);
-            
+
             final DatabaseReference receiver = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo)
                     .child(item);
             receiver.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    
+
                     if(dataSnapshot.getValue()!=null)
                     {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
@@ -319,12 +320,12 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                             });
                         }
                     }
-                    
+
                 }
-                
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                
+
                 }
             });
             
@@ -332,21 +333,21 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             
             Similarly setup contact for the other user
              */
-            
-            
+
+
             final DatabaseReference ref2  = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(item)
                     .child(Constants.contacts)
                     .child(Constants.uid);
-            
+
             DatabaseReference receiver2 = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo)
                     .child(Constants.uid);
             receiver2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    
+
                     if(dataSnapshot.getValue()!=null)
                     {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
@@ -361,39 +362,39 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                             .setConfirmText("OK")
                                             .setConfirmClickListener(null)
                                             .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                                    
-                                     moveToChatScreen();
+
+                                    moveToChatScreen();
                                 }
                             });
                         }
                     }
-                    
+
                 }
-                
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                
+
                 }
             });
         }
     }
-    
+
     @Override
     public void onStop() {
         removeListeners();
         super.onStop();
     }
-    
+
     private void removeListeners()
     {
         if(childEventListener!=null)
             referenceDMIds.removeEventListener(childEventListener);
     }
-    
-    
-    
+
+
+
     private void BuyPoints() {
         startActivity(new Intent(getActivity(), PurchasePacks.class));
     }
-    
+
 }
