@@ -1,52 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back_si"
+    android:orientation="vertical"
+    android:weightSum="10"
+    android:layout_gravity="bottom|center"
+    android:gravity="bottom|center"
+    android:background="@drawable/gradient_setupuser_shade"
     tools:context="com.testlabic.datenearu.Activities.SignIn">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/logoapp1"
+        android:elevation="4dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:layout_alignParentTop="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        android:clipToPadding="false">
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="74.7dp"
-                android:scaleType="fitCenter"
-                android:layout_gravity="center_horizontal"
-                 />
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="30dp"
+            android:layout_gravity="center"
+            android:translationZ="4dp"
+            android:background="#EBE9E9">
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="40dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="2"
                 android:layout_gravity="center"
-                android:layout_marginTop="12.7dp"
-                android:src="@drawable/logo_fliply" />
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="0.8"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+                    <ss.com.bannerslider.Slider
+                        android:id="@+id/banner_slider1"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        app:slider_animateIndicators="true"
+                        app:slider_loopSlides="true"
+                        app:slider_interval="7000"/>
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1.2"
+                android:gravity="center"
+                android:layout_gravity="center">
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="This is a Dating App"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Give it a try"
+                    android:textColor="@color/gray_btn_bg_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
 
-</LinearLayout>
+            </LinearLayout>
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_marginBottom="25dp"
-    android:layout_alignParentBottom="true">
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+        android:id="@+id/google_progress"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="5dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:paddingTop="10dp"
+                android:padding="10dp"
+                android:layout_margin="10dp"
                 android:id="@+id/facebook"
-                android:paddingBottom="10dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rect_white"
                 android:orientation="horizontal">
@@ -63,7 +129,6 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="1dp"
                     android:textSize="12sp"
-
                     android:text="Continue with Facebook"
                     android:textColor="#3b3b3b" />
             </LinearLayout>
@@ -72,12 +137,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="22dp"
-                android:paddingLeft="38dp"
-                android:paddingRight="38dp"
                 android:id="@+id/gmail"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:padding="12dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/rect_white"
                 android:orientation="horizontal">
 
@@ -109,7 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <View
@@ -142,22 +204,18 @@
             android:background="@drawable/rect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="55dp"
-            android:paddingRight="55dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="13dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:text="Signup with Email"
             android:textSize="12sp"
             android:textColor="#ffffff" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
 
         <customfonts.TextViewSFProDisplayRegular
             android:layout_width="wrap_content"
@@ -176,19 +234,6 @@
 
     </LinearLayout>
 
-
-
-
-
+    </LinearLayout>
 
 </LinearLayout>
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/google_progress"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:visibility="invisible"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-       />
-
-</RelativeLayout>

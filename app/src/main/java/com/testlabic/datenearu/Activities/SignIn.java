@@ -41,13 +41,17 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.MainSliderAdapter;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
+import com.testlabic.datenearu.PicassoImageLoadingService;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.Arrays;
 import java.util.HashMap;
+
+import ss.com.bannerslider.Slider;
 
 public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 48;
@@ -60,6 +64,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
    GoogleProgressBar progressBar;
     CallbackManager callbackManager;
     LoginButton loginButton;
+    Slider slider;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,12 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+
+        //banner
+        Slider.init(new PicassoImageLoadingService(this));
+        slider = findViewById(R.id.banner_slider1);
+        slider.setAdapter(new MainSliderAdapter());
+
         /* code for signIN */
 
         /*
