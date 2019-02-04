@@ -2,8 +2,10 @@ package com.testlabic.datenearu.AttemptMatchUtils;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.stepstone.stepper.StepperLayout;
 import com.testlabic.datenearu.Models.ModelQuestion;
@@ -50,8 +52,8 @@ public class QuestionsAttemptActivity extends AppCompatActivity {
     }
     
     private void showConfirmation() {
-        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("Are you sure?")
+        SweetAlertDialog sweetAlertDialog=new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+                sweetAlertDialog.setTitleText("Are you sure?")
                 .setContentText("Quit?")
                 .setConfirmText("Yes!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -62,6 +64,8 @@ public class QuestionsAttemptActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+        Button btn=sweetAlertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
     }
     
 }

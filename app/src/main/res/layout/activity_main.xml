@@ -22,6 +22,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         app:bb_behavior="iconsOnly"
+        app:bb_badgeBackgroundColor="@color/appcolor"
         app:bb_tabXmlResource="@xml/bottombar" />
 
 </RelativeLayout>

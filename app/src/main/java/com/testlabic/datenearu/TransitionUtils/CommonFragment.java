@@ -232,8 +232,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
         SweetAlertDialog sweetAlertDialog=new SweetAlertDialog(getActivity());
         sweetAlertDialog.setTitleText("Attempt match?");
-        sweetAlertDialog  .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue");
-        sweetAlertDialog .setConfirmText("Yes!");
+        sweetAlertDialog.setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue");
+        sweetAlertDialog.setConfirmText("Yes!");
         sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sDialog) {
