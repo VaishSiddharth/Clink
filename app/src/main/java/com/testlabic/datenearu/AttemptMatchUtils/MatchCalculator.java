@@ -145,7 +145,7 @@ public class MatchCalculator extends AppCompatActivity {
     }
     
     private void showSuccessDialog() {
-        new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+      SweetAlertDialog mainDialog =   new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
                 .setTitleText("You passed!")
                 .setContentText("Do you want us to notify the other person, and then if he/she wants, will be able to connect with you!")
                 .setConfirmButton("Sure!", new SweetAlertDialog.OnSweetClickListener() {
@@ -175,7 +175,15 @@ public class MatchCalculator extends AppCompatActivity {
                                 sweetAlertDialog
                                         .setTitleText("Done!")
                                         .setContentText("We wish you hear back soon!")
-                                        .setConfirmButton("Send one-time message?", new SweetAlertDialog.OnSweetClickListener() {
+                                        .setCancelButton("Leave it", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                Intent i = new Intent(MatchCalculator.this, MainActivity.class);
+                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(i);
+                                            }
+                                        })
+                                        .setConfirmButton("Send message?", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 
@@ -266,15 +274,7 @@ public class MatchCalculator extends AppCompatActivity {
                                                                 
                                                             }
                                                         })
-                                                        .setCancelButton("Leave it", new SweetAlertDialog.OnSweetClickListener() {
-                                                            @Override
-                                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                                sweetAlertDialog.dismiss();
-                                                                Intent i = new Intent(MatchCalculator.this, MainActivity.class);
-                                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                startActivity(i);
-                                                            }
-                                                        })
+                                                        
                                                         .show();
                                             }
                                         })
@@ -291,11 +291,15 @@ public class MatchCalculator extends AppCompatActivity {
                         new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("Are you sure?")
                                 .setContentText("You don't want him/her to know?")
-                                .setConfirmText("Yes!")
                                 .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                                         sweetAlertDialog.dismiss();
+                                         }
+                                })
+                                .setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
                                         Intent i = new Intent(MatchCalculator.this, MainActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(i);
@@ -303,8 +307,10 @@ public class MatchCalculator extends AppCompatActivity {
                                 })
                                 .show();
                     }
-                })
-                .show();
+                });
+      mainDialog.setCancelable(false);
+      mainDialog.show();
+      
     }
     
     private void SendRequestMessage() {
