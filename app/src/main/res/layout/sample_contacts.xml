@@ -27,7 +27,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="2dp"
                     android:layout_marginRight="4dp"
                     android:layout_marginLeft="4dp"
                     android:ellipsize="end"
@@ -39,11 +39,11 @@
 
                 <customfonts.MyTextView_SF_Pro_Display_Light
                     android:layout_width="wrap_content"
-                    android:id="@+id/about"
-                    android:textSize="14sp"
-                    android:text="Data Scientist, 24"
+                    android:id="@+id/timer"
+                    android:textSize="8dp"
+                    android:text="--:--:--"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
     </LinearLayout>
 </LinearLayout>

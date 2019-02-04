@@ -81,6 +81,7 @@ public class chatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
     ImageView imageView, help;
+    boolean isTemporaryContact = false;
     private ArrayList<ChatMessage> messages = new ArrayList<>();
     private EditText chatEditText1;
     private EditText.OnKeyListener keyListener = new View.OnKeyListener() {
@@ -95,6 +96,8 @@ public class chatFullScreen extends AppCompatActivity {
                 EditText editText = (EditText) v;
                 
                 if (v == chatEditText1) {
+                   // if(isTemporaryContact)
+                    //    deleteRef();
                     sendMessage(editText.getText().toString(), isOnlineForCurrentUser);
                 }
                 
@@ -106,6 +109,21 @@ public class chatFullScreen extends AppCompatActivity {
             
         }
     };
+    
+    private void deleteRef() {
+        DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Messages)
+                .child(Constants.uid)
+                .child(Constants.contacts)
+                .child(sendToUid)
+                .child("timeStamp");
+        ref.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                isTemporaryContact = false;
+            }
+        });
+    }
     
     private ImageView.OnClickListener clickListener = new View.OnClickListener() {
         @Override
@@ -187,7 +205,8 @@ public class chatFullScreen extends AppCompatActivity {
             return;
     
         checkBlockStatus();
-    
+        
+        //checkIfItsTemporaryContact();
     
         fillMessageArray(sendToUid, myUid);
         
@@ -258,6 +277,32 @@ public class chatFullScreen extends AppCompatActivity {
             }
         });
         
+    }
+    
+    private void checkIfItsTemporaryContact() {
+    
+        DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Messages)
+                .child(Constants.uid)
+                .child(Constants.contacts)
+                .child(sendToUid)
+                .child("timeStamp");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                        {
+                            //show temporay contact info
+                            isTemporaryContact = true;
+                            Toast.makeText(chatFullScreen.this, "This is a temporary contact, and will disappear if you don't reply in 24 hours!", Toast.LENGTH_SHORT).show();
+                        }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
     }
     
     private void checkBlockStatus() {

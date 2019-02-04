@@ -373,8 +373,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 }
                                     progressBar.setVisibility(View.INVISIBLE);
     
-                                    //startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                                   // finish();
+                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                                    finish();
                                     
                                 } else {
                                     /*

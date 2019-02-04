@@ -3,8 +3,10 @@ package com.testlabic.datenearu.Models;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ConnectionViewHolder extends RecyclerView.ViewHolder {
+    private static final String TAG = ConnectionViewHolder.class.getSimpleName();
     View v;
     public ConnectionViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -35,23 +38,21 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
     {
         TextView name = v.findViewById(R.id.name);
         ImageView photo = v.findViewById(R.id.image);
-        TextView about = v.findViewById(R.id.about);
-        if(model.getOneLine()!=null)
-            about.setText(model.getOneLine());
+        TextView timer = v.findViewById(R.id.timer);
         name.setText(model.getName());
         Glide.with(context).load(getBiggerImage(model.getImage())).into(photo);
         if(model.getBlockStatus()!=null&&model.getBlockStatus())
         {
             //show connection as blocked
             name.setTextColor(Color.GRAY);
-            about.setTextColor(Color.GRAY);
-            about.setText("Long press to unblock");
+           // about.setTextColor(Color.GRAY);
+            //about.setText("Long press to unblock");
         }
         else
         if(model.getBlockStatus()!=null&&!model.getBlockStatus())
         {
             name.setTextColor(context.getResources().getColor(R.color.read_color));
-            about.setText(model.getOneLine());
+           // about.setText(model.getOneLine());
         }
     
         v.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +74,64 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                 return true;
             }
         });
+        timer.setVisibility(View.GONE);
+        if(model.getTimeStamp()!=null)
+            setUpTimer(timer, (long) model.getTimeStamp().get(Constants.timeStamp), model.getUid());
     
+    }
+    
+    private void setUpTimer(final TextView timer, final long time, String uid) {
+        
+        //check if time exceeded 24 hours, if yes then remove contact;
+       /* if(time<System.currentTimeMillis())
+        {
+            //remove contact
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(Constants.uid).child(Constants.contacts)
+                    .child(uid);
+            reference.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                }
+            });
+        }*/
+    
+        final long[] startTime = {System.currentTimeMillis()- time};
+        //adding 24 hours milliseconds with current time of milliseconds to make it 24 hours milliseconds.
+       long milliseconds = 86400000 -(System.currentTimeMillis()- time) ; // 24 hours = 86400000 milliseconds
+        Log.e(TAG, "Start time is "+milliseconds);
+        CountDownTimer cdt = new CountDownTimer(milliseconds,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                
+                
+                startTime[0] = startTime[0] -1;
+                Long serverUptimeSeconds =
+                        (millisUntilFinished - startTime[0]) / 1000;
+                
+                // now you repalce txtViewHours,  txtViewMinutes, txtViewSeconds by your textView.
+            
+                String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
+                
+                String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
+            
+                String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+               
+                String time = hoursLeft+":"+minutesLeft+":"+secondsLeft;
+                
+                timer.setVisibility(View.VISIBLE);
+                timer.setText(time);
+            }
+        
+            @Override
+            public void onFinish() {
+                //execute deletion of contact
+            }
+        };
+    
+        cdt.start();
+        
     }
     
     private void showDialog(final String uid, final DatabaseReference blockRef, Boolean blockStatus, final Context context) {
