@@ -3,6 +3,7 @@ package com.testlabic.datenearu.TransitionUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BlurMaskFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,11 +13,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -129,10 +132,10 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
     private void showDmInfoDialog() {
 
-        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
-                .setTitleText("How does it work?")
-                .setContentText("You will be added as a connection temporarily and can send messages but if you do not receive a reply in 24 hours, you will lose the connection from your list!")
-                .setConfirmButton("Okay!", new SweetAlertDialog.OnSweetClickListener() {
+        SweetAlertDialog sweetAlertDialog=new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE);
+        sweetAlertDialog.setTitleText("How does it work?");
+        sweetAlertDialog.setContentText("You will be added as a connection temporarily and can send messages but if you do not receive a reply in 24 hours, you will lose the connection from your list!");
+        sweetAlertDialog.setConfirmButton("Okay!", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {
                         //check if user is allowed to dm or not
@@ -192,6 +195,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
                     }
                 }).show();
+        Button btn=sweetAlertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.button_4_dialogue));
     }
 
     private void moveToChatScreen() {
@@ -225,15 +230,16 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     }
     private void showDialog() {
 
-        new SweetAlertDialog(getActivity())
-                .setTitleText("Attempt match?")
-                .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue")
-                .setConfirmText("Yes!")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+        SweetAlertDialog sweetAlertDialog=new SweetAlertDialog(getActivity());
+        sweetAlertDialog.setTitleText("Attempt match?");
+        sweetAlertDialog  .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue");
+        sweetAlertDialog .setConfirmText("Yes!");
+        sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sDialog) {
                         sDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
                         sDialog.setContentText("Just a while, stay here!");
+                        sDialog.getProgressHelper().setBarColor(Color.parseColor("#7A5BFE"));
                         sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                         final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.xPoints)
@@ -260,6 +266,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                                         .setTitleText("Starting!")
                                                         .setContentText("Best of luck!")
                                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                        sDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
 
                                                 Handler handler = new Handler();
                                                 handler.postDelayed(new Runnable() {
@@ -288,6 +295,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                     }
                 })
                 .show();
+        Button btn=sweetAlertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.button_4_dialogue));
 
     }
     private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
