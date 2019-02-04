@@ -3,27 +3,27 @@
         id="@+id/tab_home"
         icon="@drawable/ic_home"
         inActiveColor="#4De9e9e9"
-        activeColor="#118df0"/>
+        activeColor="#FF7A5BFE"/>
 
     <tab
         id="@+id/tab_message"
         icon="@drawable/ic_messages"
         barColorWhenSelected="#fff"
         inActiveColor="#4De9e9e9"
-        activeColor="#118df0"/>
+        activeColor="#FF7A5BFE"/>
 
     <tab
         id="@+id/tab_notif"
         icon="@drawable/ic_notif"
         inActiveColor="#4De9e9e9"
-        activeColor="#118df0"/>
+        activeColor="#FF7A5BFE"/>
         >
 
     <tab
         id="@+id/tab_profile"
         icon="@drawable/ic_profile"
         inActiveColor="#4De9e9e9"
-        activeColor="#118df0"/>
+        activeColor="#FF7A5BFE"/>
 
 
 </tabs>

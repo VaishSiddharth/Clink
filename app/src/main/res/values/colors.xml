@@ -15,6 +15,13 @@
     <color name="shy_moment">#a29bfe</color>
     <color name="sour_yellow">#74b9ff</color>
     <color name="pinky_glamour">#dfe6e9</color>
-    <color name="sweet_green">#6AC913</color>
+    <color name="sweet_green">#FF7A5BFE</color>
     <color name="appcolor">#FF7A5BFE</color>
+
+    <color name="success_stroke_color">#FF7A5BFE</color>
+    <color name="trans_success_stroke_color">#337A5BFE</color>
+
+    <color name="gray_btn_bg_color">#B37A5BFE</color>
+    <color name="gray_btn_bg_pressed_color">#CC7A5BFE</color>
+
 </resources>
