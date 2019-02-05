@@ -11,6 +11,7 @@ public class Constants {
     public static final String MALE = "male";
     public static final String Questions = "Questions";
     public static final String DMIds = "DMIds";
+    public static final String LikeInfo = "LikeInfo";
     public static String userInfo = "userInfo";
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();

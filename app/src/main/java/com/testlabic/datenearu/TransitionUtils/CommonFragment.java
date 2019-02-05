@@ -12,11 +12,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,11 +36,13 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.testlabic.datenearu.Activities.EditActivity;
+import com.testlabic.datenearu.AttemptMatchUtils.MatchCalculator;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelContact;
+import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
@@ -85,6 +90,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                executeLikeFunction();
                 Toast.makeText(getActivity(), "Add to liked profiles", Toast.LENGTH_SHORT).show();
             }
         });
@@ -121,6 +127,105 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         return rootView;
     }
     
+    private void executeLikeFunction() {
+        //give 10 drops for liking
+        
+        //check if the other person has already liked you!
+        DatabaseReference checkRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.LikeInfo)
+                .child(Constants.uid)
+                .child(sendersUid)
+                ;
+        checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    //other person likes you; show match message!
+                    //first check whether the contact is blocked or not
+                    DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.blockList)
+                            .child(sendersUid)
+                            .child(Constants.uid)
+                                ;
+                    blockRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists())
+                            {
+                                SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                                        .setTitleText("Confirm Match?")
+                                        .setContentText("Congrats, S/he already likes you, its a match!")
+                                        .setConfirmButton("Sure", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sendNotificationToOtherUser(sweetAlertDialog);
+                                            }
+                                        })
+                                        .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.dismiss();
+                                            }
+                                        });
+                                alertDialog.show();
+                                Button btn=alertDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.button_4_dialogue));
+                                Button btn1=alertDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.button_4_dialogue));
+                            }
+                            else
+                                Toast.makeText(getActivity(), "Sorry an error occured", Toast.LENGTH_SHORT).show();
+                        }
+    
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                        }
+                    });
+                    
+                }
+                else {
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.LikeInfo)
+                            .child(sendersUid)
+                            .child(Constants.uid)
+                            ;
+                    String index = "0";
+                    databaseReference.setValue(index);
+                }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
+       
+    }
+    
+    private void sendNotificationToOtherUser(SweetAlertDialog sweetAlertDialog) {
+        sweetAlertDialog.dismissWithAnimation();
+        acceptRequest(sendersUid, sweetAlertDialog);
+        
+        //create a notification
+    
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Notifications)
+                .child(sendersUid).child(Constants.unread).push();
+        //constructing message
+        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        String message = userName + " liked you back! Go say hi now from messages screen.";
+    
+        long timeStamp = -1 * new java.util.Date().getTime();
+        String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
+    
+        reference.setValue(notification);
+        
+    }
+    
     private void blurData(ImageView imageView) {
 //        Blurry.with(imageView.getContext()).capture(imageView).into(imageView);
         name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -133,6 +238,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         
         new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("How does it work?")
+                
                 .setContentText("You will be added as a connection and can have a talk, but remember you don't get another chance if you are blocked/deleted by the other person!")
                 .setConfirmButton("Okay!", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -151,9 +257,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                     isDmAllowed = false;
                                     Toast.makeText(getActivity(), "You get only one try to direct message!", Toast.LENGTH_SHORT).show();
                                 }
-                                
                             }
-                            
                             @Override
                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             

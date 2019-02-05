@@ -22,6 +22,15 @@ public class ModelUser {
     String matchAlgo;
     double matchIndex;
     boolean isBlur;
+    boolean isQuestionaireComplete;
+    
+    public boolean isQuestionaireComplete() {
+        return isQuestionaireComplete;
+    }
+    
+    public boolean isBlur() {
+        return isBlur;
+    }
     
     public boolean getIsBlur() {
         return isBlur;

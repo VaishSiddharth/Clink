@@ -21,10 +21,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Fragments.AllMessagesList;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewQuestionUtils.QuestionSetup;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
@@ -214,6 +216,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, locationUpdater.class));
                     }
+                    /*if(!user.isQuestionaireComplete())
+                    {
+                        Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, QuestionSetup.class));
+                    }*/
                 }
                 
             }

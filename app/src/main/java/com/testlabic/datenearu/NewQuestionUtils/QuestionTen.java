@@ -205,7 +205,18 @@ public class QuestionTen extends Fragment implements BlockingStep {
                         if(getActivity().getIntent().getBooleanExtra(Constants.setupQuestions, false))
                         {
                             UpdateXPoints();
-                            DuplicateUserInfoToCityLabelNode();
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                    .child(Constants.userInfo)
+                                    .child(Constants.uid);
+                            HashMap<String, Object> updateBoolean = new HashMap<>();
+                            updateBoolean.put("isQuestionaireComplete", true);
+                            reference.updateChildren(updateBoolean).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    DuplicateUserInfoToCityLabelNode();
+                                }
+                            });
+                            
                         }
                         else
                         getActivity().finish();

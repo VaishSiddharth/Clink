@@ -227,7 +227,7 @@ public class pagerTransition extends Fragment {
                 ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                 if (modelSubscr != null) {
                     int current = modelSubscr.getXPoints();
-                    String set = String.valueOf(current)+" points";
+                    String set = String.valueOf(current)+" drops";
                     points.setText(set);
                     
                     points.setOnClickListener(new View.OnClickListener() {
