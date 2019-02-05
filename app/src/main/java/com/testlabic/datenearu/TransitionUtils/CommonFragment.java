@@ -2,10 +2,12 @@ package com.testlabic.datenearu.TransitionUtils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -90,8 +92,32 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                executeLikeFunction();
-                Toast.makeText(getActivity(), "Add to liked profiles", Toast.LENGTH_SHORT).show();
+                //show only first time!
+                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                boolean isFirstTime = sharedPreferences.getBoolean("firstLikeInfo", true);
+                if(!isFirstTime)
+                {
+                    SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                            .setTitleText("How it works?")
+                            .setContentText("When you like someone, we don't tell them that, but if they like you back, it'll be a match!")
+                            .setConfirmButton("ok, like!", new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismiss();
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putBoolean("firstLikeInfo", false).apply();
+                                    executeLikeFunction();
+                                }
+                            });
+                    alertDialog.show();
+                    Button btn = alertDialog.findViewById(R.id.confirm_button);
+                    btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+                }
+                else {
+                    executeLikeFunction();
+                    Toast.makeText(getActivity(), "Liked!", Toast.LENGTH_SHORT).show();
+                }
+               
             }
         });
         message.setOnClickListener(new View.OnClickListener() {
