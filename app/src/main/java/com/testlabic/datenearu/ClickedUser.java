@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -210,7 +212,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     
     private void showDialog() {
         
-        new SweetAlertDialog(this)
+      SweetAlertDialog alertDialog =  new SweetAlertDialog(this)
                 .setTitleText("Attempt match?")
                 .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue")
                 .setConfirmText("Yes!")
@@ -270,8 +272,12 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         
                         ///
                     }
-                })
-                .show();
+                });
+        alertDialog.show();
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+        Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
         
     }
     

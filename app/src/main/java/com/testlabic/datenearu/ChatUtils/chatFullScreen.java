@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -543,6 +544,11 @@ public class chatFullScreen extends AppCompatActivity {
         
         
         dialog.show();
+    
+        Button btn = dialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(chatFullScreen.this, R.drawable.button_4_dialogue));
+        Button btn1 = dialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(chatFullScreen.this, R.drawable.button_4_dialogue));
     }
     
     private void BuyPoints() {

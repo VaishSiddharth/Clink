@@ -87,6 +87,7 @@ public class AllMessagesList extends Fragment {
     private void downloadDataAndSetAdapter() {
         list = new ArrayList<>();
         list.clear();
+        
         final Query reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
@@ -200,6 +201,7 @@ public class AllMessagesList extends Fragment {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 if(adapter!=null) {
+                        adapter.notifyDataSetChanged();
                     downloadDataAndSetAdapter();
                    // adapter.notifyDataSetChanged();
                 }

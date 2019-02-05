@@ -67,7 +67,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private TextView name, age, oneLine;
     FloatingActionButton message, like;
     RapidFloatingActionButton match;
-    private String imageUrl, nameS, ageS , sendersUid, oneLineS, gender;
+    private String imageUrl, nameS, ageS, sendersUid, oneLineS, gender;
     DatabaseReference referenceDMIds;
     ChildEventListener childEventListener;
     Boolean isDmAllowed = true;
@@ -111,16 +111,14 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             }
         });
         name.setText(nameS);
-        age.setText("'"+ageS);
+        age.setText("'" + ageS);
         //TODO: Add imageview for gender, next to age and show image likewise (as in
         
-        
-        if(isBlur!=null&&isBlur)
-        {
+        if (isBlur != null && isBlur) {
             blurData(imageView);
         }
         
-        if(oneLineS!=null)
+        if (oneLineS != null)
             oneLine.setText(oneLineS);
         
         dragLayout.setGotoDetailListener(this);
@@ -134,25 +132,21 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         DatabaseReference checkRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.LikeInfo)
                 .child(Constants.uid)
-                .child(sendersUid)
-                ;
+                .child(sendersUid);
         checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists())
-                {
+                if (dataSnapshot.exists()) {
                     //other person likes you; show match message!
                     //first check whether the contact is blocked or not
                     DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.blockList)
                             .child(sendersUid)
-                            .child(Constants.uid)
-                                ;
+                            .child(Constants.uid);
                     blockRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(!dataSnapshot.exists())
-                            {
+                            if (!dataSnapshot.exists()) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                                         .setTitleText("Confirm Match?")
                                         .setContentText("Congrats, S/he already likes you, its a match!")
@@ -169,40 +163,36 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                             }
                                         });
                                 alertDialog.show();
-                                Button btn=alertDialog.findViewById(R.id.confirm_button);
-                                btn.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.button_4_dialogue));
-                                Button btn1=alertDialog.findViewById(R.id.cancel_button);
-                                btn1.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.button_4_dialogue));
-                            }
-                            else
+                                Button btn = alertDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+                                Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+                            } else
                                 Toast.makeText(getActivity(), "Sorry an error occured", Toast.LENGTH_SHORT).show();
                         }
-    
+                        
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+                        
                         }
                     });
                     
-                }
-                else {
+                } else {
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.LikeInfo)
                             .child(sendersUid)
-                            .child(Constants.uid)
-                            ;
+                            .child(Constants.uid);
                     String index = "0";
                     databaseReference.setValue(index);
                 }
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
         
-       
     }
     
     private void sendNotificationToOtherUser(SweetAlertDialog sweetAlertDialog) {
@@ -210,18 +200,18 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         acceptRequest(sendersUid, sweetAlertDialog);
         
         //create a notification
-    
+        
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Notifications)
                 .child(sendersUid).child(Constants.unread).push();
         //constructing message
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String message = userName + " liked you back! Go say hi now from messages screen.";
-    
+        
         long timeStamp = -1 * new java.util.Date().getTime();
         String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
         ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
-    
+        
         reference.setValue(notification);
         
     }
@@ -236,7 +226,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     
     private void showDmInfoDialog() {
         
-        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+      SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("How does it work?")
                 
                 .setContentText("You will be added as a connection and can have a talk, but remember you don't get another chance if you are blocked/deleted by the other person!")
@@ -247,17 +237,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         referenceDMIds = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.DMIds)
                                 .child(Constants.uid);
-                        childEventListener =  referenceDMIds.addChildEventListener(new ChildEventListener() {
+                        childEventListener = referenceDMIds.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                 
-                                if(dataSnapshot.getValue(String.class)!=null&&dataSnapshot.getValue(String.class).equals(sendersUid))
-                                {
+                                if (dataSnapshot.getValue(String.class) != null && dataSnapshot.getValue(String.class).equals(sendersUid)) {
                                     //show only one try available toast
                                     isDmAllowed = false;
                                     Toast.makeText(getActivity(), "You get only one try to direct message!", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            
                             @Override
                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             
@@ -281,13 +271,11 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         referenceDMIds.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(isDmAllowed)
-                                {
+                                if (isDmAllowed) {
                                     removeListeners();
                                     sweetAlertDialog.dismissWithAnimation();
                                     acceptRequest(sendersUid, sweetAlertDialog);
-                                }
-                                else sweetAlertDialog.dismiss();
+                                } else sweetAlertDialog.dismiss();
                             }
                             
                             @Override
@@ -297,7 +285,12 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         });
                         
                     }
-                }).show();
+                });
+      alertDialog.show();
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+        Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
     }
     
     private void moveToChatScreen() {
@@ -321,16 +314,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     public void bindData(ModelUser user) {
         this.imageUrl = user.getImageUrl();
         this.nameS = user.getUserName();
-        this.ageS = ""+user.getNumeralAge();
+        this.ageS = "" + user.getNumeralAge();
         this.sendersUid = user.getUid();
         this.oneLineS = user.getOneLine();
         this.gender = user.getGender();
         this.isBlur = user.getIsBlur();
         //Log.e(TAG, "The user is "+user.getUid());
     }
+    
     private void showDialog() {
         
-        new SweetAlertDialog(getActivity())
+        SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity())
                 .setTitleText("Attempt match?")
                 .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue")
                 .setConfirmText("Yes!")
@@ -370,7 +364,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Log.e(TAG, "The sendersUid "+sendersUid);
+                                                        Log.e(TAG, "The sendersUid " + sendersUid);
                                                         startActivity(new Intent(getActivity(), QuestionsAttemptActivity.class).putExtra(Constants.clickedUid, sendersUid));
                                                         sDialog.dismiss();
                                                     }
@@ -391,15 +385,18 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         
                         ///
                     }
-                })
-                .show();
+                });
+        alertDialog.show();
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+        Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
         
     }
+    
     private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
-        if(item!=null)
-        
-        {
-            final DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+        if (item != null) {
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(Constants.uid)
                     .child(Constants.contacts)
@@ -412,8 +409,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     
-                    if(dataSnapshot.getValue()!=null)
-                    {
+                    if (dataSnapshot.getValue() != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
                             HashMap<String, Object> timeStamp = new HashMap<>();
@@ -446,8 +442,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             Similarly setup contact for the other user
              */
             
-            
-            final DatabaseReference ref2  = FirebaseDatabase.getInstance().getReference()
+            final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(item)
                     .child(Constants.contacts)
@@ -460,8 +455,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     
-                    if(dataSnapshot.getValue()!=null)
-                    {
+                    if (dataSnapshot.getValue() != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
                             HashMap<String, Object> timeStamp = new HashMap<>();
@@ -499,9 +493,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         super.onStop();
     }
     
-    private void removeListeners()
-    {
-        if(childEventListener!=null)
+    private void removeListeners() {
+        if (childEventListener != null)
             referenceDMIds.removeEventListener(childEventListener);
     }
     
