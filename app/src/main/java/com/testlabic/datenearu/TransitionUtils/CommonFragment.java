@@ -1,9 +1,9 @@
 package com.testlabic.datenearu.TransitionUtils;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,21 +11,16 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,9 +31,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.testlabic.datenearu.Activities.EditActivity;
-import com.testlabic.datenearu.AttemptMatchUtils.MatchCalculator;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
@@ -47,18 +39,14 @@ import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
-import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
-
-import org.w3c.dom.Text;
-
-import java.sql.Timestamp;
 import java.util.HashMap;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import jp.wasabeef.blurry.Blurry;
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 
 /**
  * Created by xmuSistone on 2016/9/18.
@@ -74,6 +62,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     ChildEventListener childEventListener;
     Boolean isDmAllowed = true;
     Boolean isBlur = false;
+    KonfettiView konfettiView;
     
     @Nullable
     @Override
@@ -88,6 +77,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         oneLine = rootView.findViewById(R.id.oneLine);
         message = rootView.findViewById(R.id.message_fab);
         like = rootView.findViewById(R.id.like_fab);
+        konfettiView = rootView.findViewById(R.id.viewKonfetti);
         
         like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +85,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 //show only first time!
                 final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 boolean isFirstTime = sharedPreferences.getBoolean("firstLikeInfo", true);
-                if(!isFirstTime)
+                if(isFirstTime)
                 {
                     SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                             .setTitleText("How it works?")
@@ -173,6 +163,21 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
+    
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    
+                                     konfettiView.build()
+                                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                                    .setDirection(0.0, 359.0)
+                                    .setSpeed(1f, 5f)
+                                    .setFadeOutEnabled(true)
+                                    .setTimeToLive(2000L)
+                                    .addShapes(Shape.RECT, Shape.CIRCLE)
+                                    .addSizes(new Size(12, 5))
+                                    .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+                                    .streamFor(300, 5000L);
+                                }
+    
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                                         .setTitleText("Confirm Match?")
                                         .setContentText("Congrats, S/he already likes you, its a match!")

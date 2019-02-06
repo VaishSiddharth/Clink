@@ -1,6 +1,8 @@
 package com.testlabic.datenearu.AttemptMatchUtils;
 
+import android.content.ContentProviderOperation;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -33,6 +35,9 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 import ru.github.igla.ferriswheel.FerrisWheelView;
 
 public class MatchCalculator extends AppCompatActivity {
@@ -150,6 +155,19 @@ public class MatchCalculator extends AppCompatActivity {
     }
 
     private void showSuccessDialog() {
+    
+        KonfettiView konfettiView = findViewById(R.id.viewKonfetti);
+        konfettiView.build()
+                .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                .setDirection(0.0, 359.0)
+                .setSpeed(1f, 5f)
+                .setFadeOutEnabled(true)
+                .setTimeToLive(2000L)
+                .addShapes(Shape.RECT, Shape.CIRCLE)
+                .addSizes(new Size(12, 5))
+                .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+                .streamFor(300, 5000L);
+        
         final SweetAlertDialog mainDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
                 mainDialog.setTitleText("You passed!");
                 mainDialog.setContentText("Do you want us to notify the other person, and then if he/she wants, will be able to connect with you!");
@@ -374,8 +392,6 @@ public class MatchCalculator extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
         new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText("Are you sure?")
                 .setContentText("Quit?")

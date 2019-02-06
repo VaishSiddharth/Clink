@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--DragLayout要求所有子View的layout_gravity都居中显示-->
 
     <com.testlabic.datenearu.TransitionUtils.DragLayout
         android:id="@+id/drag_layout"
@@ -22,6 +21,10 @@
             android:alpha="0"
             android:background="@drawable/white_back"
            >
+            <nl.dionsegijn.konfetti.KonfettiView
+                android:id="@+id/viewKonfetti"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <LinearLayout
                 android:layout_width="match_parent"

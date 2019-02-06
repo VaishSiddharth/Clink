@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 .child(Constants.userInfo)
                 .child(Constants.uid);
         
-        recoveryRef.addValueEventListener(new ValueEventListener() {
+        recoveryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
     

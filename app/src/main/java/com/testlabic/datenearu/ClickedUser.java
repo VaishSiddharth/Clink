@@ -1,6 +1,7 @@
 package com.testlabic.datenearu;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -34,6 +35,9 @@ import com.testlabic.datenearu.Adapters.View_Pager_Adapter;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.relex.circleindicator.CircleIndicator;
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 
 public class ClickedUser extends AppCompatActivity implements View.OnClickListener {
     
@@ -49,8 +53,6 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private TextView attemptMatch;
     private onImageUrlReceivedListener listener;
     private Boolean comingFromNotif = false;
-    
-    
     
     public interface onImageUrlReceivedListener {
         void onDataReceived(String imageUrl);
@@ -81,7 +83,6 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         // view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
         
         if(!comingFromNotif)
-
         {
             attemptMatch.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,7 +101,6 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                 }
             });
         }
-        
     }
     
     
@@ -113,6 +113,17 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
+                        KonfettiView konfettiView = findViewById(R.id.viewKonfetti);
+                        konfettiView.build()
+                                .addColors(Color.YELLOW, Color.GREEN, Color.BLACK, Color.MAGENTA)
+                                .setDirection(0.0, 359.0)
+                                .setSpeed(1f, 5f)
+                                .setFadeOutEnabled(true)
+                                .setTimeToLive(2000L)
+                                .addShapes(Shape.RECT, Shape.CIRCLE)
+                                .addSizes(new Size(12, 5))
+                                .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+                                .streamFor(300, 5000L);
                         acceptRequest(uid, sDialog);
                     }
                 })

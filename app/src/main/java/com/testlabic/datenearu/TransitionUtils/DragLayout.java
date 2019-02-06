@@ -84,7 +84,7 @@ public class DragLayout extends FrameLayout {
                     ViewCompat.postInvalidateOnAnimation(DragLayout.this);
                 }
             }
-        }, 500);
+        }, 1000);
         
         topView.setOnClickListener(new View.OnClickListener() {
             @Override

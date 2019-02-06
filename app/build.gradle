@@ -46,8 +46,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.google.firebase:firebase-invites:16.0.6'
-    implementation 'com.google.firebase:firebase-database:16.0.5'
-    implementation 'com.google.firebase:firebase-analytics:16.0.6'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
+    implementation 'com.google.firebase:firebase-analytics:16.3.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'jp.wasabeef:richeditor-android:1.2.2'
@@ -80,6 +82,7 @@ dependencies {
     implementation 'com.github.wangjiegulu:rfab:2.0.0'
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'com.ss.bannerslider:bannerslider:2.0.0'
+    implementation 'nl.dionsegijn:konfetti:1.1.2'
 
 }
 apply plugin: 'com.google.gms.google-services'
