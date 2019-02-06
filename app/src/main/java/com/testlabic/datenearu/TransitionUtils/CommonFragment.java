@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -31,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
@@ -44,6 +46,7 @@ import com.testlabic.datenearu.Utils.Constants;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 import java.util.HashMap;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import jp.wasabeef.blurry.Blurry;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
@@ -70,7 +73,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         View rootView = inflater.inflate(R.layout.fragment_common, null);
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
-        Glide.with(CommonFragment.this).load(imageUrl).into(imageView);
+       
         //Log.e(TAG, "imageUrl is"+ imageUrl);
         name = rootView.findViewById(R.id.name);
         age = rootView.findViewById(R.id.age);
@@ -131,8 +134,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         //TODO: Add imageview for gender, next to age and show image likewise (as in
         
         if (isBlur != null && isBlur) {
-            blurData(imageView);
+            blurData();
         }
+        else  Glide.with(CommonFragment.this).load(imageUrl).into(imageView);
         
         if (oneLineS != null)
             oneLine.setText(oneLineS);
@@ -253,12 +257,25 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         
     }
     
-    private void blurData(ImageView imageView) {
+    private void blurData() {
 //        Blurry.with(imageView.getContext()).capture(imageView).into(imageView);
         name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         float radius = name.getTextSize() / 3;
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
         name.getPaint().setMaskFilter(filter);
+    
+        Glide.with(this).load(imageUrl).into(imageView);
+     
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Blurry.with(getActivity())
+                        .capture(imageView)
+                        .into((ImageView) imageView);
+            }
+        },300);
+        
     }
     
     private void showDmInfoDialog() {
