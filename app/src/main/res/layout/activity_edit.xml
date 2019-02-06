@@ -36,6 +36,7 @@
                         android:layout_gravity="center"
                         android:gravity="center">
                         <include
+                            android:id="@+id/edit_dp_1"
                             layout="@layout/edit_profile_images"/>
                     </LinearLayout>
 
@@ -46,8 +47,10 @@
                         android:layout_gravity="center"
                         android:gravity="center">
                         <include
+                            android:id="@+id/edit_dp_2"
                              layout="@layout/edit_profile_images"/>
                         <include
+                            android:id="@+id/edit_dp_3"
                              layout="@layout/edit_profile_images"/>
                     </LinearLayout>
 

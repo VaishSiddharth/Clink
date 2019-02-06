@@ -7,6 +7,17 @@ public class ModelUser {
     String userName;
     String userLastName;
     String imageUrl;
+    String image2;
+    String image3;
+
+    public String getImage2() {
+        return image2;
+    }
+
+    public String getImage3() {
+        return image3;
+    }
+
     String age;
     LatLong location;
     String cityLocation;
