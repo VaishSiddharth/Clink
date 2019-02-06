@@ -184,6 +184,12 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                         .setConfirmButton("Sure", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.LikeInfo)
+                                                        .child(sendersUid)
+                                                        .child(Constants.uid);
+                                                String index = "0";
+                                                databaseReference.setValue(index);
                                                 sendNotificationToOtherUser(sweetAlertDialog);
                                             }
                                         })
