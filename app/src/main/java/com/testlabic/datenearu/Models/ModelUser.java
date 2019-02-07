@@ -9,6 +9,11 @@ public class ModelUser {
     String imageUrl;
     String image2;
     String image3;
+    String image1;
+
+    public String getImage1() {
+        return image1;
+    }
 
     public String getImage2() {
         return image2;
