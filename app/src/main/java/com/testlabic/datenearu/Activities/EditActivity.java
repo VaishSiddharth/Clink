@@ -121,7 +121,7 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        image1.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.profile));
+                        image2.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.profile));
                         uri_update_db(default_uri_dp,"image2");
                         sweetAlertDialog.dismiss();
                     }
@@ -139,7 +139,7 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        image1.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.profile));
+                        image3.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.profile));
                         uri_update_db(default_uri_dp,"image3");
                         sweetAlertDialog.dismiss();
                     }
@@ -343,7 +343,7 @@ public class EditActivity extends AppCompatActivity {
                         Log.e(TAG, "Upload step1");
                         bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
                         image2.setImageBitmap(bitmap);
-                        displaypics_Ref= storageRef.child("Display_Pics/"+Constants.uid+"2.jpg");
+                        displaypics_Ref= storageRef.child("Display_Pics/"+Constants.uid+"/2.jpg");
                         uploaddp(bitmap,image_id);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -362,7 +362,7 @@ public class EditActivity extends AppCompatActivity {
                         Log.e(TAG, "Upload step1");
                         bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
                         image3.setImageBitmap(bitmap);
-                        displaypics_Ref= storageRef.child("Display_Pics/"+Constants.uid+"3.jpg");
+                        displaypics_Ref= storageRef.child("Display_Pics/"+Constants.uid+"/3.jpg");
                         uploaddp(bitmap,image_id);
                     } catch (IOException e) {
                         e.printStackTrace();
