@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.soundcloud.android.crop.Crop;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -45,29 +47,25 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import jp.wasabeef.blurry.Blurry;
 
 public class EditActivity extends AppCompatActivity {
+    
+    String imageId = "image1";
 
-    private static final int SELECT_IMAGE_I = 48;
-    private static final int SELECT_IMAGE_II = 58;
-    private static final int SELECT_IMAGE_III = 68;
-    private static final String default_uri_dp="https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/profile.jpeg?alt=media&token=d50ac046-46b4-480d-a612-e3d5c8519717";
+     private static final String default_uri_dp="https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/profile.jpeg?alt=media&token=d50ac046-46b4-480d-a612-e3d5c8519717";
     private static final String TAG = EditActivity.class.getSimpleName();
     TextView name, age, about;
     ImageView image1, nameWrap,image2,image3;
+    ProgressBar bar1, bar2, bar3;
     Switch blur;
     CircularImageView remove_dp1,remove_dp2,remove_dp3;
     String cityLabel, gender;
     Boolean detailsSetup = false;
-    int SELECT_IMAGE =1;
-    FirebaseStorage storage ;
-    // Create a storage reference from our app
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    // Create a reference to "mountains.jpg"
-    //final StorageReference displaypics_Ref= storageRef.child("Display_Pics");
     StorageReference displaypics_Ref;
     UploadTask uploadTask;
 
@@ -85,6 +83,9 @@ public class EditActivity extends AppCompatActivity {
         image1 = dp1.findViewById(R.id.image1);
         image2 = dp2.findViewById(R.id.image1);
         image3 = dp3.findViewById(R.id.image1);
+        bar1 = dp1.findViewById(R.id.progress_bar);
+        bar2 = dp2.findViewById(R.id.progress_bar);
+        bar3 = dp3.findViewById(R.id.progress_bar);
         blur = findViewById(R.id.blurProfile);
         nameWrap = findViewById(R.id.name_wrap);
         remove_dp1=dp1.findViewById(R.id.remove_dp);
@@ -160,28 +161,16 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Picture"),SELECT_IMAGE_I);
+                       
+                        Crop.pickImage(EditActivity.this );
                         sweetAlertDialog.dismiss();
+                     
+                        imageId = "imageUrl";
                     }
                 });
-                sweetAlertDialog.setCancelButton("Take a Selfie", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                            startActivityForResult(takePictureIntent, 0);
-                            sweetAlertDialog.dismiss();
-                        }
-                    }
-                });
+               
                 sweetAlertDialog.show();
-                /*Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"),SELECT_IMAGE_I);*/
+               
             }
         });
         image2.setOnClickListener(new View.OnClickListener() {
@@ -193,28 +182,13 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Picture"),SELECT_IMAGE_II);
+                        Crop.pickImage(EditActivity.this );
+                       
                         sweetAlertDialog.dismiss();
-                    }
-                });
-                sweetAlertDialog.setCancelButton("Take a Selfie", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                            startActivityForResult(takePictureIntent, 0);
-                            sweetAlertDialog.dismiss();
-                        }
+                        imageId = "image2";
                     }
                 });
                 sweetAlertDialog.show();
-                /*Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"),SELECT_IMAGE_II);*/
             }
         });
         image3.setOnClickListener(new View.OnClickListener() {
@@ -226,28 +200,14 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Picture"),SELECT_IMAGE_III);
+                        Crop.pickImage(EditActivity.this );
                         sweetAlertDialog.dismiss();
+                        imageId = "image3";
                     }
                 });
-                sweetAlertDialog.setCancelButton("Take a Selfie", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                            startActivityForResult(takePictureIntent, 0);
-                            sweetAlertDialog.dismiss();
-                        }
-                    }
-                });
+              
                 sweetAlertDialog.show();
-                /*Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"),SELECT_IMAGE_III);*/
+              
             }
         });
 
@@ -278,106 +238,61 @@ public class EditActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_IMAGE_I) {
-            String image_id="image1";
-            if (resultCode == Activity.RESULT_OK) {
-                Bitmap bitmap=null;
-                if (data != null) {
-                    Log.e(TAG, "Upload step1");
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                        image1.setImageBitmap(bitmap);
-                        displaypics_Ref= storageRef.child("Display_Pics/"+Constants.uid+"/1.jpg");
-                        uploaddp(bitmap,image_id);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-
-
-                    //image1.setDrawingCacheEnabled(true);
-                    //image1.buildDrawingCache();
-                    //Bitmap bitmap1 = image1.getDrawingCache();
-
-
-                        /*if (bitmap1 != null && !bitmap1.isRecycled()) {
-                            bitmap1.recycle();
-                            bitmap1 = null;
-                        }*/
-
-
-                        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data1 = baos.toByteArray();
-                        UploadTask uploadTask = displaypics_Ref.putBytes(data1);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                Log.e(TAG, "Failed!");
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Log.e(TAG, "Upload step2");
-                                downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl();//contains file metadata such as size, content-type, and download URL.
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
-
-                                HashMap<String, Object> updateimage = new HashMap<>();
-                                updateimage.put("image2", downloadUrl);
-                                ref.updateChildren(updateimage);
-                            }
-                        });*/
-
-                }
-            } else if (resultCode == Activity.RESULT_CANCELED)  {
-                Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
-            }
+    
+        if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+            beginCrop(data.getData());
+        } else if (requestCode == Crop.REQUEST_CROP) {
+            handleCrop(resultCode, data);
         }
-        else if (requestCode == SELECT_IMAGE_II) {
-            String image_id="image2";
-            if (resultCode == Activity.RESULT_OK) {
-                Bitmap bitmap=null;
-                if (data != null) {
-                    try {
-                        Log.e(TAG, "Upload step1");
-                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                        image2.setImageBitmap(bitmap);
-                        displaypics_Ref= storageRef.child("Display_Pics/"+Constants.uid+"/2.jpg");
-                        uploaddp(bitmap,image_id);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else if (resultCode == Activity.RESULT_CANCELED)  {
-                Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else if (requestCode == SELECT_IMAGE_III) {
-            String image_id="image3";
-            if (resultCode == Activity.RESULT_OK) {
-                Bitmap bitmap=null;
-                if (data != null) {
-                    try {
-                        Log.e(TAG, "Upload step1");
-                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                        image3.setImageBitmap(bitmap);
-                        displaypics_Ref= storageRef.child("Display_Pics/"+Constants.uid+"/3.jpg");
-                        uploaddp(bitmap,image_id);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else if (resultCode == Activity.RESULT_CANCELED)  {
-                Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else {
-            Toast.makeText(getApplicationContext(),"ERROR",Toast.LENGTH_LONG).show();
-        }
-        //TODO: Later
+       
     }
-
+    
+    private void beginCrop(Uri source) {
+        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+        Crop.of(source, destination).asSquare().start(this);
+    }
+    
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == RESULT_OK) {
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Crop.getOutput(result));
+                switch (imageId) {
+                    case "image2":
+                        displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/2.jpg");
+                        image2.setImageURI(Crop.getOutput(result));
+                        bar2.setVisibility(View.VISIBLE);
+                        bar1.setVisibility(View.INVISIBLE);
+                        bar3.setVisibility(View.INVISIBLE);
+    
+                        break;
+                    case "image3":
+                        displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/3.jpg");
+                        image3.setImageURI(Crop.getOutput(result));
+                        bar3.setVisibility(View.VISIBLE);
+                        bar1.setVisibility(View.INVISIBLE);
+                        bar2.setVisibility(View.INVISIBLE);
+    
+                        break;
+                    default:
+                        displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/1.jpg");
+                        image1.setImageURI(Crop.getOutput(result));
+                        bar1.setVisibility(View.VISIBLE);
+                        bar2.setVisibility(View.INVISIBLE);
+                        bar3.setVisibility(View.INVISIBLE);
+    
+                        break;
+                }
+                uploaddp(bitmap, imageId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    
     public void uploaddp(Bitmap bitmap, final String image_id){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
@@ -392,15 +307,10 @@ public class EditActivity extends AppCompatActivity {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.e(TAG, "Upload step2");
-
-                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                 Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-
+                       
                         // Continue with the task to get the download URL
                         return displaypics_Ref.getDownloadUrl();
                     }
@@ -411,11 +321,7 @@ public class EditActivity extends AppCompatActivity {
                             Uri downloadUri = task.getResult();
                             String uri=downloadUri.toString();
                             uri_update_db(uri,image_id);
-                            /*DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
-                            //Toast.makeText(getApplicationContext(),downloadUri.toString(),Toast.LENGTH_LONG).show();
-                            HashMap<String, Object> updateimage = new HashMap<>();
-                            updateimage.put("image1", String.valueOf(downloadUri));
-                            ref.updateChildren(updateimage);*/
+                           
                         } else {
                             Toast.makeText(getApplicationContext(),"Unable to get Uri",Toast.LENGTH_LONG).show();
                             // Handle failures
@@ -430,10 +336,17 @@ public class EditActivity extends AppCompatActivity {
 
     public void uri_update_db(String uri,String image_id){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
-        //Toast.makeText(getApplicationContext(),downloadUri.toString(),Toast.LENGTH_LONG).show();
         HashMap<String, Object> updateimage = new HashMap<>();
         updateimage.put(image_id, uri);
-        ref.updateChildren(updateimage);
+        ref.updateChildren(updateimage).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                bar1.setVisibility(View.INVISIBLE);
+                bar2.setVisibility(View.INVISIBLE);
+                bar3.setVisibility(View.INVISIBLE);
+    
+            }
+        });
     }
 
 
@@ -485,10 +398,8 @@ public class EditActivity extends AppCompatActivity {
 
             }
         });
-
-        if (Build.VERSION.SDK_INT >= 11) {
-            name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
+    
+        name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         float radius = name.getTextSize() / 3;
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
         name.getPaint().setMaskFilter(filter);

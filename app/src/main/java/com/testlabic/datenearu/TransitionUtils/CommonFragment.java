@@ -362,6 +362,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         Intent i = new Intent(getActivity(), ClickedUser.class);
         i.putExtra(Constants.clickedUid, sendersUid);
         i.putExtra(Constants.imageUrl, imageUrl);
+        i.putExtra(Constants.isBlur, isBlur);
         startActivity(i);
     }
     

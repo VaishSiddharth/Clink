@@ -14,10 +14,12 @@ import com.testlabic.datenearu.Fragments.multipleImages;
 public class View_Pager_Adapter extends FragmentStatePagerAdapter {
   
     String imageUrl;
+    Boolean isBlur;
     
-    public View_Pager_Adapter(FragmentManager fm, String imageUrl) {
+    public View_Pager_Adapter(FragmentManager fm, String imageUrl, Boolean isBlur) {
         super(fm);
         this.imageUrl = imageUrl;
+        this.isBlur = isBlur;
     }
     
     @Override
@@ -29,6 +31,7 @@ public class View_Pager_Adapter extends FragmentStatePagerAdapter {
                 ClickedUserImage1 tab1 = new ClickedUserImage1();
                 Bundle bundle= new Bundle();
                 bundle.putString(Constants.imageUrl, imageUrl);
+                bundle.putBoolean(Constants.isBlur, isBlur);
                 tab1.setArguments(bundle);
                 return tab1;
             case 1:

@@ -75,12 +75,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="horizontal"
-                    android:padding="7dp"
+                    android:padding="0dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_height="wrap_content">
 
                     <customfonts.MyTextView_SF_Pro_Display_Medium
                         android:layout_width="wrap_content"
-                        android:text="Blur profile"
+                        android:text="Blur profile (4 days remaining)"
                         android:textColor="#3b3b3b"
                         android:textSize="18sp"
                         android:layout_weight="5"
