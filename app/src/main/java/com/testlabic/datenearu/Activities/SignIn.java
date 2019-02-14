@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.Activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -41,6 +43,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.race604.drawable.wave.WaveDrawable;
 import com.testlabic.datenearu.MainSliderAdapter;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
@@ -65,6 +68,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     CallbackManager callbackManager;
     LoginButton loginButton;
     Slider slider;
+    ImageView imageView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,16 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         setContentView(R.layout.activity_signin);
         setupWindowAnimations();
         mAuth = FirebaseAuth.getInstance();
+        imageView=findViewById(R.id.test);
+        Drawable mWaveDrawable = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mWaveDrawable = new WaveDrawable(getDrawable(R.drawable.logoapp1));
+        }
+        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(70);
+        ((WaveDrawable) mWaveDrawable).setWaveLength(700);
+        ((WaveDrawable) mWaveDrawable).setWaveSpeed(1);
+        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
+        imageView.setImageDrawable(mWaveDrawable);
         progressBar = findViewById(R.id.google_progress);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             

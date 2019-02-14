@@ -86,5 +86,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-firestore:18.0.1'
 
+    implementation 'com.race604.waveloading:library:1.1.1'
+
 }
 apply plugin: 'com.google.gms.google-services'
