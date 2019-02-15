@@ -48,25 +48,26 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="10dp">
 
             <customfonts.BrushFlowFont
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginRight="2dp"
                 android:id="@+id/points"
                 android:text="NA"
                 android:textColor="@color/appcolor"
                 android:textSize="12sp" />
-        </RelativeLayout>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/bottle_8"/>
+        </LinearLayout>
 
 
     </android.support.v7.widget.Toolbar>
