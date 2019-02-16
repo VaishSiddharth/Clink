@@ -65,4 +65,6 @@ public class Constants {
     public static String setupQuestions = "setUpQuestions";
     public static String moveToLocationActivity = "moveToLocationActivity";
     public static String timeStamp = "timeStamp";
+    public static String imageUrl2 = "imageUrl2";
+    public static String imageUrl3 = "imageUrl3";
 }

@@ -64,7 +64,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     private GoogleApiClient mGoogleApiClient;
     LinearLayout googleSignIn;
     LinearLayout facebookSignIn;
-   GoogleProgressBar progressBar;
+    GoogleProgressBar progressBar;
     CallbackManager callbackManager;
     LoginButton loginButton;
     Slider slider;

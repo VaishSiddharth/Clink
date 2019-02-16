@@ -26,12 +26,12 @@ import jp.wasabeef.blurry.Blurry;
 public class ClickedUserImage1 extends Fragment {
     
     private static final String TAG = ClickedUserImage1.class.getSimpleName();
+    String imageUrl;
     
     public ClickedUserImage1() {
         // Required empty public constructor
     }
     
-    String imageUrl;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,13 +39,13 @@ public class ClickedUserImage1 extends Fragment {
         final ImageView imageView = view.findViewById(R.id.photos);
         if (getArguments() != null) {
             imageUrl = getArguments().getString(Constants.imageUrl);
-            Boolean isBlur = getArguments().getBoolean(Constants.isBlur);
-            Log.e(TAG, "Image url : "+imageUrl);
-            if(!isBlur)
+            boolean isBlur = getArguments().getBoolean(Constants.isBlur);
+            Log.e(TAG, "Image url : reached here "+imageUrl);
+            //if(!isBlur)
             Glide.with(getContext()).load
                     ( imageUrl).into(imageView);
     
-            else
+           // else
             {
                 Glide.with(getContext()).load
                         ( imageUrl).listener(new RequestListener<Drawable>() {

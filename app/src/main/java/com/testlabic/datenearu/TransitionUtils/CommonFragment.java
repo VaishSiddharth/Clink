@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
@@ -52,19 +53,25 @@ import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
 
 /**
- * Created by xmuSistone on 2016/9/18.
+ * Created by velox on 2019/01/18.
  */
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
     private static final String TAG = CommonFragment.class.getSimpleName();
     private ImageView imageView;
     private TextView name, age, oneLine;
     FloatingActionButton message, like;
+    ShineButton like_shine;
     RapidFloatingActionButton match;
-    private String imageUrl, nameS, ageS, sendersUid, oneLineS, gender;
+    private String imageUrl;
+    private String nameS;
+    private String ageS;
+    private String sendersUid;
+    private String oneLineS;
     DatabaseReference referenceDMIds;
     ChildEventListener childEventListener;
     Boolean isDmAllowed = true;
     Boolean isBlur = false;
+    Boolean likedOnce = false;
     KonfettiView konfettiView;
     
     @Nullable
@@ -79,38 +86,40 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         age = rootView.findViewById(R.id.age);
         oneLine = rootView.findViewById(R.id.oneLine);
         message = rootView.findViewById(R.id.message_fab);
-        like = rootView.findViewById(R.id.like_fab);
+        //like = rootView.findViewById(R.id.like_fab);
+        like_shine = rootView.findViewById(R.id.like_shiny);
         konfettiView = rootView.findViewById(R.id.viewKonfetti);
-        
-        like.setOnClickListener(new View.OnClickListener() {
+        like_shine.init(getActivity());
+        like_shine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //show only first time!
-                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                boolean isFirstTime = sharedPreferences.getBoolean("firstLikeInfo", true);
-                if(isFirstTime)
-                {
-                    SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
-                            .setTitleText("How it works?")
-                            .setContentText("When you like someone, we don't tell them that, but if they like you back, it'll be a match!")
-                            .setConfirmButton("ok, like!", new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    sweetAlertDialog.dismiss();
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putBoolean("firstLikeInfo", false).apply();
-                                    executeLikeFunction();
-                                }
-                            });
-                    alertDialog.show();
-                    Button btn = alertDialog.findViewById(R.id.confirm_button);
-                    btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+                if (!likedOnce) {
+                    final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    
+                    boolean isFirstTime = sharedPreferences.getBoolean("firstLikeInfo", true);
+                    if (isFirstTime) {
+                        SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                                .setTitleText("How it works?")
+                                .setContentText("When you like someone, we don't tell them that, but if they like you back, it'll be a match!")
+                                .setConfirmButton("ok, like!", new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        sweetAlertDialog.dismiss();
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putBoolean("firstLikeInfo", false).apply();
+                                        executeLikeFunction();
+                                    }
+                                });
+                        alertDialog.show();
+                        Button btn = alertDialog.findViewById(R.id.confirm_button);
+                        btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+                    } else {
+                        executeLikeFunction();
+                        Toast.makeText(getActivity(), "Liked!", Toast.LENGTH_SHORT).show();
+                    }
+                    likedOnce = true;
                 }
-                else {
-                    executeLikeFunction();
-                    Toast.makeText(getActivity(), "Liked!", Toast.LENGTH_SHORT).show();
-                }
-               
             }
         });
         message.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +180,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     
                                      konfettiView.build()
-                                    .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                                    .addColors(Color.BLUE, Color.GREEN, Color.MAGENTA)
                                     .setDirection(0.0, 359.0)
                                     .setSpeed(1f, 5f)
                                     .setFadeOutEnabled(true)
@@ -183,8 +192,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                 }
     
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
-                                        .setTitleText("Confirm Match?")
-                                        .setContentText("Congrats, S/he already likes you, its a match!")
+                                        .setTitleText("Confirm Cheers?")
+                                        .setContentText("Congrats, S/he already likes you, its a cheers!")
                                         .setConfirmButton("Sure", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -372,7 +381,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.ageS = "" + user.getNumeralAge();
         this.sendersUid = user.getUid();
         this.oneLineS = user.getOneLine();
-        this.gender = user.getGender();
+        String gender = user.getGender();
         this.isBlur = user.getIsBlur();
         //Log.e(TAG, "The user is "+user.getUid());
     }

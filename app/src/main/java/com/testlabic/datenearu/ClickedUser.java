@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,7 +46,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private static final String TAG = ClickedUser.class.getSimpleName();
     ImageView f1;
     boolean first = true;
-    String imageUrl;
+    String imageUrl, imageUrl2, imageUrl3;
     private TextView name, about, age;
     private ViewPager viewPager;
     private CircleIndicator circleIndicator;
@@ -54,6 +55,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private TextView attemptMatch;
     private Boolean comingFromNotif = false;
     private Boolean isBlur = false;
+    
     public interface onImageUrlReceivedListener {
         void onDataReceived(String imageUrl);
     }
@@ -66,35 +68,26 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         f1 = findViewById(R.id.f1);
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
-        imageUrl = getIntent().getStringExtra(Constants.imageUrl);
         comingFromNotif = getIntent().getBooleanExtra(Constants.comingFromNotif, false);
         isBlur = getIntent().getBooleanExtra(Constants.isBlur, false);
         
-        
         if (clickedUid != null)
             setUpDetails();
-        
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         circleIndicator = (CircleIndicator) findViewById(R.id.circleindicator);
         attemptMatch = findViewById(R.id.attempt_match);
         name = findViewById(R.id.name);
         about = findViewById(R.id.about);
-        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl, isBlur);
-        viewPager.setAdapter(view_pager_adapter);
-        circleIndicator.setViewPager(viewPager);
-        // view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
+        //
         
-        if(!comingFromNotif)
-        {
+        if (!comingFromNotif) {
             attemptMatch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showDialog();
                 }
             });
-        }
-        else
-        {
+        } else {
             attemptMatch.setText("Accept!");
             attemptMatch.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,7 +97,6 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
             });
         }
     }
-    
     
     private void ShowAConfirmationDialog(final String uid) {
         new SweetAlertDialog(ClickedUser.this, SweetAlertDialog.NORMAL_TYPE)
@@ -133,10 +125,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     }
     
     private void acceptRequest(String item, final SweetAlertDialog sDialog) {
-        if(item!=null)
-        
-        {
-            final DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+        if (item != null) {
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(Constants.uid)
                     .child(Constants.contacts)
@@ -149,8 +139,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     
-                    if(dataSnapshot.getValue()!=null)
-                    {
+                    if (dataSnapshot.getValue() != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
                             ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine(), null);
@@ -171,8 +160,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
             Similarly setup contact for the other user
              */
             
-            
-            final DatabaseReference ref2  = FirebaseDatabase.getInstance().getReference()
+            final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(item)
                     .child(Constants.contacts)
@@ -185,8 +173,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     
-                    if(dataSnapshot.getValue()!=null)
-                    {
+                    if (dataSnapshot.getValue() != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
                             ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine(), null);
@@ -200,7 +187,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                             .setConfirmClickListener(null)
                                             .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                     
-                                    Handler h= new Handler();
+                                    Handler h = new Handler();
                                     h.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -222,10 +209,9 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         }
     }
     
-    
     private void showDialog() {
         
-      SweetAlertDialog alertDialog =  new SweetAlertDialog(this)
+        SweetAlertDialog alertDialog = new SweetAlertDialog(this)
                 .setTitleText("Attempt match?")
                 .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue")
                 .setConfirmText("Yes!")
@@ -259,7 +245,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                                 sDialog
                                                         .setTitleText("Starting!")
                                                         .setContentText("Best of luck!")
-                                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                                 
                                                 Handler handler = new Handler();
                                                 handler.postDelayed(new Runnable() {
@@ -298,9 +284,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     
     }
     
-    
     private void setUpDetails() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(clickedUid);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo).child(clickedUid);
         
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -319,8 +304,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                     }
                     //blur image and name if isBlur
                     if (user != null) {
-                        if(user.getIsBlur())
-                        {
+                        if (user.getIsBlur()) {
                             name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                             float radius = name.getTextSize() / 3;
                             BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
@@ -328,10 +312,21 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         }
                         
                     }
-    
+                    
+                    //setupImages now
+                    if (user != null) {
+                        imageUrl = user.getImage1();
+                        imageUrl2 = user.getImage2();
+                        imageUrl3 = user.getImage3();
+                        //Log.e(TAG, imageUrl+ " "+ imageUrl2);
+                        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl, imageUrl2, imageUrl3, isBlur);
+                        viewPager.setAdapter(view_pager_adapter);
+                        circleIndicator.setViewPager(viewPager);
+                        view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
+                    }
+                    
                 }
                 
-             
             }
             
             @Override

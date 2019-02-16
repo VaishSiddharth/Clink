@@ -1,30 +1,70 @@
 package com.testlabic.datenearu.Fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by wolfsoft4 on 21/8/18.
  */
 
 public class multipleImages extends Fragment {
+    
+    String imageUrl;
+    
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.productfragment,container,false);
-        ImageView imageView = view.findViewById(R.id.photos);
-        Glide.with(getContext()).load("https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/26991739_1209360915834040_19867583266844739_n.jpg?alt=media&token=1cdfbd9e-9faa-4cf9-89f6-b6972fdd3ffa")
-                .into(imageView);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view=inflater.inflate(R.layout.fragment_clicked_user_image1,container,false);
+        final ImageView imageView = view.findViewById(R.id.photos);
+        if (getArguments() != null) {
+            imageUrl = getArguments().getString(Constants.imageUrl);
+            boolean isBlur = getArguments().getBoolean(Constants.isBlur);
+           // Log.e(TAG, "Image url : "+imageUrl);
+            if(!isBlur)
+                Glide.with(getContext()).load
+                        ( imageUrl).into(imageView);
+        
+            else
+            {
+                Glide.with(getContext()).load
+                        ( imageUrl).listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+                
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    
+                        Blurry.with(getActivity())
+                                .capture(imageView)
+                                .into((ImageView) imageView);
+                        return true;
+                    }
+                }).into(imageView);
+            
+            }
+        
+        }
         return view;
     }
 }
