@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginRight="10dp">
+            android:layout_marginRight="5dp">
 
             <customfonts.BrushFlowFont
                 android:layout_gravity="center"
@@ -63,6 +63,7 @@
                 android:textColor="@color/appcolor"
                 android:textSize="12sp" />
             <ImageView
+                android:id="@+id/fill_bottle"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"

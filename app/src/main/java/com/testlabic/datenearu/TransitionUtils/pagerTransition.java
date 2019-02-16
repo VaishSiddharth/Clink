@@ -98,7 +98,7 @@ public class pagerTransition extends Fragment {
     private LatLong currentUsersLatLong;
     private ModelPrefs prefs;
     private TextView points;
-    private ImageView hideAd;
+    private ImageView hideAd,bottle;
     DatabaseReference ref;
     private ChildEventListener childEventListener;
     public pagerTransition() {
@@ -122,6 +122,7 @@ public class pagerTransition extends Fragment {
         hideAd = rootView.findViewById(R.id.hideAd);
         changeLocation = rootView.findViewById(R.id.changeLocation);
         points = rootView.findViewById(R.id.points);
+        bottle=rootView.findViewById(R.id.fill_bottle);
         Constants.uid = FirebaseAuth.getInstance().getUid();
         if(Constants.uid!=null)
             setUpPoints();
@@ -229,6 +230,78 @@ public class pagerTransition extends Fragment {
                     int current = modelSubscr.getXPoints();
                     String set = String.valueOf(current)+" drops";
                     points.setText(set);
+
+                    //code for bottle image
+
+
+                    if(current>=0&&current<=50){
+                        int resID = getContext().getResources().getIdentifier("bottle_1" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>50&&current<=100){
+                        int resID = getContext().getResources().getIdentifier("bottle_2" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>100&&current<=150){
+                        int resID = getContext().getResources().getIdentifier("bottle_3" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>150&&current<=200){
+                        int resID = getContext().getResources().getIdentifier("bottle_4" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>250&&current<=300){
+                        int resID = getContext().getResources().getIdentifier("bottle_5" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>350&&current<=400){
+                        int resID = getContext().getResources().getIdentifier("bottle_6" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>450&&current<=500){
+                        int resID = getContext().getResources().getIdentifier("bottle_7" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>550&&current<=600){
+                        int resID = getContext().getResources().getIdentifier("bottle_8" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>650&&current<=700){
+                        int resID = getContext().getResources().getIdentifier("bottle_9" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>750&&current<=800){
+                        int resID = getContext().getResources().getIdentifier("bottle_10" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>850&&current<=900){
+                        int resID = getContext().getResources().getIdentifier("bottle_11" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>950&&current<=1000){
+                        int resID = getContext().getResources().getIdentifier("bottle_12" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>1050&&current<=1100){
+                        int resID = getContext().getResources().getIdentifier("bottle_13" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>1150&&current<=1200){
+                        int resID = getContext().getResources().getIdentifier("bottle_14" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else if(current>1250&&current<=1300){
+                        int resID = getContext().getResources().getIdentifier("bottle_15" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+                    else{
+                        int resID = getContext().getResources().getIdentifier("bottle_16" , "drawable", getContext().getPackageName());
+                        bottle.setImageResource(resID);
+                    }
+
+
+
+
                     
                     points.setOnClickListener(new View.OnClickListener() {
                         @Override
