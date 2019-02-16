@@ -29,6 +29,7 @@ import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewQuestionUtils.QuestionSetup;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
+import com.testlabic.datenearu.PaperOnboardingActivity;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 
                 if (firebaseAuth.getCurrentUser() == null) {
-                    startActivity(new Intent(MainActivity.this, SignIn.class));
+                    startActivity(new Intent(MainActivity.this, PaperOnboardingActivity.class));
                     finish();
                 }
                 else {

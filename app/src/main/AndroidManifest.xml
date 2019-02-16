@@ -27,6 +27,7 @@
         tools:replace="android:icon">
         <activity android:name=".AttemptMatchUtils.QuestionsAttemptActivity"></activity>
         <activity android:name=".Activities.EditActivity" />
+        <activity android:name=".PaperOnboardingActivity"/>
         <activity android:name=".Activities.SignIn" />
         <activity android:name=".Login" />
         <activity
