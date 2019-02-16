@@ -234,7 +234,7 @@ public class pagerTransition extends Fragment {
                     //code for bottle image
 
 
-                    if(current>=0&&current<=50){
+                    /*if(current>=0&&current<=50){
                         int resID = getContext().getResources().getIdentifier("bottle_1" , "drawable", getContext().getPackageName());
                         bottle.setImageResource(resID);
                     }
@@ -297,7 +297,7 @@ public class pagerTransition extends Fragment {
                     else{
                         int resID = getContext().getResources().getIdentifier("bottle_16" , "drawable", getContext().getPackageName());
                         bottle.setImageResource(resID);
-                    }
+                    }*/
 
 
 
