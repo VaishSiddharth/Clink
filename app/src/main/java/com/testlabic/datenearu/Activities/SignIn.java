@@ -1,7 +1,6 @@
 package com.testlabic.datenearu.Activities;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -11,7 +10,6 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -43,18 +41,13 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
-import com.race604.drawable.wave.WaveDrawable;
-import com.testlabic.datenearu.MainSliderAdapter;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
-import com.testlabic.datenearu.PicassoImageLoadingService;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.Arrays;
 import java.util.HashMap;
-
-import ss.com.bannerslider.Slider;
 
 public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 48;
@@ -67,43 +60,25 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     GoogleProgressBar progressBar;
     CallbackManager callbackManager;
     LoginButton loginButton;
-    Slider slider;
-    ImageView imageView;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
         setupWindowAnimations();
         mAuth = FirebaseAuth.getInstance();
-        imageView=findViewById(R.id.test);
-        Drawable mWaveDrawable = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            mWaveDrawable = new WaveDrawable(getDrawable(R.drawable.logoapp1));
-        }
-        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(70);
-        ((WaveDrawable) mWaveDrawable).setWaveLength(700);
-        ((WaveDrawable) mWaveDrawable).setWaveSpeed(1);
-        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
-        imageView.setImageDrawable(mWaveDrawable);
         progressBar = findViewById(R.id.google_progress);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            
+
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-
-        //banner
-        Slider.init(new PicassoImageLoadingService(this));
-        slider = findViewById(R.id.banner_slider1);
-        slider.setAdapter(new MainSliderAdapter());
-
         /* code for signIN */
 
         /*
         Initialize views
          */
-        
+
         /*TextView privacyPolicy = findViewById(R.id.privacy);
         privacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +89,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 startActivity(i);
             }
         });*/
-        
+
         googleSignIn = findViewById(R.id.gmail);
         facebookSignIn = findViewById(R.id.facebook);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -126,7 +101,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(com.google.android.gms.auth.api.Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-        
+
         /*google signIN*/
         googleSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,12 +134,12 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     handleFacebookAccessToken(loginResult.getAccessToken(), profile);
                 }
             }
-            
+
             @Override
             public void onCancel() {
                 // App code
             }
-            
+
             @Override
             public void onError(FacebookException exception) {
                 // App code
@@ -177,7 +152,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             }
         });
     }
-    
+
     private void handleFacebookAccessToken(AccessToken token, final Profile profile) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -186,11 +161,11 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            
+
                             /*
                             Call manual fix to update the photo of user
                              */
-                            
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             Boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
@@ -206,19 +181,19 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     uploadQuestions(mCurrentUser.getUid());
                                 }
                                 progressBar.setVisibility(View.INVISIBLE);
-    
+
                                 startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                 finish();
-                                
+
                             } else {
                                     /*
                                     move to main activity
                                      */
                                 progressBar.setVisibility(View.INVISIBLE);
-    
+
                                 startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                 finish();
-                                
+
                             }
                         } else {
                             // If sign in fails, display a message to the user.
@@ -230,28 +205,28 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     }
                 });
     }
-    
+
     private void updateDatabaseWithUser(FirebaseUser mCurrentUser, GoogleSignInAccount account, Profile profile) {
-        
+
         String firstName = null;
         String lastName = null;
-        
+
         if(account!=null)
         {
             firstName = account.getGivenName();
             lastName = account.getFamilyName();
         }
-       if(profile!=null)
+        if(profile!=null)
         {
             firstName = profile.getFirstName();
             lastName = profile.getLastName();
         }
         ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
                 , "20", null, null, null, mCurrentUser.getUid(), lastName, -1);
-        
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
-        
+
         reference.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -259,23 +234,23 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 finish();
             }
         });
-        
+
         // add 500 xPoints for a new user!
         HashMap<String, Object> updatePoints = new HashMap<>();
         updatePoints.put(Constants.xPoints, 500);
-        
+
         DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                 .child(mCurrentUser.getUid());
         xPointsRef.updateChildren(updatePoints);
     }
-    
+
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-    
+
     private String modifiedImageUrl() {
-    
+
         /*
         update user's profile first
          */
@@ -285,7 +260,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
                 Log.e(TAG, "The providerID is " + user.getProviderId());
                 if (user.getProviderId().equals("google.com")) {
-                    
+
                     assert currentUser != null;
                     if (currentUser.getPhotoUrl() != null) {
                         String url = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString();
@@ -304,7 +279,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 }
                             });
                 } else if (user.getProviderId().equals("facebook.com")) {
-                  
+
                     String facebookUserId = "";
                     // find the Facebook profile and get the user's id
                     for (UserInfo profile : currentUser.getProviderData()) {
@@ -337,7 +312,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         }
         return modifiedImageUrl;
     }
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -352,12 +327,12 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             handleSignInResult(result);
         }
     }
-    
+
     private void handleSignInResult(final GoogleSignInResult result) {
         if (result.isSuccess()) {
             final GoogleSignInAccount account = result.getSignInAccount();
             assert account != null;
-           progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
             // Toast.makeText(LogInEmail.this , "The information received by the account is " + account.getDisplayName() , Toast.LENGTH_LONG).show();
             final AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             mAuth.signInWithCredential(credential)
@@ -365,7 +340,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                
+
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
@@ -374,37 +349,37 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 //   checkAndUpdateUserInfo(user);
                                 FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                                 if (isnewUser) {
-                                    
+
                                     /*
                                     move to setup the account/profile
                                      */
                                            /*
                                         Call manual fix to update the photo of user
                                             */
-                                    
+
                                     if (mCurrentUser != null) {
                                         updateDatabaseWithUser(mCurrentUser, account, null);
-                                }
+                                    }
                                     progressBar.setVisibility(View.INVISIBLE);
-    
-                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                                    finish();
-                                    
+
+                                    //startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                                    // finish();
+
                                 } else {
                                     /*
                                     move to main activity
                                      */
                                     progressBar.setVisibility(View.INVISIBLE);
-    
+
                                     startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                     finish();
                                     //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
-                                   // finish();
+                                    // finish();
                                 }
                             } else {
                                 // If sign in fails, display a message to the user.
                                 progressBar.setVisibility(View.INVISIBLE);
-    
+
                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
                                 Toast.makeText(SignIn.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
@@ -413,9 +388,9 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     });
         }
     }
-    
+
     private void uploadQuestions(String uid) {
-        
+
        /* for (int i = 0; i < 11; i++) {
             ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bananna", "Apple");
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
@@ -423,23 +398,23 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     .child(String.valueOf(i));
             reference.setValue(question);
         }*/
-        
+
     }
-    
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
-    
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         moveTaskToBack(true);
     }
-    
+
     @Override
     protected void onStop() {
         //if (authStateListener != null)
-         //   mAuth.removeAuthStateListener(authStateListener);
+        //   mAuth.removeAuthStateListener(authStateListener);
         super.onStop();
     }
     private void setupWindowAnimations() {
@@ -450,6 +425,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             getWindow().setExitTransition(slide);
         }
     }
-    
+
 }
 

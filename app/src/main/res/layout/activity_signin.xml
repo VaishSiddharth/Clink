@@ -1,210 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="10"
-    android:layout_gravity="bottom|center"
-    android:gravity="bottom|center"
-    android:background="@drawable/gradient_setupuser_shade"
+    android:background="@drawable/back_si"
     tools:context="com.testlabic.datenearu.Activities.SignIn">
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/logoapp1"
-        android:elevation="4dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:layout_margin="15dp"
-        android:padding="10dp"
-        android:clipToPadding="false">
+        android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="74.7dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            />
 
-        <ss.com.bannerslider.Slider
-            android:id="@+id/banner_slider1"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:slider_animateIndicators="true"
-            app:slider_loopSlides="true"
-            app:slider_interval="3000"/>
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="@color/transparent"
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:translationZ="4dp"
-           >
+            android:layout_marginTop="12.7dp"
+            android:src="@drawable/logo_fliply" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:weightSum="2"
-                android:layout_gravity="center"
-                android:gravity="center">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="0.8"
-                    android:layout_gravity="center"
-                    android:gravity="center">
-
-                </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:layout_weight="1.2"
-                android:gravity="center"
-                android:layout_gravity="center">
-                <customfonts.TextViewSFProDisplayRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="This is a Dating App"
-                    android:textColor="@color/black"
-                    android:textSize="22sp" />
-                <customfonts.TextViewSFProDisplayRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Give it a try"
-                    android:textColor="@color/gray_btn_bg_color"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/google_progress"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:visibility="invisible"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center" />
-    <ImageView
-        android:id="@+id/test"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_margin="5dp">
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentBottom="true">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:padding="10dp"
-                android:layout_margin="10dp"
-                android:id="@+id/facebook"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rect_white"
-                android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            android:paddingTop="10dp"
+            android:id="@+id/facebook"
+            android:paddingBottom="10dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_white"
+            android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="17dp"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/ic_facebook" />
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_facebook" />
 
-                <customfonts.MyTextView_SF_Pro_Display_Medium
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginLeft="1dp"
-                    android:textSize="12sp"
-                    android:text="Continue with Facebook"
-                    android:textColor="#3b3b3b" />
-            </LinearLayout>
-
-            <LinearLayout
+            <customfonts.MyTextView_SF_Pro_Display_Medium
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/gmail"
-                android:padding="12dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/rect_white"
-                android:orientation="horizontal">
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="1dp"
+                android:textSize="12sp"
 
-                <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="16dp"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/ic_search" />
+                android:text="Continue with Facebook"
+                android:textColor="#3b3b3b" />
+        </LinearLayout>
 
-                <customfonts.MyTextView_SF_Pro_Display_Medium
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="1dp"
-                    android:textSize="12sp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="22dp"
+            android:paddingLeft="38dp"
+            android:paddingRight="38dp"
+            android:id="@+id/gmail"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/rect_white"
+            android:orientation="horizontal">
 
-                    android:text="Continue with Google"
-                    android:textColor="#3b3b3b" />
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_search" />
 
-            </LinearLayout>
-
-            <com.facebook.login.widget.LoginButton
-                android:layout_width="wrap_content"
-                android:id="@+id/login_button"
-                android:visibility="gone"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
+            <customfonts.MyTextView_SF_Pro_Display_Medium
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="1dp"
-                android:orientation="horizontal">
+                android:textSize="12sp"
 
-                <View
-                    android:layout_width="50dp"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#33ffffff" />
+                android:text="Continue with Google"
+                android:textColor="#3b3b3b" />
 
-                <customfonts.MyTextView_SF_Pro_Display_Medium
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginRight="9dp"
-                    android:text="or"
-                    android:textColor="#99ffffff"
-                    android:textSize="10sp" />
+        </LinearLayout>
 
-                <View
-                    android:layout_width="50dp"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#33ffffff" />
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
+            android:id="@+id/login_button"
+            android:visibility="gone"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="17dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="#33ffffff" />
+
+            <customfonts.MyTextView_SF_Pro_Display_Medium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:text="or"
+                android:textColor="#99ffffff"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="#33ffffff" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
 
 
@@ -212,8 +142,12 @@
             android:background="@drawable/rect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_margin="10dp"
+            android:paddingLeft="55dp"
+            android:paddingRight="55dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="13dp"
             android:text="Signup with Email"
             android:textSize="12sp"
             android:textColor="#ffffff" />
@@ -222,26 +156,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
-        <customfonts.TextViewSFProDisplayRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Existing user?"
-            android:textSize="11.5sp"
-            android:textColor="#B3ffffff"/>
+            <customfonts.TextViewSFProDisplayRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Existing user?"
+                android:textSize="11.5sp"
+                android:textColor="#B3ffffff"/>
 
-        <customfonts.MyTextView_SF_Pro_Display_Semibold
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Login now"
-            android:layout_marginLeft="9dp"
-            android:textSize="11.5sp"
-            android:textColor="#ffffff"/>
+            <customfonts.MyTextView_SF_Pro_Display_Semibold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login now"
+                android:layout_marginLeft="9dp"
+                android:textSize="11.5sp"
+                android:textColor="#ffffff"/>
+
+        </LinearLayout>
+
+
+
+
+
 
     </LinearLayout>
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+        android:id="@+id/google_progress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        />
 
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
