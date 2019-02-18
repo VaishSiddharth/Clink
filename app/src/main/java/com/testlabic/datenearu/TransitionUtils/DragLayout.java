@@ -76,7 +76,7 @@ public class DragLayout extends FrameLayout {
         bottomView = getChildAt(0);
         topView = getChildAt(1);
     
-        Handler handler = new Handler();
+        /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -84,7 +84,7 @@ public class DragLayout extends FrameLayout {
                     ViewCompat.postInvalidateOnAnimation(DragLayout.this);
                 }
             }
-        }, 1000);
+        }, 1000);*/
         
         topView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -113,6 +113,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:clipToPadding="false"
+        android:background="@drawable/background4"
         android:paddingEnd="48dp"
         android:layout_below="@+id/bestPicks"
         android:paddingLeft="32dp"
