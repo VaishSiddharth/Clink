@@ -4,41 +4,46 @@ import java.util.ArrayList;
 
 public class ModelUser {
     
-    String userName;
-    String userLastName;
-    String imageUrl;
-    String image2;
-    String image3;
-    String image1;
-
+    private String userName;
+    private String userLastName;
+    private String imageUrl;
+    private String image2;
+    private String image3;
+    private String image1;
+    
     public String getImage1() {
         return image1;
     }
-
+    
     public String getImage2() {
         return image2;
     }
-
+    
     public String getImage3() {
         return image3;
     }
-
-    String age;
+    
+    private String age;
     LatLong location;
-    String cityLocation;
-    String about;
-    String cityLabel;
-    ArrayList<ModelQuestion> questions;
-    String uid;
-    int numeralAge;
-    String interestedIn;
-    String dateOfBirth;
-    String gender;
-    String oneLine;
-    String matchAlgo;
-    double matchIndex;
-    boolean isBlur;
-    boolean isQuestionaireComplete;
+    private String cityLocation;
+    private String about;
+    private String cityLabel;
+    
+    public void setQuestions(ArrayList<ModelQuestion> questions) {
+        this.questions = questions;
+    }
+    
+    private ArrayList<ModelQuestion> questions;
+    private String uid;
+    private int numeralAge;
+    private String interestedIn;
+    private String dateOfBirth;
+    private String gender;
+    private String oneLine;
+    private String matchAlgo;
+    private double matchIndex;
+    private boolean isBlur;
+    private boolean isQuestionaireComplete;
     
     public boolean isQuestionaireComplete() {
         return isQuestionaireComplete;
@@ -92,7 +97,7 @@ public class ModelUser {
     }
     
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
-    , String about, String uid, String userLastName, int numeralAge) {
+            , String about, String uid, String userLastName, int numeralAge) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
