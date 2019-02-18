@@ -7,6 +7,7 @@ import android.graphics.BlurMaskFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
@@ -416,7 +417,7 @@ public class EditActivity extends AppCompatActivity {
                     if (user != null && user.getUserName() != null) {
                         name.setText(user.getUserName());
                         age.setText(String.valueOf(user.getNumeralAge()));
-                        Glide.with(EditActivity.this).load(user.getImage1()).into(image1);
+                        Glide.with(EditActivity.this).load(user.getImageUrl()).into(image1);
                         Glide.with(EditActivity.this).load(user.getImage2()).into(image2);
                         Glide.with(EditActivity.this).load(user.getImage3()).into(image3);
                         cityLabel = user.getCityLabel();
@@ -429,6 +430,10 @@ public class EditActivity extends AppCompatActivity {
                            blurProfile();
                         }
                         else blur.setChecked(false);
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(user.getCityLabel()).child(user.getGender()).child(user.getUid());
+                        HashMap<String,Object> update_image_url_city=new HashMap<>();
+                        update_image_url_city.put("imageUrl",user.getImageUrl());
+                        ref2.updateChildren(update_image_url_city);
                     }
 
 

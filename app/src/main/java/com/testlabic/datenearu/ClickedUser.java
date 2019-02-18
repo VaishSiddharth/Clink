@@ -315,7 +315,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                     
                     //setupImages now
                     if (user != null) {
-                        imageUrl = user.getImage1();
+                        imageUrl = user.getImageUrl();
                         imageUrl2 = user.getImage2();
                         imageUrl3 = user.getImage3();
                         Log.e(TAG, imageUrl+ " "+ imageUrl2);
