@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background4"
     tools:context="com.testlabic.datenearu.ClickedUser">
 
     <ScrollView
@@ -92,7 +93,9 @@
                     android:layout_marginTop="21dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="21dp"
-                    android:background="#1A979797" />
+                    android:elevation="4dp"
+                    android:outlineAmbientShadowColor="@color/appcolor"
+                    android:background="@drawable/gradient_setupuser" />
 
                 <customfonts.TextViewSFProDisplayRegular
                     android:id="@+id/about"

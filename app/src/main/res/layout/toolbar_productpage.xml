@@ -7,8 +7,10 @@
     android:background="#00000000">
 
     <ImageView
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:id="@+id/backbutton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="5dp"
         android:src="@drawable/ic_left_arrow"/>
 
 
@@ -23,14 +25,14 @@
         android:visibility="gone"/>
 
     <com.sackcentury.shinebuttonlib.ShineButton
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_gravity="end"
         android:layout_marginRight="20dp"
         android:src="@android:color/darker_gray"
         android:id="@+id/like_shiny1"
-        app:btn_color="@android:color/darker_gray"
-        app:btn_fill_color="@color/appcolor"
+        app:btn_color="@android:color/white"
+        app:btn_fill_color="@color/black"
         app:allow_random_color="false"
         app:enable_flashing="false"
         app:big_shine_color="@color/appcolor"

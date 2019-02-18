@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.Fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.testlabic.datenearu.Activities.EditActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelSubscr;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.ProfileUtils.UploadPhotos;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -240,6 +244,32 @@ public class Profile extends Fragment {
                 Glide.with(getContext()).load(user.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(displayImage);
             }
         }
+
+
+
+
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue(ModelUser.class) != null) {
+                    ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                    if (user != null && user.getUserName() != null) {
+                        Glide.with(getContext()).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(displayImage);
+                        //Glide.with(Profile.this).load(user.getImageUrl()).into(displayImage);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         
     }
     

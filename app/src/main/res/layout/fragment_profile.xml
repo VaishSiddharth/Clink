@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/background4"
    >
 
 
@@ -28,8 +28,8 @@
             android:layout_gravity="center"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/display_image"
-            android:layout_width="85dp"
-            android:layout_height="95.7dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/profile" />
 
         <customfonts.MyTextView_SF_Pro_Display_Bold
@@ -167,7 +167,7 @@
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:background="#eeeef0"
             android:id="@+id/recycler1">
 
         </android.support.v7.widget.RecyclerView>

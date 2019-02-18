@@ -44,7 +44,7 @@ import nl.dionsegijn.konfetti.models.Size;
 public class ClickedUser extends AppCompatActivity implements View.OnClickListener {
     
     private static final String TAG = ClickedUser.class.getSimpleName();
-    ImageView f1;
+    ImageView f1,backbutton;
     boolean first = true;
     String imageUrl, imageUrl2, imageUrl3;
     private TextView name, about, age;
@@ -66,6 +66,13 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_clicked_user);
         
         f1 = findViewById(R.id.f1);
+        backbutton=findViewById(R.id.backbutton);
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
         comingFromNotif = getIntent().getBooleanExtra(Constants.comingFromNotif, false);
