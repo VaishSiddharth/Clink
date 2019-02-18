@@ -40,12 +40,12 @@ public class ClickedUserImage1 extends Fragment {
         if (getArguments() != null) {
             imageUrl = getArguments().getString(Constants.imageUrl);
             boolean isBlur = getArguments().getBoolean(Constants.isBlur);
-            Log.e(TAG, "Image url : reached here "+imageUrl);
-            //if(!isBlur)
+            //Log.e(TAG, "Image url : reached here "+imageUrl);
+            if(!isBlur)
             Glide.with(getContext()).load
                     ( imageUrl).into(imageView);
     
-           // else
+            else
             {
                 Glide.with(getContext()).load
                         ( imageUrl).listener(new RequestListener<Drawable>() {
@@ -56,14 +56,14 @@ public class ClickedUserImage1 extends Fragment {
     
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-    
+
                         Blurry.with(getActivity())
                                 .capture(imageView)
                                 .into((ImageView) imageView);
                         return true;
                     }
                 }).into(imageView);
-    
+
             }
             
         }

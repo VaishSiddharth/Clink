@@ -24,12 +24,13 @@ import jp.wasabeef.blurry.Blurry;
  * A simple {@link Fragment} subclass.
  */
 public class ClickedUserImage2 extends Fragment {
-    
+
     public ClickedUserImage2() {
         // Required empty public constructor
     }
     String imageUrl;
-    
+    private static final String TAG = ClickedUserImage2.class.getSimpleName();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,11 +39,11 @@ public class ClickedUserImage2 extends Fragment {
         if (getArguments() != null) {
             imageUrl = getArguments().getString(Constants.imageUrl);
             boolean isBlur = getArguments().getBoolean(Constants.isBlur);
-           // Log.e(TAG, "Image url : "+imageUrl);
+            //Log.e(TAG, "Image url : "+imageUrl);
             if(!isBlur)
                 Glide.with(getContext()).load
                         ( imageUrl).into(imageView);
-            
+
             else
             {
                 Glide.with(getContext()).load
@@ -51,19 +52,19 @@ public class ClickedUserImage2 extends Fragment {
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
-                    
+
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        
+
                         Blurry.with(getActivity())
                                 .capture(imageView)
                                 .into((ImageView) imageView);
                         return true;
                     }
                 }).into(imageView);
-                
+
             }
-            
+
         }
         return view;
     }

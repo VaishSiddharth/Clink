@@ -50,6 +50,7 @@ public class View_Pager_Adapter extends FragmentStatePagerAdapter {
                 Bundle bundle3= new Bundle();
                 bundle3.putString(Constants.imageUrl, imageUrl3);
                 bundle3.putBoolean(Constants.isBlur, isBlur);
+                tab3.setArguments(bundle3);
                 return tab3;
 
                 default:

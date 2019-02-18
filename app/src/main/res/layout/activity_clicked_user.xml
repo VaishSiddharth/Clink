@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
-
 
 
         <LinearLayout
@@ -27,7 +25,6 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/viewpager"
                     android:layout_width="match_parent"
-
                     android:layout_height="wrap_content" />
 
                 <me.relex.circleindicator.CircleIndicator
@@ -128,62 +125,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="19dp"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp"
                 android:orientation="horizontal">
 
-
-
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <customfonts.MyTextView_SF_Pro_Display_Semibold
+                    android:id="@+id/attempt_match"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView_SF_Pro_Display_Semibold
-                        android:layout_width="0dp"
-
-                        android:layout_weight="1"
-                        android:layout_height="33dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginRight="12dp"
-                        android:background="@drawable/rect_grey"
-                        android:paddingLeft="14dp"
-                        android:paddingTop="7dp"
-                        android:paddingRight="3dp"
-                        android:paddingBottom="7.5dp"
-                        android:text="Message"
-                        android:textColor="#a6a6a6"
-                        android:textSize="12sp" />
-
-                    <customfonts.MyTextView_SF_Pro_Display_Semibold
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginRight="20dp"
-                        android:background="@drawable/rect_blue_border"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:id="@+id/attempt_match"
-                        android:text="Attempt Match"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp" />
-
-
-                </LinearLayout>
-
+                    android:layout_weight="1"
+                    android:background="@drawable/button_4_dialogue"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Attempt Match"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
 
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
-
-
 </LinearLayout>

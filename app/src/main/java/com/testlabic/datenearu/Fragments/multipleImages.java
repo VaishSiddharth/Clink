@@ -28,7 +28,8 @@ import jp.wasabeef.blurry.Blurry;
 public class multipleImages extends Fragment {
     
     String imageUrl;
-    
+    private String TAG=multipleImages.class.getSimpleName();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,7 +39,7 @@ public class multipleImages extends Fragment {
         if (getArguments() != null) {
             imageUrl = getArguments().getString(Constants.imageUrl);
             boolean isBlur = getArguments().getBoolean(Constants.isBlur);
-           // Log.e(TAG, "Image url : "+imageUrl);
+            //Log.e(TAG, "Image url : "+imageUrl);
             if(!isBlur)
                 Glide.with(getContext()).load
                         ( imageUrl).into(imageView);

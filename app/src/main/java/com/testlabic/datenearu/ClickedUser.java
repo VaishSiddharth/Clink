@@ -50,7 +50,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private TextView name, about, age;
     private ViewPager viewPager;
     private CircleIndicator circleIndicator;
-    private View_Pager_Adapter view_pager_adapter;
+    public View_Pager_Adapter view_pager_adapter;
     private String clickedUid;
     private TextView attemptMatch;
     private Boolean comingFromNotif = false;
@@ -318,7 +318,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         imageUrl = user.getImage1();
                         imageUrl2 = user.getImage2();
                         imageUrl3 = user.getImage3();
-                        //Log.e(TAG, imageUrl+ " "+ imageUrl2);
+                        Log.e(TAG, imageUrl+ " "+ imageUrl2);
                         view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl, imageUrl2, imageUrl3, isBlur);
                         viewPager.setAdapter(view_pager_adapter);
                         circleIndicator.setViewPager(viewPager);
