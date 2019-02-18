@@ -59,7 +59,7 @@ public class Constants {
     public static String blockList = "BlockList";
     public static String reportedUsers = "reportedUser";
     public static String comingFromNotif = "comingFromNotif";
-    public static String matchAlgo = "MatchAlgo";
+    public static String matchAlgo = "matchAlgo";
     public static String directConvo = "directConvo";
     public static String isBlur = "isBlur";
     public static String setupQuestions = "setUpQuestions";
@@ -67,4 +67,5 @@ public class Constants {
     public static String timeStamp = "timeStamp";
     public static String imageUrl2 = "imageUrl2";
     public static String imageUrl3 = "imageUrl3";
+    public static String userDetailsOff = "userDetailsOffline";
 }

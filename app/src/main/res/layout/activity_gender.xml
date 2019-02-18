@@ -69,7 +69,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="20dp"
-                android:text="Your Gender?"
+                android:text="Your Gender? ( can't be changed later)"
                 android:textSize="14sp" />
 
             <LinearLayout

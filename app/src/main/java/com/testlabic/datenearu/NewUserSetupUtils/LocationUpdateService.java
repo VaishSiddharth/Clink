@@ -120,8 +120,6 @@ public class LocationUpdateService extends Service
                         });
                     }
                 });
-    
-              
                 
             } catch (IOException e) {
                 e.printStackTrace();

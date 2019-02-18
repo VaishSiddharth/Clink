@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -56,7 +57,7 @@ public class Gender extends Fragment implements BlockingStep {
         dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("In progress")
                 .setContentText(".....");
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         male = rootView.findViewById(R.id.male);
         female = rootView.findViewById(R.id.female);

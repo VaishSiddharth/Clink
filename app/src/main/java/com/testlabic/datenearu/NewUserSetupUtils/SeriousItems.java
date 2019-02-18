@@ -3,6 +3,9 @@ package com.testlabic.datenearu.NewUserSetupUtils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ClipData;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -129,9 +132,13 @@ public class SeriousItems extends Fragment implements BlockingStep {
                 seq += order.get(i);
             
             //Log.e(TAG, "The sequence is "+seq);
+            final String finalSeq = seq;
             reference.setValue(seq).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    SharedPreferences preferences = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Constants.matchAlgo, finalSeq).apply();
                     dialog.hide();
                     callback.goToNextStep();
                 }

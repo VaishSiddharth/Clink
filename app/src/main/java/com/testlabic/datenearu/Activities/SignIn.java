@@ -49,6 +49,8 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 48;
     private static final String TAG = SignIn.class.getSimpleName();
@@ -60,6 +62,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     GoogleProgressBar progressBar;
     CallbackManager callbackManager;
     LoginButton loginButton;
+    SweetAlertDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,11 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         setContentView(R.layout.activity_signin);
         setupWindowAnimations();
         mAuth = FirebaseAuth.getInstance();
+        loadingDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("Loading")
+                .setContentText("Wait a while...");
+        
+        
         progressBar = findViewById(R.id.google_progress);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
@@ -206,8 +214,10 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 });
     }
 
-    private void updateDatabaseWithUser(FirebaseUser mCurrentUser, GoogleSignInAccount account, Profile profile) {
+    private void updateDatabaseWithUser(final FirebaseUser mCurrentUser, GoogleSignInAccount account, Profile profile) {
 
+        loadingDialog.show();
+        
         String firstName = null;
         String lastName = null;
 
@@ -222,7 +232,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             lastName = profile.getLastName();
         }
         ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
-                , "20", null, null, null, mCurrentUser.getUid(), lastName, -1);
+                , "NA", null, null, null, mCurrentUser.getUid(), lastName, -1);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
@@ -230,18 +240,25 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         reference.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                finish();
+                // add 500 xPoints for a new user!
+                HashMap<String, Object> updatePoints = new HashMap<>();
+                updatePoints.put(Constants.xPoints, 500);
+    
+                DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.xPoints)
+                        .child(mCurrentUser.getUid());
+                xPointsRef.updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        loadingDialog.hide();
+                        startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                        finish();
+                    }
+                });
             }
         });
 
-        // add 500 xPoints for a new user!
-        HashMap<String, Object> updatePoints = new HashMap<>();
-        updatePoints.put(Constants.xPoints, 500);
-
-        DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
-                .child(mCurrentUser.getUid());
-        xPointsRef.updateChildren(updatePoints);
+       
     }
 
     private void signIn() {
@@ -344,18 +361,14 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+                                boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                                 Log.e(TAG, "The user is a new user or not " + isnewUser);
                                 //   checkAndUpdateUserInfo(user);
                                 FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                                 if (isnewUser) {
 
-                                    /*
-                                    move to setup the account/profile
-                                     */
-                                           /*
-                                        Call manual fix to update the photo of user
-                                            */
+                                    //move to setup the account/profile
+                                    //Call manual fix to update the photo of user
 
                                     if (mCurrentUser != null) {
                                         updateDatabaseWithUser(mCurrentUser, account, null);

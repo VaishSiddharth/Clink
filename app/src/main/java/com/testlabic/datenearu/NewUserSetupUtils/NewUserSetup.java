@@ -173,8 +173,6 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
                 }
             }, 500);
         }
-    
-    
     }
     
     @Override

@@ -68,7 +68,7 @@ import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class locationUpdater extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks,
+public class locationUpdater extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
     
@@ -82,33 +82,33 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     TextView updatingLocationLabel;
     GoogleProgressBar googleProgressBar;
     LinearLayout myCurrentLocation;
-    
-    
+    SweetAlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_updater);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(locationUpdater.this);
+        SharedPreferences preferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         myCurrentLocation = findViewById(R.id.my_location_ll);
         googleProgressBar = findViewById(R.id.google_progress);
         updatingLocationLabel = findViewById(R.id.updatingLocation);
         listView = findViewById(R.id.listView);
         populateListView();
+        alertDialog = new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("Updating")
+                .setContentText(".......");
         myCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setUpLocationService();
             }
         });
-        
         gender = preferences.getString(Constants.userGender, "male");
-      
     }
     
     private void populateListView() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.cityLabels);
-        list =  new ArrayList<>();
+        list = new ArrayList<>();
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -116,70 +116,66 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 ModelCityLabel label = new ModelCityLabel(cityName, 0);
                 list.add(label);
             }
-    
+            
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+            
             }
-    
+            
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        
+            
             }
-    
+            
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+            
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
         
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            
-            Adapter adapter = new Adapter(locationUpdater.this, list);
-            
-            listView.setAdapter(adapter);
-            
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    
-                    new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
-                            .setTitleText("Updating")
-                            .setContentText(".......")
-                            .show();
+                
+                Adapter adapter = new Adapter(locationUpdater.this, list);
+                
+                listView.setAdapter(adapter);
+                
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        
+                      
+                       
+                                 alertDialog.show();
     
-                    final String[] cityLabel = {list.get(position).getCityLabel()};
+                        final String[] cityLabel = {list.get(position).getCityLabel()};
                         String uid = Constants.uid;
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.userInfo).child(uid);
-        
+                        
                         final HashMap<String, Object> updateCityLabel = new HashMap<>();
+                        cityLabel[0] = cityLabel[0].replace(", ", "_");
                         updateCityLabel.put("cityLabel", cityLabel[0]);
                         
-                    // Check for previous cityLabel, remove from previous city and transfer to new city
-                        reference.child(Constants.cityLabel).addValueEventListener(new ValueEventListener() {
+                        // Check for previous cityLabel, remove from previous city and transfer to new city
+                        reference.child(Constants.cityLabel).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                
-                                if(dataSnapshot.getValue()==null)
-                                {
+                                
+                                if (dataSnapshot.getValue() == null) {
                                     // do nothing else just update the city label;
                                     reference.updateChildren(updateCityLabel);
                                     cityLabel[0] = cityLabel[0].replace(", ", "_");
                                     DuplicateUserInfoToCityLabelNode(cityLabel[0]);
-                                }
-                                else
-                                {
+                                } else {
                                     String previousCityLabel = dataSnapshot.getValue(String.class);
-                                    if(previousCityLabel!=null&&!(previousCityLabel.equals(""))&&!previousCityLabel.equals(cityLabel[0]))
-                                    {
+                                    if (previousCityLabel != null && !(previousCityLabel.equals("")) && !previousCityLabel.equals(cityLabel[0])) {
                                         previousCityLabel = previousCityLabel.replace(", ", "_");
                                         DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
                                                 .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
@@ -199,24 +195,23 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                                     }
                                 }
                             }
+                            
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                
+                            
                             }
                         });
-        
+                        
                         // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
-    
-                  
-                   
-                }
-            });
-            
+                        
+                    }
+                });
+                
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
     }
@@ -230,7 +225,6 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
             Log.e(TAG, "Displaying location settings...");
             displayLocationSettingsRequest(locationUpdater.this);
         }
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(locationUpdater.this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(locationUpdater.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
@@ -238,8 +232,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                 displayLocationSettingsRequest(locationUpdater.this);
                 buildGoogleApiClient();
             }
-        }
-        else {
+        } else {
             displayLocationSettingsRequest(locationUpdater.this);
             buildGoogleApiClient();
         }
@@ -256,7 +249,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        
+      
         
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(2000);
@@ -271,121 +264,122 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
         final Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-       String uid =  FirebaseAuth.getInstance().getUid();
-        if(location!=null && location.getAccuracy()<5000&& uid!=null) {
-    
+        String uid = FirebaseAuth.getInstance().getUid();
+        Constants.uid = uid;
+        if (location != null && location.getAccuracy() < 5000 && uid != null) {
+            alertDialog.show();
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            List<Address> addresses = null;
+            List<Address> addresses;
             try {
                 addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 String cityName = addresses.get(0).getLocality();
                 String stateName = addresses.get(0).getAdminArea();
                 String countryName = addresses.get(0).getCountryName();
-                cityLabel = cityName+", "+stateName+", "+countryName;
-    
+                cityLabel = cityName + ", " + stateName + ", " + countryName;
+                
                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.userInfo).child(uid);
                 
                 final HashMap<String, Object> updateCityLabel = new HashMap<>();
                 updateCityLabel.put("cityLabel", cityLabel);
+                // Check for previous cityLabel, remove from previous city and transfer to new city
                 
-                /*
-                Check for previous cityLabel, remove from previous city and transfer to new city
-                 */
-                
-                reference.child(Constants.cityLabel).addValueEventListener(new ValueEventListener() {
+                reference.child(Constants.cityLabel).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         
-                        if(dataSnapshot.getValue()==null)
-                        {
+                        if (dataSnapshot.getValue() == null) {
                             // do nothing else just update the city label;
                             reference.updateChildren(updateCityLabel);
-                        }
-                        else
-                        {
+                        } else {
                             String previousCityLabel = dataSnapshot.getValue(String.class);
-                            if(previousCityLabel!=null&&!(previousCityLabel.equals(""))&&!previousCityLabel.equals(cityLabel))
-                            {
+                            if (previousCityLabel != null && !(previousCityLabel.equals("")) && !previousCityLabel.equals(cityLabel)) {
                                 previousCityLabel = previousCityLabel.replace(", ", "_");
                                 DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
                                         .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
                                 prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        reference.updateChildren(updateCityLabel);
-                                      }
+                                        Log.v(TAG, "previous citylabel ref set null");
+                                        reference.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                
+                                                LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
+                                                
+                                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.userInfo).child(Constants.uid).child(Constants.location);
+                                                
+                                                reference.setValue(latLong).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            // Duplicate user under the cityLabel node
+                                                            
+                                                            cityLabel = cityLabel.replace(", ", "_");
+                                                            DuplicateUserInfoToCityLabelNode(cityLabel);
+                                                            Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
                                 });
                             }
                         }
                     }
+                    
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+                    
                     }
                 });
                 
-               // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
-               
+                // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
                 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-           
             
-            LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
-    
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.userInfo).child(uid).child(Constants.location);
-    
-            reference.setValue(latLong).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                          // Duplicate user under the cityLabel node
-                          
-                        cityLabel = cityLabel.replace(", ", "_");
-                        DuplicateUserInfoToCityLabelNode(cityLabel);
-                        Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
-                        /*
-                        change the city label on main screen
-                         */
-                    }
-                }
-            });
         }
-
         
     }
     
     private void DuplicateUserInfoToCityLabelNode(final String cityLabel) {
         
-        if(cityLabel!=null)
-        {
+        if (cityLabel != null) {
             DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
                     .child(Constants.uid);
             refInit.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getValue(ModelUser.class)!=null)
-                    {
+                    if (dataSnapshot.getValue(ModelUser.class) != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                        String gender = user.getGender();
-                        DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
-                                .child(cityLabel).child(gender).child(Constants.uid);
-                        refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(locationUpdater.this);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString(Constants.cityLabel, cityLabel).apply();
-                                finish();
-                            }
-                        });
+                        String gender;
+                        if (user != null) {
+                            user.setQuestions(null);
+                            gender = user.getGender();
+                            DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
+                                    .child(cityLabel).child(gender).child(Constants.uid);
+                            refFin.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    //update_offline_location
+                                    SharedPreferences preferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString(Constants.cityLabel, cityLabel).apply();
+                                    Log.v(TAG, "Updated citylabel offline!");
+                                    if(alertDialog!=null)
+                                    alertDialog.hide();
+                                    finish();
+                                }
+                            });
+                        }
+                        
                     }
                 }
-    
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
@@ -404,7 +398,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         locationRequest.setFastestInterval(1500);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
-        PendingResult<LocationSettingsResult> result = LocationServices.    SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
         result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
             @Override
             public void onResult(LocationSettingsResult result) {
@@ -415,7 +409,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-    
+                        
                         try {
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
@@ -432,7 +426,6 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         });
     }
     
-    
     @Override
     public void onConnectionSuspended(int i) {
     
@@ -447,18 +440,17 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
     public void onLocationChanged(Location location) {
         
         String uid = FirebaseAuth.getInstance().getUid();
-        if(location!=null && location.getAccuracy()<3000 && uid!=null) {
-        
+        if (location != null && location.getAccuracy() < 3000 && uid != null) {
+            
             LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
-        
+            
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo).child(uid).child(Constants.location);
-        
+            
             reference.setValue(latLong).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
+                    if (task.isSuccessful()) {
                         finish();
                         /*
                         change the city label on main screen
@@ -466,10 +458,7 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
                     }
                 }
             });
-        }
-        else
-        if(location!=null&&location.getAccuracy()>3000)
-        {
+        } else if (location != null && location.getAccuracy() > 3000) {
             Toast.makeText(locationUpdater.this, "Waiting for accurate location...", Toast.LENGTH_SHORT).show();
         }
     }
@@ -483,44 +472,40 @@ public class locationUpdater extends AppCompatActivity implements  GoogleApiClie
         }
     }
     
-    private class Adapter extends BaseAdapter
-    {
+    private class Adapter extends BaseAdapter {
         Context context;
         ArrayList<ModelCityLabel> list;
-    
+        
         public Adapter(Context context, ArrayList<ModelCityLabel> list) {
             this.context = context;
             this.list = list;
         }
-    
+        
         @Override
         public int getCount() {
             return list.size();
         }
-    
+        
         @Override
         public ModelCityLabel getItem(int position) {
             return list.get(position);
         }
-    
+        
         @Override
         public long getItemId(int position) {
             return 0;
         }
-    
+        
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-           if(convertView == null)
-           {
-               convertView = LayoutInflater.from(context).inflate(R.layout.sample_citylables, null);
-           }
-           
-           TextView cityLabel = convertView.findViewById(R.id.cityName);
-           
-           cityLabel.setText(getItem(position).getCityLabel().replace("_",", "));
-           
-           
-           return convertView;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.sample_citylables, null);
+            }
+            
+            TextView cityLabel = convertView.findViewById(R.id.cityName);
+            
+            cityLabel.setText(getItem(position).getCityLabel().replace("_", ", "));
+            return convertView;
         }
     }
 }

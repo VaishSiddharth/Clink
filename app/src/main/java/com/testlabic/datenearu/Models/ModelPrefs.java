@@ -5,7 +5,7 @@ public class ModelPrefs {
     private double distanceLimit;
     private int minAge;
     private int maxAge;
-    String preferedGender;
+    private String preferedGender;
     
     public ModelPrefs(double distanceLimit, int minAge, int maxAge, String preferedGender) {
         this.distanceLimit = distanceLimit;
