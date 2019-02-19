@@ -1,9 +1,11 @@
 package com.testlabic.datenearu.TransitionUtils;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -40,16 +42,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.startapp.android.publish.ads.banner.Banner;
-import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Activities.SignIn;
+import com.testlabic.datenearu.ArchitectureUtils.ViewModels.CityLabelModel;
+import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PointLabelModel;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelPrefs;
@@ -65,8 +61,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -107,12 +101,17 @@ public class pagerTransition extends Fragment {
         // Required empty public constructor
     }
     
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        
+    }
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         
-        // 1. 沉浸式状态栏
-        //viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+       
         rootView = inflater.inflate(R.layout.activity_pager_transition, viewPager, false);
         if (Constants.uid != null)
             fetchPreferences();
@@ -135,7 +134,6 @@ public class pagerTransition extends Fragment {
                 startActivity(new Intent(getActivity(), locationUpdater.class));
             }
         });
-        initImageLoader();
         downloadList();
         
         if (!sharedPreferences.getBoolean(Constants.shownShowCaser, false))
@@ -156,6 +154,29 @@ public class pagerTransition extends Fragment {
             }
         });
         setShowcaseView();
+        
+        //setupCityLabelLocation
+    
+        // Obtain a new or prior instance of HotStockViewModel from the
+        // ViewModelProviders utility class.
+        CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
+    
+        LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
+        
+        liveData.observe(this, new Observer<DataSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                    if(dataSnapshot!=null)
+                    {
+                        Log.e(TAG, "Setting value using architecture "+ dataSnapshot.getValue());
+                        if (dataSnapshot.getValue() != null) {
+                            String value = dataSnapshot.getValue(String.class);
+                            changeLocation.setText(value);
+                        }
+                    }
+            }
+        });
+    
         return rootView;
         
     }
@@ -221,102 +242,82 @@ public class pagerTransition extends Fragment {
     }
     
     private void setUpPoints() {
-        DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.xPoints)
-                .child(Constants.uid);
-        xPointsRef.addValueEventListener(new ValueEventListener() {
+        PointLabelModel viewModel =  ViewModelProviders.of(this).get(PointLabelModel.class);
+        LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
+        
+        liveData.observe(this, new Observer<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                
-                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                ModelSubscr modelSubscr = null;
+                if (dataSnapshot != null) {
+                    modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                }
                 if (modelSubscr != null) {
                     int current = modelSubscr.getXPoints();
                     String set = String.valueOf(current) + " drops";
                     points.setText(set);
-                    
+        
                     //code for bottle image
-
-
-                    /*if(current>=0&&current<=50){
-                        int resID = getContext().getResources().getIdentifier("bottle_1" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                    if(current>=0&&current<=50){
+                        bottle.setImageResource(R.drawable.bottle_1);
                     }
                     else if(current>50&&current<=100){
-                        int resID = getContext().getResources().getIdentifier("bottle_2" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_2);
                     }
                     else if(current>100&&current<=150){
-                        int resID = getContext().getResources().getIdentifier("bottle_3" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_3);
                     }
                     else if(current>150&&current<=200){
-                        int resID = getContext().getResources().getIdentifier("bottle_4" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_5);
                     }
                     else if(current>250&&current<=300){
-                        int resID = getContext().getResources().getIdentifier("bottle_5" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_5);
                     }
                     else if(current>350&&current<=400){
-                        int resID = getContext().getResources().getIdentifier("bottle_6" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_6);
                     }
                     else if(current>450&&current<=500){
-                        int resID = getContext().getResources().getIdentifier("bottle_7" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_7);
                     }
                     else if(current>550&&current<=600){
-                        int resID = getContext().getResources().getIdentifier("bottle_8" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_8);
                     }
                     else if(current>650&&current<=700){
-                        int resID = getContext().getResources().getIdentifier("bottle_9" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_9);
                     }
                     else if(current>750&&current<=800){
-                        int resID = getContext().getResources().getIdentifier("bottle_10" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_10);
                     }
                     else if(current>850&&current<=900){
-                        int resID = getContext().getResources().getIdentifier("bottle_11" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_11);
                     }
                     else if(current>950&&current<=1000){
-                        int resID = getContext().getResources().getIdentifier("bottle_12" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_12);
                     }
                     else if(current>1050&&current<=1100){
-                        int resID = getContext().getResources().getIdentifier("bottle_13" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_13);
                     }
                     else if(current>1150&&current<=1200){
-                        int resID = getContext().getResources().getIdentifier("bottle_14" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_14);
                     }
                     else if(current>1250&&current<=1300){
-                        int resID = getContext().getResources().getIdentifier("bottle_15" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
+                        bottle.setImageResource(R.drawable.bottle_15);
                     }
                     else{
-                        int resID = getContext().getResources().getIdentifier("bottle_16" , "drawable", getContext().getPackageName());
-                        bottle.setImageResource(resID);
-                    }*/
-                    
+                        bottle.setImageResource(R.drawable.bottle_16);
+                    }
+        
                     points.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            
+                
                             startActivity(new Intent(getActivity(), PurchasePacks.class));
                         }
                     });
                 }
             }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
         });
+        
     }
     
     private void fetchPreferences() {
@@ -681,9 +682,9 @@ public class pagerTransition extends Fragment {
                         if (dataSnapshot.exists()) {
                             curUsersMatchSeq = dataSnapshot.getValue(String.class);
                             if (user.getMatchAlgo() != null) {
+                                editor.putString(Constants.matchAlgo, curUsersMatchSeq).apply();
                                 double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
                                 user.setMatchIndex(s);
-                                editor.putString(Constants.matchAlgo, curUsersMatchSeq).apply();
                                // downloadList();
                             }
                         }
@@ -758,54 +759,7 @@ public class pagerTransition extends Fragment {
         indicatorTv.setText(Html.fromHtml("<font color='#12edf0'>" + currentItem + "</font>  /  " + totalNum));
     }
     
-    @SuppressWarnings("deprecation")
-    private void initImageLoader() {
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-                getActivity())
-                .memoryCacheExtraOptions(480, 800)
-                // default = device screen dimensions
-                .threadPoolSize(3)
-                // default
-                .threadPriority(Thread.NORM_PRIORITY - 1)
-                // default
-                .tasksProcessingOrder(QueueProcessingType.FIFO)
-                // default
-                .denyCacheImageMultipleSizesInMemory()
-                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-                .memoryCacheSize(2 * 1024 * 1024).memoryCacheSizePercentage(13) // default
-                .discCacheSize(50 * 1024 * 1024) // 缓冲大小
-                .discCacheFileCount(100) // 缓冲文件数目
-                .discCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
-                .imageDownloader(new BaseImageDownloader(getActivity())) // default
-                .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
-                .writeDebugLogs().build();
-        
-        // 2.单例ImageLoader类的初始化
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.init(config);
-    }
     
-    private void putValueInchangeLocation() {
-        
-        if (Constants.uid != null) {
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo).child(Constants.uid).child("cityLabel");
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    
-                    if (dataSnapshot.getValue() != null) {
-                        String value = dataSnapshot.getValue(String.class);
-                        changeLocation.setText(value);
-                    }
-                }
-                
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                
-                }
-            });
-        }
-    }
     
     @Override
     public void onAttach(Context context) {
@@ -818,7 +772,6 @@ public class pagerTransition extends Fragment {
         super.onResume();
         if (adapter != null)
             adapter.notifyDataSetChanged();
-        putValueInchangeLocation();
         FirebaseAuth.AuthStateListener stateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

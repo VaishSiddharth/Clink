@@ -56,10 +56,6 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private Boolean comingFromNotif = false;
     private Boolean isBlur = false;
     
-    public interface onImageUrlReceivedListener {
-        void onDataReceived(String imageUrl);
-    }
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

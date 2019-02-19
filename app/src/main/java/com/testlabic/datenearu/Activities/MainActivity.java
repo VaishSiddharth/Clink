@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Fix method called");
                 ModelUser user = dataSnapshot.getValue(ModelUser.class);
                 if(user!=null) {
-                    if(user.getUserName()==null||user.getInterestedIn()==null||user.getGender()==null||user.getNumeralAge()<0)
+                    if(user.getUserName()==null||user.getInterestedIn()==null||user.getGender()==null||user.getNumeralAge()<0||user.getMatchAlgo()==null)
                     {
                         //reRun Activity to fill info!
                         Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, locationUpdater.class));
                     }
-                    /*if(!user.isQuestionaireComplete())
+                   /* if(!user.isQuestionaireComplete())
                     {
                         Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, QuestionSetup.class));
