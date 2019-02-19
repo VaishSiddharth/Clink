@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
@@ -74,6 +76,9 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         mStepperLayout.setAdapter(adapter);
         setUpLocation();
     
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(Constants.newUserSetupDone, true).apply();
     }
     
     private void setUpStatusbarColor() {

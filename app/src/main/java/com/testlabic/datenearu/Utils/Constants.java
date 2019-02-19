@@ -68,4 +68,5 @@ public class Constants {
     public static String imageUrl2 = "imageUrl2";
     public static String imageUrl3 = "imageUrl3";
     public static String userDetailsOff = "userDetailsOffline";
+    public static String newUserSetupDone = "newUserSetupDown";
 }

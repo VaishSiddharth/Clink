@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomBar bottomBar;
     private int count = 0;
     private int messagesUnread = 0;
+    FirebaseAuth.AuthStateListener authStateListener;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,10 +172,10 @@ public class MainActivity extends AppCompatActivity {
     
     @Override
     protected void onResume() {
-        
+        Log.e(TAG, "Main Activity onresume called!");
         super.onResume();
         Constants.uid = FirebaseAuth.getInstance().getUid();
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+       authStateListener =  new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 
@@ -186,55 +188,58 @@ public class MainActivity extends AppCompatActivity {
                     checkForNotification();
                     checkForNewMessages();
                     updateStatus(Constants.online);
-                   // checkForIncompleteData();
+                    checkForIncompleteData();
                     //giveXPoints();
                 }
                 
             }
-        });
+        };
+       mAuth.addAuthStateListener(authStateListener);
         
     }
     
-    private void checkForIncompleteData() {
-        DatabaseReference recoveryRef = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.userInfo)
-                .child(Constants.uid);
-        
-        recoveryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
     
-                Log.e(TAG, "Fix method called");
-                ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                if(user!=null) {
-                    if(user.getUserName()==null||user.getInterestedIn()==null||user.getGender()==null||user.getNumeralAge()<0||user.getMatchAlgo()==null)
-                    {
-                        //reRun Activity to fill info!
-                        Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, NewUserSetup.class));
-                    }
-                    else
-                    if(user.getCityLabel()==null)
-                    {
-                        Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, locationUpdater.class));
-                    }
+    private void checkForIncompleteData() {
+    
+        //SharedPreferences sharedPreferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+        //boolean checkRecovery = sharedPreferences.getBoolean(Constants.newUserSetupDone, false);
+        //if (checkRecovery)
+        {
+            DatabaseReference recoveryRef = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(Constants.uid);
+    
+            recoveryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            
+                    Log.e(TAG, "Fix method called for recovery");
+                    ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                    if (user != null) {
+                        if (user.getUserName() == null || user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getMatchAlgo() == null) {
+                            //reRun Activity to fill info!
+                            Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(MainActivity.this, NewUserSetup.class));
+                        } else if (user.getCityLabel() == null) {
+                            Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(MainActivity.this, locationUpdater.class));
+                        }
                    /* if(!user.isQuestionaireComplete())
                     {
                         Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, QuestionSetup.class));
                     }*/
+                    }
+            
                 }
-                
-            }
-    
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
         
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+                }
+            });
+        }
     }
-    
     private void checkForNewMessages() {
         messagesUnread = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
@@ -301,6 +306,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         updateStatus(Constants.offline);
+        if(mAuth!=null&&authStateListener!=null)
+            mAuth.removeAuthStateListener(authStateListener);
     }
     
     @Override
