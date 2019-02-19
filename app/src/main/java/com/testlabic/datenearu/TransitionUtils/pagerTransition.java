@@ -159,23 +159,24 @@ public class pagerTransition extends Fragment {
     
         // Obtain a new or prior instance of ViewModel from the
         // ViewModelProviders utility class.
-        CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
+        if(Constants.uid!=null) {
+            CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
     
-        LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
-        
-        liveData.observe(this, new Observer<DataSnapshot>() {
-            @Override
-            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                    if(dataSnapshot!=null)
-                    {
-                        Log.e(TAG, "Setting value using architecture "+ dataSnapshot.getValue());
+            LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
+    
+            liveData.observe(this, new Observer<DataSnapshot>() {
+                @Override
+                public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        Log.e(TAG, "Setting value using architecture " + dataSnapshot.getValue());
                         if (dataSnapshot.getValue() != null) {
                             String value = dataSnapshot.getValue(String.class);
                             changeLocation.setText(value);
                         }
                     }
-            }
-        });
+                }
+            });
+        }
     
         return rootView;
         

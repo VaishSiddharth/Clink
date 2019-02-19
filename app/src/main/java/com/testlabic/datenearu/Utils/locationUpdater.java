@@ -83,6 +83,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     GoogleProgressBar googleProgressBar;
     LinearLayout myCurrentLocation;
     SweetAlertDialog alertDialog;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,9 +151,8 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         
-                       
-                                 alertDialog.show();
-    
+                        alertDialog.show();
+                        
                         final String[] cityLabel = {list.get(position).getCityLabel()};
                         String uid = Constants.uid;
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
@@ -248,7 +248,6 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-      
         
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(2000);
@@ -369,8 +368,8 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString(Constants.cityLabel, cityLabel).apply();
                                     Log.v(TAG, "Updated citylabel offline!");
-                                    if(alertDialog!=null)
-                                    alertDialog.hide();
+                                    if (alertDialog != null)
+                                        alertDialog.hide();
                                     finish();
                                 }
                             });

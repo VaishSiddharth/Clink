@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
+import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
@@ -55,6 +56,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private TextView attemptMatch;
     private Boolean comingFromNotif = false;
     private Boolean isBlur = false;
+    SweetAlertDialog alertDialog;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +64,13 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_clicked_user);
         
         f1 = findViewById(R.id.f1);
-        backbutton=findViewById(R.id.backbutton);
-        backbutton.setOnClickListener(new View.OnClickListener() {
+       // backbutton=findViewById(R.id.backbutton);
+       /* backbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
         f1.setOnClickListener(this);
         clickedUid = getIntent().getStringExtra(Constants.clickedUid);
         comingFromNotif = getIntent().getBooleanExtra(Constants.comingFromNotif, false);
@@ -214,7 +216,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     
     private void showDialog() {
         
-        SweetAlertDialog alertDialog = new SweetAlertDialog(this)
+        alertDialog = new SweetAlertDialog(this)
                 .setTitleText("Attempt match?")
                 .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue")
                 .setConfirmText("Yes!")
@@ -237,7 +239,14 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                     int current = modelSubscr.getXPoints();
                                     if (current < Constants.attemptTestPoints) {
                                         Toast.makeText(ClickedUser.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
-                                        BuyPoints();
+                                        Handler h = new Handler();
+                                        h.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                BuyPoints();
+                                            }
+                                        }, 1000);
+                                       
                                     } else {
                                         current -= Constants.attemptTestPoints;
                                         HashMap<String, Object> updatePoints = new HashMap<>();
@@ -284,7 +293,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     }
     
     private void BuyPoints() {
-    
+        alertDialog.dismiss();
+        startActivity(new Intent(ClickedUser.this, PurchasePacks.class));
     }
     
     private void setUpDetails() {

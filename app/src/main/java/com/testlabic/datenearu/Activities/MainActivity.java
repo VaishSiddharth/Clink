@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     checkForNotification();
                     checkForNewMessages();
                     updateStatus(Constants.online);
-                    checkForIncompleteData();
+                   // checkForIncompleteData();
                     //giveXPoints();
                 }
                 
@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, NewUserSetup.class));
                     }
+                    else
                     if(user.getCityLabel()==null)
                     {
                         Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();

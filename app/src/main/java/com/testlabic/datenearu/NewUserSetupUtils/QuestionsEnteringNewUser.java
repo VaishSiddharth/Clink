@@ -1,11 +1,14 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.NewQuestionUtils.QuestionsStepperAdapter;
 import com.testlabic.datenearu.R;
 
@@ -58,7 +61,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
     }
     
     private void showInstructionDialog() {
-        new SweetAlertDialog(this)
+        SweetAlertDialog alertDialog = new SweetAlertDialog(this)
                 .setTitleText("Last step!")
                 .setContentText("Answer these ten questions about yourself, these questions will then be used to get a match for you!")
                 .setConfirmText("Yes, go ahead!")
@@ -67,6 +70,12 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
                     }
-                }).show();
+                });
+        alertDialog.show();
+        
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(QuestionsEnteringNewUser.this, R.drawable.button_4_dialogue));
+        Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(QuestionsEnteringNewUser.this, R.drawable.button_4_dialogue));
     }
 }

@@ -130,7 +130,7 @@
                 android:layout_margin="4dp"
                 android:orientation="horizontal">
 
-                <customfonts.MyTextView_SF_Pro_Display_Medium
+                <customfonts.MyTextView_SF_Pro_Display_Light
                     android:id="@+id/attempt_match"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -138,9 +138,10 @@
                     android:background="@drawable/button_4_dialogue"
                     android:gravity="center"
                     android:padding="8dp"
+                    android:textAllCaps="true"
                     android:text="Attempt Cheers"
                     android:textColor="#ffffff"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
         </LinearLayout>
