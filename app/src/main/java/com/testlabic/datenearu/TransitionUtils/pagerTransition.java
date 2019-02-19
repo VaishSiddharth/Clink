@@ -323,7 +323,7 @@ public class pagerTransition extends Fragment {
         DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userPreferences)
                 .child(Constants.uid);
-        refPrefs.addValueEventListener(new ValueEventListener() {
+        refPrefs.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
