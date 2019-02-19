@@ -150,7 +150,6 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         
-                      
                        
                                  alertDialog.show();
     
@@ -507,5 +506,10 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
             cityLabel.setText(getItem(position).getCityLabel().replace("_", ", "));
             return convertView;
         }
+    }
+    
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

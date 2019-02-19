@@ -157,7 +157,7 @@ public class pagerTransition extends Fragment {
         
         //setupCityLabelLocation
     
-        // Obtain a new or prior instance of HotStockViewModel from the
+        // Obtain a new or prior instance of ViewModel from the
         // ViewModelProviders utility class.
         CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
     
@@ -791,6 +791,7 @@ public class pagerTransition extends Fragment {
         displayArrayList.clear();
     }
     
+   
     @Override
     public void onDestroy() {
         cleanup();
