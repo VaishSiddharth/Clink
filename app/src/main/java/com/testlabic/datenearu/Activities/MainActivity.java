@@ -172,9 +172,14 @@ public class MainActivity extends AppCompatActivity {
     
     @Override
     protected void onResume() {
-        Log.e(TAG, "Main Activity onresume called!");
+        //Log.e(TAG, "Main Activity onresume called! "+Constants.uid);
         super.onResume();
         Constants.uid = FirebaseAuth.getInstance().getUid();
+        if(Constants.uid==null) {
+            startActivity(new Intent(MainActivity.this, SignIn.class));
+            finish();
+    
+        }
        authStateListener =  new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

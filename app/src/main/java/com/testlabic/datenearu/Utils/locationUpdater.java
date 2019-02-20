@@ -105,6 +105,9 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
         googleProgressBar = findViewById(R.id.google_progress);
         updatingLocationLabel = findViewById(R.id.updatingLocation);
         listView = findViewById(R.id.listView);
+        alertDialog = new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("Updating")
+                .setContentText(".......");
         populateListView();
        
         myCurrentLocation.setOnClickListener(new View.OnClickListener() {
@@ -252,6 +255,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                 String stateName = addresses.get(0).getAdminArea();
                 String countryName = addresses.get(0).getCountryName();
                 cityLabel = cityName + ", " + stateName + ", " + countryName;
+                Log.e(TAG, "City Label from location cordinates is "+cityLabel);
                 updateCityLabel = new HashMap<>();
                 updateCityLabel.put("cityLabel", cityLabel);
                 updateLocationCoordinates(location);
@@ -271,6 +275,8 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     
     private void updateCityLabelAndData() {
     
+        Log.e(TAG, "Update city label and data called!");
+        
         CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
     
         LiveData<DataSnapshot> cityLiveData = viewModel.getDataSnapshotLiveData();
@@ -282,7 +288,8 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
         cityLiveData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
+                if (dataSnapshot != null)
+                {
                     if (dataSnapshot.getValue() == null) {
                     
                         cityLabelRef.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -296,6 +303,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                         String previousCityLabel = dataSnapshot.getValue(String.class);
                         if (previousCityLabel != null && !(previousCityLabel.equals(""))) {
                             previousCityLabel = previousCityLabel.replace(", ", "_");
+                            Log.e(TAG, "Previous city label is "+previousCityLabel);
                             DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
                                     .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
                             prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -305,6 +313,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             cityLabel = cityLabel.replace(", ", "_");
+                                            Log.e(TAG, "Calling duplicate user info method");
                                             DuplicateUserInfoToCityLabelNode(cityLabel);
                                         }
                                     });

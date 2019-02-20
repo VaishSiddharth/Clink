@@ -24,7 +24,6 @@ public class application extends Application {
         applicationHandler = new Handler(Instance.getMainLooper());
     
         FirebaseApp.initializeApp(this);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
     

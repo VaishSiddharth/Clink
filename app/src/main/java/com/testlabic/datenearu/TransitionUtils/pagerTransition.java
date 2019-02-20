@@ -46,7 +46,9 @@ import com.startapp.android.publish.ads.banner.Banner;
 import com.testlabic.datenearu.Activities.SignIn;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.CityLabelModel;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PointLabelModel;
+import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PrefsModel;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.Login;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelPrefs;
 import com.testlabic.datenearu.Models.ModelSubscr;
@@ -95,7 +97,9 @@ public class pagerTransition extends Fragment {
     private ImageView hideAd, bottle;
     DatabaseReference ref;
     String curUsersMatchSeq;
+    Boolean fetchPrefsCalledOnce = false;
     private ChildEventListener childEventListener;
+    String city;
     
     public pagerTransition() {
         // Required empty public constructor
@@ -113,11 +117,11 @@ public class pagerTransition extends Fragment {
         
        
         rootView = inflater.inflate(R.layout.activity_pager_transition, viewPager, false);
-        if (Constants.uid != null)
-            fetchPreferences();
+        
         sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
         curUsersMatchSeq = sharedPreferences.getString(Constants.matchAlgo, null);
+        city = sharedPreferences.getString(Constants.cityLabel, null);
         
         editor = sharedPreferences.edit();
         filterList = rootView.findViewById(R.id.filter);
@@ -126,15 +130,17 @@ public class pagerTransition extends Fragment {
         points = rootView.findViewById(R.id.points);
         bottle = rootView.findViewById(R.id.fill_bottle);
         Constants.uid = FirebaseAuth.getInstance().getUid();
-        if (Constants.uid != null)
+        if (Constants.uid != null) {
+            fetchPreferences();
             setUpPoints();
+        }
+        
         changeLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), locationUpdater.class));
             }
         });
-        downloadList();
         
         if (!sharedPreferences.getBoolean(Constants.shownShowCaser, false))
             setupShowCaser();
@@ -171,6 +177,7 @@ public class pagerTransition extends Fragment {
                         Log.e(TAG, "Setting value using architecture " + dataSnapshot.getValue());
                         if (dataSnapshot.getValue() != null) {
                             String value = dataSnapshot.getValue(String.class);
+                            editor.putString(Constants.cityLabel, value).apply();
                             changeLocation.setText(value);
                         }
                     }
@@ -322,23 +329,48 @@ public class pagerTransition extends Fragment {
     }
     
     private void fetchPreferences() {
-        DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.userPreferences)
-                .child(Constants.uid);
-        refPrefs.addListenerForSingleValueEvent(new ValueEventListener() {
+    
+       // Log.e(TAG, "The boolean is "+fetchPrefsCalledOnce);
+        PrefsModel prefsModel = ViewModelProviders.of(this).get(PrefsModel.class);
+        LiveData<DataSnapshot> snapshotLiveData = prefsModel.getDataSnapshotLiveData();
+        
+        snapshotLiveData.observe(this, new Observer<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null && dataSnapshot.getValue() != null&& !fetchPrefsCalledOnce) {
+                    //Log.e(TAG, "Fetch Prefs called again");
                     prefs = dataSnapshot.getValue(ModelPrefs.class);
-                    editor.putString(Constants.userIntrGender, prefs.getPreferedGender()).apply();
+                    if (prefs != null) {
+                        fetchPrefsCalledOnce = true;
+                        curUsersMatchSeq = prefs.getMatchAlgo();
+                        editor.putString(Constants.userIntrGender, prefs.getPreferedGender()).apply();
+                        city = sharedPreferences.getString(Constants.cityLabel, null);
+                        if(city==null)
+                        {
+                            CityLabelModel viewModel = ViewModelProviders.of(pagerTransition.this).get(CityLabelModel.class);
+    
+                            LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
+    
+                            liveData.observe(pagerTransition.this, new Observer<DataSnapshot>() {
+                                @Override
+                                public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot != null) {
+                                        if (dataSnapshot.getValue() != null) {
+                                            String value = dataSnapshot.getValue(String.class);
+                                            editor.putString(Constants.cityLabel, value).apply();
+                                            downloadList();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        else
+                        downloadList();
+                    }
                 }
             }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
         });
+        
         // get lat long
         DatabaseReference latLong = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo)
@@ -603,7 +635,6 @@ public class pagerTransition extends Fragment {
         
         displayArrayList = new ArrayList<>();
         displayArrayList.clear();
-        String city = sharedPreferences.getString(Constants.cityLabel, "Lucknow_Uttar Pradesh_India");
         Log.e(TAG, "current city is "+city);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
         ref = FirebaseDatabase.getInstance().getReference()
@@ -623,12 +654,13 @@ public class pagerTransition extends Fragment {
             
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.e(TAG, "The child changed");
+                Log.e(TAG, "The child changed triggeres");
                 downloadList();
             }
             
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Log.e(TAG, "The child removerd triggeres");
                 downloadList();
             }
             
@@ -674,37 +706,14 @@ public class pagerTransition extends Fragment {
         final Levenshtein l = new Levenshtein();
         
         for (final ModelUser user : displayArrayList) {
-            if (curUsersMatchSeq == null) {
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.userInfo).child(Constants.uid).child("matchAlgo");
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            curUsersMatchSeq = dataSnapshot.getValue(String.class);
-                            if (user.getMatchAlgo() != null) {
-                                editor.putString(Constants.matchAlgo, curUsersMatchSeq).apply();
-                                double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
-                                user.setMatchIndex(s);
-                               // downloadList();
-                            }
-                        }
-                    }
-                    
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    
-                    }
-                });
-            } else {
-               // Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
+            
+                //Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
                 if (user.getMatchAlgo() != null) {
                     double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
                     user.setMatchIndex(s);
                     // Log.e(TAG, "The match index is "+ s);
                 }
             }
-        }
         
     }
     
@@ -771,15 +780,11 @@ public class pagerTransition extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
-        FirebaseAuth.AuthStateListener stateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null)
-                    startActivity(new Intent(getActivity(), SignIn.class));
-            }
-        };
+       FirebaseAuth mAuth = FirebaseAuth.getInstance();
+       if(mAuth.getCurrentUser()==null)
+           startActivity(new Intent(getActivity(), Login.class));
+       else
+           Constants.uid = FirebaseAuth.getInstance().getUid();
         //downloadList();
         //checkForNotification();
         //Log.e(TAG, "On resume called in pagerTransition!");
@@ -789,7 +794,7 @@ public class pagerTransition extends Fragment {
         // We're being destroyed, let go of our mListener and forget about all of the mModels
         if (ref != null && childEventListener != null)
             ref.removeEventListener(childEventListener);
-        displayArrayList.clear();
+       
     }
     
    

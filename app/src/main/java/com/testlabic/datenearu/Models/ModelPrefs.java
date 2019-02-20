@@ -7,6 +7,12 @@ public class ModelPrefs {
     private int maxAge;
     private String preferedGender;
     
+    public String getMatchAlgo() {
+        return matchAlgo;
+    }
+    
+    private String matchAlgo;
+    
     public ModelPrefs(double distanceLimit, int minAge, int maxAge, String preferedGender) {
         this.distanceLimit = distanceLimit;
         this.minAge = minAge;

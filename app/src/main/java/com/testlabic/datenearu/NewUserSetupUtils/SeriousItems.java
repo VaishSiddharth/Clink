@@ -133,6 +133,13 @@ public class SeriousItems extends Fragment implements BlockingStep {
             
             //Log.e(TAG, "The sequence is "+seq);
             final String finalSeq = seq;
+    
+            DatabaseReference prefRef = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userPreferences)
+                    .child(Constants.uid)
+                    .child("matchAlgo");
+            prefRef.setValue(seq);
+            
             reference.setValue(seq).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
