@@ -185,7 +185,7 @@ public class pagerTransition extends Fragment {
     public void setShowcaseView() {
         //showcase view
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+        boolean isFirstRun = wmbPreference.getBoolean("SHOW", true);
         Log.e(TAG, "Showcase working i " + isFirstRun);
         //Log.e(TAG, "Showcase working " + isFirstRun);
         if (isFirstRun) {
@@ -232,7 +232,7 @@ public class pagerTransition extends Fragment {
         }
         // Code to run once
         SharedPreferences.Editor editor = wmbPreference.edit();
-        editor.putBoolean("FIRSTRUN", false).apply();
+        editor.putBoolean("SHOW", false).apply();
         
     }
     
@@ -697,7 +697,7 @@ public class pagerTransition extends Fragment {
                     }
                 });
             } else {
-                Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
+               // Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
                 if (user.getMatchAlgo() != null) {
                     double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
                     user.setMatchIndex(s);
@@ -782,7 +782,7 @@ public class pagerTransition extends Fragment {
         };
         //downloadList();
         //checkForNotification();
-        Log.e(TAG, "On resume called in pagerTransition!");
+        //Log.e(TAG, "On resume called in pagerTransition!");
     }
     
     public void cleanup() {

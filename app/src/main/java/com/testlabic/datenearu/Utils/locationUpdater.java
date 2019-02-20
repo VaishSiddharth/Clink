@@ -1,6 +1,9 @@
 package com.testlabic.datenearu.Utils;
 
 import android.Manifest;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -16,6 +19,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,10 +58,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Activities.MainActivity;
+import com.testlabic.datenearu.ArchitectureUtils.ViewModels.CityLabelModel;
+import com.testlabic.datenearu.ArchitectureUtils.ViewModels.UserInfoModel;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelCityLabel;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 
 import java.io.IOException;
@@ -83,6 +90,11 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     GoogleProgressBar googleProgressBar;
     LinearLayout myCurrentLocation;
     SweetAlertDialog alertDialog;
+    DatabaseReference cityLabelRef;
+    DatabaseReference adapterRef;
+    ChildEventListener childEventListener;
+    HashMap<String, Object> updateCityLabel;
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,23 +106,29 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
         updatingLocationLabel = findViewById(R.id.updatingLocation);
         listView = findViewById(R.id.listView);
         populateListView();
-        alertDialog = new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
-                .setTitleText("Updating")
-                .setContentText(".......");
+       
         myCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                googleProgressBar.setVisibility(View.VISIBLE);
                 setUpLocationService();
             }
         });
         gender = preferences.getString(Constants.userGender, "male");
     }
     
+    private void cleanUp()
+    {
+        if(adapterRef!=null&&childEventListener!=null)
+            adapterRef.removeEventListener(childEventListener);
+    }
+    
     private void populateListView() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+        
+        adapterRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.cityLabels);
         list = new ArrayList<>();
-        reference.addChildEventListener(new ChildEventListener() {
+        childEventListener = adapterRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String cityName = dataSnapshot.getKey();
@@ -139,7 +157,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
             }
         });
         
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        adapterRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
@@ -150,59 +168,12 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        
                         alertDialog.show();
-                        
-                        final String[] cityLabel = {list.get(position).getCityLabel()};
-                        String uid = Constants.uid;
-                        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                                .child(Constants.userInfo).child(uid);
-                        
-                        final HashMap<String, Object> updateCityLabel = new HashMap<>();
-                        cityLabel[0] = cityLabel[0].replace(", ", "_");
-                        updateCityLabel.put("cityLabel", cityLabel[0]);
-                        
-                        // Check for previous cityLabel, remove from previous city and transfer to new city
-                        reference.child(Constants.cityLabel).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                
-                                if (dataSnapshot.getValue() == null) {
-                                    // do nothing else just update the city label;
-                                    reference.updateChildren(updateCityLabel);
-                                    cityLabel[0] = cityLabel[0].replace(", ", "_");
-                                    DuplicateUserInfoToCityLabelNode(cityLabel[0]);
-                                } else {
-                                    String previousCityLabel = dataSnapshot.getValue(String.class);
-                                    if (previousCityLabel != null && !(previousCityLabel.equals("")) && !previousCityLabel.equals(cityLabel[0])) {
-                                        previousCityLabel = previousCityLabel.replace(", ", "_");
-                                        DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
-                                                .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
-                                        prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                reference.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        cityLabel[0] = cityLabel[0].replace(", ", "_");
-                                                        DuplicateUserInfoToCityLabelNode(cityLabel[0]);
-                                                        Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                            
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            
-                            }
-                        });
-                        
-                        // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
-                        
+                        cityLabel = list.get(position).getCityLabel();
+                        cityLabel = cityLabel.replace(", ", "_");
+                        updateCityLabel = new HashMap<>();
+                        updateCityLabel.put("cityLabel", cityLabel);
+                        updateCityLabelAndData();
                     }
                 });
                 
@@ -217,23 +188,30 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     
     private void setUpLocationService() {
         //
-        
+    
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         assert manager != null;
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            Log.e(TAG, "Displaying location settings...");
-            displayLocationSettingsRequest(locationUpdater.this);
-        }
+       
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(locationUpdater.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                displayLocationSettingsRequest(locationUpdater.this);
                 buildGoogleApiClient();
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    Log.e(TAG, "Displaying location settings...");
+                    displayLocationSettingsRequest(locationUpdater.this);
+                }
             }
+            else
+                {
+                    ActivityCompat.requestPermissions(locationUpdater.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            1);
+                }
         } else {
-            displayLocationSettingsRequest(locationUpdater.this);
-            buildGoogleApiClient();
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                displayLocationSettingsRequest(locationUpdater.this);
+            }
         }
     }
     
@@ -248,13 +226,13 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        
+        alertDialog = new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("Updating")
+                .setContentText(".......");
+        alertDialog.show();
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(2000);
         mLocationRequest.setFastestInterval(1500);
-        /*
-        DUMMY
-         */
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -274,67 +252,14 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                 String stateName = addresses.get(0).getAdminArea();
                 String countryName = addresses.get(0).getCountryName();
                 cityLabel = cityName + ", " + stateName + ", " + countryName;
-                
-                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.userInfo).child(uid);
-                
-                final HashMap<String, Object> updateCityLabel = new HashMap<>();
+                updateCityLabel = new HashMap<>();
                 updateCityLabel.put("cityLabel", cityLabel);
-                // Check for previous cityLabel, remove from previous city and transfer to new city
+                updateLocationCoordinates(location);
                 
-                reference.child(Constants.cityLabel).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        
-                        if (dataSnapshot.getValue() == null) {
-                            // do nothing else just update the city label;
-                            reference.updateChildren(updateCityLabel);
-                        } else {
-                            String previousCityLabel = dataSnapshot.getValue(String.class);
-                            if (previousCityLabel != null && !(previousCityLabel.equals("")) && !previousCityLabel.equals(cityLabel)) {
-                                previousCityLabel = previousCityLabel.replace(", ", "_");
-                                DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
-                                        .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
-                                prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.v(TAG, "previous citylabel ref set null");
-                                        reference.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                
-                                                LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
-                                                
-                                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                                                        .child(Constants.userInfo).child(Constants.uid).child(Constants.location);
-                                                
-                                                reference.setValue(latLong).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            // Duplicate user under the cityLabel node
-                                                            
-                                                            cityLabel = cityLabel.replace(", ", "_");
-                                                            DuplicateUserInfoToCityLabelNode(cityLabel);
-                                                            Toast.makeText(locationUpdater.this, "Done!", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                    }
-                    
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    
-                    }
-                });
+                //UserInfoModel userInfoModel = ViewModelProviders.of(this).get(UserInfoModel.class);
                 
-                // Log.e(TAG, "The city name will appear as : "+ cityName+","+stateName+","+countryName);
+                //LiveData<DataSnapshot> liveData = userInfoModel.getDataSnapshotLiveData();
+                updateCityLabelAndData();
                 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -344,17 +269,77 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
         
     }
     
+    private void updateCityLabelAndData() {
+    
+        CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
+    
+        LiveData<DataSnapshot> cityLiveData = viewModel.getDataSnapshotLiveData();
+    
+        cityLabelRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(Constants.uid);
+    
+        cityLiveData.observe(this, new Observer<DataSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    if (dataSnapshot.getValue() == null) {
+                    
+                        cityLabelRef.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                cityLabel = cityLabel.replace(", ", "_");
+                                DuplicateUserInfoToCityLabelNode(cityLabel);
+                            }
+                        });
+                    } else {
+                        String previousCityLabel = dataSnapshot.getValue(String.class);
+                        if (previousCityLabel != null && !(previousCityLabel.equals(""))) {
+                            previousCityLabel = previousCityLabel.replace(", ", "_");
+                            DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
+                                    .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
+                            prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    cityLabelRef.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            cityLabel = cityLabel.replace(", ", "_");
+                                            DuplicateUserInfoToCityLabelNode(cityLabel);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    private void updateLocationCoordinates(Location location) {
+        LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
+    
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo).child(Constants.uid).child(Constants.location);
+    
+        reference.setValue(latLong);
+    }
+    
     private void DuplicateUserInfoToCityLabelNode(final String cityLabel) {
         
         if (cityLabel != null) {
-            DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
-                    .child(Constants.uid);
-            refInit.addListenerForSingleValueEvent(new ValueEventListener() {
+            //change code to viewmodel livedata architecture;
+            UserInfoModel userInfoModel = ViewModelProviders.of(this).get(UserInfoModel.class);
+            
+            LiveData<DataSnapshot> liveData = userInfoModel.getDataSnapshotLiveData();
+            
+            liveData.observe(this, new Observer<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue(ModelUser.class) != null) {
+                public void onChanged(@Nullable DataSnapshot dataSnapshot) {
+                    
+                    if (dataSnapshot != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                        String gender;
                         if (user != null) {
                             user.setQuestions(null);
                             gender = user.getGender();
@@ -374,19 +359,15 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                                 }
                             });
                         }
-                        
                     }
-                }
-                
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    
                 }
             });
         }
     }
     
     private void displayLocationSettingsRequest(final Context context) {
-        googleProgressBar.setVisibility(View.VISIBLE);
+        //googleProgressBar.setVisibility(View.VISIBLE);
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
@@ -439,25 +420,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
         
         String uid = FirebaseAuth.getInstance().getUid();
         if (location != null && location.getAccuracy() < 3000 && uid != null) {
-            
-            LatLong latLong = new LatLong(location.getLongitude(), location.getLatitude());
-            
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.userInfo).child(uid).child(Constants.location);
-            
-            reference.setValue(latLong).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        finish();
-                        /*
-                        change the city label on main screen
-                         */
-                    }
-                }
-            });
-        } else if (location != null && location.getAccuracy() > 3000) {
-            Toast.makeText(locationUpdater.this, "Waiting for accurate location...", Toast.LENGTH_SHORT).show();
+            updateLocationCoordinates(location);
         }
     }
     
@@ -468,6 +431,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+        cleanUp();
     }
     
     private class Adapter extends BaseAdapter {
@@ -501,7 +465,6 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
             }
             
             TextView cityLabel = convertView.findViewById(R.id.cityName);
-            
             cityLabel.setText(getItem(position).getCityLabel().replace("_", ", "));
             return convertView;
         }
