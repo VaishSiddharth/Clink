@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:id="@+id/firstPack"
-                    android:text="Buy 110 points for Rs. 20" />
+                    android:text="XXXX" />
 
             </LinearLayout>
 
@@ -49,7 +49,8 @@
                 <customfonts.TextViewSFProDisplayRegular
                     android:layout_width="wrap_content"
                     android:padding="16dp"
-                    android:text="Buy 500 points for Rs. 70"
+                    android:text="XXXX"
+                    android:id="@+id/secondPack"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
@@ -69,8 +70,9 @@
 
                 <customfonts.TextViewSFProDisplayRegular
                     android:layout_width="wrap_content"
-                    android:text="Buy 1000 points for Rs. 120"
+                    android:text="XXXX"
                     android:padding="16dp"
+                    android:id="@+id/thirdPack"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
