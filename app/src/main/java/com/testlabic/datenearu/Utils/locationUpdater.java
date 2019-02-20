@@ -1,10 +1,12 @@
 package com.testlabic.datenearu.Utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -171,6 +173,9 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        alertDialog = new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
+                                .setTitleText("Updating")
+                                .setContentText(".......");
                         alertDialog.show();
                         cityLabel = list.get(position).getCityLabel();
                         cityLabel = cityLabel.replace(", ", "_");
@@ -201,7 +206,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                    Log.e(TAG, "Displaying location settings...");
+                   // Log.e(TAG, "Displaying location settings...");
                     displayLocationSettingsRequest(locationUpdater.this);
                 }
             }
@@ -215,6 +220,31 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 displayLocationSettingsRequest(locationUpdater.this);
             }
+        }
+    }
+    
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    displayLocationSettingsRequest(locationUpdater.this);
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(locationUpdater.this, "Permission denied, enabling location services is mandatory to continue", Toast.LENGTH_SHORT).show();
+                    ActivityCompat.requestPermissions(locationUpdater.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            1);
+                }
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
     
@@ -275,7 +305,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     
     private void updateCityLabelAndData() {
     
-        Log.e(TAG, "Update city label and data called!");
+       // Log.e(TAG, "Update city label and data called!");
         
         CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
     
@@ -303,7 +333,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                         String previousCityLabel = dataSnapshot.getValue(String.class);
                         if (previousCityLabel != null && !(previousCityLabel.equals(""))) {
                             previousCityLabel = previousCityLabel.replace(", ", "_");
-                            Log.e(TAG, "Previous city label is "+previousCityLabel);
+                            //Log.e(TAG, "Previous city label is "+previousCityLabel);
                             DatabaseReference prevRef = FirebaseDatabase.getInstance().getReference()
                                     .child(Constants.cityLabels).child(previousCityLabel).child(gender).child(Constants.uid);
                             prevRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -313,7 +343,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             cityLabel = cityLabel.replace(", ", "_");
-                                            Log.e(TAG, "Calling duplicate user info method");
+                                           
                                             DuplicateUserInfoToCityLabelNode(cityLabel);
                                         }
                                     });
@@ -336,7 +366,7 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     }
     
     private void DuplicateUserInfoToCityLabelNode(final String cityLabel) {
-        
+        Log.e(TAG, "Calling duplicate user info method");
         if (cityLabel != null) {
             //change code to viewmodel livedata architecture;
             UserInfoModel userInfoModel = ViewModelProviders.of(this).get(UserInfoModel.class);
@@ -361,9 +391,13 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
                                     SharedPreferences preferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString(Constants.cityLabel, cityLabel).apply();
-                                    Log.v(TAG, "Updated citylabel offline!");
+                                    //Log.e(TAG, "Updated citylabel!");
                                     if (alertDialog != null)
-                                        alertDialog.hide();
+                                        alertDialog.dismiss();
+    
+                                    Intent resultIntent = new Intent();
+                                    resultIntent.putExtra(Constants.refresh, true);
+                                    setResult(Activity.RESULT_OK, resultIntent);
                                     finish();
                                 }
                             });
@@ -416,12 +450,9 @@ public class locationUpdater extends AppCompatActivity implements GoogleApiClien
     
     @Override
     public void onConnectionSuspended(int i) {
-    
     }
-    
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-    
     }
     
     @Override

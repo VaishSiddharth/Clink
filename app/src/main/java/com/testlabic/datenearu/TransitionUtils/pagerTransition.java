@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.TransitionUtils;
 
+import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -138,7 +139,7 @@ public class pagerTransition extends Fragment {
         changeLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), locationUpdater.class));
+                startActivityForResult(new Intent(getActivity(), locationUpdater.class), 87);
             }
         });
         
@@ -174,7 +175,7 @@ public class pagerTransition extends Fragment {
                 @Override
                 public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null) {
-                        Log.e(TAG, "Setting value using architecture " + dataSnapshot.getValue());
+                       // Log.e(TAG, "Setting value using architecture " + dataSnapshot.getValue());
                         if (dataSnapshot.getValue() != null) {
                             String value = dataSnapshot.getValue(String.class);
                             editor.putString(Constants.cityLabel, value).apply();
@@ -189,11 +190,33 @@ public class pagerTransition extends Fragment {
         
     }
     
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e(TAG, "Paused pagerTransition");
+        cleanup();
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode== 87 && resultCode== Activity.RESULT_OK)
+        {
+            //Log.e(TAG, "onActivityResult!");
+            boolean refresh = data.getBooleanExtra(Constants.refresh, false);
+            if(refresh) {
+                fetchPrefsCalledOnce = false;
+                fetchPreferences();
+            }
+        }
+        
+    }
+    
     public void setShowcaseView() {
         //showcase view
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean isFirstRun = wmbPreference.getBoolean("SHOW", true);
-        Log.e(TAG, "Showcase working i " + isFirstRun);
+        //Log.e(TAG, "Showcase working i " + isFirstRun);
         //Log.e(TAG, "Showcase working " + isFirstRun);
         if (isFirstRun) {
             final Handler handler = new Handler();
@@ -635,13 +658,13 @@ public class pagerTransition extends Fragment {
         
         displayArrayList = new ArrayList<>();
         displayArrayList.clear();
-        Log.e(TAG, "current city is "+city);
+        Log.e(TAG, "Dwnload list called with "+city);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
         ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.cityLabels).child(city).child(interestedGender);
         
         //Log.e(TAG, "download list called "+ ref);
-        childEventListener = ref.addChildEventListener(new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getValue() != null) {
@@ -673,7 +696,8 @@ public class pagerTransition extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
             }
-        });
+        };
+        ref.addChildEventListener(childEventListener);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -770,12 +794,6 @@ public class pagerTransition extends Fragment {
     }
     
     
-    
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        
-    }
     
     @Override
     public void onResume() {

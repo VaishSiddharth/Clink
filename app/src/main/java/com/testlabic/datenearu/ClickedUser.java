@@ -1,10 +1,12 @@
 package com.testlabic.datenearu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -19,14 +21,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelContact;
+import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.QuestionUtils.QuestionsActivity;
@@ -45,7 +50,8 @@ import nl.dionsegijn.konfetti.models.Size;
 public class ClickedUser extends AppCompatActivity implements View.OnClickListener {
     
     private static final String TAG = ClickedUser.class.getSimpleName();
-    ImageView f1,backbutton;
+    ShineButton f1;
+    ImageView backbutton;
     boolean first = true;
     String imageUrl, imageUrl2, imageUrl3;
     private TextView name, about, age;
@@ -104,7 +110,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     }
     
     private void ShowAConfirmationDialog(final String uid) {
-        new SweetAlertDialog(ClickedUser.this, SweetAlertDialog.NORMAL_TYPE)
+      SweetAlertDialog alertDialog =  new SweetAlertDialog(ClickedUser.this, SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("Are you sure?")
                 .setContentText("You guys will be added as a connection to each other!")
                 .setConfirmText("Yes, go for it!")
@@ -126,7 +132,11 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         acceptRequest(uid, sDialog);
                     }
                 })
-                .show();
+              ;
+      alertDialog.show();
+    
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
     }
     
     private void acceptRequest(String item, final SweetAlertDialog sDialog) {
@@ -238,7 +248,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                 if (modelSubscr != null) {
                                     int current = modelSubscr.getXPoints();
                                     if (current < Constants.attemptTestPoints) {
-                                        Toast.makeText(ClickedUser.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ClickedUser.this, "You don't have enough drops, buy now!", Toast.LENGTH_SHORT).show();
                                         Handler h = new Handler();
                                         h.postDelayed(new Runnable() {
                                             @Override
@@ -352,11 +362,144 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         if (first) {
-            f1.setBackgroundResource(R.drawable.ic_like_1);
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ClickedUser.this);
+    
+            boolean isFirstTime = sharedPreferences.getBoolean("firstLikeInfo", true);
+            if (isFirstTime) {
+                SweetAlertDialog alertDialog = new SweetAlertDialog(ClickedUser.this, SweetAlertDialog.NORMAL_TYPE)
+                        .setTitleText("How it works?")
+                        .setContentText("When you like someone, we don't tell them that, but if they like you back, it'll be a match!")
+                        .setConfirmButton("ok, like!", new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("firstLikeInfo", false).apply();
+                                executeLikeFunction();
+                            }
+                        });
+                alertDialog.show();
+                Button btn = alertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+            } else {
+                executeLikeFunction();
+                Toast.makeText(ClickedUser.this, "Liked!", Toast.LENGTH_SHORT).show();
+            }
             first = false;
         } else {
-            f1.setBackgroundResource(R.drawable.ic_like_heart_outline);
             first = true;
         }
     }
+    
+    private void executeLikeFunction() {
+        //give 10 drops for liking
+        
+        //check if the other person has already liked you!
+        DatabaseReference checkRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.LikeInfo)
+                .child(Constants.uid)
+                .child(clickedUid);
+        checkRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    //other person likes you; show match message!
+                    //first check whether the contact is blocked or not
+                    DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.blockList)
+                            .child(clickedUid)
+                            .child(Constants.uid);
+                    blockRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (!dataSnapshot.exists()) {
+                                
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    KonfettiView konfettiView = findViewById(R.id.viewKonfetti);
+                                    konfettiView.build()
+                                            .addColors(Color.BLUE, Color.GREEN, Color.MAGENTA)
+                                            .setDirection(0.0, 359.0)
+                                            .setSpeed(1f, 5f)
+                                            .setFadeOutEnabled(true)
+                                            .setTimeToLive(2000L)
+                                            .addShapes(Shape.RECT, Shape.CIRCLE)
+                                            .addSizes(new Size(12, 5))
+                                            .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+                                            .streamFor(300, 5000L);
+                                }
+                                
+                                SweetAlertDialog alertDialog = new SweetAlertDialog(ClickedUser.this, SweetAlertDialog.NORMAL_TYPE)
+                                        .setTitleText("Confirm Cheers?")
+                                        .setContentText("Congrats, S/he already likes you, its a cheers!")
+                                        .setConfirmButton("Sure", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.LikeInfo)
+                                                        .child(clickedUid)
+                                                        .child(Constants.uid);
+                                                String index = "0";
+                                                databaseReference.setValue(index);
+                                                sendNotificationToOtherUser(sweetAlertDialog);
+                                            }
+                                        })
+                                        .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.dismiss();
+                                            }
+                                        });
+                                alertDialog.show();
+                                Button btn = alertDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+                                Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+                            } else
+                                Toast.makeText(ClickedUser.this, "Sorry an error occured", Toast.LENGTH_SHORT).show();
+                        }
+                        
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        
+                        }
+                    });
+                    
+                } else {
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.LikeInfo)
+                            .child(clickedUid)
+                            .child(Constants.uid);
+                    String index = "0";
+                    databaseReference.setValue(index);
+                }
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        
+    }
+    private void sendNotificationToOtherUser(SweetAlertDialog sweetAlertDialog) {
+        sweetAlertDialog.dismissWithAnimation();
+        acceptRequest(clickedUid, sweetAlertDialog);
+        
+        //create a notification
+        
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Notifications)
+                .child(clickedUid).child(Constants.unread).push();
+        //constructing message
+        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        String message = userName + " liked you back! Go say hi now from messages screen.";
+        
+        long timeStamp = -1 * new java.util.Date().getTime();
+        String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
+        
+        reference.setValue(notification);
+        
+    }
+    
 }

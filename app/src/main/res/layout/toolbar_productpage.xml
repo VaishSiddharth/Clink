@@ -13,10 +13,7 @@
         android:padding="5dp"
         android:src="@drawable/ic_left_arrow"/>
 
-
-
     <ImageView
-        android:id="@+id/f1"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/ic_heart"
@@ -30,7 +27,7 @@
         android:layout_gravity="end"
         android:layout_marginRight="20dp"
         android:src="@android:color/darker_gray"
-        android:id="@+id/like_shiny1"
+        android:id="@+id/f1"
         app:btn_color="@android:color/white"
         app:btn_fill_color="@color/black"
         app:allow_random_color="false"

@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             
-                    Log.e(TAG, "Fix method called for recovery");
+                   // Log.e(TAG, "Fix method called for recovery");
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null) {
                         if (user.getUserName() == null || user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getMatchAlgo() == null) {
