@@ -172,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
     
     @Override
     protected void onResume() {
-        //Log.e(TAG, "Main Activity onresume called! "+Constants.uid);
+        Log.e(TAG, "Main Activity onresume called! "+Constants.uid);
+        Toast.makeText(this, "Main Activity onresume called! "+Constants.uid, Toast.LENGTH_SHORT ).show();
         super.onResume();
         Constants.uid = FirebaseAuth.getInstance().getUid();
         if(Constants.uid==null) {
