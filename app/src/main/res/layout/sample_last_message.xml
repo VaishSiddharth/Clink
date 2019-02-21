@@ -5,6 +5,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_below="@+id/toolbar"
+        android:background="#efefef" />
+
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
@@ -21,8 +27,6 @@
             android:id="@+id/image"
             android:padding="6dp"
             android:layout_width="65dp"
-            app:civ_border_color="@color/appcolor"
-            app:civ_border_width="1dp"
             android:layout_height="65dp"
             android:src="@drawable/profile"/>
 
@@ -35,53 +39,53 @@
             android:orientation="vertical">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <customfonts.TextViewSFProDisplayRegular
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Keith Mills"
-                android:textSize="15sp"
-                android:textColor="#212121"/>
-
-            <ImageView
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="9dp"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:id="@+id/onlineStatus"
-                android:visibility="gone"
-                android:background="@drawable/ic_brightness_1_black"/>
-
-            <TextView
-                android:id="@+id/numberOfNewMessages"
-                android:layout_gravity="center"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginLeft="5dp"
-                android:visibility="gone"
-                android:textSize="10sp"
-                android:text="1"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:background="@drawable/circle_blue"/>
-
-            <customfonts.TextViewSFProDisplayRegular
-                android:id="@+id/time"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="24m ago"
-                android:layout_gravity="right"
-                android:gravity="right"
-                android:textSize="12.5sp"
-                android:textColor="#a9a9b0"/>
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Keith Mills"
+                    android:textSize="15sp"
+                    android:textColor="#212121"/>
+
+                <ImageView
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:id="@+id/onlineStatus"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_brightness_1_black"/>
+
+                <TextView
+                    android:id="@+id/numberOfNewMessages"
+                    android:layout_gravity="center"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="5dp"
+                    android:visibility="gone"
+                    android:textSize="10sp"
+                    android:text="1"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/circle_blue"/>
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="24m ago"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:textSize="12.5sp"
+                    android:textColor="#a9a9b0"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -146,12 +150,6 @@
     </LinearLayout>
 
 
-    <View
-        android:layout_width="150dp"
-        android:layout_height="0.7dp"
-        android:layout_gravity="center"
-        android:layout_below="@+id/toolbar"
-        android:background="@color/appcolor" />
 
 
 </LinearLayout>

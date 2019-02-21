@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -141,8 +143,12 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
         
         final SweetAlertDialog mainDialog = new SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("Choose")
+                .setConfirmText("Cancel")
                 .setCustomView(connectionSetting);
         mainDialog.show();
+    
+        Button btn = mainDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(context, R.drawable.button_4_dialogue));
         
         Button block = connectionSetting.findViewById(R.id.block);
         Button delete = connectionSetting.findViewById(R.id.delete);
@@ -154,7 +160,7 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     //unblock user
-                    new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                  SweetAlertDialog alertDialog =  new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("Unblock connection?")
                             .setContentText("You will be able to send/receive further messages again")
                             .setConfirmButton("Proceed?", new SweetAlertDialog.OnSweetClickListener() {
@@ -187,15 +193,17 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                                         }
                                     });
                                 }
-                            })
-                            .show();
+                            });
+                            alertDialog.show();
+                    Button btn = alertDialog.findViewById(R.id.confirm_button);
+                    btn.setBackground(ContextCompat.getDrawable(context, R.drawable.button_4_dialogue));
                 }
             });
         } else {
             block.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                  SweetAlertDialog alertDialog =   new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("Block connection?")
                             .setContentText("You will not be able to send/receive further messages")
                             .setConfirmButton("Proceed?", new SweetAlertDialog.OnSweetClickListener() {
@@ -228,8 +236,11 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                                         }
                                     });
                                 }
-                            })
-                            .show();
+                            });
+                            alertDialog.show();
+    
+                    Button btn = alertDialog.findViewById(R.id.confirm_button);
+                    btn.setBackground(ContextCompat.getDrawable(context, R.drawable.button_4_dialogue));
                 }
             });
             
@@ -239,7 +250,7 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 
-                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+              SweetAlertDialog alertDialog =   new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Delete Connection?")
                         .setContentText("Any message sent to you by the connection will not reach you anymore!")
                         .setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
@@ -259,7 +270,9 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                                 });
                                 
                             }
-                        }).show();
+                        }); alertDialog.show();
+                Button btn = alertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(context, R.drawable.button_4_dialogue));
             }
         });
         

@@ -40,6 +40,7 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
@@ -231,8 +232,10 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             firstName = profile.getFirstName();
             lastName = profile.getLastName();
         }
+        HashMap<String, Object> timeStamp = new HashMap<>();
+        timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
         ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
-                , "NA", null, null, null, mCurrentUser.getUid(), lastName, -1);
+                , "NA", null, null, null, mCurrentUser.getUid(), lastName, -1, timeStamp);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());

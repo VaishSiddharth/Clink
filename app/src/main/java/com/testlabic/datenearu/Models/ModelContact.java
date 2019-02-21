@@ -10,6 +10,7 @@ public class ModelContact {
     String oneLine;
     Boolean blockStatus;
     HashMap<String, Object> timeStamp;
+    Boolean directMessage;
     
     public HashMap<String, Object> getTimeStamp() {
         return timeStamp;
@@ -27,12 +28,25 @@ public class ModelContact {
         return oneLine;
     }
     
+    public Boolean getDirectMessage() {
+        return directMessage;
+    }
+    
     public ModelContact(String name, String image, String uid, String oneLine, HashMap<String, Object> timeStamp) {
         this.name = name;
         this.image = image;
         this.uid = uid;
         this.oneLine = oneLine;
         this.timeStamp = timeStamp;
+    }
+    
+    public ModelContact(String name, String image, String uid, String oneLine, HashMap<String, Object> timeStamp, Boolean directMessage) {
+        this.name = name;
+        this.image = image;
+        this.uid = uid;
+        this.oneLine = oneLine;
+        this.timeStamp = timeStamp;
+        this.directMessage = directMessage;
     }
     
     public String getName() {

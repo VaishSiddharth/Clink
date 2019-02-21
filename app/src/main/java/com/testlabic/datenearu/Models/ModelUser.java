@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ModelUser {
     
@@ -10,7 +11,7 @@ public class ModelUser {
     private String image2;
     private String image3;
     private String image1;
-    
+    private HashMap<String, Object> creationTime;
     public String getImage1() {
         return image1;
     }
@@ -96,8 +97,12 @@ public class ModelUser {
         return userLastName;
     }
     
+    public HashMap<String, Object> getCreationTime() {
+        return creationTime;
+    }
+    
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
-            , String about, String uid, String userLastName, int numeralAge) {
+            , String about, String uid, String userLastName, int numeralAge, HashMap<String, Object> creationTime ) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
@@ -107,6 +112,7 @@ public class ModelUser {
         this.uid = uid;
         this.userLastName = userLastName;
         this.numeralAge = numeralAge;
+        this.creationTime = creationTime;
     }
     
     public int getNumeralAge() {

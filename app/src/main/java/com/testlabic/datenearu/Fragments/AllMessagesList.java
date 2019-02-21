@@ -66,6 +66,8 @@ public class AllMessagesList extends Fragment {
     private FirebaseRecyclerAdapter cAdapter;
     Query lastQuery;
     ValueEventListener valueEventListener;
+    ChildEventListener childEventListener;
+    Query reference;
     
     @Nullable
     @Override
@@ -88,11 +90,11 @@ public class AllMessagesList extends Fragment {
         list = new ArrayList<>();
         list.clear();
         
-        final Query reference = FirebaseDatabase.getInstance().getReference()
+        reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
                 .child(Constants.contacts);
-        reference.addChildEventListener(new ChildEventListener() {
+        childEventListener = reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable final String s) {
                 if(bar!=null)
@@ -108,15 +110,14 @@ public class AllMessagesList extends Fragment {
                                 .child(Constants.CHATS)
                                 .child(Constants.uid)
                                 .child(uid);
-                         /*
-                        Now fetch the last message and time and setup adapter
-                         */
-                        
-                        lastQuery = databaseReference.orderByKey().limitToLast(1);
+                       // Now fetch the last message and time and setup adapter
+                         
+                         lastQuery = databaseReference.orderByKey().limitToLast(1);
                        valueEventListener=  lastQuery.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot one : dataSnapshot.getChildren()) {
+                                for (DataSnapshot one : dataSnapshot.getChildren())
+                                {
                                     if (one.getValue(ChatMessage.class) != null) {
                                         if (one.getValue(ChatMessage.class) != null) {
                                             final String lastMessage = one.getValue(ChatMessage.class).getMessage();
@@ -125,12 +126,7 @@ public class AllMessagesList extends Fragment {
                                             final String sendersUid = one.getValue(ChatMessage.class).getSentFrom();
                                             final Boolean successfullySent = one.getValue(ChatMessage.class).getSuccessfullySent();
                                             if (lastMessage != null) {
-                                                
-                                                /*
-                                                Check online status
-                                                 */
-                                                
-                                                //Querying database to check status
+                                                 //Querying database to check status
                                                 
                                                 DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
                                                         .child(Constants.usersStatus)
@@ -192,10 +188,11 @@ public class AllMessagesList extends Fragment {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 
-                if(adapter!=null) {
+               /* if(adapter!=null) {
+                    adapter.notifyDataSetChanged();
                     downloadDataAndSetAdapter();
                     //adapter.notifyDataSetChanged();
-                }
+                }*/
             }
             
             @Override
@@ -233,8 +230,7 @@ public class AllMessagesList extends Fragment {
     //code for connections
     
     private void setUpListView() {
-        Log.e(TAG, "setting biew");
-        
+       
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid).child(Constants.contacts);
@@ -266,8 +262,6 @@ public class AllMessagesList extends Fragment {
         
     }
     
-   
-    
     @Override
     public void onStart() {
         super.onStart();
@@ -275,13 +269,16 @@ public class AllMessagesList extends Fragment {
     }
     
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         
         if (cAdapter != null)
             cAdapter.stopListening();
         
         if(valueEventListener!=null)
             lastQuery.removeEventListener(valueEventListener);
+        
+        if(childEventListener!=null)
+            reference.removeEventListener(childEventListener);
     }
 }
