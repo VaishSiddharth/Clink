@@ -41,16 +41,18 @@
     </android.support.v7.widget.Toolbar>
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.7dp"
+        android:layout_height="1dp"
         android:id="@+id/line"
         android:layout_below="@+id/toolbar"
-        android:background="#efefef" />
+        android:outlineAmbientShadowColor="@color/appcolor"
+        android:background="@drawable/gradient_setupuser" />
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_below="@+id/line"
         android:id="@+id/listView"
         tools:listitem="@layout/sample_notif"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@color/colorAccent"/>
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progress_bar"

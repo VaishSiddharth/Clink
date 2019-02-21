@@ -58,8 +58,13 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
-
+    <View
+        android:layout_width="300dp"
+        android:layout_gravity="center"
+        android:layout_height="0.7dp"
+        android:id="@+id/line"
+        android:layout_below="@+id/toolbar"
+        android:outlineAmbientShadowColor="@color/appcolor"
+        android:background="@drawable/gradient_setupuser" />
 
 </LinearLayout>

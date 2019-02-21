@@ -9,27 +9,14 @@
             android:id="@+id/toolbar"
             />
 
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.7dp"
-            android:layout_below="@+id/toolbar"
-            android:background="#efefef" />
-
-        
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cRecylerView"
             android:layout_margin="4dp"
             android:layout_below="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="110dp">
+            android:layout_height="wrap_content">
 
         </android.support.v7.widget.RecyclerView>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.7dp"
-            android:layout_below="@+id/cRecylerView"
-            android:background="#efefef" />
 
         <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
             android:id="@+id/progress_bar"

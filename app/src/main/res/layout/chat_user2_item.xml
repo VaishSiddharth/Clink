@@ -18,10 +18,11 @@
         android:layout_marginTop="2dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="10dp"
+        android:layout_gravity="right"
         android:orientation="horizontal">
 
         <customfonts.MyTextView_SF_Pro_Display_Medium
-            android:layout_width="285dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="6dp"
             android:text="Nice meeting you, Keith. I’m interested and \n would love to know more about the drone. \n Is it still under warranty? Do you have the \n bills and stuff?"
@@ -32,7 +33,7 @@
             android:paddingBottom="13dp"
             android:id="@+id/textview_message"
             android:textSize="13sp"
-            android:background="@drawable/rect_blue_border"/>
+            android:background="@drawable/button_4_dialogue"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
 
@@ -40,6 +41,8 @@
             android:id="@+id/image"
             android:layout_width="36dp"
             android:padding="2dp"
+            app:civ_border_color="@color/appcolor"
+            app:civ_border_width="1dp"
             android:layout_marginStart="8dp"
             android:visibility="visible"
             android:layout_height="40dp"
@@ -51,7 +54,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:layout_marginRight="10dp"
+        android:gravity="right">
 
         <customfonts.TextViewSFProDisplayRegular
             android:layout_width="wrap_content"
