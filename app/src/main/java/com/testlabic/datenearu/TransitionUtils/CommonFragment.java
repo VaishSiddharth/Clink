@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -145,7 +146,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         if (isBlur != null && isBlur) {
             blurData();
         }
-        else  Glide.with(CommonFragment.this).load(imageUrl).into(imageView);
+        else{
+            Glide.with(CommonFragment.this).load(imageUrl).into(imageView);
+        }
         
         if (oneLineS != null)
             oneLine.setText(oneLineS);
@@ -272,8 +275,14 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         float radius = name.getTextSize() / 3;
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
         name.getPaint().setMaskFilter(filter);
-    
-        Glide.with(this).load(imageUrl).into(imageView);
+
+        RequestOptions myOptions = new RequestOptions()
+                .override(15, 15)
+                .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+        Glide.with(CommonFragment.this).load(imageUrl).apply(myOptions).into(imageView);
+
+        /*Glide.with(this).load(imageUrl).into(imageView);
      
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -283,7 +292,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         .capture(imageView)
                         .into((ImageView) imageView);
             }
-        },300);
+        },300);*/
         
     }
     

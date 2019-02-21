@@ -26,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,6 +46,7 @@ import com.soundcloud.android.crop.Crop;
 import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.TransitionUtils.CommonFragment;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.io.ByteArrayOutputStream;
@@ -386,7 +389,8 @@ public class EditActivity extends AppCompatActivity {
     }
     
     private void blurProfile() {
-        Blurry.with(EditActivity.this).capture(image1).into(image1);
+        //Blurry.with(EditActivity.this).capture(image1).into(image1);
+
 //        Blurry.with(EditActivity.this).capture(nameWrap).into(nameWrap);
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid);
@@ -432,6 +436,13 @@ public class EditActivity extends AppCompatActivity {
                         detailsSetup = true;
                         if (user.getIsBlur()) {
                             blur.setChecked(true);
+                            RequestOptions myOptions = new RequestOptions()
+                                    .override(15, 15)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+                            Glide.with(EditActivity.this).load(user.getImageUrl()).apply(myOptions).into(image1);
+                            Glide.with(EditActivity.this).load(user.getImage2()).apply(myOptions).into(image2);
+                            Glide.with(EditActivity.this).load(user.getImage3()).apply(myOptions).into(image3);
                             blurProfile();
                         } else blur.setChecked(false);
                         DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());

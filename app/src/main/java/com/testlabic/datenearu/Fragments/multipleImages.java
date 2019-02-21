@@ -13,8 +13,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -46,7 +48,15 @@ public class multipleImages extends Fragment {
         
             else
             {
-                Glide.with(getContext()).load
+                RequestOptions myOptions = new RequestOptions()
+                        .override(15, 15)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+                Glide.with(getContext())
+                        .load( imageUrl)
+                        .apply(myOptions)
+                        .into(imageView);
+                /*Glide.with(getContext()).load
                         ( imageUrl).listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -61,7 +71,7 @@ public class multipleImages extends Fragment {
                                 .into((ImageView) imageView);
                         return true;
                     }
-                }).into(imageView);
+                }).into(imageView);*/
             
             }
         
