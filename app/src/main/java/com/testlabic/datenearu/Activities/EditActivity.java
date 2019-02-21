@@ -430,7 +430,7 @@ public class EditActivity extends AppCompatActivity {
                            blurProfile();
                         }
                         else blur.setChecked(false);
-                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(user.getCityLabel()).child(user.getGender()).child(user.getUid());
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());
                         HashMap<String,Object> update_image_url_city=new HashMap<>();
                         update_image_url_city.put("imageUrl",user.getImageUrl());
                         ref2.updateChildren(update_image_url_city);

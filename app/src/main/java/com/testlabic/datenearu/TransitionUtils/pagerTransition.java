@@ -123,7 +123,6 @@ public class pagerTransition extends Fragment {
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
         curUsersMatchSeq = sharedPreferences.getString(Constants.matchAlgo, null);
         city = sharedPreferences.getString(Constants.cityLabel, null);
-        
         editor = sharedPreferences.edit();
         filterList = rootView.findViewById(R.id.filter);
         hideAd = rootView.findViewById(R.id.hideAd);
@@ -178,8 +177,11 @@ public class pagerTransition extends Fragment {
                        // Log.e(TAG, "Setting value using architecture " + dataSnapshot.getValue());
                         if (dataSnapshot.getValue() != null) {
                             String value = dataSnapshot.getValue(String.class);
-                            editor.putString(Constants.cityLabel, value).apply();
-                            changeLocation.setText(value);
+                           
+                            if (value != null) {
+                                editor.putString(Constants.cityLabel, value).apply();
+                                changeLocation.setText(Constants.decrypt(value));
+                            }
                         }
                     }
                 }
@@ -361,6 +363,7 @@ public class pagerTransition extends Fragment {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null&& !fetchPrefsCalledOnce) {
+                    //
                     //Log.e(TAG, "Fetch Prefs called again");
                     prefs = dataSnapshot.getValue(ModelPrefs.class);
                     if (prefs != null) {
@@ -658,10 +661,17 @@ public class pagerTransition extends Fragment {
         
         displayArrayList = new ArrayList<>();
         displayArrayList.clear();
-        Log.e(TAG, "Dwnload list called with "+city);
+        Log.e(TAG, "Download list called with "+city);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
+        
+        if(city==null) {
+            fetchPrefsCalledOnce = false;
+            fetchPreferences();
+        }
+        else{
+        
         ref = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.cityLabels).child(city).child(interestedGender);
+                .child(Constants.cityLabels).child(Constants.encrypt(city)).child(interestedGender);
         
         //Log.e(TAG, "download list called "+ ref);
         childEventListener = new ChildEventListener() {
@@ -723,7 +733,7 @@ public class pagerTransition extends Fragment {
             
             }
         });
-    }
+    }}
     
     private void sortWithMatch() {
         
@@ -731,7 +741,7 @@ public class pagerTransition extends Fragment {
         
         for (final ModelUser user : displayArrayList) {
             
-                //Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
+                Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
                 if (user.getMatchAlgo() != null) {
                     double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
                     user.setMatchIndex(s);
@@ -744,6 +754,7 @@ public class pagerTransition extends Fragment {
     private void filterList(ModelUser item) {
         //pass the item through the filters and then add them to the list for adaper;
         //1. Age filter
+       // Log.e(TAG, "Filtering with "+String.valueOf(prefs));
         if (prefs != null && item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge()
                 && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit()) {
             displayArrayList.add(item);

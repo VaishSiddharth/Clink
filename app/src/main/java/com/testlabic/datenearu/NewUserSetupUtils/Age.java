@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -118,7 +119,7 @@ public class Age extends Fragment implements BlockingStep {
                         .child(Constants.userInfo)
                         .child(uid);
                 Log.e("Age", "Click received");
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if(age!=-1)
                     editor.putInt(Constants.age,age ).apply();

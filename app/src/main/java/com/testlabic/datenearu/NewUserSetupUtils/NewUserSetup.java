@@ -7,6 +7,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -42,6 +43,7 @@ import com.stepstone.stepper.VerificationError;
 import com.testlabic.datenearu.Models.ModelQuestion;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.locationUpdater;
 
 import java.util.ArrayList;
 
@@ -53,6 +55,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     boolean proceedAhead;
     ArrayList<ModelQuestion> questions;
     MyStepperAdapter adapter;
+    private LocationManager mLocationManager = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,22 +164,33 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     }
     
     private void setUpLocation() {
-        if (ContextCompat.checkSelfPermission(NewUserSetup.this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(NewUserSetup.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1);
-            displayLocationSettingsRequest(NewUserSetup.this);
-        } else
-        {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+    
+        if (mLocationManager == null) {
+            mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(NewUserSetup.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    // Log.e(TAG, "Displaying location settings...");
                     displayLocationSettingsRequest(NewUserSetup.this);
+                } else {
+                    //start location based service!
+                    startService(new Intent(NewUserSetup.this, LocationUpdateService.class));
                 }
-            }, 500);
+            } else {
+                ActivityCompat.requestPermissions(NewUserSetup.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+            }
+        } else {
+            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                displayLocationSettingsRequest(NewUserSetup.this);
+            } else {
+                startService(new Intent(NewUserSetup.this, LocationUpdateService.class));
+            }
+        
         }
     }
     

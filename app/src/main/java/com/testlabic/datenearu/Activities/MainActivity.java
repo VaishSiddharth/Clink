@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 
+                Log.e(TAG, "Firebase auth changed!");
                 if (firebaseAuth.getCurrentUser() == null) {
                     startActivity(new Intent(MainActivity.this, PaperOnboardingActivity.class));
                     finish();

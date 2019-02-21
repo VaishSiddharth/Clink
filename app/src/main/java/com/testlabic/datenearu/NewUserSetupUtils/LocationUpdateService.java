@@ -94,7 +94,7 @@ public class LocationUpdateService extends Service
                 String cityName = addresses.get(0).getLocality();
                 String stateName = addresses.get(0).getAdminArea();
                 String countryName = addresses.get(0).getCountryName();
-                cityLabel = cityName + ", " + stateName + ", " + countryName;
+                cityLabel = cityName + "_" + stateName + "_" + countryName;
         
                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.userInfo).child(uid);

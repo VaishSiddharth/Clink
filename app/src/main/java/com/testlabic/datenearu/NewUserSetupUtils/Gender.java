@@ -154,7 +154,7 @@ public class Gender extends Fragment implements BlockingStep {
                 .child(Constants.userPreferences)
                 .child(Constants.uid);
         // calculate min Age, max age according to your algo
-        int userAge = sharedPreferences.getInt(Constants.age, -1);
+        int userAge = sharedPreferences.getInt(Constants.age, 18);
         int minAge =-1, maxAge =-1;
         String gender = sharedPreferences.getString(Constants.userGender, null);
         String preferredGender = sharedPreferences.getString(Constants.userIntrGender, null);

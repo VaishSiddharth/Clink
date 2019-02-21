@@ -69,4 +69,13 @@ public class Constants {
     public static String imageUrl3 = "imageUrl3";
     public static String userDetailsOff = "userDetailsOffline";
     public static String newUserSetupDone = "newUserSetupDown";
+    
+    public static String encrypt(String cityLabel) {
+        
+        return cityLabel.replace(", ", "_");
+    }
+    
+    public static String decrypt(String value) {
+        return value.replace("_", ", ");
+    }
 }

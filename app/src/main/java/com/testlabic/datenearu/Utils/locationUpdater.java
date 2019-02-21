@@ -551,7 +551,7 @@ public class locationUpdater extends AppCompatActivity {
                     String cityName = addresses.get(0).getLocality();
                     String stateName = addresses.get(0).getAdminArea();
                     String countryName = addresses.get(0).getCountryName();
-                    cityLabel = cityName + ", " + stateName + ", " + countryName;
+                    cityLabel = cityName + "_" + stateName + "_" + countryName;
                     Log.e(TAG, "City Label from location cordinates is "+cityLabel);
                     updateCityLabel = new HashMap<>();
                     updateCityLabel.put("cityLabel", cityLabel);
