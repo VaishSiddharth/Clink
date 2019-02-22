@@ -1,15 +1,20 @@
 package com.testlabic.datenearu.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +29,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
+import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.Fragments.AllMessagesList;
 import com.testlabic.datenearu.Models.ModelNotification;
@@ -40,6 +46,8 @@ import java.util.HashMap;
 import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.Profile;
 import com.testlabic.datenearu.Utils.locationUpdater;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity {
     
@@ -100,7 +108,86 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
+        blurtrial();
         
+    }
+    private void blurtrial(){
+
+        //code for blur subscription
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.userInfo).child(Constants.uid).child("creationTime").child(Constants.timeStamp);
+                ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        if(dataSnapshot.getValue()!=null) {
+                            long timestamp=  dataSnapshot.getValue(Long.class);
+                            long epoch = System.currentTimeMillis()/1000;
+                            long oneday=86400;
+                            if((epoch+(5*oneday)>=timestamp)&&((epoch+(6*oneday))<=timestamp)) {
+                                SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Trial period Over!!")
+                                        .setContentText("Tomorrow your profile will be unblured")
+                                        .setCancelText("Leave")
+                                        .setConfirmButton("Buy Drops", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                startActivity(new Intent(MainActivity.this, PurchasePacks.class));
+
+                                            }
+                                        });
+                                alertDialog.show();
+                                Button btn=alertDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
+                                Button btn1=alertDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
+
+                            }
+                            if((epoch+(7*oneday))<=timestamp){
+                                final SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Trial period Over!!")
+                                        .setContentText("If you press Cancel your profile will be unblured")
+                                        .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.userInfo).child(Constants.uid);
+                                                HashMap<String,Object> update_blur=new HashMap<>();
+                                                update_blur.put("isBlur",false);
+                                                ref1.updateChildren(update_blur);
+                                                sweetAlertDialog.dismiss();
+                                            }
+                                        })
+                                        .setConfirmButton("Buy Drops", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                startActivity(new Intent(MainActivity.this, PurchasePacks.class));
+
+                                            }
+                                        });
+                                alertDialog.setCancelable(false);
+                                alertDialog.show();
+                                Button btn=alertDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
+                                Button btn1=alertDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
+                            }
+                            //Log.e(TAG, String.valueOf(timestamp));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        },5000);
+
     }
     
     private void checkForNotification() {

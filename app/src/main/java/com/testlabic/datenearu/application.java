@@ -26,7 +26,7 @@ public class application extends Application {
         FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseDatabase.getInstance().goOnline();
-        
+
         //setup test connection!
         setUpConnectionTest();
     }
