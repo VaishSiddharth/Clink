@@ -108,12 +108,17 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
-        blurtrial();
+        SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        boolean trail = sharedPref.getBoolean("trialover", true);
+        if(trail) {
+            blurtrial();
+        }
         
     }
     private void blurtrial(){
 
-        //code for blur subscription
+        //TODO: check for blur condition if on then only display this message
+        //code for blur trial
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -175,6 +180,12 @@ public class MainActivity extends AppCompatActivity {
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
                                 Button btn1=alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
+
+                                //code so that does not run again and again
+                                SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putBoolean("trialover",false);
+                                editor.commit();
                             }
                             //Log.e(TAG, String.valueOf(timestamp));
                         }
