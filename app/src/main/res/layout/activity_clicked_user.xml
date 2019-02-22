@@ -66,7 +66,7 @@
                     android:layout_marginTop="7dp"
                     android:orientation="horizontal">
 
-                    <customfonts.MyTextView_SF_Pro_Display_Bold
+                    <customfonts.MyTextView_SF_Pro_Display_Medium
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                         android:textSize="23sp" />
 
 
-                    <customfonts.MyTextView_SF_Pro_Display_Bold
+                    <customfonts.MyTextView_SF_Pro_Display_Medium
                         android:id="@+id/age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

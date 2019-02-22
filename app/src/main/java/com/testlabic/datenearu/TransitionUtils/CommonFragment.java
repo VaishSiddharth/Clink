@@ -24,7 +24,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -425,6 +427,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                         current -= Constants.attemptTestPoints;
                                         HashMap<String, Object> updatePoints = new HashMap<>();
                                         updatePoints.put(Constants.xPoints, current);
+                                        Log.e(TAG, "Updating the drops here");
                                         dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -444,6 +447,13 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                                 }, 2500);
                                             }
                                         });
+                                        
+                                        /*dataSnapshot.getRef().updateChildren(updatePoints).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Log.e(TAG, "THe results are "+task.getResult());
+                                            }
+                                        });*/
                                         
                                     }
                                 }

@@ -202,7 +202,7 @@ public class MatchCalculator extends AppCompatActivity {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 Intent i = new Intent(MatchCalculator.this, MainActivity.class);
-                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(i);
                                             }
                                         })
@@ -333,7 +333,7 @@ public class MatchCalculator extends AppCompatActivity {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                                         Intent i = new Intent(MatchCalculator.this, MainActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(i);
                                     }
                                 });
@@ -401,7 +401,7 @@ public class MatchCalculator extends AppCompatActivity {
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismiss();
                         Intent i = new Intent(MatchCalculator.this, MainActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
                     }
                 })

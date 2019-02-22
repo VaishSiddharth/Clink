@@ -63,6 +63,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private Boolean comingFromNotif = false;
     private Boolean isBlur = false;
     SweetAlertDialog alertDialog;
+    DatabaseReference ref;
+    ValueEventListener userInfoListener;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,9 +310,10 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     }
     
     private void setUpDetails() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo).child(clickedUid);
         
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo).child(clickedUid);
+        
+        userInfoListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -332,6 +335,11 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                             float radius = name.getTextSize() / 3;
                             BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
                             name.getPaint().setMaskFilter(filter);
+                        }
+                        else
+                        {
+                            //unblur code
+                            
                         }
                         
                     }
@@ -356,7 +364,25 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
             }
-        });
+        };
+        ref.addValueEventListener(userInfoListener);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cleanUp();
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+    
+    private void cleanUp()
+    {
+        if(ref!=null&&userInfoListener!=null)
+            ref.removeEventListener(userInfoListener);
     }
     
     @Override

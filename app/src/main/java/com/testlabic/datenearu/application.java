@@ -25,9 +25,16 @@ public class application extends Application {
     
         FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        
+        //setup test connection!
+        setUpConnectionTest();
     }
     
-   
+    private void setUpConnectionTest() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child("test");
+        reference.setValue("Test");
+    }
     
     public static application getInstance()
     {
