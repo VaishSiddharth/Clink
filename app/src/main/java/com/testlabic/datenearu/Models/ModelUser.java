@@ -25,7 +25,7 @@ public class ModelUser {
     }
     
     private String age;
-    LatLong location;
+    private LatLong location;
     private String cityLocation;
     private String about;
     private String cityLabel;

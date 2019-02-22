@@ -195,7 +195,7 @@ public class pagerTransition extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.e(TAG, "Paused pagerTransition");
+        //Log.e(TAG, "Paused pagerTransition");
         cleanup();
     }
     
@@ -741,7 +741,7 @@ public class pagerTransition extends Fragment {
         
         for (final ModelUser user : displayArrayList) {
             
-                Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
+              //  Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
                 if (user.getMatchAlgo() != null) {
                     double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
                     user.setMatchIndex(s);

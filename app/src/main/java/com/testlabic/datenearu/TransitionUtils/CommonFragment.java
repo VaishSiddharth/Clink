@@ -76,6 +76,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     Boolean isBlur = false;
     Boolean likedOnce = false;
     KonfettiView konfettiView;
+    ValueEventListener attemptListener;
+    DatabaseReference attemptRef;
     
     @Nullable
     @Override
@@ -283,18 +285,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 .diskCacheStrategy(DiskCacheStrategy.NONE);
 
         Glide.with(CommonFragment.this).load(imageUrl).apply(myOptions).into(imageView);
-
-        /*Glide.with(this).load(imageUrl).into(imageView);
-     
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Blurry.with(getActivity())
-                        .capture(imageView)
-                        .into((ImageView) imageView);
-            }
-        },300);*/
         
     }
     
@@ -401,7 +391,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         
         SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity())
                 .setTitleText("Attempt match?")
-                .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 points continue")
+                .setContentText("You will have to answer ten questions, and if you win you get a chance to connect, it will cost you 100 drops continue")
                 .setConfirmText("Yes!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -409,14 +399,14 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         sDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
                         sDialog.setContentText("Just a while, stay here!");
                         sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
-                        final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
+                        attemptRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.xPoints)
                                 .child(Constants.uid);
                         
-                        xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                       attemptListener = (new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                
+                                removeListeners();
                                 ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                                 if (modelSubscr != null) {
                                     int current = modelSubscr.getXPoints();
@@ -448,12 +438,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                             }
                                         });
                                         
-                                        /*dataSnapshot.getRef().updateChildren(updatePoints).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                Log.e(TAG, "THe results are "+task.getResult());
-                                            }
-                                        });*/
                                         
                                     }
                                 }
@@ -465,6 +449,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                             
                             }
                         });
+                       attemptRef.addValueEventListener(attemptListener);
                         
                         ///
                     }
@@ -579,6 +564,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private void removeListeners() {
         if (childEventListener != null)
             referenceDMIds.removeEventListener(childEventListener);
+        
+        if(attemptRef!=null&&attemptListener!=null)
+            attemptRef.removeEventListener(attemptListener);
     }
     
     private void BuyPoints() {

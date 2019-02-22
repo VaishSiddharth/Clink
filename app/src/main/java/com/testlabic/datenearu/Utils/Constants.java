@@ -69,6 +69,7 @@ public class Constants {
     public static String imageUrl3 = "imageUrl3";
     public static String userDetailsOff = "userDetailsOffline";
     public static String newUserSetupDone = "newUserSetupDown";
+    public static int wineAmount = 500;
     
     public static String encrypt(String cityLabel) {
         

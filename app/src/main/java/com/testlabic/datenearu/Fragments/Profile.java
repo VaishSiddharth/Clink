@@ -256,7 +256,7 @@ public class Profile extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue(ModelUser.class) != null) {
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                    if (user != null && user.getUserName() != null) {
+                    if (user != null && user.getUserName() != null&&getContext()!=null) {
                         Glide.with(getContext()).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(displayImage);
                         //Glide.with(Profile.this).load(user.getImageUrl()).into(displayImage);
                     }
