@@ -164,13 +164,13 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/shadow"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#eeeef0"
             android:id="@+id/recycler1">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
 
     </LinearLayout>

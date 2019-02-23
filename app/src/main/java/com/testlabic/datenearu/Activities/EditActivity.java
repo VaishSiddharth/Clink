@@ -1,18 +1,14 @@
 package com.testlabic.datenearu.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -43,22 +39,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.soundcloud.android.crop.Crop;
-import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
-import com.testlabic.datenearu.TransitionUtils.CommonFragment;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.Callable;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import jp.wasabeef.blurry.Blurry;
 
 public class EditActivity extends AppCompatActivity {
     

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Utils.locationUpdater">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
         android:layout_height="wrap_content">
@@ -16,7 +16,7 @@
             android:text="Choose Location"
             android:layout_height="wrap_content" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <customfonts.TextViewSFProDisplayRegular
         android:layout_width="wrap_content"

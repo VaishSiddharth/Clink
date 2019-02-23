@@ -1,6 +1,6 @@
 package com.testlabic.datenearu.ArchitectureUtils;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;

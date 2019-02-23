@@ -51,7 +51,7 @@
                         android:paddingEnd="16dp"
                         android:clipToPadding="false">
 
-                        <android.support.design.widget.FloatingActionButton
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/message_fab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                             rfab:rfab_shadow_color="#997A5BFE"
                             />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

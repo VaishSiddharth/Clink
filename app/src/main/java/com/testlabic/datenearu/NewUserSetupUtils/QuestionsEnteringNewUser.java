@@ -1,14 +1,13 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
 
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
-import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.NewQuestionUtils.QuestionsStepperAdapter;
 import com.testlabic.datenearu.R;
 
