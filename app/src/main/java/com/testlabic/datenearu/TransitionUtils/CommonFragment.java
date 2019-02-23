@@ -144,64 +144,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             }
         });
 
-        //setShowcaseView();
-
-        //showcase view
-
-
-        /*Handler handler =new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int[] imagelocation={0,0} ;
-                name.getLocationInWindow(imagelocation);
-                final float imageX=imagelocation[0]+name.getMeasuredWidth()/2f;
-                final float imageY=imagelocation[1]+name.getMeasuredHeight()/2f;
-                final float imageRadius=100f;
-                Log.e(TAG, String.valueOf(name.getMeasuredWidth())+"  "+String.valueOf(imageY));
-                final SimpleTarget simpleTarget = new SimpleTarget.Builder((Activity) getContext())
-                        .setPoint(imageX,imageY)
-                        .setShape(new Circle(500f)) // or RoundedRectangle()
-                        .setTitle("the title")
-                        .setDescription("the description")
-                        .setOverlayPoint(100f, imageY+imageRadius+100f)
-                        .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
-                            @Override
-                            public void onStarted(SimpleTarget target) {
-                                // do something
-                            }
-                            @Override
-                            public void onEnded(SimpleTarget target) {
-                                // do something
-                            }
-                        })
-                        .build();
-                Spotlight.with((Activity) getContext())
-                        .setOverlayColor(R.color.appcolorlessopacity)
-                        .setDuration(1000L)
-                        .setAnimation(new DecelerateInterpolator(2f))
-                        .setTargets(simpleTarget)
-                        .setClosedOnTouchedOutside(true)
-                        .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
-                            @Override
-                            public void onStarted() {
-                                Toast.makeText(getContext(), "spotlight is started", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onEnded() {
-                                Toast.makeText(getContext(), "spotlight is ended", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .start();
-            }
-        },5000);*/
-
-
-
-
-
-
         match = rootView.findViewById(R.id.attempt_match);
         match.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -334,60 +276,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             SharedPreferences.Editor editor = wmbPreference.edit();
             editor.putBoolean("SHOW20", false).apply();
         }
-
-
-
-        //showcase view
-        /*SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean isFirstRun = wmbPreference.getBoolean("SHOW", true);
-        //Log.e(TAG, "Showcase working i " + isFirstRun);
-        //Log.e(TAG, "Showcase working " + isFirstRun);
-        if (isFirstRun) {
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (getActivity() != null) {
-                        showcaseView = new ShowcaseView.Builder(getActivity())
-                                .setTarget(new ViewTarget(filterList))
-                                .setStyle(R.style.CustomShowcaseTheme2)
-                                .setContentTitle("PLANNER")
-                                .hideOnTouchOutside()
-                                .setContentText("SET REMINDER FOR EVENT")
-                                .setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        switch (counter) {
-                                            case 0:
-                                                showcaseView.setShowcase(new ViewTarget(changeLocation), true);
-                                                showcaseView.setContentTitle("LOCATION");
-                                                showcaseView.setContentText("FIND THE WAY TO REACH THE VENUE");
-                                                break;
-
-                                            case 1:
-                                                showcaseView.setShowcase(new ViewTarget(viewPager), true);
-                                                showcaseView.setContentTitle("OPEN CARD");
-                                                showcaseView.setContentText("TAP TO SEE THE DETAILS OF THE EVENT");
-                                                break;
-
-                                            case 2:
-                                                showcaseView.hide();
-                                                setAlpha(1.0f, filterList, changeLocation, viewPager);
-                                                break;
-                                        }
-                                        counter++;
-                                    }
-                                })
-                                .build();
-                    }
-                }
-            }, 2000);
-            // runOnce = true;
-        }
-        // Code to run once
-        SharedPreferences.Editor editor = wmbPreference.edit();
-        editor.putBoolean("SHOW", false).apply();*/
-
     }
     @Override
     public void onResume() {
