@@ -152,10 +152,7 @@ public class pagerTransition extends Fragment {
                 startActivityForResult(new Intent(getActivity(), locationUpdater.class), 87);
             }
         });
-
-        if (!sharedPreferences.getBoolean(Constants.shownShowCaser, false))
-            setupShowCaser();
-
+        
         filterList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,7 +226,7 @@ public class pagerTransition extends Fragment {
     public void setShowcaseView() {
         final SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean isFirstRun = wmbPreference.getBoolean("SHOW18", true);
-        if (true) {//make isFirstRun
+        if (isFirstRun) {//make isFirstRun
             rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -333,12 +330,7 @@ public class pagerTransition extends Fragment {
         }
 
     }
-
-    private void setAlpha(float alpha, View... views) {
-        for (View view : views) {
-            view.setAlpha(alpha);
-        }
-    }
+    
 
     private void setUpPoints() {
         PointLabelModel viewModel = ViewModelProviders.of(this).get(PointLabelModel.class);
@@ -639,26 +631,7 @@ public class pagerTransition extends Fragment {
 
     }
 
-    private void setupShowCaser() {
-        new ShowcaseView.Builder(getActivity())
-                //.withMaterialShowcase()
-                .setStyle(R.style.CustomShowcaseTheme2)
-                .setTarget(new ViewTarget(changeLocation))
-                .hideOnTouchOutside()
-                .setContentTitle("Your current city")
-                .setContentText("To change your city tap here, and then you can see profiles from your city")
-                .setShowcaseEventListener(new SimpleShowcaseEventListener() {
-                    @Override
-                    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-                        //onHiddenFirstShowcase();
-                    }
-                })
-                .withHoloShowcase()
-                .build();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(Constants.shownShowCaser, true).apply();
-    }
-
+  
     private void fillViewPager(final ArrayList<ModelUser> displayArrayList) {
 
         indicatorTv = (TextView) rootView.findViewById(R.id.indicator_tv);
