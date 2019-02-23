@@ -1,21 +1,21 @@
 package com.testlabic.datenearu.TransitionUtils;
 
 import android.app.Activity;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +44,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.startapp.android.publish.ads.banner.Banner;
-import com.testlabic.datenearu.Activities.SignIn;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.CityLabelModel;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PointLabelModel;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PrefsModel;
@@ -416,6 +415,8 @@ public class pagerTransition extends Fragment {
         });
         
     }
+    
+   
     
     private void showFilterDialog() {
         

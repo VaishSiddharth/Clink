@@ -3,20 +3,15 @@ package com.testlabic.datenearu;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ramotion.paperonboarding.PaperOnboardingEngine;
 import com.ramotion.paperonboarding.PaperOnboardingPage;
 import com.ramotion.paperonboarding.listeners.PaperOnboardingOnChangeListener;
 import com.ramotion.paperonboarding.listeners.PaperOnboardingOnRightOutListener;
-import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Activities.SignIn;
 
 import java.util.ArrayList;
-
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PaperOnboardingActivity extends AppCompatActivity {
 

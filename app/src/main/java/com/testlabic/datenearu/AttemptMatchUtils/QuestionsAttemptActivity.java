@@ -2,18 +2,14 @@ package com.testlabic.datenearu.AttemptMatchUtils;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 
 import com.stepstone.stepper.StepperLayout;
-import com.testlabic.datenearu.Models.ModelQuestion;
-import com.testlabic.datenearu.NewQuestionUtils.QuestionsStepperAdapter;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
-
-import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
