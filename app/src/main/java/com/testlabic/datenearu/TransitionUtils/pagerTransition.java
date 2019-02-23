@@ -742,7 +742,7 @@ public class pagerTransition extends Fragment {
         
         for (final ModelUser user : displayArrayList) {
             
-              //  Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
+                Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
                 if (user.getMatchAlgo() != null) {
                     double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
                     user.setMatchIndex(s);
