@@ -12,7 +12,7 @@ public class UserInfoModel extends ViewModel {
     public static void Ref(DatabaseReference userInfoRef) {
         USER_INFO_REF = userInfoRef;
     }
-    
+
     private static DatabaseReference USER_INFO_REF;
     
     private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(USER_INFO_REF);

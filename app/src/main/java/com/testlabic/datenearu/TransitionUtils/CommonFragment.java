@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.TransitionUtils;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +37,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.sackcentury.shinebuttonlib.ShineButton;
+import com.takusemba.spotlight.OnSpotlightStateChangedListener;
+import com.takusemba.spotlight.OnTargetStateChangedListener;
+import com.takusemba.spotlight.Spotlight;
+import com.takusemba.spotlight.shape.Circle;
+import com.takusemba.spotlight.target.SimpleTarget;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
@@ -45,11 +53,15 @@ import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
+
+import static com.google.common.collect.ComparisonChain.start;
 
 /**
  * Created by velox on 2019/01/18.
@@ -74,11 +86,12 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     KonfettiView konfettiView;
     ValueEventListener attemptListener;
     DatabaseReference attemptRef;
+    View rootView;
     
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_common, null);
+        rootView = inflater.inflate(R.layout.fragment_common, null);
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
        
@@ -130,7 +143,65 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 //Toast.makeText(getActivity(), "Under Progress", Toast.LENGTH_SHORT).show();
             }
         });
-        
+
+        //setShowcaseView();
+
+        //showcase view
+
+
+        /*Handler handler =new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int[] imagelocation={0,0} ;
+                name.getLocationInWindow(imagelocation);
+                final float imageX=imagelocation[0]+name.getMeasuredWidth()/2f;
+                final float imageY=imagelocation[1]+name.getMeasuredHeight()/2f;
+                final float imageRadius=100f;
+                Log.e(TAG, String.valueOf(name.getMeasuredWidth())+"  "+String.valueOf(imageY));
+                final SimpleTarget simpleTarget = new SimpleTarget.Builder((Activity) getContext())
+                        .setPoint(imageX,imageY)
+                        .setShape(new Circle(500f)) // or RoundedRectangle()
+                        .setTitle("the title")
+                        .setDescription("the description")
+                        .setOverlayPoint(100f, imageY+imageRadius+100f)
+                        .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
+                            @Override
+                            public void onStarted(SimpleTarget target) {
+                                // do something
+                            }
+                            @Override
+                            public void onEnded(SimpleTarget target) {
+                                // do something
+                            }
+                        })
+                        .build();
+                Spotlight.with((Activity) getContext())
+                        .setOverlayColor(R.color.appcolorlessopacity)
+                        .setDuration(1000L)
+                        .setAnimation(new DecelerateInterpolator(2f))
+                        .setTargets(simpleTarget)
+                        .setClosedOnTouchedOutside(true)
+                        .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
+                            @Override
+                            public void onStarted() {
+                                Toast.makeText(getContext(), "spotlight is started", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onEnded() {
+                                Toast.makeText(getContext(), "spotlight is ended", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .start();
+            }
+        },5000);*/
+
+
+
+
+
+
         match = rootView.findViewById(R.id.attempt_match);
         match.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +227,174 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         dragLayout.setGotoDetailListener(this);
         return rootView;
     }
-    
+
+    public void setShowcaseView() {
+        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean isFirstRun = wmbPreference.getBoolean("SHOW20", true);
+        boolean isFirstRun1 = wmbPreference.getBoolean("SHOW21", true);
+        //Log.e(TAG, String.valueOf(isFirstRun));
+        if ((isFirstRun)&&(!isFirstRun1)) {//make isFirstRun
+            rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    //first target
+                    int[] imagelocation1 = {0, 0};
+                    imageView.getLocationInWindow(imagelocation1);
+                    final float imageX1 = imagelocation1[0] + imageView.getMeasuredWidth() / 2f;
+                    final float imageY1 = imagelocation1[1] + imageView.getMeasuredHeight() / 2f;
+                    final float imageRadius1 = 100f;
+                    //Log.e(TAG, String.valueOf(filterList.getMeasuredWidth()) + "  " + String.valueOf(imageY));
+                    final SimpleTarget simpleTarget1 = new SimpleTarget.Builder((Activity) getContext())
+                            .setPoint(imageX1, imageY1)
+                            .setShape(new Circle(400f)) // or RoundedRectangle()
+                            .setTitle("the title")
+                            .setDescription("the description")
+                            .setOverlayPoint(100f, imageY1 + imageRadius1 + 300f)
+                            .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
+                                @Override
+                                public void onStarted(SimpleTarget target) {
+                                    // do something
+                                }
+
+                                @Override
+                                public void onEnded(SimpleTarget target) {
+                                    // do something
+                                }
+                            })
+                            .build();
+                    //second target
+                    int[] imagelocation2 = {0, 0};
+                    match.getLocationInWindow(imagelocation2);
+                    final float imageX2 = imagelocation2[0] + match.getMeasuredWidth() / 2f;
+                    final float imageY2 = imagelocation2[1] + match.getMeasuredHeight() / 2f;
+                    final float imageRadius2 = 200f;
+                    final SimpleTarget simpleTarget2 = new SimpleTarget.Builder((Activity) getContext())
+                            .setPoint(imageX2, imageY2)
+                            .setShape(new Circle(100f)) // or RoundedRectangle()
+                            .setTitle("the title")
+                            .setDescription("the description")
+                            .setOverlayPoint(100f,  imageRadius2 + 100f)
+                            .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
+                                @Override
+                                public void onStarted(SimpleTarget target) {
+                                    // do something
+                                }
+
+                                @Override
+                                public void onEnded(SimpleTarget target) {
+                                    // do something
+                                }
+                            })
+                            .build();
+                    //third target
+                    /*int[] imagelocation3 = {0, 0};
+                    bottle.getLocationInWindow(imagelocation3);
+                    final float imageX3 = imagelocation3[0] + bottle.getMeasuredWidth() / 2f;
+                    final float imageY3 = imagelocation3[1] + bottle.getMeasuredHeight() / 2f;
+                    final float imageRadius3 = 400f;
+                    final SimpleTarget simpleTarget3 = new SimpleTarget.Builder((Activity) getContext())
+                            .setPoint(imageX3, imageY3)
+                            .setShape(new Circle(100f)) // or RoundedRectangle()
+                            .setTitle("the title")
+                            .setDescription("the description")
+                            .setOverlayPoint(100f, imageY3 + imageRadius3 + 100f)
+                            .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
+                                @Override
+                                public void onStarted(SimpleTarget target) {
+                                    // do something
+                                }
+
+                                @Override
+                                public void onEnded(SimpleTarget target) {
+                                    // do something
+                                }
+                            })
+                            .build();*/
+                    Spotlight.with((Activity) getContext())
+                            .setOverlayColor(R.color.background)
+                            .setDuration(1000L)
+                            .setAnimation(new DecelerateInterpolator(2f))
+                            .setTargets(simpleTarget1,simpleTarget2)
+                            .setClosedOnTouchedOutside(true)
+                            .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
+                                @Override
+                                public void onStarted() {
+                                    Toast.makeText(getContext(), "spotlight is started", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onEnded() {
+                                    Toast.makeText(getContext(), "spotlight is ended", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .start();
+                }
+            });
+            SharedPreferences.Editor editor = wmbPreference.edit();
+            editor.putBoolean("SHOW20", false).apply();
+        }
+
+
+
+        //showcase view
+        /*SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean isFirstRun = wmbPreference.getBoolean("SHOW", true);
+        //Log.e(TAG, "Showcase working i " + isFirstRun);
+        //Log.e(TAG, "Showcase working " + isFirstRun);
+        if (isFirstRun) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (getActivity() != null) {
+                        showcaseView = new ShowcaseView.Builder(getActivity())
+                                .setTarget(new ViewTarget(filterList))
+                                .setStyle(R.style.CustomShowcaseTheme2)
+                                .setContentTitle("PLANNER")
+                                .hideOnTouchOutside()
+                                .setContentText("SET REMINDER FOR EVENT")
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        switch (counter) {
+                                            case 0:
+                                                showcaseView.setShowcase(new ViewTarget(changeLocation), true);
+                                                showcaseView.setContentTitle("LOCATION");
+                                                showcaseView.setContentText("FIND THE WAY TO REACH THE VENUE");
+                                                break;
+
+                                            case 1:
+                                                showcaseView.setShowcase(new ViewTarget(viewPager), true);
+                                                showcaseView.setContentTitle("OPEN CARD");
+                                                showcaseView.setContentText("TAP TO SEE THE DETAILS OF THE EVENT");
+                                                break;
+
+                                            case 2:
+                                                showcaseView.hide();
+                                                setAlpha(1.0f, filterList, changeLocation, viewPager);
+                                                break;
+                                        }
+                                        counter++;
+                                    }
+                                })
+                                .build();
+                    }
+                }
+            }, 2000);
+            // runOnce = true;
+        }
+        // Code to run once
+        SharedPreferences.Editor editor = wmbPreference.edit();
+        editor.putBoolean("SHOW", false).apply();*/
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setShowcaseView();
+    }
+
     private void executeLikeFunction() {
         //give 10 drops for liking
         
