@@ -1,14 +1,18 @@
 package com.testlabic.datenearu.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,25 +55,28 @@ public class Profile extends Fragment {
     public Profile() {
         // Required empty public constructor
     }
+    
     private ProfileAdapter profileAdapter;
     private RecyclerView recyclerview;
     private ArrayList<ProfileModel> profileModelArrayList;
-    private  View rootView;
+    private View rootView;
     private TextView username, desc;
     private ImageView displayImage, edit;
     private TextView points, buy;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     
-    Integer inbox[]={R.drawable.ic_inbox,R.drawable.ic_like,R.drawable.ic_profile,R.drawable.ic_settings};
-    Integer arrow[]={R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,
-            R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp};
-    String txttrades[]={"My Questions","Edit Profile","About you","Sign Out"};
-    String txthistory[]={"Your questions for matches","Improve your profile","Tap to Edit","Logout from app"};
+    Integer inbox[] = {R.drawable.ic_inbox, R.drawable.ic_like, R.drawable.ic_profile, R.drawable.ic_settings};
+    Integer arrow[] = {R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp,
+            R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp};
+    String txttrades[] = {"My Questions", "Edit Profile", "About you", "Sign Out"};
+    String txthistory[] = {"Your questions for matches", "Improve your profile", "Tap to Edit", "Logout from app"};
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView =  inflater.inflate(R.layout.fragment_profile, container, false);
+        rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         username = rootView.findViewById(R.id.username);
         desc = rootView.findViewById(R.id.about);
         edit = rootView.findViewById(R.id.edit);
@@ -109,49 +116,82 @@ public class Profile extends Fragment {
         profileModelArrayList = new ArrayList<>();
         
         for (int i = 0; i < inbox.length; i++) {
-            ProfileModel view = new ProfileModel(inbox[i],arrow[i],txttrades[i],txthistory[i]);
+            ProfileModel view = new ProfileModel(inbox[i], arrow[i], txttrades[i], txthistory[i]);
             profileModelArrayList.add(view);
         }
-        profileAdapter = new ProfileAdapter(getActivity(),profileModelArrayList);
+        profileAdapter = new ProfileAdapter(getActivity(), profileModelArrayList);
         recyclerview.setAdapter(profileAdapter);
-        
-        
         
         return rootView;
     }
     
     private void showEditDialog(String text) {
-    
+        
         final LayoutInflater factory = LayoutInflater.from(getActivity());
         final View editTextDialog = factory.inflate(R.layout.dialog_edittext, null);
         final EditText editText = editTextDialog.findViewById(R.id.ediText);
         editText.setText(text);
-    
+        
         new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 // .setTitleText("Send a one-time message (25 pts)?")
                 .setCustomView(editTextDialog)
                 .setConfirmButton("Update!", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sDialog) {
-    
+                        
                         //display edit text
                         String text = editText.getText().toString();
-                        if(text.matches(""))
-                        {
+                        if (text.matches("")) {
                             Toast.makeText(getActivity(), "Can't be empty!", Toast.LENGTH_SHORT).show();
-                        }
-                        
-                        else
-                        {
+                        } else {
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
                                     .child(Constants.uid);
-    
-                            HashMap<String, Object> updateMap = new HashMap<>();
+                            
+                            final HashMap<String, Object> updateMap = new HashMap<>();
                             updateMap.put("oneLine", text);
                             
                             reference.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    
+                                    //updateAgain
+                                    sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
+                                    final String cityLabel = sharedPreferences.getString(Constants.cityLabel, null);
+                                    final String gender = sharedPreferences.getString(Constants.userGender, null);
+                                    if (cityLabel != null) {
+                                        if (gender == null) {
+                                            DatabaseReference genderRef = FirebaseDatabase.getInstance().getReference()
+                                                    .child(Constants.userInfo)
+                                                    .child(Constants.uid).child("gender");
+                                            genderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.exists()) {
+                                                        if (dataSnapshot.getValue(String.class) != null) {
+                                                            editor = sharedPreferences.edit();
+                                                            editor.putString(Constants.userGender, dataSnapshot.getValue(String.class)).apply();
+                                                            DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()
+                                                                    .child(Constants.cityLabels).child(cityLabel).child(dataSnapshot.getValue(String.class)).child(Constants.uid);
+                                                           // Log.e("Test", String.valueOf(reference1));
+                                                            reference1.updateChildren(updateMap);
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                
+                                                }
+                                            });
+                                        } else {
+                                            DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()
+                                                    .child(Constants.cityLabels).child(cityLabel).child(gender).child(Constants.uid);
+                                            //Log.e("Test2", String.valueOf(reference1));
+    
+                                            reference1.updateChildren(updateMap);
+                                        }
+                                    }
+                                    
                                     sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                                     sDialog
                                             .setTitleText("Successful!")
@@ -164,14 +204,13 @@ public class Profile extends Fragment {
                                             sDialog.dismissWithAnimation();
                                         }
                                     }, 2000);
-    
+                                    
                                 }
                             });
                             //TODO: update other places also;
                             
-                            
                         }
-    
+                        
                     }
                 })
                 .show();
@@ -188,19 +227,19 @@ public class Profile extends Fragment {
                 
                 final String text = dataSnapshot.getValue(String.class);
                 desc.setText(text);
-    
+                
                 edit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showEditDialog( text);
-            
+                        showEditDialog(text);
+                        
                     }
                 });
-             }
-    
+            }
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
     }
@@ -218,7 +257,7 @@ public class Profile extends Fragment {
                     int current = modelSubscr.getXPoints();
                     String set = String.valueOf(current);
                     points.setText(set);
-
+                    
                 }
             }
             
@@ -230,42 +269,36 @@ public class Profile extends Fragment {
     }
     
     private void fillProfile() {
-    
+        
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null)
-        {
-            if(user.getDisplayName()!=null)
+        if (user != null) {
+            if (user.getDisplayName() != null)
                 username.setText(user.getDisplayName());
             
-            if(user.getPhotoUrl()!=null)
-            {
+            if (user.getPhotoUrl() != null) {
                 Glide.with(getContext()).load(user.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(displayImage);
             }
         }
-
-
-
-
-
+        
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
-
+        
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue(ModelUser.class) != null) {
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                    if (user != null && user.getUserName() != null&&getContext()!=null) {
+                    if (user != null && user.getUserName() != null && getContext() != null) {
                         Glide.with(getContext()).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(displayImage);
                         //Glide.with(Profile.this).load(user.getImageUrl()).into(displayImage);
                     }
-
+                    
                 }
-
+                
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
         });
         

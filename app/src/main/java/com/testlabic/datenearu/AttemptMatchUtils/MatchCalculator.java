@@ -89,9 +89,9 @@ public class MatchCalculator extends AppCompatActivity {
         
         SweetAlertDialog sweetAlertDialog1=new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
         sweetAlertDialog1.setTitleText("Oops...")
-                .setContentText("Too different answers!\nHmmm, you can send a bottle of wine, s/he may notice you!\n(500 drops)")
+                .setContentText("Too different answers!\n\nHmmm, you can send a bottle of wine, s/he may notice you!")
                 .setCustomImage(R.drawable.wine_bottle)
-                .setConfirmButton("Yes!", new SweetAlertDialog.OnSweetClickListener() {
+                .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
@@ -150,9 +150,22 @@ public class MatchCalculator extends AppCompatActivity {
                         });
                     }
                 })
+                .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        startActivity(new Intent(MatchCalculator.this,MainActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        sweetAlertDialog.dismiss();
+                        finish();
+                    }
+                })
                 .show();
         Button btn=sweetAlertDialog1.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
+    
+        Button cancel=sweetAlertDialog1.findViewById(R.id.cancel_button);
+        cancel.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
+    
     }
     
     private void sendWine() {

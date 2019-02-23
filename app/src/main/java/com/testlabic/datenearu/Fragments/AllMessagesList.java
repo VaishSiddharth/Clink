@@ -137,7 +137,6 @@ public class AllMessagesList extends Fragment {
                                                         Collections.sort(list, new Comparator<ModelLastMessage>() {
                                                             @Override
                                                             public int compare(ModelLastMessage v1, ModelLastMessage v2) {
-
                                                                 long sub = v2.getTimeStamp() - (v1.getTimeStamp());
                                                                 return (int) sub;
                                                             }
@@ -254,8 +253,8 @@ public class AllMessagesList extends Fragment {
     }
     
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         
         if (cAdapter != null)
             cAdapter.stopListening();
