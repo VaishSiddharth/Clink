@@ -185,6 +185,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/gradient_setupuser_shade"/>
+                <View
+                    android:id="@+id/view_on_blur"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_darker_fragment_blur"/>
 
             </FrameLayout>
 

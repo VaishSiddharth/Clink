@@ -87,6 +87,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     ValueEventListener attemptListener;
     DatabaseReference attemptRef;
     View rootView;
+    View blur_view;
     
     @Nullable
     @Override
@@ -104,6 +105,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         like_shine = rootView.findViewById(R.id.like_shiny);
         konfettiView = rootView.findViewById(R.id.viewKonfetti);
         like_shine.init(getActivity());
+        blur_view=rootView.findViewById(R.id.view_on_blur);
         like_shine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -407,7 +409,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 .diskCacheStrategy(DiskCacheStrategy.NONE);
 
         Glide.with(CommonFragment.this).load(imageUrl).apply(myOptions).into(imageView);
-        
+        imageView.setAlpha(0.7f);
+        blur_view.setVisibility(View.VISIBLE);
     }
     
     private void showDmInfoDialog() {
