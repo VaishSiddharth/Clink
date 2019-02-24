@@ -1,34 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center">
+    <ImageView
+        android:id="@+id/rgbottle"
+        android:paddingTop="20dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/regular_bottle"/>
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
         android:textSize="18sp"
         android:id="@+id/one"
+        android:layout_below="@+id/rgbottle"
         android:layout_gravity="center"
         android:text="Regular Wine (500 drops)"
         android:layout_width="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/prbottle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/one"
+        android:src="@drawable/premium_bottle"/>
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
         android:textSize="18sp"
         android:id="@+id/two"
         android:layout_gravity="center"
-        android:layout_margin="16dp"
+        android:layout_below="@id/prbottle"
+        android:layout_margin="10dp"
         android:text="Premium Wine (800 drops)"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/rybottle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/two"
+        android:src="@drawable/royal_bottle"/>
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
         android:textSize="18sp"
         android:id="@+id/three"
         android:layout_gravity="center"
-        android:layout_margin="16dp"
-
+        android:layout_margin="10dp"
+        android:layout_below="@+id/rybottle"
         android:text="Royal Wine (1000 drops)"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
+    <customfonts.MyTextView_SF_Pro_Display_Bold
+        android:textSize="18sp"
+        android:id="@+id/four"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/rybottle"
+        android:text="Royal Wine (1000 drops)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

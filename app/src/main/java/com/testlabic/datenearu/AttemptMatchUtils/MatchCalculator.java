@@ -40,12 +40,12 @@ import nl.dionsegijn.konfetti.models.Size;
 import ru.github.igla.ferriswheel.FerrisWheelView;
 
 public class MatchCalculator extends AppCompatActivity {
-    
+
     private static final String TAG = MatchCalculator.class.getSimpleName();
     private String clickedUsersId;
     private FerrisWheelView ferrisWheelView;
     SweetAlertDialog sweetAlertDialog1;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +65,7 @@ public class MatchCalculator extends AppCompatActivity {
                     if (clickedUsersId != null) {
                         showSuccessDialog();
                     }
-                    
+
                     ferrisWheelView.stopAnimation();
                     ferrisWheelView.setVisibility(View.GONE);
                     //statusMatch.setText(getResources().getString(R.string.matchSuccess));
@@ -74,18 +74,18 @@ public class MatchCalculator extends AppCompatActivity {
                     ferrisWheelView.setVisibility(View.GONE);
                     showFailedDialog();
                     // statusMatch.setText(getResources().getString(R.string.matchFailed));
-                    
+
                 }
             }
         }, 3000);
-        
+
     }
-    
+
     private void showFailedDialog() {
-        
+
         // LayoutInflater factory = LayoutInflater.from(this);
         // final View filterDialogView = factory.inflate(R.layout.send_wine, null);
-        
+
         sweetAlertDialog1 = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
         sweetAlertDialog1.setTitleText("Oops...")
                 .setContentText("Too different answers!\n\nHmmm, you can send a bottle of wine, s/he may notice you!")
@@ -109,67 +109,67 @@ public class MatchCalculator extends AppCompatActivity {
         sweetAlertDialog1.setCancelable(false);
         Button btn=sweetAlertDialog1.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
-    
+
         Button cancel=sweetAlertDialog1.findViewById(R.id.cancel_button);
         cancel.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
-    
+
     }
-    
+
     private void showWineTypes(final SweetAlertDialog mainDialog) {
-    
+
         LayoutInflater factory = LayoutInflater.from(this);
         final View wineCategory = factory.inflate(R.layout.wine_categories, null);
-        
+
         TextView one, two, three;
-        
+
         one = wineCategory.findViewById(R.id.one);
         two = wineCategory.findViewById(R.id.two);
         three = wineCategory.findViewById(R.id.three);
-        
-         final SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-                 .setCustomView(wineCategory);
-         
+
+        final SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+                .setCustomView(wineCategory);
+
         alertDialog.show();
-        
+
         one.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 initateSendingWine(Constants.wineAmount, alertDialog, mainDialog);
-             }
-         });
-    
+            @Override
+            public void onClick(View v) {
+                initateSendingWine(Constants.wineAmount, alertDialog, mainDialog);
+            }
+        });
+
         two.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initateSendingWine(800, alertDialog, mainDialog);
             }
         });
-    
+
         three.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initateSendingWine(1000, alertDialog, mainDialog);
             }
         });
-        
+
     }
-    
+
     private void initateSendingWine(final int wineAmount, final SweetAlertDialog secondMainDialog, final SweetAlertDialog mainDialog) {
-    
+
         //complete the transaction and update accordingly
-    
+
         final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.xPoints)
                 .child(Constants.uid);
-    
+
         xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            
+
                 final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.PROGRESS_TYPE)
                         .setContentText("Loading");
                 sweetAlertDialog.show();
-                   ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                 if (modelSubscr != null) {
                     int current = modelSubscr.getXPoints();
                     if (current < wineAmount) {
@@ -186,7 +186,7 @@ public class MatchCalculator extends AppCompatActivity {
                                         .setTitleText("Sending!")
                                         .setContentText("Your wine is on its way")
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-    
+
                                 //sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                                 sendWine();
                                 Handler handler = new Handler();
@@ -203,19 +203,19 @@ public class MatchCalculator extends AppCompatActivity {
                                 }, 2500);
                             }
                         });
-                    
+
                     }
                 }
-            
+
             }
-        
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+
             }
         });
     }
-    
+
     private void sendWine() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Notifications)
@@ -223,22 +223,22 @@ public class MatchCalculator extends AppCompatActivity {
         /*
         constructing message!
          */
-        
+
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String message = userName + " sent you a premium bottle of wine! \nCheck out his/her profile and connect with him by accepting the request.";
-        
+
         long timeStamp = -1 * new java.util.Date().getTime();
         String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
         ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
-        
+
         reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 //add 300 drops to receivers
-                
+
                 final DatabaseReference DROP_REF =
                         FirebaseDatabase.getInstance().getReference().child(Constants.xPoints).child(clickedUsersId);
-                
+
                 DROP_REF.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -255,22 +255,22 @@ public class MatchCalculator extends AppCompatActivity {
                             }
                         }
                     }
-    
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+
                     }
                 });
             }
         });
     }
-    
+
     private void BuyPoints() {
         startActivity(new Intent(MatchCalculator.this, PurchasePacks.class));
     }
-    
+
     private void showSuccessDialog() {
-        
+
         KonfettiView konfettiView = findViewById(R.id.viewKonfetti);
         konfettiView.build()
                 .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
@@ -282,7 +282,7 @@ public class MatchCalculator extends AppCompatActivity {
                 .addSizes(new Size(12, 5))
                 .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
                 .streamFor(300, 5000L);
-        
+
         final SweetAlertDialog mainDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
         mainDialog.setTitleText("You passed!");
         mainDialog.setContentText("Do you want us to notify the other person, and then if he/she wants, will be able to connect with you!");
@@ -298,15 +298,15 @@ public class MatchCalculator extends AppCompatActivity {
                                   */
                 String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                 String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.";
-                
+
                 long timeStamp = -1 * new java.util.Date().getTime();
                 String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
                 ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
-                
+
                 reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        
+
                         sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(true);
                         //sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CANCEL);
                         sweetAlertDialog.showCancelButton(false);
@@ -324,30 +324,30 @@ public class MatchCalculator extends AppCompatActivity {
                                 .setConfirmButton("Send message?", new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        
+
                                         final LayoutInflater factory = LayoutInflater.from(MatchCalculator.this);
                                         final View editTextDialog = factory.inflate(R.layout.dialog_edittext, null);
                                         final EditText editText = editTextDialog.findViewById(R.id.ediText);
-                                        
+
                                         SweetAlertDialog sweetAlertDialog1=new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.NORMAL_TYPE);
                                         // .setTitleText("Send a one-time message (25 pts)?")
                                         sweetAlertDialog1.setCustomView(editTextDialog);
                                         sweetAlertDialog1.setConfirmButton("25 drops", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(final SweetAlertDialog sDialog) {
-                                                
+
                                                 //display edit text
                                                 //complete transaction
-                                                
+
                                                 sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                                                 final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                                                         .child(Constants.xPoints)
                                                         .child(Constants.uid);
-                                                
+
                                                 xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        
+
                                                         ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                                                         if (modelSubscr != null) {
                                                             int current = modelSubscr.getXPoints();
@@ -361,31 +361,31 @@ public class MatchCalculator extends AppCompatActivity {
                                                                 dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                     @Override
                                                                     public void onSuccess(Void aVoid) {
-                                                                        
+
                                                                         //first update notification
-                                                                        
+
                                                                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                                                                 .child(Constants.Notifications)
                                                                                 .child(clickedUsersId).child(Constants.unread).push();
                                                                         String messageText = editText.getText().toString();
-                                                                        
+
                                                                         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                                                                         String message = userName + " has sent you a one time message!\n\n" + "\"" + messageText + "\"";
-                                                                        
+
                                                                         long timeStamp = -1 * new java.util.Date().getTime();
                                                                         String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
                                                                         ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, true);
-                                                                        
+
                                                                         reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                             @Override
                                                                             public void onSuccess(Void aVoid) {
-                                                                                
+
                                                                                 sDialog
                                                                                         .setTitleText("Message Sent!")
                                                                                         .setContentText("Best of luck!")
                                                                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                                                                 sDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
-                                                                                
+
                                                                                 Handler handler = new Handler();
                                                                                 handler.postDelayed(new Runnable() {
                                                                                     @Override
@@ -402,16 +402,16 @@ public class MatchCalculator extends AppCompatActivity {
                                                             }
                                                         }
                                                     }
-                                                    
+
                                                     @Override
                                                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                    
+
                                                     }
                                                 });
-                                                
+
                                             }
                                         });
-                                        
+
                                         sweetAlertDialog1.show();
                                         Button btn=sweetAlertDialog1.findViewById(R.id.confirm_button);
                                         btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
@@ -424,7 +424,7 @@ public class MatchCalculator extends AppCompatActivity {
                         btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
                         Button btn1=sweetAlertDialog.findViewById(R.id.cancel_button);
                         btn1.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
-                        
+
                         //show another dialog to write a one-time message!
                     }
                 });
@@ -455,7 +455,7 @@ public class MatchCalculator extends AppCompatActivity {
                         btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
                         Button btn1=sweetAlertDialog1.findViewById(R.id.cancel_button);
                         btn1.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
-                        
+
                     }
                 });
         mainDialog.setCancelable(false);
@@ -464,18 +464,18 @@ public class MatchCalculator extends AppCompatActivity {
         btn.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
         Button btn1=mainDialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
-        
+
     }
-    
+
     private void SendRequestMessage() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(clickedUsersId).child(Constants.requestMessages)
                 .child(Constants.uid);
-        
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            
+
             String photoUrl = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
             String name = String.valueOf(user.getDisplayName());
             long timeStamp = new java.util.Date().getTime();
@@ -484,8 +484,8 @@ public class MatchCalculator extends AppCompatActivity {
             reference.setValue(message);
         }
     }
-    
-    
+
+
     @Override
     public void onBackPressed() {
         SweetAlertDialog alertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
