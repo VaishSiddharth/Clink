@@ -1,7 +1,5 @@
 package com.testlabic.datenearu.AttemptMatchUtils;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
@@ -46,6 +44,7 @@ public class MatchCalculator extends AppCompatActivity {
     private static final String TAG = MatchCalculator.class.getSimpleName();
     private String clickedUsersId;
     private FerrisWheelView ferrisWheelView;
+    SweetAlertDialog sweetAlertDialog1;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,67 +86,14 @@ public class MatchCalculator extends AppCompatActivity {
         // LayoutInflater factory = LayoutInflater.from(this);
         // final View filterDialogView = factory.inflate(R.layout.send_wine, null);
         
-        SweetAlertDialog sweetAlertDialog1=new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
+        sweetAlertDialog1 = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
         sweetAlertDialog1.setTitleText("Oops...")
                 .setContentText("Too different answers!\n\nHmmm, you can send a bottle of wine, s/he may notice you!")
                 .setCustomImage(R.drawable.wine_bottle)
-                .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
+                .setConfirmButton("Send Wine", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
-                        
-                        //complete the transaction and update accordingly
-                        
-                        final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
-                                .child(Constants.xPoints)
-                                .child(Constants.uid);
-                        
-                        xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                
-                                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
-                                if (modelSubscr != null) {
-                                    int current = modelSubscr.getXPoints();
-                                    if (current < 500) {
-                                        Toast.makeText(MatchCalculator.this, "You don't have enough drops, buy now!", Toast.LENGTH_SHORT).show();
-                                        BuyPoints();
-                                    } else {
-                                        current -= Constants.wineAmount;
-                                        HashMap<String, Object> updatePoints = new HashMap<>();
-                                        updatePoints.put(Constants.xPoints, current);
-                                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                sweetAlertDialog
-                                                        .setTitleText("Sending!")
-                                                        .setContentText("Your wine is on its way")
-                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                                                sweetAlertDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
-                                                sendWine();
-                                                Handler handler = new Handler();
-                                                handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        startActivity(new Intent(MatchCalculator.this,MainActivity.class)
-                                                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                                                        sweetAlertDialog.dismiss();
-                                                        finish();
-                                                    }
-                                                }, 2500);
-                                            }
-                                        });
-                                        
-                                    }
-                                }
-                                
-                            }
-                            
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            
-                            }
-                        });
+                        showWineTypes(sweetAlertDialog);
                     }
                 })
                 .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
@@ -160,12 +106,112 @@ public class MatchCalculator extends AppCompatActivity {
                     }
                 })
                 .show();
+        sweetAlertDialog1.setCancelable(false);
         Button btn=sweetAlertDialog1.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
     
         Button cancel=sweetAlertDialog1.findViewById(R.id.cancel_button);
         cancel.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
     
+    }
+    
+    private void showWineTypes(final SweetAlertDialog mainDialog) {
+    
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View wineCategory = factory.inflate(R.layout.wine_categories, null);
+        
+        TextView one, two, three;
+        
+        one = wineCategory.findViewById(R.id.one);
+        two = wineCategory.findViewById(R.id.two);
+        three = wineCategory.findViewById(R.id.three);
+        
+         final SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+                 .setCustomView(wineCategory);
+         
+        alertDialog.show();
+        
+        one.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 initateSendingWine(Constants.wineAmount, alertDialog, mainDialog);
+             }
+         });
+    
+        two.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initateSendingWine(800, alertDialog, mainDialog);
+            }
+        });
+    
+        three.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initateSendingWine(1000, alertDialog, mainDialog);
+            }
+        });
+        
+    }
+    
+    private void initateSendingWine(final int wineAmount, final SweetAlertDialog secondMainDialog, final SweetAlertDialog mainDialog) {
+    
+        //complete the transaction and update accordingly
+    
+        final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+    
+        xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            
+                final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(MatchCalculator.this);
+                   ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                if (modelSubscr != null) {
+                    int current = modelSubscr.getXPoints();
+                    if (current < wineAmount) {
+                        Toast.makeText(MatchCalculator.this, "You don't have enough drops, buy now!", Toast.LENGTH_SHORT).show();
+                        BuyPoints();
+                    } else {
+                        current -= wineAmount;
+                        HashMap<String, Object> updatePoints = new HashMap<>();
+                        updatePoints.put(Constants.xPoints, current);
+                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                sweetAlertDialog
+                                        .setTitleText("Sending!")
+                                        .setContentText("Your wine is on its way")
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+    
+                                sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
+                                sendWine();
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startActivity(new Intent(MatchCalculator.this,MainActivity.class)
+                                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                        sweetAlertDialog.dismiss();
+                                        secondMainDialog.dismiss();
+                                        mainDialog.dismiss();
+                                        finish();
+                                    }
+                                }, 8000);
+                            }
+                        });
+                    
+                    }
+                }
+            
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
     }
     
     private void sendWine() {
@@ -349,13 +395,10 @@ public class MatchCalculator extends AppCompatActivity {
                                                                                 }, 2500);
                                                                             }
                                                                         });
-                                                                        
                                                                     }
                                                                 });
-                                                                
                                                             }
                                                         }
-                                                        
                                                     }
                                                     
                                                     @Override
