@@ -99,6 +99,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
                         //holder.linear.setBackgroundResource(R.drawable.rect_white_border);
                         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/SF-Pro-Display-Bold.otf");
                         holder.name.setTypeface(tf);
+                        holder.time.setTypeface(tf);
                         holder.name.setTextColor(context.getResources().getColor(R.color.shade_black));
                         
                     }

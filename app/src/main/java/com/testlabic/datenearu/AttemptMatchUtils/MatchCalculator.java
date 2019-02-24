@@ -284,7 +284,7 @@ public class MatchCalculator extends AppCompatActivity {
                                         SweetAlertDialog sweetAlertDialog1=new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.NORMAL_TYPE);
                                         // .setTitleText("Send a one-time message (25 pts)?")
                                         sweetAlertDialog1.setCustomView(editTextDialog);
-                                        sweetAlertDialog1.setConfirmButton("Sure!", new SweetAlertDialog.OnSweetClickListener() {
+                                        sweetAlertDialog1.setConfirmButton("25 drops", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(final SweetAlertDialog sDialog) {
                                                 
@@ -304,7 +304,7 @@ public class MatchCalculator extends AppCompatActivity {
                                                         if (modelSubscr != null) {
                                                             int current = modelSubscr.getXPoints();
                                                             if (current < Constants.oneTimeMessageCost) {
-                                                                Toast.makeText(MatchCalculator.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(MatchCalculator.this, "You don't have enough drops, buy now!", Toast.LENGTH_SHORT).show();
                                                                 BuyPoints();
                                                             } else {
                                                                 current -= Constants.oneTimeMessageCost;
@@ -342,8 +342,9 @@ public class MatchCalculator extends AppCompatActivity {
                                                                                 handler.postDelayed(new Runnable() {
                                                                                     @Override
                                                                                     public void run() {
-                                                                                        startActivity(new Intent(MatchCalculator.this, MainActivity.class));
-                                                                                        sDialog.dismiss();
+                                                                                        Intent i = new Intent(MatchCalculator.this, MainActivity.class);
+                                                                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                                        startActivity(i);                                                                                        sDialog.dismiss();
                                                                                     }
                                                                                 }, 2500);
                                                                             }
