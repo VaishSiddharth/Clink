@@ -166,7 +166,7 @@ public class MatchCalculator extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             
-                final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(MatchCalculator.this)
+                final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.PROGRESS_TYPE)
                         .setContentText("Loading");
                 sweetAlertDialog.show();
                    ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
