@@ -214,6 +214,16 @@
                     android:textSize="20sp"
                     android:shadowColor="@color/black"/>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/female_glass1"/>
                 <customfonts.MyTextView_SF_Pro_Display_Medium
                     android:id="@+id/age"
                     android:layout_width="wrap_content"
@@ -223,6 +233,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:shadowColor="@color/black"/>
+                </LinearLayout>
 
                 <customfonts.TextViewSFProDisplayRegular
                     android:layout_width="wrap_content"
@@ -239,7 +250,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/address1"
