@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Fliply.iml" filepath="$PROJECT_DIR$/Fliply.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/datex.iml" filepath="$PROJECT_DIR$/datex.iml" />
     </modules>
   </component>
 </project>
