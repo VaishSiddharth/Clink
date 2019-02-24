@@ -166,7 +166,9 @@ public class MatchCalculator extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             
-                final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(MatchCalculator.this);
+                final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(MatchCalculator.this)
+                        .setContentText("Loading");
+                sweetAlertDialog.show();
                    ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                 if (modelSubscr != null) {
                     int current = modelSubscr.getXPoints();
@@ -185,7 +187,7 @@ public class MatchCalculator extends AppCompatActivity {
                                         .setContentText("Your wine is on its way")
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
     
-                                sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
+                                //sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                                 sendWine();
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
@@ -198,7 +200,7 @@ public class MatchCalculator extends AppCompatActivity {
                                         mainDialog.dismiss();
                                         finish();
                                     }
-                                }, 8000);
+                                }, 2500);
                             }
                         });
                     
