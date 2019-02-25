@@ -11,9 +11,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +33,35 @@ public class Transparent_gift_Activity extends Activity {
     ModelGift modelGift;
     ImageView imagePerson;
     TextView namePerson;
+    RelativeLayout completeScreen;
+    boolean tapTwice = false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent_gift_);
         modelGift = (ModelGift) getIntent().getSerializableExtra(Constants.giftModel);
         final ImageView premium_bottle = findViewById(R.id.premium_bottle);
+        completeScreen = findViewById(R.id.scratch_view_behind);
+        completeScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Log.e("Trans", "The value of tap twice is "+ tapTwice);
+                if(tapTwice)
+                    finish();
+                else
+                {
+                    tapTwice = true;
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            tapTwice = false;
+                        }
+                    }, 2000);
+                }
+            }
+        });
         ImageView regular_bottle = findViewById(R.id.royal_bottle);
         ImageView royal_bottle = findViewById(R.id.regular_bottle);
         //scratchImageView=findViewById(R.id.sample_image);
@@ -53,14 +78,14 @@ public class Transparent_gift_Activity extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Transparent_gift_Activity.this, ClickedUser.class);
                 i.putExtra(Constants.comingFromNotif, true);
-                i.putExtra(Constants.clickedUid,modelGift.getGiftSendersImageUrl());
+                i.putExtra(Constants.clickedUid,modelGift.getGiftSendersUid());
                 finish();
                 startActivity(i);
             }
         });
         
         ScratchoffController controller = new ScratchoffController(this)
-                .setThresholdPercent(0.10d)
+                .setThresholdPercent(0.20d)
                 .setTouchRadiusDip(this, 30)
                 .setFadeOnClear(true)
                 .setClearOnThresholdReached(true)
@@ -93,7 +118,7 @@ public class Transparent_gift_Activity extends Activity {
                             public void run() {
                                 finish();
                             }
-                        }, 10000);
+                        }, 8000);
                     }
                 })
                 .attach(findViewById(R.id.scratch_view), findViewById(R.id.scratch_view_behind));
