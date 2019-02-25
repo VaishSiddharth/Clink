@@ -121,6 +121,9 @@
         <activity android:name=".NewQuestionUtils.QuestionSetup" />
         <activity android:name=".Utils.TransparentActivity"
             android:theme="@style/Theme.Transparent"/>
+        <activity android:name=".Utils.Transparent_likeback"
+            android:theme="@style/Theme.Transparent"
+            />
     </application>
 
 </manifest>

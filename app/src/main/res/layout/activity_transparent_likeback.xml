@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/completeScreen"
     android:layout_height="match_parent"
     android:background="@color/appcolorlessopacity">
 
@@ -14,8 +15,8 @@
 
     <ImageView
         android:id="@+id/imageperson"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_gravity="center"
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
@@ -38,13 +39,14 @@
         android:layout_centerHorizontal="true"
         android:text="Siddharth Vaish send you a gift!"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="15sp" />
 
     <RelativeLayout
         android:id="@+id/scratch_view_behind"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/nameperson"
+
         android:background="@color/transparent">
 
         <ImageView
@@ -89,23 +91,6 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <com.jackpocket.scratchoff.views.ScratchableLinearLayout
-        android:id="@+id/scratch_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/nameperson"
-        android:gravity="center"
-        android:background="@color/transparent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:gravity="center"
-            android:src="@drawable/gift" />
-    </com.jackpocket.scratchoff.views.ScratchableLinearLayout>
 </RelativeLayout>
 
 

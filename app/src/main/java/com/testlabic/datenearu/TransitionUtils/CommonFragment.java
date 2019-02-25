@@ -9,11 +9,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -58,6 +63,7 @@ import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
@@ -71,55 +77,52 @@ import static com.google.common.collect.ComparisonChain.start;
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
     private static final String TAG = CommonFragment.class.getSimpleName();
     private ImageView imageView;
-    private TextView name, age, oneLine;
-    FloatingActionButton message, like;
-    ShineButton like_shine;
-    RapidFloatingActionButton match;
+    private TextView name;
+    private FloatingActionButton like;
+    private RapidFloatingActionButton match;
     private String imageUrl;
     private String nameS;
     private String ageS;
     private String sendersUid;
     private String oneLineS;
     private String gender;
-    DatabaseReference referenceDMIds;
-    ChildEventListener childEventListener;
-    Boolean isDmAllowed = true;
-    Boolean isBlur = false;
-    Boolean likedOnce = false;
-    KonfettiView konfettiView;
-    ValueEventListener attemptListener;
-    DatabaseReference attemptRef;
-    View rootView;
-    View blur_view;
-    ImageView male;
-    ImageView female;
+    private DatabaseReference referenceDMIds;
+    private ChildEventListener childEventListener;
+    private Boolean isDmAllowed = true;
+    private Boolean isBlur = false;
+    private Boolean likedOnce = false;
+    private ValueEventListener attemptListener;
+    private DatabaseReference attemptRef;
+    private View rootView;
+    private View blur_view;
     
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_common, null);
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
-       
+        
         //Log.e(TAG, "imageUrl is"+ imageUrl);
         name = rootView.findViewById(R.id.name);
-        age = rootView.findViewById(R.id.age);
-        oneLine = rootView.findViewById(R.id.oneLine);
-        message = rootView.findViewById(R.id.message_fab);
+        TextView age = rootView.findViewById(R.id.age);
+        TextView oneLine = rootView.findViewById(R.id.oneLine);
+        FloatingActionButton message = rootView.findViewById(R.id.message_fab);
         //like = rootView.findViewById(R.id.like_fab);
-        like_shine = rootView.findViewById(R.id.like_shiny);
-        konfettiView = rootView.findViewById(R.id.viewKonfetti);
-        male=rootView.findViewById(R.id.maleglass);
-        female=rootView.findViewById(R.id.femaleglass);
+        final ShineButton like_shine = rootView.findViewById(R.id.like_shiny);
+        KonfettiView konfettiView = rootView.findViewById(R.id.viewKonfetti);
+        ImageView male = rootView.findViewById(R.id.maleglass);
+        ImageView female = rootView.findViewById(R.id.femaleglass);
         like_shine.init(getActivity());
-        blur_view=rootView.findViewById(R.id.view_on_blur);
+        blur_view = rootView.findViewById(R.id.view_on_blur);
         like_shine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //show only first time!
+                
                 if (!likedOnce) {
                     final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-    
+                    
                     boolean isFirstTime = sharedPreferences.getBoolean("firstLikeInfo", true);
                     if (isFirstTime) {
                         SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
@@ -141,8 +144,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         executeLikeFunction();
                         Toast.makeText(getActivity(), "Liked!", Toast.LENGTH_SHORT).show();
                     }
-                    likedOnce = true;
+                    likedOnce = !likedOnce;
                 }
+                else likedOnce = !likedOnce;
             }
         });
         message.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +156,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 //Toast.makeText(getActivity(), "Under Progress", Toast.LENGTH_SHORT).show();
             }
         });
-
+        
         match = rootView.findViewById(R.id.attempt_match);
         match.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +167,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         });
         name.setText(nameS);
         age.setText(ageS);
-        if(gender!=null) {
+        if (gender != null) {
             if (gender.equalsIgnoreCase("male")) {
                 female.setVisibility(View.GONE);
                 male.setVisibility(View.VISIBLE);
@@ -173,13 +177,12 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 male.setVisibility(View.GONE);
             }
         }
-
+        
         //TODO: Add imageview for gender, next to age and show image likewise (as in
         
         if (isBlur != null && isBlur) {
             blurData();
-        }
-        else{
+        } else {
             Glide.with(CommonFragment.this).load(imageUrl).into(imageView);
         }
         
@@ -189,13 +192,13 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         dragLayout.setGotoDetailListener(this);
         return rootView;
     }
-
+    
     public void setShowcaseView() {
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean isFirstRun = wmbPreference.getBoolean("SHOW20", true);
         boolean isFirstRun1 = wmbPreference.getBoolean("SHOW21", true);
         //Log.e(TAG, String.valueOf(isFirstRun));
-        if ((isFirstRun)&&(!isFirstRun1)) {//make isFirstRun
+        if ((isFirstRun) && (!isFirstRun1)) {//make isFirstRun
             rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -218,7 +221,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                 public void onStarted(SimpleTarget target) {
                                     // do something
                                 }
-
+                                
                                 @Override
                                 public void onEnded(SimpleTarget target) {
                                     // do something
@@ -236,13 +239,13 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                             .setShape(new Circle(100f)) // or RoundedRectangle()
                             .setTitle("the title")
                             .setDescription("the description")
-                            .setOverlayPoint(100f,  imageRadius2 + 100f)
+                            .setOverlayPoint(100f, imageRadius2 + 100f)
                             .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
                                 @Override
                                 public void onStarted(SimpleTarget target) {
                                     // do something
                                 }
-
+                                
                                 @Override
                                 public void onEnded(SimpleTarget target) {
                                     // do something
@@ -277,14 +280,14 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                             .setOverlayColor(R.color.background)
                             .setDuration(1000L)
                             .setAnimation(new DecelerateInterpolator(2f))
-                            .setTargets(simpleTarget1,simpleTarget2)
+                            .setTargets(simpleTarget1, simpleTarget2)
                             .setClosedOnTouchedOutside(true)
                             .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
                                 @Override
                                 public void onStarted() {
                                     //Toast.makeText(getContext(), "spotlight is started", Toast.LENGTH_SHORT).show();
                                 }
-
+                                
                                 @Override
                                 public void onEnded() {
                                     //Toast.makeText(getContext(), "spotlight is ended", Toast.LENGTH_SHORT).show();
@@ -297,12 +300,13 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             editor.putBoolean("SHOW20", false).apply();
         }
     }
+    
     @Override
     public void onResume() {
         super.onResume();
         setShowcaseView();
     }
-
+    
     private void executeLikeFunction() {
         //give 10 drops for liking
         
@@ -326,17 +330,16 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
                                 
-    
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         startActivity(new Intent(getActivity(), TransparentActivity.class).putExtra(Constants.showDialog, true)
-                                        .putExtra(Constants.clickedUid, sendersUid)
-                                        .putExtra(Constants.sendToName, nameS));
-            
+                                                .putExtra(Constants.clickedUid, sendersUid)
+                                                .putExtra(Constants.sendToName, nameS));
+                                        
                                     }
-                                },1000);
+                                }, 1000);
                             } else
                                 Toast.makeText(getActivity(), "Sorry an error occured", Toast.LENGTH_SHORT).show();
                         }
@@ -365,18 +368,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         
     }
     
-    
     private void blurData() {
 //        Blurry.with(imageView.getContext()).capture(imageView).into(imageView);
         name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         float radius = name.getTextSize() / 3;
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
         name.getPaint().setMaskFilter(filter);
-
+        
         RequestOptions myOptions = new RequestOptions()
                 .override(15, 15)
                 .diskCacheStrategy(DiskCacheStrategy.NONE);
-
+        
         Glide.with(CommonFragment.this).load(imageUrl).apply(myOptions).into(imageView);
         imageView.setAlpha(0.7f);
         blur_view.setVisibility(View.VISIBLE);
@@ -384,7 +386,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     
     private void showDmInfoDialog() {
         
-      SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+        SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("How does it work?")
                 
                 .setContentText("You will be added as a connection and can have a talk, but remember you don't get another chance if you are blocked/deleted by the other person!")
@@ -444,7 +446,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         
                     }
                 });
-      alertDialog.show();
+        alertDialog.show();
         Button btn = alertDialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
         Button btn1 = alertDialog.findViewById(R.id.cancel_button);
@@ -497,7 +499,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                 .child(Constants.xPoints)
                                 .child(Constants.uid);
                         
-                       attemptListener = (new ValueEventListener() {
+                        attemptListener = (new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 removeListeners();
@@ -532,7 +534,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                             }
                                         });
                                         
-                                        
                                     }
                                 }
                                 
@@ -543,7 +544,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                             
                             }
                         });
-                       attemptRef.addValueEventListener(attemptListener);
+                        attemptRef.addValueEventListener(attemptListener);
                         
                         ///
                     }
@@ -659,7 +660,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         if (childEventListener != null)
             referenceDMIds.removeEventListener(childEventListener);
         
-        if(attemptRef!=null&&attemptListener!=null)
+        if (attemptRef != null && attemptListener != null)
             attemptRef.removeEventListener(attemptListener);
     }
     

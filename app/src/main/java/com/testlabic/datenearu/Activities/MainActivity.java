@@ -42,6 +42,7 @@ import java.util.HashMap;
 
 import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.ProfileFragment;
+import com.testlabic.datenearu.Utils.Transparent_likeback;
 import com.testlabic.datenearu.Utils.locationUpdater;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -55,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private int messagesUnread = 0;
     private boolean shownGifts = false;
     private int giftUnopened =0;
-    private boolean dataChanged = false;
     FirebaseAuth.AuthStateListener authStateListener;
+    private boolean shownLikeBacks = false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +263,8 @@ public class MainActivity extends AppCompatActivity {
                     Constants.uid = firebaseAuth.getUid();
                     checkForNotification();
                     checkForNewMessages();
-                   checkForUpdatingChecks();
+                    checkForUpdatingChecks();
+                    checkForLikeBacks();
                     updateStatus(Constants.online);
                     checkForIncompleteData();
                 }
@@ -271,6 +273,65 @@ public class MainActivity extends AppCompatActivity {
         };
         mAuth.addAuthStateListener(authStateListener);
         
+    }
+    
+    private void checkForLikeBacks() {
+    
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.LikeBacks)
+                .child(Constants.uid);
+        
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                if(dataSnapshot.exists())
+                
+                    {  if(!shownLikeBacks)
+                        checkForNewLikeBacks();
+                    }
+                
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+    
+    
+    }
+    
+    private void checkForNewLikeBacks() {
+        shownLikeBacks = true;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.LikeBacks)
+                .child(Constants.uid);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+    
+                //initiate transparent activity and pass data
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren())
+                        {
+                            ModelGift modelGift = snapshot.getValue(ModelGift.class);
+                            startActivity(new Intent(MainActivity.this, Transparent_likeback.class)
+                                    .putExtra(Constants.giftModel, modelGift));
+                
+                        }
+                    }
+                }, 2500);
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
     }
     
     private void checkForUpdatingChecks() {
@@ -284,7 +345,6 @@ public class MainActivity extends AppCompatActivity {
                     if(dataSnapshot.exists())
                     {  if(!shownGifts)
                         checkForNewGifts();
-                    
                     }
             }
     
@@ -414,9 +474,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        shownLikeBacks = false;
+        shownGifts = false;
         updateStatus(Constants.offline);
         if (mAuth != null && authStateListener != null)
             mAuth.removeAuthStateListener(authStateListener);
+        
     }
     
     @Override

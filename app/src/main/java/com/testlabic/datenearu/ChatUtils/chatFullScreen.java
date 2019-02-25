@@ -801,7 +801,7 @@ public class chatFullScreen extends AppCompatActivity {
                 if (dataSnapshot.getValue(String.class) != null) {
                     isOnlineForCurrentUser = true;
                 }
-                Log.e(TAG, "User is offline move to unread");
+               // Log.e(TAG, "User is offline move to unread");
                 isOnlineForCurrentUser = false;
                 // send message to unread
             }

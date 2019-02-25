@@ -32,6 +32,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.Models.ModelContact;
+import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
@@ -54,18 +55,6 @@ public class TransparentActivity extends Activity {
         sendersUid = getIntent().getStringExtra(Constants.clickedUid);
         if(showDialog)
             showSweetAlertDialog(sendersUid);
-        
-        AlphaAnimation anim1 = new AlphaAnimation(1.0f, 0.0f);
-        anim1.setStartOffset(100);
-        anim1.setDuration(1000);
-        anim1.setRepeatCount(10);
-        anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
-      
-        AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
-        anim2.setStartOffset(100);
-        anim2.setDuration(3000);
-        anim1.setRepeatCount(10);
-        anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
       
     
         //scratchImageView.setVisibility(View.GONE);
@@ -137,6 +126,23 @@ public class TransparentActivity extends Activity {
         ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
         
         reference.setValue(notification);
+    
+        sweetAlertDialog.dismissWithAnimation();
+        acceptRequest(sendersUid, sweetAlertDialog);
+    
+        //create a notification
+    
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.LikeBacks)
+                .child(sendersUid).child(Constants.uid);
+    
+    
+        //constructing message
+        
+        HashMap<String, Object > timeStamp2 = new HashMap<>();
+        timeStamp2.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+        ModelGift likeBack = new ModelGift(Constants.uid, null, sendersUid, userName,url, timeStamp2);
+        reference2.setValue(likeBack);
         
     }
     private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
