@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.testlabic.datenearu.Activities.EditActivity;
 import com.testlabic.datenearu.Activities.Settings;
+import com.testlabic.datenearu.Activities.Transparent_gift_Activity;
 import com.testlabic.datenearu.NewQuestionUtils.QuestionSetup;
 import com.testlabic.datenearu.ProfileUtils.AboutEditor;
 import com.testlabic.datenearu.R;
@@ -74,7 +75,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             holder.profileItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(new Intent(context, EditActivity.class));
+                    context.startActivity(new Intent(context, Transparent_gift_Activity.class));
                 }
             });
         }

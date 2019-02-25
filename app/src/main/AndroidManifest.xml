@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".application"
@@ -25,9 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".AttemptMatchUtils.QuestionsAttemptActivity"></activity>
+        <activity android:name=".Activities.Transparent_gift_Activity"
+            android:theme="@style/Theme.Transparent"></activity>
+        <activity android:name=".AttemptMatchUtils.QuestionsAttemptActivity" />
         <activity android:name=".Activities.EditActivity" />
-        <activity android:name=".PaperOnboardingActivity"/>
+        <activity android:name=".PaperOnboardingActivity" />
         <activity android:name=".Activities.SignIn" />
         <activity android:name=".Login" />
         <activity
@@ -40,6 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
