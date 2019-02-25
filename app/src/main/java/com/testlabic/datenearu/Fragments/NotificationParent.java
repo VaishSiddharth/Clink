@@ -57,7 +57,7 @@ public class NotificationParent extends Fragment {
     
         TablayoutAdapter adapter = new TablayoutAdapter(getFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
-       // wrapTabIndicatorToTitle(tabLayout, 32, 32);
+        wrapTabIndicatorToTitle(tabLayout, 32, 32);
         viewPager.setOffscreenPageLimit(1);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         for (int i = 0; i < tabLayout.getTabCount(); i++) {

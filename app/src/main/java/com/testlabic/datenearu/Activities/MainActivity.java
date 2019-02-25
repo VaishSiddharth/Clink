@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private int messagesUnread = 0;
     private boolean shownGifts = false;
     private int giftUnopened =0;
+    private boolean dataChanged = false;
     FirebaseAuth.AuthStateListener authStateListener;
     
     @Override
@@ -261,8 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     Constants.uid = firebaseAuth.getUid();
                     checkForNotification();
                     checkForNewMessages();
-                    if(!shownGifts)
-                    checkForNewGifts();
+                   checkForUpdatingChecks();
                     updateStatus(Constants.online);
                     checkForIncompleteData();
                 }
@@ -271,6 +271,28 @@ public class MainActivity extends AppCompatActivity {
         };
         mAuth.addAuthStateListener(authStateListener);
         
+    }
+    
+    private void checkForUpdatingChecks() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Gifts)
+                .child(Constants.uid)
+                .child(Constants.unread);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists())
+                    {  if(!shownGifts)
+                        checkForNewGifts();
+                    
+                    }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
     }
     
     private void checkForNewGifts() {
@@ -390,23 +412,11 @@ public class MainActivity extends AppCompatActivity {
     }
     
     @Override
-    protected void onStart() {
-        super.onStart();
-        // startActivity(new Intent(MainActivity.this, MainActivity.class));
-    }
-    
-    @Override
     protected void onPause() {
         super.onPause();
         updateStatus(Constants.offline);
         if (mAuth != null && authStateListener != null)
             mAuth.removeAuthStateListener(authStateListener);
-    }
-    
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // updateStatus(Constants.offline);
     }
     
     @Override
@@ -434,25 +444,7 @@ public class MainActivity extends AppCompatActivity {
         
     }
     
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        
-        /*
-        move to home fragment if on any other fragment, else exit
-         */
-        
-    }
     
-    public void giveXPoints() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.xPoints)
-                .child(Constants.uid);
-        HashMap<String, Object> updatePoints = new HashMap<>();
-        updatePoints.put(Constants.xPoints, 1000);
-        reference.updateChildren(updatePoints);
-        
-    }
 }
 
 

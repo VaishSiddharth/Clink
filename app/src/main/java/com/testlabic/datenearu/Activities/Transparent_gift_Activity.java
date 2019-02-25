@@ -1,5 +1,7 @@
 package com.testlabic.datenearu.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
@@ -22,6 +24,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cooltechworks.views.ScratchImageView;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jackpocket.scratchoff.ScratchoffController;
 import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelGift;
@@ -43,14 +52,14 @@ public class Transparent_gift_Activity extends Activity {
         modelGift = (ModelGift) getIntent().getSerializableExtra(Constants.giftModel);
         final ImageView premium_bottle = findViewById(R.id.premium_bottle);
         completeScreen = findViewById(R.id.scratch_view_behind);
+        moveGiftToRead();
         completeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Log.e("Trans", "The value of tap twice is "+ tapTwice);
-                if(tapTwice)
+                if (tapTwice)
                     finish();
-                else
-                {
+                else {
                     tapTwice = true;
                     Handler h = new Handler();
                     h.postDelayed(new Runnable() {
@@ -68,7 +77,7 @@ public class Transparent_gift_Activity extends Activity {
         //scratchImageView = new ScratchImageView(this);
         imagePerson = findViewById(R.id.imageperson);
         namePerson = findViewById(R.id.nameperson);
-    
+        
         String url = modelGift.getGiftSendersImageUrl();
         Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagePerson);
         String message = modelGift.getGiftSendersName() + " has sent you a gift (Tap to see Profile) ";
@@ -78,7 +87,7 @@ public class Transparent_gift_Activity extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Transparent_gift_Activity.this, ClickedUser.class);
                 i.putExtra(Constants.comingFromNotif, true);
-                i.putExtra(Constants.clickedUid,modelGift.getGiftSendersUid());
+                i.putExtra(Constants.clickedUid, modelGift.getGiftSendersUid());
                 finish();
                 startActivity(i);
             }
@@ -122,6 +131,40 @@ public class Transparent_gift_Activity extends Activity {
                     }
                 })
                 .attach(findViewById(R.id.scratch_view), findViewById(R.id.scratch_view_behind));
+        
+    }
     
+    private void moveGiftToRead() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Gifts)
+                .child(Constants.uid).child(Constants.unread);
+        ValueEventListener listener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    ModelGift notification = dataSnapshot.getValue(ModelGift.class);
+                    String pushKey = dataSnapshot.getKey();
+                    if (notification != null && pushKey != null) {
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.Gifts)
+                                .child(Constants.uid).child(Constants.read).child(pushKey);
+                        
+                        reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                dataSnapshot.getRef().setValue(null);
+                                
+                            }
+                        });
+                    }
+                }
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+            
+        });
     }
 }
