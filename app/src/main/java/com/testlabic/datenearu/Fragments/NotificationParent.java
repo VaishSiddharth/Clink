@@ -49,7 +49,6 @@ public class NotificationParent extends Fragment {
         tabLayout = rootView.findViewById(R.id.tablayout);
 
 //        setCustomFontAndStyle(tabLayout, 0);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         
         tabLayout.addTab(tabLayout.newTab().setText("Notifications"));
         tabLayout.addTab( tabLayout.newTab().setText("Gifts"));
@@ -58,7 +57,7 @@ public class NotificationParent extends Fragment {
     
         TablayoutAdapter adapter = new TablayoutAdapter(getFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
-        wrapTabIndicatorToTitle(tabLayout, 32, 32);
+       // wrapTabIndicatorToTitle(tabLayout, 32, 32);
         viewPager.setOffscreenPageLimit(1);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         for (int i = 0; i < tabLayout.getTabCount(); i++) {

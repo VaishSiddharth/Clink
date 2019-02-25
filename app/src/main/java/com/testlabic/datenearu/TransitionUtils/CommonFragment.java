@@ -42,6 +42,7 @@ import com.takusemba.spotlight.OnTargetStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
 import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
+import com.testlabic.datenearu.Activities.Transparent_gift_Activity;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
@@ -52,6 +53,7 @@ import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.TransparentActivity;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 
 import java.util.ArrayList;
@@ -307,47 +309,18 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
+                                
     
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    
-                                     konfettiView.build()
-                                    .addColors(Color.BLUE, Color.GREEN, Color.MAGENTA)
-                                    .setDirection(0.0, 359.0)
-                                    .setSpeed(1f, 5f)
-                                    .setFadeOutEnabled(true)
-                                    .setTimeToLive(2000L)
-                                    .addShapes(Shape.RECT, Shape.CIRCLE)
-                                    .addSizes(new Size(12, 5))
-                                    .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
-                                    .streamFor(300, 5000L);
-                                }
-    
-                                SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
-                                        .setTitleText("Confirm Cheers?")
-                                        .setContentText("Congrats, S/he already likes you, its a cheers!")
-                                        .setConfirmButton("Sure", new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
-                                                        .child(Constants.LikeInfo)
-                                                        .child(sendersUid)
-                                                        .child(Constants.uid);
-                                                String index = "0";
-                                                databaseReference.setValue(index);
-                                                sendNotificationToOtherUser(sweetAlertDialog);
-                                            }
-                                        })
-                                        .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                sweetAlertDialog.dismiss();
-                                            }
-                                        });
-                                alertDialog.show();
-                                Button btn = alertDialog.findViewById(R.id.confirm_button);
-                                btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
-                                Button btn1 = alertDialog.findViewById(R.id.cancel_button);
-                                btn1.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startActivity(new Intent(getActivity(), TransparentActivity.class).putExtra(Constants.showDialog, true)
+                                        .putExtra(Constants.clickedUid, sendersUid)
+                                        .putExtra(Constants.sendToName, nameS));
+            
+                                    }
+                                },1000);
                             } else
                                 Toast.makeText(getActivity(), "Sorry an error occured", Toast.LENGTH_SHORT).show();
                         }
@@ -376,26 +349,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         
     }
     
-    private void sendNotificationToOtherUser(SweetAlertDialog sweetAlertDialog) {
-        sweetAlertDialog.dismissWithAnimation();
-        acceptRequest(sendersUid, sweetAlertDialog);
-        
-        //create a notification
-        
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Notifications)
-                .child(sendersUid).child(Constants.unread).push();
-        //constructing message
-        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        String message = userName + " liked you back! Go say hi now from messages screen.";
-        
-        long timeStamp = -1 * new java.util.Date().getTime();
-        String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
-        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
-        
-        reference.setValue(notification);
-        
-    }
     
     private void blurData() {
 //        Blurry.with(imageView.getContext()).capture(imageView).into(imageView);

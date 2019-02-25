@@ -119,6 +119,8 @@
         <activity android:name=".MatchAlgoUtils.SeriousOrCasual" />
         <activity android:name=".MatchAlgoUtils.CasualItems" />
         <activity android:name=".NewQuestionUtils.QuestionSetup" />
+        <activity android:name=".Utils.TransparentActivity"
+            android:theme="@style/Theme.Transparent"/>
     </application>
 
 </manifest>
