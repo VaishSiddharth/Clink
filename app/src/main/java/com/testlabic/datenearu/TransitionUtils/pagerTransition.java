@@ -55,6 +55,7 @@ import com.takusemba.spotlight.OnTargetStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
 import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
+import com.testlabic.datenearu.Activities.SignIn;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.CityLabelModel;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PointLabelModel;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PrefsModel;
@@ -833,7 +834,7 @@ public class pagerTransition extends Fragment {
         super.onResume();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null)
-            startActivity(new Intent(getActivity(), Login.class));
+            startActivity(new Intent(getActivity(), SignIn.class));
         else
             Constants.uid = FirebaseAuth.getInstance().getUid();
         //downloadList();

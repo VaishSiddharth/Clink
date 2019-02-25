@@ -50,9 +50,9 @@ import model.ProfileModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Profile extends Fragment {
+public class ProfileFragment extends Fragment {
     
-    public Profile() {
+    public ProfileFragment() {
         // Required empty public constructor
     }
     

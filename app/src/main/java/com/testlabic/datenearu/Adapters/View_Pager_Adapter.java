@@ -9,7 +9,7 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import com.testlabic.datenearu.Fragments.ClickedUserImage1;
 import com.testlabic.datenearu.Fragments.ClickedUserImage2;
-import com.testlabic.datenearu.Fragments.multipleImages;
+import com.testlabic.datenearu.Fragments.ClickedUserImage3;
 
 public class View_Pager_Adapter extends FragmentStatePagerAdapter {
   
@@ -38,7 +38,7 @@ public class View_Pager_Adapter extends FragmentStatePagerAdapter {
                 return tab1;
                 
             case 1:
-                multipleImages tab2 = new multipleImages();
+                ClickedUserImage3 tab2 = new ClickedUserImage3();
                 Bundle bundle2= new Bundle();
                 bundle2.putString(Constants.imageUrl, imageUrl2);
                 bundle2.putBoolean(Constants.isBlur, isBlur);

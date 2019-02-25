@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.content.ContextCompat;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,9 +28,8 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
-import com.testlabic.datenearu.ChatUtils.ChatMessage;
-import com.testlabic.datenearu.Fragments.AllMessagesList;
-import com.testlabic.datenearu.Models.ModelNotification;
+import com.testlabic.datenearu.Fragments.AllMessagesListFragment;
+import com.testlabic.datenearu.Fragments.NotificationParent;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.PaperOnboardingActivity;
@@ -43,7 +40,7 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.HashMap;
 
 import com.testlabic.datenearu.Fragments.NotificationFragment;
-import com.testlabic.datenearu.Fragments.Profile;
+import com.testlabic.datenearu.Fragments.ProfileFragment;
 import com.testlabic.datenearu.Utils.locationUpdater;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -55,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomBar bottomBar;
     private int count = 0;
     private int messagesUnread = 0;
+    private int giftUnopened =0;
     FirebaseAuth.AuthStateListener authStateListener;
     
     @Override
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 if (tabId == R.id.tab_message) {
                     // switch to messages fragment
-                    changeFragment(new AllMessagesList());
+                    changeFragment(new AllMessagesListFragment());
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
                     nearby.removeBadge();
                 } else if (tabId == R.id.tab_home) {
@@ -98,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
                     changeFragment(new pagerTransition());
                 } else if (tabId == R.id.tab_profile) {
                     // switch to messages fragment
-                    changeFragment(new Profile());
+                    changeFragment(new ProfileFragment());
                 } else if (tabId == R.id.tab_notif) {
-                    changeFragment(new NotificationFragment());
+                    changeFragment(new NotificationParent());
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                     nearby.removeBadge();
                 }
@@ -261,15 +259,47 @@ public class MainActivity extends AppCompatActivity {
                     Constants.uid = firebaseAuth.getUid();
                     checkForNotification();
                     checkForNewMessages();
+                    checkForNewGifts();
                     updateStatus(Constants.online);
                     checkForIncompleteData();
-                    //giveXPoints();
                 }
                 
             }
         };
         mAuth.addAuthStateListener(authStateListener);
         
+    }
+    
+    private void checkForNewGifts() {
+        giftUnopened =0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Gifts)
+                .child(Constants.uid).child(Constants.unread);
+    
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            
+                giftUnopened = (int) dataSnapshot.getChildrenCount();
+                giftUnopened  += count;
+                //Log.e(TAG, giftUnopened+" yyy");
+                bottomBar = findViewById(R.id.bottomBar);
+                BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
+                if (giftUnopened > 0) {
+                
+                    nearby.setBadgeCount(giftUnopened);
+                
+                    // Remove the badge when you're done with it.
+                } else
+                    nearby.removeBadge();
+            
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
     }
     
     private void checkForIncompleteData() {

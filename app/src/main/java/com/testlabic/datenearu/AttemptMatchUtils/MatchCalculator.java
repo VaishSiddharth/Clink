@@ -22,9 +22,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
@@ -188,7 +190,7 @@ public class MatchCalculator extends AppCompatActivity {
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
 
                                 //sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
-                                sendWine();
+                                sendWine(wineAmount);
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -216,22 +218,27 @@ public class MatchCalculator extends AppCompatActivity {
         });
     }
 
-    private void sendWine() {
+    private void sendWine(int wineAmount) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Notifications)
+                .child(Constants.Gifts)
                 .child(clickedUsersId).child(Constants.unread).push();
-        /*
-        constructing message!
-         */
-
+      
+        String wineType = Constants.regularWine;
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        String message = userName + " sent you a premium bottle of wine! \nCheck out his/her profile and connect with him by accepting the request.";
-
-        long timeStamp = -1 * new java.util.Date().getTime();
+        HashMap<String, Object > timeStamp = new HashMap<>();
+        timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
         String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
-        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
-
-        reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
+        switch (wineAmount)
+        {
+            case 500: wineType = Constants.regularWine;
+            break;
+            case 800: wineType = Constants.premiumWine;
+            break;
+            case 1000: wineType = Constants.royalWine;
+            break;
+        }
+        ModelGift gift = new ModelGift(Constants.uid, wineType, clickedUsersId, userName, url, timeStamp );
+        reference.setValue(gift).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 //add 300 drops to receivers

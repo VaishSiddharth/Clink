@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.testlabic.datenearu.Chat_fliply">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,46 @@
         android:orientation="vertical">
 
 
-        <include layout="@layout/toolbar_home"/>
+
+        <androidx.appcompat.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:id="@+id/toolbar"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <customfonts.MyTextView_SF_Pro_Display_Bold
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notifications"
+                    android:textSize="22sp"
+                    android:textColor="#3b3b3b"/>
+
+
+                <ImageView
+                    android:layout_marginRight="15dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_search_magnifier_interface_symbol"/>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/line"
+            android:layout_below="@+id/toolbar"
+            android:outlineAmbientShadowColor="@color/appcolor"
+            android:background="@drawable/gradient_setupuser" />
 
 
         <com.google.android.material.tabs.TabLayout
@@ -45,12 +84,5 @@
 
     </LinearLayout>
 
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBar"
-        app:bb_behavior="iconsOnly"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        app:bb_tabXmlResource="@xml/bottombar"/>
 
 </RelativeLayout>

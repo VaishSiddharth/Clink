@@ -39,9 +39,9 @@ import com.testlabic.datenearu.Adapters.LastMessageAdapter;
  * Created by wolfsoft4 on 21/9/18.
  */
 
-public class AllMessagesList extends Fragment {
+public class AllMessagesListFragment extends Fragment {
     
-    private static final String TAG = AllMessagesList.class.getSimpleName();
+    private static final String TAG = AllMessagesListFragment.class.getSimpleName();
     private LastMessageAdapter adapter;
     private GoogleProgressBar bar;
     private RecyclerView recyclerview;

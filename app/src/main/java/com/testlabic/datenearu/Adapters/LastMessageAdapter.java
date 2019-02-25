@@ -29,9 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by wolfsoft4 on 21/9/18.
- */
+
 
 public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.ViewHolder> {
     private static final String TAG = LastMessageAdapter.class.getSimpleName();

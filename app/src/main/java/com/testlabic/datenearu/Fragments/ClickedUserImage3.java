@@ -20,10 +20,10 @@ import com.testlabic.datenearu.Utils.Constants;
  * Created by wolfsoft4 on 21/8/18.
  */
 
-public class multipleImages extends Fragment {
+public class ClickedUserImage3 extends Fragment {
     
     String imageUrl;
-    private String TAG=multipleImages.class.getSimpleName();
+    private String TAG= ClickedUserImage3.class.getSimpleName();
 
     @Nullable
     @Override

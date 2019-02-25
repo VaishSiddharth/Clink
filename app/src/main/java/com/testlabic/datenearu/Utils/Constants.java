@@ -12,6 +12,7 @@ public class Constants {
     public static final String Questions = "Questions";
     public static final String DMIds = "DMIds";
     public static final String LikeInfo = "LikeInfo";
+    public static final String Gifts = "Gifts";
     public static String userInfo = "userInfo";
     public static String location = "location";
     public static  String uid = FirebaseAuth.getInstance().getUid();
@@ -70,6 +71,9 @@ public class Constants {
     public static String userDetailsOff = "userDetailsOffline";
     public static String newUserSetupDone = "newUserSetupDown";
     public static int wineAmount = 500;
+    public static String regularWine = "Regular Wine";
+    public static String premiumWine = "Premium Wine";
+    public static String royalWine = "Royal Wine";
     
     public static String encrypt(String cityLabel) {
         

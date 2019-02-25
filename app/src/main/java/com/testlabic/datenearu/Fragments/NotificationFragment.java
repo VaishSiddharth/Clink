@@ -48,14 +48,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 public class NotificationFragment extends Fragment {
     private static final String TAG = NotificationFragment.class.getSimpleName();
-    FirebaseListAdapter<ModelNotification> adapter;
-    GoogleProgressBar bar;
-    Query reference;
-    int notifCount =-1;
-    SwipeMenuListView listView;
+    private FirebaseListAdapter<ModelNotification> adapter;
+    private GoogleProgressBar bar;
+    private Query reference;
+    private int notifCount =-1;
+    private SwipeMenuListView listView;
     private ChildEventListener listener;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-    View rootView;
+    private View rootView;
     public NotificationFragment() {
         // Required empty public constructor
     }
