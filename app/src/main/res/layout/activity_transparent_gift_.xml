@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/appcolorlessopacity">
@@ -8,55 +8,110 @@
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/viewKonfetti"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_height="match_parent" />
+        android:layout_alignParentRight="true" />
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/imageperson"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:scaleType="centerCrop"
+        app:civ_border_color="@color/appcolor"
+        app:civ_border_width="3dp"
+        app:civ_shadow="true"
+        app:civ_shadow_radius="15"
+        app:civ_shadow_color="@color/black"
+        app:civ_shadow_gravity="center"
+        android:src="@drawable/profile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.cooltechworks.views.ScratchImageView
-        android:id="@+id/sample_image"
+    <customfonts.MyTextView_SF_Pro_Display_Bold
+        android:id="@+id/nameperson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="104.5dp"
-        android:layout_marginTop="246.5dp"
-        android:layout_marginEnd="104.5dp"
-        android:layout_marginBottom="246.5dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/premium_bottle"
-        />
+        android:layout_below="@id/imageperson"
+        android:layout_centerHorizontal="true"
+        android:text="Siddharth Vaish"
+        android:textColor="@color/white"
+        android:textSize="23sp" />
 
-    <ImageView
-        android:id="@+id/premium_bottle"
+    <RelativeLayout
+        android:id="@+id/scratch_view_behind"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="115dp"
-        android:layout_marginBottom="115dp"
-        android:src="@drawable/premium_bottle"
-        android:visibility="gone"/>
-    <ImageView
-        android:id="@+id/royal_bottle"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="115dp"
-        android:layout_marginBottom="115dp"
-        android:src="@drawable/royal_bottle"
-        android:visibility="gone"/>
-    <ImageView
-        android:id="@+id/regular_bottle"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="115dp"
-        android:layout_marginBottom="115dp"
-        android:src="@drawable/regular_bottle"
-        android:visibility="gone"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/nameperson"
+        android:background="@color/transparent">
 
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="25dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/premium_bottle" />
+
+        <ImageView
+            android:id="@+id/premium_bottle"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="115dp"
+            android:layout_marginBottom="115dp"
+            android:src="@drawable/premium_bottle"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/royal_bottle"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="115dp"
+            android:layout_marginBottom="115dp"
+            android:src="@drawable/royal_bottle"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/regular_bottle"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="115dp"
+            android:layout_marginBottom="115dp"
+            android:src="@drawable/regular_bottle"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <com.jackpocket.scratchoff.views.ScratchableLinearLayout
+        android:id="@+id/scratch_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/nameperson"
+        android:gravity="center"
+        android:background="@color/transparent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:src="@drawable/gift" />
+    </com.jackpocket.scratchoff.views.ScratchableLinearLayout>
 </RelativeLayout>
+
+
+
+
