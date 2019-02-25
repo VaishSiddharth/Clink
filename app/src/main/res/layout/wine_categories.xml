@@ -13,7 +13,7 @@
         android:src="@drawable/regular_bottle"/>
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:id="@+id/one"
         android:layout_below="@+id/rgbottle"
         android:layout_gravity="center"
@@ -29,7 +29,7 @@
         android:src="@drawable/premium_bottle"/>
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:id="@+id/two"
         android:layout_gravity="center"
         android:layout_below="@id/prbottle"
@@ -46,7 +46,7 @@
         android:src="@drawable/royal_bottle"/>
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:id="@+id/three"
         android:layout_gravity="center"
         android:layout_margin="10dp"
@@ -56,8 +56,9 @@
         android:layout_height="wrap_content"
         />
     <customfonts.MyTextView_SF_Pro_Display_Bold
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:id="@+id/four"
+        android:visibility="gone"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:layout_below="@+id/rybottle"

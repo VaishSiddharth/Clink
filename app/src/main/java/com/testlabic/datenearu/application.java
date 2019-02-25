@@ -56,6 +56,7 @@ public class application extends Application {
             @Override
             public void onCancelled(DatabaseError error) {
                 //System.err.println("Listener was cancelled");
+                Log.e("App: ", "On cancelled called!");
             }
         });
     }

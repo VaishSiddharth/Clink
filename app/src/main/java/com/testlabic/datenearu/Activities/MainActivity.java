@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -61,17 +63,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         
         //initialize the startappSDK
-    
-       // StartAppSDK.init(this, "211455651", false);
         
-       // StartAppAd.disableSplash();
+        // StartAppSDK.init(this, "211455651", false);
+        
+        // StartAppAd.disableSplash();
         boolean moveToLocationActivity = getIntent().getBooleanExtra(Constants.moveToLocationActivity, false);
-        if(moveToLocationActivity)
+        if (moveToLocationActivity)
             startActivity(new Intent(this, locationUpdater.class));
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    
+        
         boolean refresh = getIntent().getBooleanExtra(Constants.refresh, false);
        
         /*
@@ -107,16 +109,17 @@ public class MainActivity extends AppCompatActivity {
         });
         SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
         boolean trail = sharedPref.getBoolean("trialover", true);
-        if(trail) {
+        if (trail) {
             blurtrial();
         }
         
     }
-    private void blurtrial(){
-
+    
+    private void blurtrial() {
+        
         //TODO: check for blur condition if on then only display this message
         //code for blur trial
-        Handler handler=new Handler();
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -125,12 +128,12 @@ public class MainActivity extends AppCompatActivity {
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        if(dataSnapshot.getValue()!=null) {
-                            long timestamp=  dataSnapshot.getValue(Long.class);
-                            long epoch = System.currentTimeMillis()/1000;
-                            long oneday=86400;
-                            if((epoch+(5*oneday)>=timestamp)&&((epoch+(6*oneday))<=timestamp)) {
+                        
+                        if (dataSnapshot.getValue() != null) {
+                            long timestamp = dataSnapshot.getValue(Long.class);
+                            long epoch = System.currentTimeMillis() / 1000;
+                            long oneday = 86400;
+                            if ((epoch + (5 * oneday) >= timestamp) && ((epoch + (6 * oneday)) <= timestamp)) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Trial period Over!!")
                                         .setContentText("Tomorrow your profile will be unblured")
@@ -139,17 +142,17 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 startActivity(new Intent(MainActivity.this, PurchasePacks.class));
-
+                                                
                                             }
                                         });
                                 alertDialog.show();
-                                Button btn=alertDialog.findViewById(R.id.confirm_button);
-                                btn.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
-                                Button btn1=alertDialog.findViewById(R.id.cancel_button);
-                                btn1.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
-
+                                Button btn = alertDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+                                Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+                                
                             }
-                            if((epoch+(7*oneday))<=timestamp){
+                            if ((epoch + (7 * oneday)) <= timestamp) {
                                 final SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Trial period Over!!")
                                         .setContentText("If you press Cancel your profile will be unblured")
@@ -158,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
                                                         .child(Constants.userInfo).child(Constants.uid);
-                                                HashMap<String,Object> update_blur=new HashMap<>();
-                                                update_blur.put("isBlur",false);
+                                                HashMap<String, Object> update_blur = new HashMap<>();
+                                                update_blur.put("isBlur", false);
                                                 ref1.updateChildren(update_blur);
                                                 sweetAlertDialog.dismiss();
                                             }
@@ -168,34 +171,34 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 startActivity(new Intent(MainActivity.this, PurchasePacks.class));
-
+                                                
                                             }
                                         });
                                 alertDialog.setCancelable(false);
                                 alertDialog.show();
-                                Button btn=alertDialog.findViewById(R.id.confirm_button);
-                                btn.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
-                                Button btn1=alertDialog.findViewById(R.id.cancel_button);
-                                btn1.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.button_4_dialogue));
-
+                                Button btn = alertDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+                                Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+                                
                                 //code so that does not run again and again
                                 SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putBoolean("trialover",false);
+                                editor.putBoolean("trialover", false);
                                 editor.commit();
                             }
                             //Log.e(TAG, String.valueOf(timestamp));
                         }
                     }
-
+                    
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    
                     }
                 });
             }
-        },5000);
-
+        }, 5000);
+        
     }
     
     private void checkForNotification() {
@@ -204,48 +207,18 @@ public class MainActivity extends AppCompatActivity {
                 .child(Constants.Notifications)
                 .child(Constants.uid).child(Constants.unread);
         
-        reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getValue(ModelNotification.class) != null) {
-                    count++;
-                }
-            }
-            
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            
-            }
-            
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
-        
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        /*
-                        change the notification icon.
-                         */
+                
+                count = (int) dataSnapshot.getChildrenCount();
                 bottomBar = findViewById(R.id.bottomBar);
                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                 if (count > 0) {
                     
                     nearby.setBadgeCount(count);
-
-// Remove the badge when you're done with it.
+                    
+                    // Remove the badge when you're done with it.
                 } else
                     nearby.removeBadge();
                 
@@ -265,20 +238,18 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
     
-   
-    
     @Override
     protected void onResume() {
-        Log.e(TAG, "Main Activity onresume called! "+Constants.uid);
+        Log.e(TAG, "Main Activity onresume called! " + Constants.uid);
         //Toast.makeText(this, "Main Activity onresume called! "+Constants.uid, Toast.LENGTH_SHORT ).show();
         super.onResume();
         Constants.uid = FirebaseAuth.getInstance().getUid();
-        if(Constants.uid==null) {
+        if (Constants.uid == null) {
             startActivity(new Intent(MainActivity.this, SignIn.class));
             finish();
-    
+            
         }
-       authStateListener =  new FirebaseAuth.AuthStateListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 
@@ -286,8 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 if (firebaseAuth.getCurrentUser() == null) {
                     startActivity(new Intent(MainActivity.this, PaperOnboardingActivity.class));
                     finish();
-                }
-                else {
+                } else {
                     Constants.uid = firebaseAuth.getUid();
                     checkForNotification();
                     checkForNewMessages();
@@ -298,13 +268,12 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         };
-       mAuth.addAuthStateListener(authStateListener);
+        mAuth.addAuthStateListener(authStateListener);
         
     }
     
-    
     private void checkForIncompleteData() {
-    
+        
         //SharedPreferences sharedPreferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         //boolean checkRecovery = sharedPreferences.getBoolean(Constants.newUserSetupDone, false);
         //if (checkRecovery)
@@ -312,12 +281,12 @@ public class MainActivity extends AppCompatActivity {
             DatabaseReference recoveryRef = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo)
                     .child(Constants.uid);
-    
+            
             recoveryRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            
-                   // Log.e(TAG, "Fix method called for recovery");
+                    
+                    // Log.e(TAG, "Fix method called for recovery");
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null) {
                         if (user.getUserName() == null || user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getMatchAlgo() == null) {
@@ -334,63 +303,34 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, QuestionSetup.class));
                     }*/
                     }
-            
+                    
                 }
-        
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+                
                 }
             });
         }
     }
+    
     private void checkForNewMessages() {
         messagesUnread = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
                 .child(Constants.uid + Constants.unread);
         
-        reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getValue(ChatMessage.class) != null) {
-                    messagesUnread++;
-                }
-            }
-            
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            
-            }
-            
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int unreads = (int) dataSnapshot.getChildrenCount();
-                
-                if (unreads > 0) {
-                    BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
-                    if (messagesUnread > 0) {
-        
-                        nearby.setBadgeCount(messagesUnread);
-                        // Remove the badge when you're done with it.
-                    } else
-                        nearby.removeBadge();
-                }
+                messagesUnread = (int) dataSnapshot.getChildrenCount();
+                BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
+                if (messagesUnread > 0) {
+                    
+                    nearby.setBadgeCount(messagesUnread);
+                    // Remove the badge when you're done with it.
+                    
+                } else
+                    nearby.removeBadge();
             }
             
             @Override
@@ -403,42 +343,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-       // startActivity(new Intent(MainActivity.this, MainActivity.class));
+        // startActivity(new Intent(MainActivity.this, MainActivity.class));
     }
     
     @Override
     protected void onPause() {
         super.onPause();
         updateStatus(Constants.offline);
-        if(mAuth!=null&&authStateListener!=null)
+        if (mAuth != null && authStateListener != null)
             mAuth.removeAuthStateListener(authStateListener);
     }
     
     @Override
     protected void onStop() {
         super.onStop();
-       // updateStatus(Constants.offline);
+        // updateStatus(Constants.offline);
     }
     
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(Constants.uid!=null)
-        updateStatus(Constants.offline);
+        if (Constants.uid != null)
+            updateStatus(Constants.offline);
     }
     
     private void updateStatus(final String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(Constants.status, status);
-        if(Constants.uid==null)
+        if (Constants.uid == null)
             return;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
                 .child(Constants.uid);
         reference.updateChildren(updateStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                if(status.equals(Constants.online))
-                {
+                if (status.equals(Constants.online)) {
                 
                 }
             }
@@ -456,15 +395,14 @@ public class MainActivity extends AppCompatActivity {
         
     }
     
-    public void giveXPoints()
-    {
+    public void giveXPoints() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.xPoints)
                 .child(Constants.uid);
         HashMap<String, Object> updatePoints = new HashMap<>();
         updatePoints.put(Constants.xPoints, 1000);
         reference.updateChildren(updatePoints);
-    
+        
     }
 }
 

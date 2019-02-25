@@ -187,7 +187,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 // for now update users database
                                 if (mCurrentUser != null) {
                                     updateDatabaseWithUser(mCurrentUser, null, profile);
-                                    uploadQuestions(mCurrentUser.getUid());
                                 }
                                 progressBar.setVisibility(View.INVISIBLE);
 
@@ -406,15 +405,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     }
 
     private void uploadQuestions(String uid) {
-
-       /* for (int i = 0; i < 11; i++) {
-            ModelQuestion question = new ModelQuestion("What is your favourite fruit?", "Apple", "Mango", "Grapes", "Bananna", "Apple");
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.userInfo).child(uid).child(Constants.questions)
-                    .child(String.valueOf(i));
-            reference.setValue(question);
-        }*/
-
+    
     }
 
     @Override
