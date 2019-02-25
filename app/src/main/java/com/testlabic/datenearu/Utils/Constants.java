@@ -75,6 +75,7 @@ public class Constants {
     public static String premiumWine = "Premium Wine";
     public static String royalWine = "Royal Wine";
     public static String showDialog = "showDialog";
+    public static String giftModel = "giftModel";
     
     public static String encrypt(String cityLabel) {
         

@@ -30,6 +30,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Fragments.AllMessagesListFragment;
 import com.testlabic.datenearu.Fragments.NotificationParent;
+import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.PaperOnboardingActivity;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomBar bottomBar;
     private int count = 0;
     private int messagesUnread = 0;
+    private boolean shownGifts = false;
     private int giftUnopened =0;
     FirebaseAuth.AuthStateListener authStateListener;
     
@@ -259,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
                     Constants.uid = firebaseAuth.getUid();
                     checkForNotification();
                     checkForNewMessages();
+                    if(!shownGifts)
                     checkForNewGifts();
                     updateStatus(Constants.online);
                     checkForIncompleteData();
@@ -271,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void checkForNewGifts() {
+        shownGifts = true;
         giftUnopened =0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
@@ -278,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
     
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
             
                 giftUnopened = (int) dataSnapshot.getChildrenCount();
                 giftUnopened  += count;
@@ -288,6 +292,21 @@ public class MainActivity extends AppCompatActivity {
                 if (giftUnopened > 0) {
                 
                     nearby.setBadgeCount(giftUnopened);
+                    //initiate transparent activity and pass data
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(DataSnapshot snapshot : dataSnapshot.getChildren())
+                            {
+                                ModelGift modelGift = snapshot.getValue(ModelGift.class);
+                                startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
+                                        .putExtra(Constants.giftModel, modelGift));
+        
+                            }
+                        }
+                    }, 2500);
+                   
                 
                     // Remove the badge when you're done with it.
                 } else

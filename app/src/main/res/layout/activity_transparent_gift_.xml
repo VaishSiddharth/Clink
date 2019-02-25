@@ -11,24 +11,19 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" />
-    <com.mikhaellopez.circularimageview.CircularImageView
+
+    <ImageView
         android:id="@+id/imageperson"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_gravity="center"
-        android:layout_centerHorizontal="true"
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="2dp"
         android:scaleType="centerCrop"
-        app:civ_border_color="@color/appcolor"
-        app:civ_border_width="3dp"
-        app:civ_shadow="true"
-        app:civ_shadow_radius="15"
-        app:civ_shadow_color="@color/black"
-        app:civ_shadow_gravity="center"
         android:src="@drawable/profile"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,13 +31,14 @@
 
     <customfonts.MyTextView_SF_Pro_Display_Bold
         android:id="@+id/nameperson"
+        android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageperson"
         android:layout_centerHorizontal="true"
-        android:text="Siddharth Vaish"
+        android:text="Siddharth Vaish send you a gift!"
         android:textColor="@color/white"
-        android:textSize="23sp" />
+        android:textSize="15sp" />
 
     <RelativeLayout
         android:id="@+id/scratch_view_behind"
@@ -52,8 +48,8 @@
         android:background="@color/transparent">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_centerInParent="true"
             android:layout_margin="25dp"
             android:adjustViewBounds="true"

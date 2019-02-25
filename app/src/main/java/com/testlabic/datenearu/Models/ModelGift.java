@@ -1,8 +1,9 @@
 package com.testlabic.datenearu.Models;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class ModelGift {
+public class ModelGift  implements Serializable {
     
     private String giftSendersUid;
     private String giftType;
