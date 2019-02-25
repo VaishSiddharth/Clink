@@ -75,7 +75,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             holder.profileItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(new Intent(context, Transparent_gift_Activity.class));
+                    context.startActivity(new Intent(context, EditActivity.class));
                 }
             });
         }
