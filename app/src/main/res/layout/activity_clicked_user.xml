@@ -75,12 +75,30 @@
                         android:textColor="#3b3b3b"
                         android:textSize="23sp" />
 
+                    <ImageView
+                        android:id="@+id/femaleglass"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/female_glass1"
+                        android:visibility="gone"/>
+                    <ImageView
+                        android:id="@+id/maleglass"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/male_glass1"
+                        android:visibility="gone"/>
 
                     <customfonts.MyTextView_SF_Pro_Display_Medium
                         android:id="@+id/age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="20 yr"
                         android:textColor="#3b3b3b"
                         android:textSize="23sp" />

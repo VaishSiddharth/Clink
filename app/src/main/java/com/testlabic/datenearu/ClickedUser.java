@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -63,6 +64,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     SweetAlertDialog alertDialog;
     DatabaseReference ref;
     ValueEventListener userInfoListener;
+    ImageView male;
+    ImageView female;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         circleIndicator = (CircleIndicator) findViewById(R.id.circleindicator);
         attemptMatch = findViewById(R.id.attempt_match);
+        male=findViewById(R.id.maleglass);
+        female=findViewById(R.id.femaleglass);
         name = findViewById(R.id.name);
         about = findViewById(R.id.about);
         //
@@ -325,6 +330,22 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         } else {
                             about.setText(Html.fromHtml(user.getAbout()));
                         }
+                    }
+                    if(user!=null&&user.getGender()!=null)
+                    {
+                        String gender =user.getGender();
+                        if(gender.equalsIgnoreCase("female")) {
+                            Log.e(TAG,gender);
+                            male.setVisibility(View.GONE);
+                            female.setVisibility(View.VISIBLE);
+
+                        }
+                        if(gender.equalsIgnoreCase("male")){
+                            Log.e(TAG,gender);
+                            female.setVisibility(View.GONE);
+                            male.setVisibility(View.VISIBLE);
+                        }
+
                     }
                     //blur image and name if isBlur
                     if (user != null) {

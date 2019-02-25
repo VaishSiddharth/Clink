@@ -80,6 +80,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private String ageS;
     private String sendersUid;
     private String oneLineS;
+    private String gender;
     DatabaseReference referenceDMIds;
     ChildEventListener childEventListener;
     Boolean isDmAllowed = true;
@@ -90,6 +91,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     DatabaseReference attemptRef;
     View rootView;
     View blur_view;
+    ImageView male;
+    ImageView female;
     
     @Nullable
     @Override
@@ -106,6 +109,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         //like = rootView.findViewById(R.id.like_fab);
         like_shine = rootView.findViewById(R.id.like_shiny);
         konfettiView = rootView.findViewById(R.id.viewKonfetti);
+        male=rootView.findViewById(R.id.maleglass);
+        female=rootView.findViewById(R.id.femaleglass);
         like_shine.init(getActivity());
         blur_view=rootView.findViewById(R.id.view_on_blur);
         like_shine.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +162,18 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             }
         });
         name.setText(nameS);
-        age.setText("'" + ageS);
+        age.setText(ageS);
+        if(gender!=null) {
+            if (gender.equalsIgnoreCase("male")) {
+                female.setVisibility(View.GONE);
+                male.setVisibility(View.VISIBLE);
+            }
+            if (gender.equalsIgnoreCase("female")) {
+                female.setVisibility(View.VISIBLE);
+                male.setVisibility(View.GONE);
+            }
+        }
+
         //TODO: Add imageview for gender, next to age and show image likewise (as in
         
         if (isBlur != null && isBlur) {
@@ -460,7 +476,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.ageS = "" + user.getNumeralAge();
         this.sendersUid = user.getUid();
         this.oneLineS = user.getOneLine();
-        String gender = user.getGender();
+        this.gender = user.getGender();
         this.isBlur = user.getIsBlur();
         //Log.e(TAG, "The user is "+user.getUid());
     }
