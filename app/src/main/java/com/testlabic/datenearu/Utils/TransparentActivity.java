@@ -14,11 +14,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cooltechworks.views.ScratchImageView;
@@ -41,15 +43,23 @@ import java.util.HashMap;
 
 public class TransparentActivity extends Activity {
     
+    private static final String TAG = TransparentActivity.class.getSimpleName();
     String sendersUid;
     String nameS;
     KonfettiView viewKonfetti;
+    RelativeLayout completeScreen;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent);
-
+        completeScreen = findViewById(R.id.completeScreen);
+        completeScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         boolean showDialog = getIntent().getBooleanExtra(Constants.showDialog, false);
         nameS = getIntent().getStringExtra(Constants.sendToName);
         sendersUid = getIntent().getStringExtra(Constants.clickedUid);
@@ -110,7 +120,7 @@ public class TransparentActivity extends Activity {
     
     private void sendNotificationToOtherUser(SweetAlertDialog sweetAlertDialog) {
         sweetAlertDialog.dismissWithAnimation();
-        acceptRequest(sendersUid, sweetAlertDialog);
+        //acceptRequest(sendersUid, sweetAlertDialog);
         
         //create a notification
         
@@ -221,7 +231,7 @@ public class TransparentActivity extends Activity {
                                             .setConfirmText("OK")
                                             .setConfirmClickListener(null)
                                             .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                                    
+                                    Log.e(TAG, "Move to chat screen called by transparent activity");
                                     moveToChatScreen();
                                 }
                             });
@@ -238,7 +248,7 @@ public class TransparentActivity extends Activity {
         }
     }
     private void moveToChatScreen() {
-        
+       
         Intent i = new Intent(TransparentActivity.this, chatFullScreen.class);
         i.putExtra(Constants.sendToUid, sendersUid);
         i.putExtra(Constants.sendToName, nameS);
