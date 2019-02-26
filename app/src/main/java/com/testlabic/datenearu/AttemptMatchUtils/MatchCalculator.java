@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Activities.MainActivity;
+import com.testlabic.datenearu.Activities.Transparent_wine_types;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelMessage;
@@ -95,7 +96,9 @@ public class MatchCalculator extends AppCompatActivity {
                 .setConfirmButton("Send Wine", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {
-                        showWineTypes(sweetAlertDialog);
+                        startActivity(new Intent(MatchCalculator.this, Transparent_wine_types.class)
+                                .putExtra(Constants.clickedUid , clickedUsersId));
+                        //showWineTypes(sweetAlertDialog);
                     }
                 })
                 .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
