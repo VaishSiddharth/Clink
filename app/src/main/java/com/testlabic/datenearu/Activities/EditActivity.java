@@ -1,10 +1,13 @@
 package com.testlabic.datenearu.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.ToolbarWidgetWrapper;
@@ -41,6 +44,7 @@ import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.soundcloud.android.crop.Crop;
+import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -58,7 +62,7 @@ public class EditActivity extends AppCompatActivity {
     
     private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/profile.jpeg?alt=media&token=d50ac046-46b4-480d-a612-e3d5c8519717";
     private static final String TAG = EditActivity.class.getSimpleName();
-    TextView name, age, about;
+    TextView name, age, about,blurinfo;
     ImageView image1, nameWrap, image2, image3,previewprofile,backbutton;
     ProgressBar bar1, bar2, bar3;
     Switch blur;
@@ -94,6 +98,7 @@ public class EditActivity extends AppCompatActivity {
         toolbar=findViewById(R.id.toolbar);
         backbutton=toolbar.findViewById(R.id.backbutton1);
         previewprofile=toolbar.findViewById(R.id.previewprofile);
+        blurinfo=findViewById(R.id.blurinfo);
 
 
         backbutton.setOnClickListener(new View.OnClickListener() {
@@ -245,6 +250,7 @@ public class EditActivity extends AppCompatActivity {
             }
         });
         setUpDetails();
+        blurTrialCalc();
     }
     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -256,6 +262,31 @@ public class EditActivity extends AppCompatActivity {
             handleCrop(resultCode, data);
         }
         
+    }
+    public void blurTrialCalc()
+    {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo).child(Constants.uid).child("creationTime").child(Constants.timeStamp);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null) {
+                    long timestamp = dataSnapshot.getValue(Long.class);
+                    long epoch = System.currentTimeMillis() / 1000;
+                    long oneday = 86400;
+                    long trialend=timestamp+7*oneday;
+                    long daysleft=(trialend-epoch)/oneday;
+                    blurinfo.setText("Blur profile ("+daysleft+" days remaining)");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
     
     private void beginCrop(Uri source) {

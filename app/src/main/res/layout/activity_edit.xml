@@ -81,6 +81,7 @@
 
                     <customfonts.MyTextView_SF_Pro_Display_Medium
                         android:layout_width="wrap_content"
+                        android:id="@+id/blurinfo"
                         android:text="Blur profile (4 days remaining)"
                         android:textColor="#3b3b3b"
                         android:textSize="18sp"
