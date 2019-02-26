@@ -219,7 +219,7 @@ public class GiftsFragment extends Fragment {
                         // show the profile of the request sender
                         Intent i = new Intent(getActivity(), ClickedUser.class);
                         i.putExtra(Constants.comingFromNotif, true);
-                        i.putExtra(Constants.clickedUid,adapter.getItem(position).getGiftReceiversUid());
+                        i.putExtra(Constants.clickedUid,adapter.getItem(position).getGiftSendersUid());
                         startActivity(i);
                         // Toast.makeText(getActivity(), "Accepting request!", Toast.LENGTH_SHORT).show();
                         break;

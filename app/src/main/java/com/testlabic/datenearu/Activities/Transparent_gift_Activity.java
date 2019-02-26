@@ -138,9 +138,10 @@ public class Transparent_gift_Activity extends Activity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
                 .child(Constants.uid).child(Constants.unread);
-        ValueEventListener listener = reference.addValueEventListener(new ValueEventListener() {
+        
+        reference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getValue() != null) {
                     ModelGift notification = dataSnapshot.getValue(ModelGift.class);
                     String pushKey = dataSnapshot.getKey();
@@ -148,23 +149,42 @@ public class Transparent_gift_Activity extends Activity {
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.Gifts)
                                 .child(Constants.uid).child(Constants.read).child(pushKey);
-                        
+                            //Log.e("Trans", "THe ref to push to reaad" + reference);
                         reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                dataSnapshot.getRef().setValue(null);
-                                
+                                dataSnapshot.getRef().setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                       // Log.e("trans" , "nulling ref her "+ dataSnapshot.getRef());
+                                    }
+                                });
+                    
                             }
                         });
                     }
                 }
             }
-            
+    
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        
+            }
+    
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        
+            }
+    
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+        
             }
-            
         });
     }
 }
