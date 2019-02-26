@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="#00000000">
+
+    <ImageView
+        android:id="@+id/backbutton1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="5dp"
+        android:src="@drawable/ic_left_arrow"/>
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_heart"
+        android:layout_gravity="end"
+        android:layout_marginRight="20dp"
+        android:visibility="gone"/>
+
+    <com.sackcentury.shinebuttonlib.ShineButton
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end"
+        android:layout_marginRight="20dp"
+        android:src="@android:color/darker_gray"
+        android:id="@+id/f1"
+        app:btn_color="@android:color/white"
+        app:btn_fill_color="@color/black"
+        app:allow_random_color="false"
+        app:enable_flashing="false"
+        app:big_shine_color="@color/appcolor"
+        app:click_animation_duration="200"
+        app:shine_animation_duration="1500"
+        app:shine_turn_angle="10"
+        app:small_shine_offset_angle="20"
+        app:shine_distance_multiple="2"
+        app:small_shine_color="#CC9999"
+        app:shine_count="8"
+        app:siShape="@raw/like"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/previewprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_location" />
+
+
+
+
+</androidx.appcompat.widget.Toolbar>

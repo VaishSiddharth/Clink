@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutpv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="#E6000000"
+    android:orientation="vertical"
+    tools:context=".Activities.ProfilePreview">
+
+    <customfonts.MyTextView_SF_Pro_Display_Bold
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_margin="30dp"
+        android:text="This is how your Profile will look like to people"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:shadowColor="@color/black"/>
+
+    <com.testlabic.datenearu.TransitionUtils.AspectRatioCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/card_extra_height"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="10dp">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imagepv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_setupuser_shade"/>
+            <View
+                android:id="@+id/view_on_blurpv"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_darker_fragment_blur"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            android:layout_margin="10dp">
+
+            <customfonts.MyTextView_SF_Pro_Display_Bold
+                android:id="@+id/namepv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingRight="10dp"
+                android:text="Siddharth Vaish"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:shadowColor="@color/black"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/femaleglasspv"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/female_glass1"
+                    android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/maleglasspv"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/male_glass1"
+                    android:visibility="gone"/>
+                <customfonts.MyTextView_SF_Pro_Display_Medium
+                    android:id="@+id/agepv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="NO. 7911847"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:shadowColor="@color/black"/>
+            </LinearLayout>
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:layout_width="wrap_content"
+                android:text="One liner god, works at Google"
+                android:layout_gravity="bottom"
+                android:textColor="#FFFFFF"
+                android:id="@+id/oneLinepv"
+                android:textSize="13sp"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/black"/>
+        </LinearLayout>
+
+    </com.testlabic.datenearu.TransitionUtils.AspectRatioCardView>
+
+</LinearLayout>

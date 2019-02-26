@@ -20,8 +20,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="370dp">
-                <include layout="@layout/toolbar_productpage"
-                    android:id="@+id/toolbar"/>
+                <include layout="@layout/toolbar_editactivity"
+                    android:id="@+id/toolbar" />
 
                 <LinearLayout
                     android:layout_below="@+id/toolbar"
@@ -37,7 +37,7 @@
                         android:gravity="center">
                         <include
                             android:id="@+id/edit_dp_1"
-                            layout="@layout/edit_profile_images"/>
+                            layout="@layout/edit_profile_images" />
                     </LinearLayout>
 
                     <LinearLayout

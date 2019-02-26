@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ToolbarWidgetWrapper;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.soundcloud.android.crop.Crop;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
@@ -57,7 +59,7 @@ public class EditActivity extends AppCompatActivity {
     private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/profile.jpeg?alt=media&token=d50ac046-46b4-480d-a612-e3d5c8519717";
     private static final String TAG = EditActivity.class.getSimpleName();
     TextView name, age, about;
-    ImageView image1, nameWrap, image2, image3;
+    ImageView image1, nameWrap, image2, image3,previewprofile,backbutton;
     ProgressBar bar1, bar2, bar3;
     Switch blur;
     CircularImageView remove_dp1, remove_dp2, remove_dp3;
@@ -66,6 +68,7 @@ public class EditActivity extends AppCompatActivity {
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     StorageReference displaypics_Ref;
     UploadTask uploadTask;
+    View toolbar;
     
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -88,6 +91,23 @@ public class EditActivity extends AppCompatActivity {
         remove_dp1 = dp1.findViewById(R.id.remove_dp);
         remove_dp2 = dp2.findViewById(R.id.remove_dp);
         remove_dp3 = dp3.findViewById(R.id.remove_dp);
+        toolbar=findViewById(R.id.toolbar);
+        backbutton=toolbar.findViewById(R.id.backbutton1);
+        previewprofile=toolbar.findViewById(R.id.previewprofile);
+
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditActivity.super.onBackPressed();
+            }
+        });
+        previewprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EditActivity.this,ProfilePreview.class));
+            }
+        });
         
         //remove dp code
         remove_dp1.setOnClickListener(new View.OnClickListener() {
@@ -368,8 +388,8 @@ public class EditActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         
-                        startActivity(new Intent(EditActivity.this, EditActivity.class));
-                        finish();
+                        startActivity(new Intent(EditActivity.this, ProfilePreview.class));
+                        //finish();
                     }
                 });
                 
@@ -379,9 +399,6 @@ public class EditActivity extends AppCompatActivity {
     }
     
     private void blurProfile() {
-        //Blurry.with(EditActivity.this).capture(image1).into(image1);
-
-//        Blurry.with(EditActivity.this).capture(nameWrap).into(nameWrap);
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid);
         
@@ -395,15 +412,20 @@ public class EditActivity extends AppCompatActivity {
                 
                 DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.cityLabels).child(cityLabel).child(gender).child(Constants.uid);
-                ref2.updateChildren(updateBlur);
+                ref2.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startActivity(new Intent(EditActivity.this, ProfilePreview.class));
+                    }
+                });
                 
             }
         });
         
-        name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        /*name.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         float radius = name.getTextSize() / 3;
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
-        name.getPaint().setMaskFilter(filter);
+        name.getPaint().setMaskFilter(filter);*/
     }
     
     private void setUpDetails() {
@@ -426,14 +448,14 @@ public class EditActivity extends AppCompatActivity {
                         detailsSetup = true;
                         if (user.getIsBlur()) {
                             blur.setChecked(true);
-                            RequestOptions myOptions = new RequestOptions()
+                            /*RequestOptions myOptions = new RequestOptions()
                                     .override(15, 15)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE);
 
                             Glide.with(EditActivity.this).load(user.getImageUrl()).apply(myOptions).into(image1);
                             Glide.with(EditActivity.this).load(user.getImage2()).apply(myOptions).into(image2);
                             Glide.with(EditActivity.this).load(user.getImage3()).apply(myOptions).into(image3);
-                            blurProfile();
+                            blurProfile();*/
                         } else blur.setChecked(false);
                         DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());
                         HashMap<String, Object> update_image_url_city = new HashMap<>();

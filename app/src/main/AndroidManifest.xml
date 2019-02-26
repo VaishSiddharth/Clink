@@ -25,8 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".Activities.Transparent_gift_Activity"
+        <activity android:name=".Activities.ProfilePreview"
             android:theme="@style/Theme.Transparent"></activity>
+        <activity
+            android:name=".Activities.Transparent_gift_Activity"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".AttemptMatchUtils.QuestionsAttemptActivity" />
         <activity android:name=".Activities.EditActivity" />
         <activity android:name=".PaperOnboardingActivity" />
@@ -119,11 +122,12 @@
         <activity android:name=".MatchAlgoUtils.SeriousOrCasual" />
         <activity android:name=".MatchAlgoUtils.CasualItems" />
         <activity android:name=".NewQuestionUtils.QuestionSetup" />
-        <activity android:name=".Utils.TransparentActivity"
-            android:theme="@style/Theme.Transparent"/>
-        <activity android:name=".Utils.Transparent_likeback"
-            android:theme="@style/Theme.Transparent"
-            />
+        <activity
+            android:name=".Utils.TransparentActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".Utils.Transparent_likeback"
+            android:theme="@style/Theme.Transparent" />
     </application>
 
 </manifest>
