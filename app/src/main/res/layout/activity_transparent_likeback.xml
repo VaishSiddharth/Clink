@@ -54,6 +54,7 @@
             android:layout_height="250dp"
             android:layout_centerInParent="true"
             android:layout_margin="25dp"
+            android:visibility="gone"
             android:adjustViewBounds="true"
             android:src="@drawable/premium_bottle" />
 

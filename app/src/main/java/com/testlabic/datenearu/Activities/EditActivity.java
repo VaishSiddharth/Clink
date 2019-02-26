@@ -73,6 +73,7 @@ public class EditActivity extends AppCompatActivity {
     StorageReference displaypics_Ref;
     UploadTask uploadTask;
     View toolbar;
+    boolean switchedManually = false;
     
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -211,6 +212,9 @@ public class EditActivity extends AppCompatActivity {
                     }
                 });
                 sweetAlertDialog.show();
+                Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+    
             }
         });
         image3.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +233,10 @@ public class EditActivity extends AppCompatActivity {
                 });
                 
                 sweetAlertDialog.show();
-                
+                Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+    
+    
             }
         });
         
@@ -239,12 +246,12 @@ public class EditActivity extends AppCompatActivity {
                 if (isChecked) {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
-                    else
+                    else if(switchedManually)
                         blurProfile();
                 } else {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
-                    else
+                    else if(switchedManually)
                         unBlurProfile();
                 }
             }
@@ -479,6 +486,7 @@ public class EditActivity extends AppCompatActivity {
                         detailsSetup = true;
                         if (user.getIsBlur()) {
                             blur.setChecked(true);
+                            switchedManually = true;
                             /*RequestOptions myOptions = new RequestOptions()
                                     .override(15, 15)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE);
@@ -487,7 +495,10 @@ public class EditActivity extends AppCompatActivity {
                             Glide.with(EditActivity.this).load(user.getImage2()).apply(myOptions).into(image2);
                             Glide.with(EditActivity.this).load(user.getImage3()).apply(myOptions).into(image3);
                             blurProfile();*/
-                        } else blur.setChecked(false);
+                        } else {
+                            blur.setChecked(false);
+                            switchedManually = true;
+                        }
                         DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());
                         HashMap<String, Object> update_image_url_city = new HashMap<>();
                         update_image_url_city.put("imageUrl", user.getImageUrl());
