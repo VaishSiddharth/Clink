@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,10 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.fragment.app.Fragment;
@@ -65,6 +71,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import jp.wasabeef.blurry.Blurry;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
@@ -376,10 +383,29 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         name.getPaint().setMaskFilter(filter);
         
         RequestOptions myOptions = new RequestOptions()
-                .override(15, 15)
+                .override(30, 30)
                 .diskCacheStrategy(DiskCacheStrategy.NONE);
         
-        Glide.with(CommonFragment.this).load(imageUrl).apply(myOptions).into(imageView);
+        Glide.with(CommonFragment.this)
+                .load(imageUrl).apply(myOptions).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                Handler handler=new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Blurry.with(imageView.getContext()).radius(20)
+                                .sampling(2).capture(imageView).into(imageView);
+                    }
+                },10);
+                return false;
+            }
+        }).into(imageView);
         imageView.setAlpha(0.7f);
         blur_view.setVisibility(View.VISIBLE);
     }

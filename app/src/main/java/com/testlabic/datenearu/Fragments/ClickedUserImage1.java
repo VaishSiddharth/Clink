@@ -1,17 +1,25 @@
 package com.testlabic.datenearu.Fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import jp.wasabeef.blurry.Blurry;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -42,30 +50,47 @@ public class ClickedUserImage1 extends Fragment {
     
             else
             {
-                RequestOptions myOptions = new RequestOptions()
+                /*RequestOptions myOptions = new RequestOptions()
                         .override(15, 15)
                         .diskCacheStrategy(DiskCacheStrategy.NONE);
 
                 Glide.with(getContext())
                         .load( imageUrl)
                         .apply(myOptions)
-                        .into(imageView);
-                /*Glide.with(getContext()).load
-                        ( imageUrl).listener(new RequestListener<Drawable>() {
+                        .into(imageView);*/
+
+                RequestOptions myOptions = new RequestOptions()
+                        .override(15, 15)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+                Glide.with(this)
+                        .load(imageUrl).apply(myOptions).listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
-    
+
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-
-                        Blurry.with(getActivity())
-                                .capture(imageView)
-                                .into((ImageView) imageView);
-                        return true;
+                        Handler handler=new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Blurry.with(imageView.getContext()).radius(25)
+                                        .sampling(2).capture(imageView).into(imageView);
+                            }
+                        },10);
+                        return false;
                     }
-                }).into(imageView);*/
+                }).into(imageView);
+                imageView.setAlpha(0.7f);
+                //blur_view.setVisibility(View.VISIBLE);
+
+
+
+
+
+
 
             }
             
