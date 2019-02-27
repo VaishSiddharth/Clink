@@ -59,8 +59,8 @@
                     android:layout_width="8dp"
                     android:layout_height="8dp"
                     android:id="@+id/onlineStatus"
-                    android:visibility="gone"
-                    android:background="@drawable/ic_brightness_1_black"/>
+                    android:visibility="invisible"
+                    android:background="@drawable/ic_online_"/>
 
                 <TextView
                     android:id="@+id/numberOfNewMessages"

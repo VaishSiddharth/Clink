@@ -17,8 +17,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -30,9 +33,46 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class ConnectionViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = ConnectionViewHolder.class.getSimpleName();
     View v;
+    private DatabaseReference onlineStatusRef;
+    private ValueEventListener onlineStatusListener;
+    
     public ConnectionViewHolder(@NonNull View itemView) {
         super(itemView);
         v = itemView;
+    }
+    
+    private void setUpOnlineStatus(String contactUid, final ImageView onlineStatus) {
+        
+        onlineStatusRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.usersStatus).child(contactUid)
+                .child("status");
+        
+        onlineStatusListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                if(dataSnapshot.exists()&&dataSnapshot.getValue(String.class)!=null)
+                {
+                    String stat = dataSnapshot.getValue(String.class);
+                    // Log.e(TAG, "The user "+sendersUid+ " is "+stat);
+                    if (stat != null) {
+                        if(stat.equalsIgnoreCase(Constants.online)) {
+                            // Log.e(TAG, "Showing srch ");
+                            onlineStatus.setVisibility(View.VISIBLE);
+                        } else if(stat.equalsIgnoreCase(Constants.offline))
+                            onlineStatus.setVisibility(View.INVISIBLE);
+                    }else
+                        onlineStatus.setVisibility(View.GONE);
+                }
+                
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        };
+        onlineStatusRef.addValueEventListener(onlineStatusListener);
     }
     
     public void bindMember(final ModelContact model, final Context context, final DatabaseReference ref)
@@ -40,6 +80,10 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
         TextView name = v.findViewById(R.id.name);
         ImageView photo = v.findViewById(R.id.image);
         TextView timer = v.findViewById(R.id.timer);
+        ImageView statusOnline = v.findViewById(R.id.statusOnline);
+        
+        setUpOnlineStatus(model.getUid(), statusOnline);
+        
         name.setText(model.getName());
         Glide.with(context).load(getBiggerImage(model.getImage())).into(photo);
         if(model.getBlockStatus()!=null&&model.getBlockStatus())

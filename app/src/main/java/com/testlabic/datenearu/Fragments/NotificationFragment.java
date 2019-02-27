@@ -94,9 +94,7 @@ public class NotificationFragment extends Fragment {
                     reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            
                             dataSnapshot.getRef().setValue(null);
-                            
                         }
                     });
                 }

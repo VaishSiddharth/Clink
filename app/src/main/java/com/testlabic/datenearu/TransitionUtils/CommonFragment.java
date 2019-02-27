@@ -515,6 +515,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     
     private void setUpOnlineStatus() {
         
+        if(sendersUid==null)
+            return;
         onlineStatusRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.usersStatus).child(sendersUid)
                 .child("status");

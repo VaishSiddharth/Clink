@@ -17,6 +17,10 @@
         android:layout_margin="2dp"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
                 android:layout_width="60dp"
@@ -26,6 +30,14 @@
                 app:civ_border_width="1dp"
                 android:layout_gravity="center"/>
 
+            <ImageView
+                android:layout_width="10dp"
+                android:id="@+id/statusOnline"
+                android:visibility="invisible"
+                android:layout_height="10dp"
+                android:src="@drawable/ic_online_" />
+
+        </RelativeLayout>
                 <customfonts.MyTextView_SF_Pro_Display_Bold
                     android:id="@+id/name"
                     android:layout_width="match_parent"
@@ -47,7 +59,9 @@
                     android:textSize="8dp"
                     android:text="--:--:--"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"/>
+                    android:visibility="invisible"/>
+
+
 
     </LinearLayout>
 </LinearLayout>

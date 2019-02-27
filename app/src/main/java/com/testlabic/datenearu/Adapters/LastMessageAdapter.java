@@ -35,6 +35,9 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     private static final String TAG = LastMessageAdapter.class.getSimpleName();
     private Context context;
     private ArrayList<ModelLastMessage> allModelArrayList;
+    private DatabaseReference onlineStatusRef;
+    private ValueEventListener onlineStatusListener;
+    
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("h:mm a", Locale.getDefault());
     
     private String setTime(long timestampCreatedLong) {
@@ -57,7 +60,42 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.sample_last_message,parent,false);
         return new ViewHolder(view);
     }
-
+    
+    private void setUpOnlineStatus(String contactUid, final ImageView onlineStatus) {
+        
+        onlineStatusRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.usersStatus).child(contactUid)
+                .child("status");
+        
+        onlineStatusListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                if(dataSnapshot.exists()&&dataSnapshot.getValue(String.class)!=null)
+                {
+                    String stat = dataSnapshot.getValue(String.class);
+                    // Log.e(TAG, "The user "+sendersUid+ " is "+stat);
+                    if (stat != null) {
+                        if(stat.equalsIgnoreCase(Constants.online)) {
+                            // Log.e(TAG, "Showing srch ");
+                            onlineStatus.setVisibility(View.VISIBLE);
+                        } else if(stat.equalsIgnoreCase(Constants.offline))
+                            onlineStatus.setVisibility(View.INVISIBLE);
+                    }else
+                        onlineStatus.setVisibility(View.GONE);
+                }
+                
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        };
+        onlineStatusRef.addValueEventListener(onlineStatusListener);
+    }
+    
+    
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         
@@ -67,6 +105,8 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         holder.txt.setText(allModelArrayList.get(position).getLastMessage());
         
         Glide.with(context).load(lastMessage.getImageUrl()).into(holder.image);
+        
+        setUpOnlineStatus(allModelArrayList.get(position).getUid(), holder.onlineStat);
         
         /*
         Get unread messages and display the number of messages unread
@@ -86,7 +126,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS+Constants.unread)
                 .child(Constants.uid+Constants.unread)
                 .child(lastMessage.getUid());
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     int unreads = (int) dataSnapshot.getChildrenCount();
