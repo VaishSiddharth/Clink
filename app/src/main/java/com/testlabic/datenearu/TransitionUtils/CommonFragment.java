@@ -76,8 +76,6 @@ import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
 
-import static com.google.common.collect.ComparisonChain.start;
-
 /**
  * Created by velox on 2019/01/18.
  */

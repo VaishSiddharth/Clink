@@ -358,17 +358,15 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         else
                         {
                             //unblur code
-                            
                         }
-                        
                     }
-                    
                     //setupImages now
                     if (user != null) {
                         imageUrl = user.getImageUrl();
                         imageUrl2 = user.getImage2();
                         imageUrl3 = user.getImage3();
                         //Log.e(TAG, imageUrl+ " "+ imageUrl2);
+                        isBlur = user.getIsBlur();
                         view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl, imageUrl2, imageUrl3, isBlur);
                         viewPager.setAdapter(view_pager_adapter);
                         circleIndicator.setViewPager(viewPager);

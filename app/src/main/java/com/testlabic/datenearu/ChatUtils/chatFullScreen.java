@@ -58,6 +58,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,10 +82,11 @@ public class chatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
-    ImageView imageView, help;
+    ImageView imageView, help, emojis;
     boolean isTemporaryContact = false;
+    private View rootView;
     private ArrayList<ChatMessage> messages = new ArrayList<>();
-    private EditText chatEditText1;
+    private EmojiconEditText chatEditText1;
     private EditText.OnKeyListener keyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -235,6 +238,15 @@ public class chatFullScreen extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chat_list_view);
         
         help = findViewById(R.id.help);
+        
+        emojis = findViewById(R.id.emojis);
+    
+        rootView = findViewById(R.id.rootView);
+    
+        EmojIconActions emojIcon=new EmojIconActions(chatFullScreen.this ,rootView,chatEditText1,emojis,"#495C66","#DCE1E2","#E6EBEF");
+        emojIcon.ShowEmojIcon();
+        
+        emojIcon.addEmojiconEditTextList(chatEditText1);
         
         chatListView.setEmptyView(emptyView);
         

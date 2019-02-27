@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/rootView"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -119,27 +120,30 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:id="@+id/attach"
                 android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_plus" />
+                android:id="@+id/emojis"
+                android:src="@drawable/ic_smile"
+                 />
 
-            <customfonts.EditText__SF_Pro_Display_Medium
-                android:layout_width="wrap_content"
+            <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_weight="1"
                 android:padding="16dp"
                 android:id="@+id/chat_edit_text1"
                 android:background="#00000000"
                 android:hint="Type something..."
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="20dp"
-                android:src="@drawable/ic_smile" />
+                android:id="@+id/attach"
+                android:src="@drawable/ic_plus"
+                />
 
             <ImageView
                 android:layout_width="30dp"
