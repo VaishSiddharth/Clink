@@ -446,24 +446,27 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void checkForNewMessages() {
-        messagesUnread = 0;
+       
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
                 .child(Constants.uid + Constants.unread);
         
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                messagesUnread = (int) dataSnapshot.getChildrenCount();
-                BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
-                if (messagesUnread > 0) {
-                    
-                    nearby.setBadgeCount(messagesUnread);
-                    // Remove the badge when you're done with it.
-                    
-                } else
-                    nearby.removeBadge();
+                if (dataSnapshot.exists()) {
+                    messagesUnread = 0;
+                    messagesUnread = (int) dataSnapshot.getChildrenCount();
+    
+                    BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
+                    if (messagesUnread > 0) {
+        
+                        nearby.setBadgeCount(messagesUnread);
+                        // Remove the badge when you're done with it.
+        
+                    } else
+                        nearby.removeBadge();
+                }
             }
-            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             

@@ -83,17 +83,9 @@ public class Transparent_wine_types extends Activity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
                 final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(Transparent_wine_types.this, SweetAlertDialog.PROGRESS_TYPE)
-                        .setContentText("Loading")
-                        .setConfirmButton("Okay", new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-        
-                            }
-                        });
+                        .setContentText("Loading");
                 sweetAlertDialog.show();
-                Button btn=sweetAlertDialog.findViewById(R.id.confirm_button);
-                btn.setBackground(ContextCompat.getDrawable(Transparent_wine_types.this,R.drawable.button_4_dialogue));
-    
+              
     
                 
                 ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
@@ -113,7 +105,7 @@ public class Transparent_wine_types extends Activity {
                                         .setTitleText("Sending!")
                                         .setContentText("Your wine is on its way")
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                                
+                                sweetAlertDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
                                 //sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                                 sendWine(wineAmount);
                                 Handler handler = new Handler();
