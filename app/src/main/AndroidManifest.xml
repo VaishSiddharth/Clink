@@ -25,6 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <activity android:name=".Activities.Transparent_many_gifts"
+            android:theme="@style/Theme.Transparent" ></activity>
         <activity
             android:name=".Activities.Transparent_wine_types"
             android:theme="@style/Theme.Transparent" />
