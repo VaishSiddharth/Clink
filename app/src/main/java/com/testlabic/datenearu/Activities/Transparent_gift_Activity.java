@@ -38,7 +38,7 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 public class Transparent_gift_Activity extends Activity {
-    
+
     ModelGift modelGift;
     ImageView imagePerson;
     ImageView royal_bottle;
@@ -47,7 +47,7 @@ public class Transparent_gift_Activity extends Activity {
     RelativeLayout completeScreen;
     boolean tapTwice = false;
     ImageView regular_bottle;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +80,7 @@ public class Transparent_gift_Activity extends Activity {
         //scratchImageView = new ScratchImageView(this);
         imagePerson = findViewById(R.id.imageperson);
         namePerson = findViewById(R.id.nameperson);
-        
+
         String url = modelGift.getGiftSendersImageUrl();
         Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagePerson);
         String message = modelGift.getGiftSendersName() + " has sent you a gift (Tap to see Profile) ";
@@ -95,7 +95,7 @@ public class Transparent_gift_Activity extends Activity {
                 startActivity(i);
             }
         });
-        
+
         ScratchoffController controller = new ScratchoffController(this)
                 .setThresholdPercent(0.20d)
                 .setTouchRadiusDip(this, 30)
@@ -104,42 +104,42 @@ public class Transparent_gift_Activity extends Activity {
                 .setCompletionCallback(new Runnable() {
                     @Override
                     public void run() {
-    
+
                         AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
                         switch (modelGift.getGiftType())
                         {
                             case "Regular Wine" : regular_bottle.setVisibility(View.VISIBLE);
-                                
+
                                 anim2.setStartOffset(100);
                                 anim2.setDuration(1000);
                                 //anim1.setRepeatCount(10);
                                 //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
                                 premium_bottle.startAnimation(anim2);
                                 break;
-    
-    
+
+
                             case "Premium Wine" : premium_bottle.setVisibility(View.VISIBLE);
-                               
+
                                 anim2.setStartOffset(100);
                                 anim2.setDuration(1000);
                                 //anim1.setRepeatCount(10);
                                 //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
                                 premium_bottle.startAnimation(anim2);
                                 break;
-    
-    
+
+
                             case "Royal Wine" : royal_bottle.setVisibility(View.VISIBLE);
-                                
+
                                 anim2.setStartOffset(100);
                                 anim2.setDuration(1000);
                                 //anim1.setRepeatCount(10);
                                 //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
                                 premium_bottle.startAnimation(anim2);
                                 break;
-    
-    
+
+
                         }
-                       
+
                         KonfettiView viewKonfetti = findViewById(R.id.viewKonfetti);
                         viewKonfetti.build()
                                 .addColors(getApplicationContext().getResources().getColor(R.color.appcolor),
@@ -163,14 +163,14 @@ public class Transparent_gift_Activity extends Activity {
                     }
                 })
                 .attach(findViewById(R.id.scratch_view), findViewById(R.id.scratch_view_behind));
-        
+
     }
-    
+
     private void moveGiftToRead() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
                 .child(Constants.uid).child(Constants.unread);
-        
+
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
@@ -181,41 +181,41 @@ public class Transparent_gift_Activity extends Activity {
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.Gifts)
                                 .child(Constants.uid).child(Constants.read).child(pushKey);
-                            //Log.e("Trans", "THe ref to push to reaad" + reference);
+                        //Log.e("Trans", "THe ref to push to reaad" + reference);
                         reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 dataSnapshot.getRef().setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                       // Log.e("trans" , "nulling ref her "+ dataSnapshot.getRef());
+                                        // Log.e("trans" , "nulling ref her "+ dataSnapshot.getRef());
                                     }
                                 });
-                    
+
                             }
                         });
                     }
                 }
             }
-    
+
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+
             }
-    
+
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        
+
             }
-    
+
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+
             }
-    
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+
             }
         });
     }
