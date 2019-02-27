@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="6dp"
-            android:text="Nice meeting you, Keith. I’m interested and \n would love to know more about the drone. \n Is it still under warranty? Do you have the \n bills and stuff?"
+            android:text="-------------"
             android:textColor="#ffffff"
             android:paddingLeft="19dp"
             android:paddingRight="19dp"
@@ -37,7 +37,6 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
 
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/image"
             android:layout_width="36dp"
             android:padding="2dp"
@@ -60,7 +59,7 @@
         <customfonts.TextViewSFProDisplayRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
             android:layout_marginLeft="20dp"
             android:text="24m ago"
             android:id="@+id/textview_time"

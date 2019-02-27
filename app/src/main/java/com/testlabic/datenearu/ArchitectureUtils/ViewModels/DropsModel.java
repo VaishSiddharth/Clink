@@ -12,9 +12,6 @@ public class DropsModel extends ViewModel {
     
     private DatabaseReference DROP_REF ;
     
-    public void setRef(DatabaseReference reference) {
-        DROP_REF = reference;
-    }
     
     private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(DROP_REF);
     

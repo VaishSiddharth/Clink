@@ -33,7 +33,7 @@ import java.util.Locale;
 
 public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.ViewHolder> {
     private static final String TAG = LastMessageAdapter.class.getSimpleName();
-    Context context;
+    private Context context;
     private ArrayList<ModelLastMessage> allModelArrayList;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("h:mm a", Locale.getDefault());
     
@@ -114,9 +114,8 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         
         if(lastMessage.getSendersUid().equals(Constants.uid))
         {
-            /*
-            For own message show delivered status
-             */
+            //For own message show delivered status
+            
             holder.replysymbol.setVisibility(View.VISIBLE);
             holder.readStat.setVisibility(View.GONE);
             if(lastMessage.getSuccessfullySent()!=null&& lastMessage.getSuccessfullySent())
@@ -168,23 +167,21 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         return allModelArrayList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image,readStat,onlineStat,n4,replysymbol;
         TextView name,time,txt,numberOfNewMesssages;
         LinearLayout linear;
 
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-
             image=itemView.findViewById(R.id.image);
             name=itemView.findViewById(R.id.name);
             time=itemView.findViewById(R.id.time);
             txt=itemView.findViewById(R.id.txt);
             linear =itemView.findViewById(R.id.linear);
             replysymbol=itemView.findViewById(R.id.replysymbol);
-
-           onlineStat= itemView.findViewById(R.id.onlineStatus);
+            onlineStat= itemView.findViewById(R.id.onlineStatus);
             readStat=itemView.findViewById(R.id.readStat);
             numberOfNewMesssages=itemView.findViewById(R.id.numberOfNewMessages);
             

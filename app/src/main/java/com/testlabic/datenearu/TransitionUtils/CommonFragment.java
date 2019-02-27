@@ -99,7 +99,10 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private ValueEventListener attemptListener;
     private DatabaseReference attemptRef;
     private View rootView;
+    private ImageView onlineStatus;
     private View blur_view;
+    private DatabaseReference onlineStatusRef;
+    private ValueEventListener onlineStatusListener;
     
     @Nullable
     @Override
@@ -112,6 +115,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         name = rootView.findViewById(R.id.name);
         TextView age = rootView.findViewById(R.id.age);
         TextView oneLine = rootView.findViewById(R.id.oneLine);
+        onlineStatus = rootView.findViewById(R.id.onlineStatus);
         FloatingActionButton message = rootView.findViewById(R.id.message_fab);
         //like = rootView.findViewById(R.id.like_fab);
         final ShineButton like_shine = rootView.findViewById(R.id.like_shiny);
@@ -309,6 +313,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     @Override
     public void onResume() {
         super.onResume();
+        setUpOnlineStatus();
         setShowcaseView();
     }
     
@@ -505,6 +510,55 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.gender = user.getGender();
         this.isBlur = user.getIsBlur();
         //Log.e(TAG, "The user is "+user.getUid());
+    
+    }
+    
+    private void setUpOnlineStatus() {
+        
+        onlineStatusRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.usersStatus).child(sendersUid)
+                .child("status");
+      
+        onlineStatusListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                if(dataSnapshot.exists()&&dataSnapshot.getValue(String.class)!=null)
+                {
+                    String stat = dataSnapshot.getValue(String.class);
+                    Log.e(TAG, "The user "+sendersUid+ " is "+stat);
+                    if (stat != null) {
+                        if(stat.equalsIgnoreCase(Constants.online)) {
+                            Log.e(TAG, "Showing srch ");
+                            onlineStatus.setVisibility(View.VISIBLE);
+                        } else if(stat.equalsIgnoreCase(Constants.offline))
+                            onlineStatus.setVisibility(View.VISIBLE);
+                    }else
+                        onlineStatus.setVisibility(View.GONE);
+                }
+                
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        };
+        onlineStatusRef.addValueEventListener(onlineStatusListener);
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        removeOnlineListeners();
+    }
+    
+    
+    
+    private void removeOnlineListeners()
+    {
+        if(onlineStatusRef!=null&&onlineStatusListener!=null)
+            onlineStatusRef.removeEventListener(onlineStatusListener);
     }
     
     private void showDialog() {
@@ -677,6 +731,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     @Override
     public void onStop() {
         removeListeners();
+        removeOnlineListeners();
         super.onStop();
     }
     
