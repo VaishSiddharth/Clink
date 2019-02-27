@@ -526,13 +526,13 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 if(dataSnapshot.exists()&&dataSnapshot.getValue(String.class)!=null)
                 {
                     String stat = dataSnapshot.getValue(String.class);
-                    Log.e(TAG, "The user "+sendersUid+ " is "+stat);
+                   // Log.e(TAG, "The user "+sendersUid+ " is "+stat);
                     if (stat != null) {
                         if(stat.equalsIgnoreCase(Constants.online)) {
-                            Log.e(TAG, "Showing srch ");
+                           // Log.e(TAG, "Showing srch ");
                             onlineStatus.setVisibility(View.VISIBLE);
                         } else if(stat.equalsIgnoreCase(Constants.offline))
-                            onlineStatus.setVisibility(View.VISIBLE);
+                            onlineStatus.setVisibility(View.INVISIBLE);
                     }else
                         onlineStatus.setVisibility(View.GONE);
                 }
