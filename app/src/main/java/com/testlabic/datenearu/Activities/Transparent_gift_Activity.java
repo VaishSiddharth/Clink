@@ -41,16 +41,19 @@ public class Transparent_gift_Activity extends Activity {
     
     ModelGift modelGift;
     ImageView imagePerson;
+    ImageView royal_bottle;
     TextView namePerson;
+    ImageView premium_bottle;
     RelativeLayout completeScreen;
     boolean tapTwice = false;
+    ImageView regular_bottle;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent_gift_);
         modelGift = (ModelGift) getIntent().getSerializableExtra(Constants.giftModel);
-        final ImageView premium_bottle = findViewById(R.id.premium_bottle);
+        premium_bottle = findViewById(R.id.premium_bottle);
         completeScreen = findViewById(R.id.scratch_view_behind);
         moveGiftToRead();
         completeScreen.setOnClickListener(new View.OnClickListener() {
@@ -71,8 +74,8 @@ public class Transparent_gift_Activity extends Activity {
                 }
             }
         });
-        ImageView regular_bottle = findViewById(R.id.royal_bottle);
-        ImageView royal_bottle = findViewById(R.id.regular_bottle);
+        regular_bottle = findViewById(R.id.royal_bottle);
+        royal_bottle = findViewById(R.id.regular_bottle);
         //scratchImageView=findViewById(R.id.sample_image);
         //scratchImageView = new ScratchImageView(this);
         imagePerson = findViewById(R.id.imageperson);
@@ -101,13 +104,42 @@ public class Transparent_gift_Activity extends Activity {
                 .setCompletionCallback(new Runnable() {
                     @Override
                     public void run() {
-                        premium_bottle.setVisibility(View.VISIBLE);
+    
                         AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
-                        anim2.setStartOffset(100);
-                        anim2.setDuration(1000);
-                        //anim1.setRepeatCount(10);
-                        //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
-                        premium_bottle.startAnimation(anim2);
+                        switch (modelGift.getGiftType())
+                        {
+                            case "Regular Wine" : regular_bottle.setVisibility(View.VISIBLE);
+                                
+                                anim2.setStartOffset(100);
+                                anim2.setDuration(1000);
+                                //anim1.setRepeatCount(10);
+                                //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
+                                premium_bottle.startAnimation(anim2);
+                                break;
+    
+    
+                            case "Premium Wine" : premium_bottle.setVisibility(View.VISIBLE);
+                               
+                                anim2.setStartOffset(100);
+                                anim2.setDuration(1000);
+                                //anim1.setRepeatCount(10);
+                                //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
+                                premium_bottle.startAnimation(anim2);
+                                break;
+    
+    
+                            case "Royal Wine" : royal_bottle.setVisibility(View.VISIBLE);
+                                
+                                anim2.setStartOffset(100);
+                                anim2.setDuration(1000);
+                                //anim1.setRepeatCount(10);
+                                //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
+                                premium_bottle.startAnimation(anim2);
+                                break;
+    
+    
+                        }
+                       
                         KonfettiView viewKonfetti = findViewById(R.id.viewKonfetti);
                         viewKonfetti.build()
                                 .addColors(getApplicationContext().getResources().getColor(R.color.appcolor),

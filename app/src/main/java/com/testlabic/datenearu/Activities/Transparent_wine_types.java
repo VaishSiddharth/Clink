@@ -2,6 +2,7 @@ package com.testlabic.datenearu.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import android.app.Activity;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +54,7 @@ public class Transparent_wine_types extends Activity {
             }
         });
     
-        two.setOnClickListener(new View.OnClickListener() {
+       two.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initateSendingWine(800);
@@ -81,8 +83,19 @@ public class Transparent_wine_types extends Activity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
                 final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(Transparent_wine_types.this, SweetAlertDialog.PROGRESS_TYPE)
-                        .setContentText("Loading");
+                        .setContentText("Loading")
+                        .setConfirmButton("Okay", new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+        
+                            }
+                        });
                 sweetAlertDialog.show();
+                Button btn=sweetAlertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(Transparent_wine_types.this,R.drawable.button_4_dialogue));
+    
+    
+                
                 ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                 if (modelSubscr != null) {
                     int current = modelSubscr.getXPoints();

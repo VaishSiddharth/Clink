@@ -21,8 +21,9 @@
         android:layout_margin="30dp"
         android:text="This is how your Profile will look like to people"
         android:textColor="#FFFFFF"
+        android:shadowColor="@color/black"
         android:textSize="20sp"
-        android:shadowColor="@color/black"/>
+       />
 
     <com.testlabic.datenearu.TransitionUtils.AspectRatioCardView
         android:layout_width="match_parent"
