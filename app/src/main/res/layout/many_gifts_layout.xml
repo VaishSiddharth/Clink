@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#E6000000"
+    android:id="@+id/linearLayoutgiftsmany">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageperson"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile"
+            android:layout_margin="16dp" />
+        <customfonts.TextViewSFProDisplayRegular
+            android:id="@+id/nameperson"
+            android:layout_margin="16dp"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:text="Siddharth Vaish send you a gift!"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/gift"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="0.5"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/gift"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/premium_bottle"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="0.5"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/premium_bottle"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/royal_bottle"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_margin="20dp"
+            android:layout_height="70dp"
+            android:src="@drawable/royal_bottle"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/regular_bottle"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_margin="20dp"
+            android:layout_height="70dp"
+            android:src="@drawable/regular_bottle"
+            android:visibility="gone" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="300dp"
+        android:layout_gravity="center"
+        android:layout_height="0.7dp"
+        android:id="@+id/line"
+        android:background="@color/white" />
+
+
+</LinearLayout>
