@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,8 @@ public class AllMessagesListFragment extends Fragment {
     private void downloadDataAndSetAdapter() {
         list = new ArrayList<>();
         list.clear();
-        
+        adapter = new LastMessageAdapter(getActivity(), list);
+        recyclerview.setAdapter(adapter);
         reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
@@ -98,9 +100,11 @@ public class AllMessagesListFragment extends Fragment {
                        // Now fetch the last message and time and setup adapter
                          
                          lastQuery = databaseReference.orderByKey().limitToLast(1);
-                       valueEventListener=  lastQuery.addValueEventListener(new ValueEventListener() {
+                         valueEventListener=  lastQuery.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.e(TAG, "The last query is "+String.valueOf(dataSnapshot.getValue()));
+    
                                 for (DataSnapshot one : dataSnapshot.getChildren())
                                 {
                                     if (one.getValue(ChatMessage.class) != null) {
@@ -133,6 +137,7 @@ public class AllMessagesListFragment extends Fragment {
                                                         ModelLastMessage message = new ModelLastMessage(name, imageUrl
                                                                 , uid, lastMessage, timeStamp, isDelivered, sendersUid, status, successfullySent);
                                                         list.add(message);
+                                                        adapter.notifyDataSetChanged();
                                                         //sort messages with time
                                                         Collections.sort(list, new Comparator<ModelLastMessage>() {
                                                             @Override
@@ -141,8 +146,7 @@ public class AllMessagesListFragment extends Fragment {
                                                                 return (int) sub;
                                                             }
                                                         });
-                                                        adapter = new LastMessageAdapter(getActivity(), list);
-                                                        recyclerview.setAdapter(adapter);
+                                                       
                                                         
                                                     }
                                                     

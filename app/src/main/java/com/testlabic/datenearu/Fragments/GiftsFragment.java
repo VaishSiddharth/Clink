@@ -138,9 +138,7 @@ public class GiftsFragment extends Fragment {
                     @Override
                     protected void populateView(View v, ModelGift model, int position) {
                         
-                        TextView txt = v.findViewById(R.id.txt);
-                       
-                        
+                            TextView txt = v.findViewById(R.id.txt);
                             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/SF-Pro-Display-Regular.otf");
                             txt.setTypeface(tf);
                             txt.setTextColor(getResources().getColor(R.color.black));

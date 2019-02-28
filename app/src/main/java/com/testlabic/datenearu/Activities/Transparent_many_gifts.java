@@ -88,7 +88,7 @@ public class Transparent_many_gifts extends Activity {
                                 public void onClick(View v) {
                                     Intent i = new Intent(Transparent_many_gifts.this, ClickedUser.class);
                                     i.putExtra(Constants.comingFromNotif, true);
-                                    i.putExtra(Constants.clickedUid,adapter.getItem(position).getGiftSendersUid());
+                                    i.putExtra(Constants.clickedUid, model.getGiftSendersUid());
                                     startActivity(i);
                                 }
                             });
@@ -123,7 +123,10 @@ public class Transparent_many_gifts extends Activity {
 
             }
         });
-
-
+    }
+    
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

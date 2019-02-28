@@ -379,13 +379,15 @@ public class MainActivity extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            /*for(DataSnapshot snapshot : dataSnapshot.getChildren())
+                            if(dataSnapshot.getChildrenCount()<2)
+                            for(DataSnapshot snapshot : dataSnapshot.getChildren())
                             {
                                 ModelGift modelGift = snapshot.getValue(ModelGift.class);
                                 startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
                                         .putExtra(Constants.giftModel, modelGift));
         
-                            }*/
+                            }
+                            else
                             startActivity(new Intent(MainActivity.this, Transparent_many_gifts.class));
                         }
                     }, 2500);

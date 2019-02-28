@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Keith Mills"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="#212121"/>
 
                 <ImageView
@@ -75,14 +75,14 @@
                     android:textColor="@color/white"
                     android:background="@drawable/circle_blue"/>
 
-                <customfonts.TextViewSFProDisplayRegular
+                <customfonts.MyTextView_SF_Pro_Display_Light
                     android:id="@+id/time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="24m ago"
                     android:layout_gravity="right"
                     android:gravity="right"
-                    android:textSize="12.5sp"
+                    android:textSize="11sp"
                     android:textColor="#a9a9b0"/>
 
             </LinearLayout>
@@ -111,7 +111,7 @@
                     android:maxLines="1"
                     android:text="Hey, would you be interested in ..."
                     android:textColor="#a9a9b0"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:layout_marginRight="32dp" />
 
                 <ImageView
