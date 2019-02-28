@@ -150,9 +150,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             public void onClick(View v) {
                 
                 Intent i = new Intent(context, chatFullScreen.class);
-                
                 i.putExtra(Constants.sendToUid, lastMessage.getUid());
-                
                 i.putExtra(Constants.sendToName, lastMessage.getName());
                 
                 context.startActivity(i);
@@ -168,7 +166,7 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()) {
-                    Log.e(TAG, "This "+ dataSnapshot.getRef()+" doesn't exist");
+                    //Log.e(TAG, "This "+ dataSnapshot.getRef()+" doesn't exist");
                    // Log.e(TAG, "Found in  " + position);
                   //  allModelArrayList.remove(position);
                   //  notifyDataSetChanged();

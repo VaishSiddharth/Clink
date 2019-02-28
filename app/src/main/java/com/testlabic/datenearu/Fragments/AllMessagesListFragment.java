@@ -66,7 +66,6 @@ public class AllMessagesListFragment extends Fragment {
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         cRecyclerView = view.findViewById(R.id.cRecylerView);
-        downloadDataAndSetAdapter();
         bar.setVisibility(View.VISIBLE);
         return view;
         
@@ -92,13 +91,16 @@ public class AllMessagesListFragment extends Fragment {
                         final String imageUrl = contact.getImage();
                         final String uid = contact.getUid();
                         ModelLastMessage message = new ModelLastMessage(name, imageUrl
-                                , uid, null, 0, null, null, status, null);
+                                , uid, null, -1000000000, null, null, status, null);
                         list.add(message);
      
                     }}}
             
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(adapter!=null)
+                    adapter.notifyDataSetChanged();
+            }
             
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -148,6 +150,7 @@ public class AllMessagesListFragment extends Fragment {
         setUpListView();
         if (cAdapter != null)
             cAdapter.startListening();
+        downloadDataAndSetAdapter();
         
     }
     
