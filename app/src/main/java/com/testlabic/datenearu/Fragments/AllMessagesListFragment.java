@@ -66,7 +66,7 @@ public class AllMessagesListFragment extends Fragment {
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         cRecyclerView = view.findViewById(R.id.cRecylerView);
-        //downloadDataAndSetAdapter();
+        downloadDataAndSetAdapter();
         bar.setVisibility(View.VISIBLE);
         return view;
         
@@ -75,8 +75,7 @@ public class AllMessagesListFragment extends Fragment {
     private void downloadDataAndSetAdapter() {
         list = new ArrayList<>();
         list.clear();
-        adapter = new LastMessageAdapter(getActivity(), list);
-        recyclerview.setAdapter(adapter);
+    
         reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
@@ -92,96 +91,14 @@ public class AllMessagesListFragment extends Fragment {
                         final String name = contact.getName();
                         final String imageUrl = contact.getImage();
                         final String uid = contact.getUid();
-                        
-                        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
-                                .child(Constants.CHATS)
-                                .child(Constants.uid)
-                                .child(uid);
-                       // Now fetch the last message and time and setup adapter
-                         
-                         lastQuery = databaseReference.orderByKey().limitToLast(1);
-                         valueEventListener=  lastQuery.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Log.e(TAG, "The last query is "+String.valueOf(dataSnapshot.getValue()));
-    
-                                for (DataSnapshot one : dataSnapshot.getChildren())
-                                {
-                                    if (one.getValue(ChatMessage.class) != null) {
-                                        if (one.getValue(ChatMessage.class) != null) {
-                                            final String lastMessage = one.getValue(ChatMessage.class).getMessage();
-                                            final long timeStamp = one.getValue(ChatMessage.class).getSendingTime();
-                                            final Boolean isDelivered = one.getValue(ChatMessage.class).getMessageDelivered();
-                                            final String sendersUid = one.getValue(ChatMessage.class).getSentFrom();
-                                            final Boolean successfullySent = one.getValue(ChatMessage.class).getSuccessfullySent();
-                                            if (lastMessage != null) {
-                                                 //Querying database to check status
-                                                
-                                                DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
-                                                        .child(Constants.usersStatus)
-                                                        .child(uid)
-                                                        .child(Constants.status);
-                                                statusCheckRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        //check if user is online for current user
-                                                        if (dataSnapshot.getValue(String.class) != null) {
-                                                            String stat = dataSnapshot.getValue(String.class);
-                                                            if (stat != null && stat.equals(Constants.online))
-                                                                status = Constants.online;
-                                                            else
-                                                                status = Constants.offline;
-                                                            
-                                                        }
-                                                        // Log.e(TAG, "Status for "+uid + " "+status);
-                                                        ModelLastMessage message = new ModelLastMessage(name, imageUrl
-                                                                , uid, lastMessage, timeStamp, isDelivered, sendersUid, status, successfullySent);
-                                                        list.add(message);
-                                                        adapter.notifyDataSetChanged();
-                                                        //sort messages with time
-                                                        Collections.sort(list, new Comparator<ModelLastMessage>() {
-                                                            @Override
-                                                            public int compare(ModelLastMessage v1, ModelLastMessage v2) {
-                                                                long sub = v2.getTimeStamp() - (v1.getTimeStamp());
-                                                                return (int) sub;
-                                                            }
-                                                        });
-                                                       
-                                                        
-                                                    }
-                                                    
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                    
-                                                    }
-                                                });
-                                                
-                                            }
-                                        }
-                                        
-                                    }
-                                }
-                            }
-                            
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                //Handle possible errors.
-                            }
-                        });
-                        
-                    }
-                }
-            }
+                        ModelLastMessage message = new ModelLastMessage(name, imageUrl
+                                , uid, null, 0, null, null, status, null);
+                        list.add(message);
+     
+                    }}}
             
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                
-               /* if(adapter!=null) {
-                    adapter.notifyDataSetChanged();
-                    downloadDataAndSetAdapter();
-                    //adapter.notifyDataSetChanged();
-                }*/
-            }
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -193,15 +110,35 @@ public class AllMessagesListFragment extends Fragment {
             }
             
             @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+        
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                //sort messages with time
+                Collections.sort(list, new Comparator<ModelLastMessage>() {
+                    @Override
+                    public int compare(ModelLastMessage v1, ModelLastMessage v2) {
+                        long sub = v2.getTimeStamp() - (v1.getTimeStamp());
+                        return (int) sub;
+                    }
+                });
+    
+                adapter = new LastMessageAdapter(getActivity(), list);
+                recyclerview.setAdapter(adapter);
+    
             }
-            
+    
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+        
             }
         });
+        
     }
     
     
@@ -211,7 +148,6 @@ public class AllMessagesListFragment extends Fragment {
         setUpListView();
         if (cAdapter != null)
             cAdapter.startListening();
-        downloadDataAndSetAdapter();
         
     }
     

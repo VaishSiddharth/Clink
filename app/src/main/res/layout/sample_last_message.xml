@@ -79,7 +79,7 @@
                     android:id="@+id/time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="24m ago"
+
                     android:layout_gravity="right"
                     android:gravity="right"
                     android:textSize="11sp"
@@ -109,7 +109,7 @@
                     android:ellipsize="end"
                     android:layout_marginEnd="32dp"
                     android:maxLines="1"
-                    android:text="Hey, would you be interested in ..."
+                    android:text="You are now connected, tap to send message."
                     android:textColor="#a9a9b0"
                     android:textSize="12sp"
                     android:layout_marginRight="32dp" />
