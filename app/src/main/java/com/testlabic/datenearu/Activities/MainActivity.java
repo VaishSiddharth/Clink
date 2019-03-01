@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.content.ContextCompat;
@@ -17,6 +18,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchaseHistoryResponseListener;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +45,7 @@ import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.ProfileFragment;
@@ -48,7 +55,7 @@ import com.testlabic.datenearu.Utils.locationUpdater;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity {
-
+    
     private static final String TAG = MainActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
     private BottomBar bottomBar;
@@ -59,16 +66,16 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener authStateListener;
     private boolean shownLikeBacks = false;
     private static boolean manygiftsactivity=true;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         //initialize the startappSDK
-
+        
         // StartAppSDK.init(this, "211455651", false);
-
+        
         // StartAppAd.disableSplash();
         boolean moveToLocationActivity = getIntent().getBooleanExtra(Constants.moveToLocationActivity, false);
         if (moveToLocationActivity)
@@ -76,21 +83,21 @@ public class MainActivity extends AppCompatActivity {
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+        
         boolean refresh = getIntent().getBooleanExtra(Constants.refresh, false);
        
         /*
         on create switch to the home fragment
          */
-
+        
         changeFragment(new pagerTransition());
-
+        
         //setCustomFontAndStyle(tabLayout1, 0);
-
+        
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(int tabId) {
-
+                
                 if (tabId == R.id.tab_message) {
                     // switch to messages fragment
                     changeFragment(new AllMessagesListFragment());
@@ -107,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                     nearby.removeBadge();
                 }
-
+                
             }
         });
         SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
@@ -115,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
         if (trail) {
             blurtrial();
         }
-
+        
     }
-
+    
     private void blurtrial() {
-
+        
         //TODO: check for blur condition if on then only display this message
         //code for blur trial
         Handler handler = new Handler();
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                        
                         if (dataSnapshot.getValue() != null) {
                             long timestamp = dataSnapshot.getValue(Long.class);
                             long epoch = System.currentTimeMillis() / 1000;
@@ -145,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 startActivity(new Intent(MainActivity.this, PurchasePacks.class));
-
+                                                
                                             }
                                         });
                                 alertDialog.show();
@@ -153,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
                                 Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
-
+                                
                             }
                             if ((epoch + (7 * oneday)) <= timestamp) {
                                 final SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
@@ -174,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 startActivity(new Intent(MainActivity.this, PurchasePacks.class));
-
+                                                
                                             }
                                         });
                                 alertDialog.setCancelable(false);
@@ -183,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
                                 Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
-
+                                
                                 //code so that does not run again and again
                                 SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPref.edit();
@@ -193,54 +200,54 @@ public class MainActivity extends AppCompatActivity {
                             //Log.e(TAG, String.valueOf(timestamp));
                         }
                     }
-
+                    
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    
                     }
                 });
             }
         }, 5000);
-
+        
     }
-
+    
     private void checkForNotification() {
         count = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Notifications)
                 .child(Constants.uid).child(Constants.unread);
-
+        
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                
                 count = (int) dataSnapshot.getChildrenCount();
                 bottomBar = findViewById(R.id.bottomBar);
                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                 if (count > 0) {
-
+                    
                     nearby.setBadgeCount(count);
-
+                    
                     // Remove the badge when you're done with it.
                 } else
                     nearby.removeBadge();
-
+                
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
         });
     }
-
+    
     public void changeFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
-
+    
     @Override
     protected void onResume() {
         Log.e(TAG, "Main Activity onresume called! " + Constants.uid);
@@ -250,12 +257,12 @@ public class MainActivity extends AppCompatActivity {
         if (Constants.uid == null) {
             startActivity(new Intent(MainActivity.this, SignIn.class));
             finish();
-
+            
         }
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
+                
                 Log.e(TAG, "Firebase auth changed!");
                 if (firebaseAuth.getCurrentUser() == null) {
                     startActivity(new Intent(MainActivity.this, PaperOnboardingActivity.class));
@@ -268,40 +275,74 @@ public class MainActivity extends AppCompatActivity {
                     checkForLikeBacks();
                     updateStatus(Constants.online);
                     checkForIncompleteData();
+                    checkForInApps();
                 }
-
+                
             }
         };
         mAuth.addAuthStateListener(authStateListener);
-
+        
     }
-
+    
+    private void checkForInApps() {
+        final BillingClient billingClient = BillingClient.newBuilder(this).setListener(new PurchasesUpdatedListener() {
+            @Override
+            public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+            
+            }
+        }).build();
+        
+        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP,
+                new PurchaseHistoryResponseListener() {
+                    @Override
+                    public void onPurchaseHistoryResponse(@BillingClient.BillingResponse int responseCode,
+                                                          List<Purchase> purchasesList) {
+                        if (responseCode == BillingClient.BillingResponse.OK
+                                && purchasesList != null) {
+                            for (Purchase purchase : purchasesList) {
+                                // Process the result.
+                                final ConsumeResponseListener listener = new ConsumeResponseListener() {
+                                    @Override
+                                    public void onConsumeResponse(@BillingClient.BillingResponse int responseCode, String outToken) {
+                                        if (responseCode == BillingClient.BillingResponse.OK) {
+                                            // Handle the success of the consume operation.
+                                            // For example, increase the number of coins inside the user's basket.
+                                            Log.e(TAG, "Consumption code in mainActivity");
+                                        }
+                                    }
+                                };
+                                billingClient.consumeAsync(purchase.getPurchaseToken(), listener);
+                            }
+                        }
+                    }
+                });
+    }
+    
     private void checkForLikeBacks() {
-
+        
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.LikeBacks)
                 .child(Constants.uid);
-
+        
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                
                 if (dataSnapshot.exists()) {
                     if (!shownLikeBacks)
                         checkForNewLikeBacks();
                 }
-
+                
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
         });
-
-
+        
     }
-
+    
     private void checkForNewLikeBacks() {
         shownLikeBacks = true;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
@@ -310,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
+                
                 //initiate transparent activity and pass data
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -320,19 +361,19 @@ public class MainActivity extends AppCompatActivity {
                             ModelGift modelGift = snapshot.getValue(ModelGift.class);
                             startActivity(new Intent(MainActivity.this, Transparent_likeback.class)
                                     .putExtra(Constants.giftModel, modelGift));
-
+                            
                         }
                     }
                 }, 2500);
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
         });
     }
-
+    
     private void checkForUpdatingChecks() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
@@ -346,10 +387,10 @@ public class MainActivity extends AppCompatActivity {
                         checkForNewGifts();
                 }
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
         });
     }
@@ -407,8 +448,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void checkForIncompleteData() {
 
+    private void checkForIncompleteData() {
+        
         //SharedPreferences sharedPreferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         //boolean checkRecovery = sharedPreferences.getBoolean(Constants.newUserSetupDone, false);
         //if (checkRecovery)
@@ -416,11 +458,11 @@ public class MainActivity extends AppCompatActivity {
             DatabaseReference recoveryRef = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo)
                     .child(Constants.uid);
-
+            
             recoveryRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                    
                     // Log.e(TAG, "Fix method called for recovery");
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null) {
@@ -438,47 +480,44 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, QuestionSetup.class));
                     }*/
                     }
-
+                    
                 }
-
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                
                 }
             });
         }
     }
-
+    
     private void checkForNewMessages() {
-
+        
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
                 .child(Constants.uid + Constants.unread);
-
+        
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     messagesUnread = 0;
                     messagesUnread = (int) dataSnapshot.getChildrenCount();
-
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
                     if (messagesUnread > 0) {
-
                         nearby.setBadgeCount(messagesUnread);
                         // Remove the badge when you're done with it.
-
+                        
                     } else
                         nearby.removeBadge();
                 }
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
-
+    
     @Override
     protected void onPause() {
         super.onPause();
@@ -487,16 +526,16 @@ public class MainActivity extends AppCompatActivity {
         updateStatus(Constants.offline);
         if (mAuth != null && authStateListener != null)
             mAuth.removeAuthStateListener(authStateListener);
-
+        
     }
-
+    
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (Constants.uid != null)
             updateStatus(Constants.offline);
     }
-
+    
     private void updateStatus(final String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(Constants.status, status);
@@ -508,14 +547,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 if (status.equals(Constants.online)) {
-
+                
                 }
             }
         });
-
+        
     }
-
-
+    
 }
 
 

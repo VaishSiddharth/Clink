@@ -414,10 +414,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     }
     
     private void showDmInfoDialog() {
-        
         SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("How does it work?")
-                
                 .setContentText("You will be added as a connection and can have a talk, but remember you don't get another chance if you are blocked/deleted by the other person!")
                 .setConfirmButton("Okay!", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -436,25 +434,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                     Toast.makeText(getActivity(), "You get only one try to direct message!", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            
                             @Override
                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            
                             }
-                            
                             @Override
                             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                            
                             }
-                            
                             @Override
                             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            
                             }
-                            
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                            
                             }
                         });
                         referenceDMIds.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -588,6 +578,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                     int current = modelSubscr.getXPoints();
                                     if (current < Constants.attemptTestPoints) {
                                         Toast.makeText(getActivity(), "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                        sDialog.dismiss();
                                         BuyPoints();
                                     } else {
                                         current -= Constants.attemptTestPoints;
