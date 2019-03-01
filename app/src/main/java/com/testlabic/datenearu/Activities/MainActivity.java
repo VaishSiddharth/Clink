@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.content.ContextCompat;
@@ -17,6 +18,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchaseHistoryResponseListener;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +45,7 @@ import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.ProfileFragment;
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private int count = 0;
     private int messagesUnread = 0;
     private boolean shownGifts = false;
-    private int giftUnopened =0;
+    private int giftUnopened = 0;
     FirebaseAuth.AuthStateListener authStateListener;
     private boolean shownLikeBacks = false;
     
@@ -267,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
                     checkForLikeBacks();
                     updateStatus(Constants.online);
                     checkForIncompleteData();
+                    checkForInApps();
                 }
                 
             }
@@ -275,8 +283,42 @@ public class MainActivity extends AppCompatActivity {
         
     }
     
-    private void checkForLikeBacks() {
+    private void checkForInApps() {
+        final BillingClient billingClient = BillingClient.newBuilder(this).setListener(new PurchasesUpdatedListener() {
+            @Override
+            public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+            
+            }
+        }).build();
+        
+        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP,
+                new PurchaseHistoryResponseListener() {
+                    @Override
+                    public void onPurchaseHistoryResponse(@BillingClient.BillingResponse int responseCode,
+                                                          List<Purchase> purchasesList) {
+                        if (responseCode == BillingClient.BillingResponse.OK
+                                && purchasesList != null) {
+                            for (Purchase purchase : purchasesList) {
+                                // Process the result.
+                                final ConsumeResponseListener listener = new ConsumeResponseListener() {
+                                    @Override
+                                    public void onConsumeResponse(@BillingClient.BillingResponse int responseCode, String outToken) {
+                                        if (responseCode == BillingClient.BillingResponse.OK) {
+                                            // Handle the success of the consume operation.
+                                            // For example, increase the number of coins inside the user's basket.
+                                            Log.e(TAG, "Consumption code in mainActivity");
+                                        }
+                                    }
+                                };
+                                billingClient.consumeAsync(purchase.getPurchaseToken(), listener);
+                            }
+                        }
+                    }
+                });
+    }
     
+    private void checkForLikeBacks() {
+        
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.LikeBacks)
                 .child(Constants.uid);
@@ -285,21 +327,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
-                if(dataSnapshot.exists())
-                
-                    {  if(!shownLikeBacks)
+                if (dataSnapshot.exists()) {
+                    if (!shownLikeBacks)
                         checkForNewLikeBacks();
-                    }
+                }
                 
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
-    
-    
+        
     }
     
     private void checkForNewLikeBacks() {
@@ -310,26 +350,25 @@ public class MainActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-    
+                
                 //initiate transparent activity and pass data
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        for(DataSnapshot snapshot : dataSnapshot.getChildren())
-                        {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             ModelGift modelGift = snapshot.getValue(ModelGift.class);
                             startActivity(new Intent(MainActivity.this, Transparent_likeback.class)
                                     .putExtra(Constants.giftModel, modelGift));
-                
+                            
                         }
                     }
                 }, 2500);
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
     }
@@ -342,63 +381,61 @@ public class MainActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists())
-                    {  if(!shownGifts)
+                if (dataSnapshot.exists()) {
+                    if (!shownGifts)
                         checkForNewGifts();
-                    }
+                }
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
     }
     
     private void checkForNewGifts() {
         shownGifts = true;
-        giftUnopened =0;
+        giftUnopened = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
                 .child(Constants.uid).child(Constants.unread);
-    
+        
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-            
+                
                 giftUnopened = (int) dataSnapshot.getChildrenCount();
-                giftUnopened  += count;
+                giftUnopened += count;
                 //Log.e(TAG, giftUnopened+" yyy");
                 bottomBar = findViewById(R.id.bottomBar);
                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                 if (giftUnopened > 0) {
-                
+                    
                     nearby.setBadgeCount(giftUnopened);
                     //initiate transparent activity and pass data
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if(dataSnapshot.getChildrenCount()<2)
-                            for(DataSnapshot snapshot : dataSnapshot.getChildren())
-                            {
-                                ModelGift modelGift = snapshot.getValue(ModelGift.class);
-                                startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
-                                        .putExtra(Constants.giftModel, modelGift));
-        
-                            }
+                            if (dataSnapshot.getChildrenCount() < 2)
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    ModelGift modelGift = snapshot.getValue(ModelGift.class);
+                                    startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
+                                            .putExtra(Constants.giftModel, modelGift));
+                                    
+                                }
                             else
-                            startActivity(new Intent(MainActivity.this, Transparent_many_gifts.class));
+                                startActivity(new Intent(MainActivity.this, Transparent_many_gifts.class));
                         }
                     }, 2500);
-                   
-                
+                    
                     // Remove the badge when you're done with it.
                 } else
                     nearby.removeBadge();
-            
+                
             }
-        
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
@@ -449,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void checkForNewMessages() {
-       
+        
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
                 .child(Constants.uid + Constants.unread);
         
@@ -459,20 +496,18 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     messagesUnread = 0;
                     messagesUnread = (int) dataSnapshot.getChildrenCount();
-    
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
                     if (messagesUnread > 0) {
-        
                         nearby.setBadgeCount(messagesUnread);
                         // Remove the badge when you're done with it.
-        
+                        
                     } else
                         nearby.removeBadge();
                 }
             }
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
             }
         });
     }
@@ -512,7 +547,6 @@ public class MainActivity extends AppCompatActivity {
         });
         
     }
-    
     
 }
 
