@@ -22,4 +22,32 @@ public class ModelPurchase {
         this.originalSignature = originalSignature;
         this.numberOfDrops = numberOfDrops;
     }
+    
+    public String getSkuId() {
+        return skuId;
+    }
+    
+    public String getOriginalJson() {
+        return originalJson;
+    }
+    
+    public String getOrderId() {
+        return orderId;
+    }
+    
+    public String getPurchaseTime() {
+        return purchaseTime;
+    }
+    
+    public String getPurchaseToken() {
+        return purchaseToken;
+    }
+    
+    public String getOriginalSignature() {
+        return originalSignature;
+    }
+    
+    public int getNumberOfDrops() {
+        return numberOfDrops;
+    }
 }
