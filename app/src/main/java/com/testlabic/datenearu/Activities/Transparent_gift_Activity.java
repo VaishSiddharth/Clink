@@ -47,6 +47,8 @@ public class Transparent_gift_Activity extends Activity {
     RelativeLayout completeScreen;
     boolean tapTwice = false;
     ImageView regular_bottle;
+    DatabaseReference moveReadRef;
+    ChildEventListener childEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,6 @@ public class Transparent_gift_Activity extends Activity {
         modelGift = (ModelGift) getIntent().getSerializableExtra(Constants.giftModel);
         premium_bottle = findViewById(R.id.premium_bottle);
         completeScreen = findViewById(R.id.scratch_view_behind);
-        moveGiftToRead();
         completeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,21 +158,47 @@ public class Transparent_gift_Activity extends Activity {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                removeListeners();
                                 finish();
                             }
                         }, 8000);
                     }
                 })
                 .attach(findViewById(R.id.scratch_view), findViewById(R.id.scratch_view_behind));
+        moveGiftToRead();
 
     }
-
-    private void moveGiftToRead() {
+    private void removeListeners() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
                 .child(Constants.uid).child(Constants.unread);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataSnapshot.getRef().setValue(null);
+                moveReadRef.removeEventListener(childEventListener);
+            }
 
-        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        removeListeners();
+    }
+
+    private void moveGiftToRead() {
+        moveReadRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Gifts)
+                .child(Constants.uid).child(Constants.unread);
+
+
+        childEventListener = moveReadRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.getValue() != null) {
@@ -182,18 +209,7 @@ public class Transparent_gift_Activity extends Activity {
                                 .child(Constants.Gifts)
                                 .child(Constants.uid).child(Constants.read).child(pushKey);
                         //Log.e("Trans", "THe ref to push to reaad" + reference);
-                        reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                dataSnapshot.getRef().setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        // Log.e("trans" , "nulling ref her "+ dataSnapshot.getRef());
-                                    }
-                                });
-
-                            }
-                        });
+                        reference.setValue(notification);
                     }
                 }
             }
