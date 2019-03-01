@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jackpocket.scratchoff.ScratchoffController;
+import com.skyfishjy.library.RippleBackground;
 import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.R;
@@ -47,6 +48,7 @@ public class Transparent_gift_Activity extends Activity {
     RelativeLayout completeScreen;
     boolean tapTwice = false;
     ImageView regular_bottle;
+    ImageView bottletype;
     DatabaseReference moveReadRef;
     ChildEventListener childEventListener;
 
@@ -77,11 +79,13 @@ public class Transparent_gift_Activity extends Activity {
         });
         regular_bottle = findViewById(R.id.royal_bottle);
         royal_bottle = findViewById(R.id.regular_bottle);
+        bottletype=findViewById(R.id.bottletype);
         //scratchImageView=findViewById(R.id.sample_image);
         //scratchImageView = new ScratchImageView(this);
         imagePerson = findViewById(R.id.imageperson);
         namePerson = findViewById(R.id.nameperson);
-
+        final RippleBackground rippleBackground = (RippleBackground)findViewById(R.id.content);
+        rippleBackground.startRippleAnimation();
         String url = modelGift.getGiftSendersImageUrl();
         Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagePerson);
         String message = modelGift.getGiftSendersName() + " has sent you a gift (Tap to see Profile) ";
@@ -109,33 +113,40 @@ public class Transparent_gift_Activity extends Activity {
                         AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
                         switch (modelGift.getGiftType())
                         {
-                            case "Regular Wine" : regular_bottle.setVisibility(View.VISIBLE);
+                            case "Regular Wine" : bottletype.setImageResource(R.drawable.regular_bottle);
 
                                 anim2.setStartOffset(100);
                                 anim2.setDuration(1000);
                                 //anim1.setRepeatCount(10);
                                 //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
-                                premium_bottle.startAnimation(anim2);
+                                //premium_bottle.startAnimation(anim2);
+                                royal_bottle.setVisibility(View.GONE);
+                                premium_bottle.setVisibility(View.GONE);
                                 break;
 
 
-                            case "Premium Wine" : premium_bottle.setVisibility(View.VISIBLE);
+                            case "Premium Wine" : bottletype.setImageResource(R.drawable.premium_bottle);
 
                                 anim2.setStartOffset(100);
                                 anim2.setDuration(1000);
                                 //anim1.setRepeatCount(10);
                                 //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
-                                premium_bottle.startAnimation(anim2);
+                                //premium_bottle.startAnimation(anim2);
+                                royal_bottle.setVisibility(View.GONE);
+                                regular_bottle.setVisibility(View.GONE);
                                 break;
 
 
-                            case "Royal Wine" : royal_bottle.setVisibility(View.VISIBLE);
+                            case "Royal Wine" :
 
                                 anim2.setStartOffset(100);
                                 anim2.setDuration(1000);
                                 //anim1.setRepeatCount(10);
                                 //anim1.setRepeatMode(Animation.ZORDER_BOTTOM);
-                                premium_bottle.startAnimation(anim2);
+                                //premium_bottle.startAnimation(anim2);
+                                premium_bottle.setVisibility(View.INVISIBLE);
+                                regular_bottle.setVisibility(View.INVISIBLE);
+                                bottletype.setImageResource(R.drawable.royal_bottle);
                                 break;
 
 

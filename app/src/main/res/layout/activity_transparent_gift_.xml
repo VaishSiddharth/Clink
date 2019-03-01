@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appcolorlessopacity">
+    android:background="#E6000000">
 
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/viewKonfetti"
@@ -12,18 +12,25 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageperson"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
+        android:layout_margin="16dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="2dp"
         android:scaleType="centerCrop"
         android:src="@drawable/profile"
-        android:layout_margin="16dp"
+        app:civ_border_color="@color/appcolor"
+        app:civ_border_width="1.5dp"
+        app:civ_shadow="true"
+        app:civ_shadow_color="#575757"
+        app:civ_shadow_gravity="center"
+        app:civ_shadow_radius="15"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,14 +38,26 @@
 
     <customfonts.TextViewSFProDisplayRegular
         android:id="@+id/nameperson"
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageperson"
         android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:gravity="center"
         android:text="Siddharth Vaish send you a gift!"
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+    <customfonts.BrushFlowFont
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameperson"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="+1000 drops"
+        android:textColor="@color/appcolor"
+        android:textSize="15sp" />
 
     <RelativeLayout
         android:id="@+id/scratch_view_behind"
@@ -47,13 +66,6 @@
         android:layout_below="@id/nameperson"
         android:background="@color/transparent">
 
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_centerInParent="true"
-            android:layout_margin="25dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/premium_bottle" />
 
         <ImageView
             android:id="@+id/premium_bottle"
@@ -64,7 +76,7 @@
             android:layout_marginTop="115dp"
             android:layout_marginBottom="115dp"
             android:src="@drawable/premium_bottle"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/royal_bottle"
@@ -75,7 +87,7 @@
             android:layout_marginTop="115dp"
             android:layout_marginBottom="115dp"
             android:src="@drawable/royal_bottle"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/regular_bottle"
@@ -87,16 +99,36 @@
             android:layout_marginBottom="115dp"
             android:src="@drawable/regular_bottle"
             android:visibility="gone" />
+
+        <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:rb_color="@color/appcolor"
+            app:rb_duration="3000"
+            app:rb_radius="50dp"
+            app:rb_rippleAmount="7"
+            app:rb_scale="4">
+
+            <ImageView
+                android:id="@+id/bottletype"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerInParent="true"
+                android:layout_margin="25dp"
+                android:adjustViewBounds="true" />
+        </com.skyfishjy.library.RippleBackground>
     </RelativeLayout>
 
     <com.jackpocket.scratchoff.views.ScratchableLinearLayout
         android:id="@+id/scratch_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_below="@id/nameperson"
-        android:gravity="center"
-        android:background="@color/transparent">
+        android:layout_centerInParent="true"
+        android:background="@color/transparent"
+        android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -105,6 +137,7 @@
             android:adjustViewBounds="true"
             android:gravity="center"
             android:src="@drawable/gift" />
+
     </com.jackpocket.scratchoff.views.ScratchableLinearLayout>
 </RelativeLayout>
 
