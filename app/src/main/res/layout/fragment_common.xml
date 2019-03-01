@@ -19,8 +19,8 @@
             android:layout_height="320dp"
             android:layout_gravity="center_vertical"
             android:alpha="0"
-            android:background="@drawable/white_back"
-           >
+            android:background="@drawable/white_back">
+
             <nl.dionsegijn.konfetti.KonfettiView
                 android:id="@+id/viewKonfetti"
                 android:layout_width="match_parent"
@@ -35,139 +35,148 @@
 
                 <LinearLayout
                     android:id="@+id/button_container"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:paddingBottom="5dp"
                     android:clipChildren="false"
-                    android:clipToPadding="false">
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <RelativeLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:paddingRight="16dp"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
                         android:paddingEnd="16dp"
-                        android:clipToPadding="false">
+                        android:paddingRight="16dp">
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/message_fab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:hapticFeedbackEnabled="true"
                             android:src="@drawable/ic_message_square"
                             app:backgroundTint="@android:color/white"
                             app:fabSize="mini"
-                            app:rippleColor="#22ED7563"/>
-
+                            app:rippleColor="#22ED7563" />
 
 
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:clipChildren="false"
-                        android:clipToPadding="false">
+                        android:clipToPadding="false"
+                        android:orientation="horizontal">
 
-                        <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton
-                            xmlns:rfab="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/attempt_match"
+                        <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:rb_color="@color/appcolor"
+                            app:rb_duration="3000"
+                            app:rb_radius="8dp"
+                            app:rb_rippleAmount="3"
+                            app:rb_scale="6">
+
+                            <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton xmlns:rfab="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/attempt_match"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:clipChildren="true"
+                                android:clipToPadding="true"
+                                android:hapticFeedbackEnabled="true"
+                                rfab:rfab_color_normal="@color/appcolor"
+                                rfab:rfab_drawable="@drawable/logoapp1"
+                                rfab:rfab_shadow_color="#997A5BFE"
+                                rfab:rfab_shadow_radius="10dp"
+                                rfab:rfab_size="normal" />
+                        </com.skyfishjy.library.RippleBackground>
+
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:hapticFeedbackEnabled="true"
-                            android:clipToPadding="true"
-                            android:clipChildren="true"
-                            rfab:rfab_size="normal"
-                            rfab:rfab_drawable="@drawable/logoapp1"
-                            rfab:rfab_color_normal="@color/appcolor"
-                            rfab:rfab_shadow_radius="10dp"
-                            rfab:rfab_shadow_color="#997A5BFE"
-                            />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:hapticFeedbackEnabled="true"
-            android:visibility="gone"
-            app:fabSize="auto"
-            android:src="@drawable/logoapp1"
-            app:backgroundTint="@color/appcolor"
-            app:rippleColor="#225BC9FA" />
+                            android:src="@drawable/logoapp1"
+                            android:visibility="gone"
+                            app:backgroundTint="@color/appcolor"
+                            app:fabSize="auto"
+                            app:rippleColor="#225BC9FA" />
 
 
-    </RelativeLayout>
+                    </RelativeLayout>
 
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:clipToPadding="false">
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingLeft="16dp">
 
-        <!--<android.support.design.widget.FloatingActionButton
-            android:id="@+id/like_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:hapticFeedbackEnabled="true"
-            android:src="@drawable/like"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="mini"
-            app:rippleColor="#226FE2B3"/>
--->
-        <com.sackcentury.shinebuttonlib.ShineButton
-            android:layout_width="35dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:src="@android:color/darker_gray"
-            android:id="@+id/like_shiny"
-            app:btn_color="@android:color/darker_gray"
-            app:btn_fill_color="@color/appcolor"
-            app:allow_random_color="false"
-            app:enable_flashing="false"
-            app:big_shine_color="@color/appcolor"
-            app:click_animation_duration="200"
-            app:shine_animation_duration="1500"
-            app:shine_turn_angle="10"
-            app:small_shine_offset_angle="20"
-            app:shine_distance_multiple="2"
-            app:small_shine_color="#CC9999"
-            app:shine_count="8"
-            app:siShape="@raw/like"/>
+                        <!--<android.support.design.widget.FloatingActionButton
+                            android:id="@+id/like_fab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:hapticFeedbackEnabled="true"
+                            android:src="@drawable/like"
+                            app:backgroundTint="@android:color/white"
+                            app:fabSize="mini"
+                            app:rippleColor="#226FE2B3"/>
+                -->
+                        <com.sackcentury.shinebuttonlib.ShineButton
+                            android:id="@+id/like_shiny"
+                            android:layout_width="35dp"
+                            android:layout_height="40dp"
+                            android:layout_centerInParent="true"
+                            android:src="@android:color/darker_gray"
+                            app:allow_random_color="false"
+                            app:big_shine_color="@color/appcolor"
+                            app:btn_color="@android:color/darker_gray"
+                            app:btn_fill_color="@color/appcolor"
+                            app:click_animation_duration="200"
+                            app:enable_flashing="false"
+                            app:shine_animation_duration="1500"
+                            app:shine_count="8"
+                            app:shine_distance_multiple="2"
+                            app:shine_turn_angle="10"
+                            app:siShape="@raw/like"
+                            app:small_shine_color="#CC9999"
+                            app:small_shine_offset_angle="20" />
 
-    </RelativeLayout>
+                    </RelativeLayout>
 
-</LinearLayout>
+                </LinearLayout>
 
 
+            </LinearLayout>
 
-</LinearLayout>
+        </FrameLayout>
 
-</FrameLayout>
-
-<!--2. 頂層可滑动的View-->
+        <!--2. 頂層可滑动的View-->
 
         <com.testlabic.datenearu.TransitionUtils.AspectRatioCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/card_extra_height"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="@dimen/card_extra_height"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
             app:cardMaxElevation="10dp">
@@ -180,27 +189,28 @@
                     android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/gradient_setupuser_shade" />
+
                 <View
                     android:id="@+id/view_on_blur"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/gradient_darker_fragment_blur"/>
+                    android:background="@drawable/gradient_darker_fragment_blur"
+                    android:visibility="gone" />
 
             </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="bottom"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
                 <customfonts.MyTextView_SF_Pro_Display_Bold
                     android:id="@+id/name"
@@ -210,10 +220,10 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:paddingRight="10dp"
+                    android:shadowColor="@color/black"
                     android:text="Siddharth Vaish"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    android:shadowColor="@color/black"/>
+                    android:textSize="20sp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -224,46 +234,48 @@
                         android:id="@+id/femaleglass"
                         android:layout_width="13dp"
                         android:layout_height="13dp"
-                        android:layout_marginRight="3dp"
                         android:layout_gravity="center"
+                        android:layout_marginRight="3dp"
                         android:src="@drawable/female_glass1"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
+
                     <ImageView
                         android:id="@+id/maleglass"
                         android:layout_width="13dp"
                         android:layout_height="13dp"
-                        android:layout_marginRight="3dp"
                         android:layout_gravity="center"
+                        android:layout_marginRight="3dp"
                         android:src="@drawable/male_glass1"
-                        android:visibility="gone"/>
-                <customfonts.MyTextView_SF_Pro_Display_Medium
-                    android:id="@+id/age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:text="NO. 7911847"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp"
-                    android:shadowColor="@color/black"/>
+                        android:visibility="gone" />
+
+                    <customfonts.MyTextView_SF_Pro_Display_Medium
+                        android:id="@+id/age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:shadowColor="@color/black"
+                        android:text="NO. 7911847"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
 
                     <ImageView
+                        android:id="@+id/onlineStatus"
                         android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginStart="4dp"
                         android:src="@drawable/ic_online_"
-                        android:visibility="invisible"
-                        android:id="@+id/onlineStatus"
-                        android:layout_height="15dp" />
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <customfonts.TextViewSFProDisplayRegular
-                    android:layout_width="wrap_content"
-                    android:text="One liner god, works at Google"
-                    android:layout_gravity="bottom"
-                    android:textColor="#FFFFFF"
                     android:id="@+id/oneLine"
-                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:shadowColor="@color/black"/>
+                    android:layout_gravity="bottom"
+                    android:shadowColor="@color/black"
+                    android:text="One liner god, works at Google"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <RelativeLayout
@@ -288,8 +300,8 @@
                     android:layout_height="22dp"
                     android:layout_centerInParent="true"
                     android:scaleType="fitXY"
-                    android:visibility="gone"
-                    android:src="@drawable/gps" />
+                    android:src="@drawable/gps"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/address3"

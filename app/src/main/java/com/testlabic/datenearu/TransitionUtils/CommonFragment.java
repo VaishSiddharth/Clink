@@ -48,6 +48,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.sackcentury.shinebuttonlib.ShineButton;
+import com.skyfishjy.library.RippleBackground;
 import com.takusemba.spotlight.OnSpotlightStateChangedListener;
 import com.takusemba.spotlight.OnTargetStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
@@ -122,6 +123,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         KonfettiView konfettiView = rootView.findViewById(R.id.viewKonfetti);
         ImageView male = rootView.findViewById(R.id.maleglass);
         ImageView female = rootView.findViewById(R.id.femaleglass);
+        final RippleBackground rippleBackground=(RippleBackground)rootView.findViewById(R.id.content);
+        rippleBackground.startRippleAnimation();
         like_shine.init(getActivity());
         blur_view = rootView.findViewById(R.id.view_on_blur);
         like_shine.setOnClickListener(new View.OnClickListener() {
