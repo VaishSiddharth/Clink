@@ -2,42 +2,71 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#E6000000"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="@color/transparent"
     android:id="@+id/linearLayoutgiftsmany">
+    <View
+        android:layout_width="300dp"
+        android:layout_gravity="center"
+        android:layout_height="0.7dp"
+        android:id="@+id/line1"
+        android:background="@color/appcolor" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageperson"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:scaleType="centerCrop"
             android:src="@drawable/profile"
-            android:layout_margin="16dp" />
+            android:layout_margin="15dp"
+            app:civ_border_color="@color/appcolor"
+            app:civ_border_width="1.5dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="15"
+            app:civ_shadow_color="#575757"
+            app:civ_shadow_gravity="center"/>
         <customfonts.TextViewSFProDisplayRegular
             android:id="@+id/nameperson"
-            android:layout_margin="16dp"
+            android:layout_margin="15dp"
             android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="1.5"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Siddharth Vaish send you a gift!"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
         <ImageView
             android:id="@+id/gift"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_weight="0.5"
-            android:layout_margin="20dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:src="@drawable/gift"
             android:visibility="visible" />
+
+            <customfonts.BrushFlowFont
+                android:id="@+id/points"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+1000 drops"
+                android:textColor="@color/appcolor"
+                android:textSize="9sp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/premium_bottle"
@@ -73,7 +102,7 @@
         android:layout_gravity="center"
         android:layout_height="0.7dp"
         android:id="@+id/line"
-        android:background="@color/white" />
+        android:background="@color/appcolor" />
 
 
 </LinearLayout>

@@ -45,7 +45,31 @@ public class Transparent_many_gifts extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent_many_gifts);
         listView=findViewById(R.id.manygiftsList);
-        //listView.setAdapter(adapter);
+        int mWidth= this.getResources().getDisplayMetrics().widthPixels;
+        int mHeight= this.getResources().getDisplayMetrics().heightPixels;
+        KonfettiView viewKonfetti = findViewById(R.id.viewKonfetti);
+        viewKonfetti.build()
+                .addColors(getApplicationContext().getResources().getColor(R.color.appcolor),
+                        getApplicationContext().getResources().getColor(R.color.yellow),
+                        getApplicationContext().getResources().getColor(R.color.appcolor))
+                .setDirection(0.0, 359.0)
+                .setSpeed(1f, 5f)
+                .setFadeOutEnabled(true)
+                .setTimeToLive(2500L)
+                .addShapes(Shape.RECT, Shape.CIRCLE)
+                .addSizes(new Size(8, 3))
+                .setPosition(mWidth/2f,mHeight/7f)
+                .burst(1000);
+
+                /*.setDirection(0.0, 359.0)
+                .setSpeed(1f, 5f)
+                .setFadeOutEnabled(true)
+                .setTimeToLive(2000L)
+                .addShapes(Shape.RECT, Shape.CIRCLE)
+                .addSizes(new Size(12, 5))
+                .setPosition(-100f, 1000f, -50f, -50f)
+                .streamFor(300, 5000L);
+        //listView.setAdapter(adapter);*/
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
@@ -78,6 +102,9 @@ public class Transparent_many_gifts extends Activity {
                             royal_bottle=v.findViewById(R.id.royal_bottle);
                             regular_bottle=v.findViewById(R.id.regular_bottle);
                             gift=v.findViewById(R.id.gift);
+                            String winetype=model.getGiftType().toLowerCase().replaceAll("\\s+","");
+                            int resID = getApplicationContext().getResources().getIdentifier(winetype , "drawable", getApplicationContext().getPackageName());
+                            gift.setImageResource(resID);
                             Glide.with(Transparent_many_gifts.this)
                                     .load(model.getGiftSendersImageUrl()).into(imagePerson);
                             String message = model.getGiftSendersName()
@@ -90,24 +117,6 @@ public class Transparent_many_gifts extends Activity {
                                     i.putExtra(Constants.comingFromNotif, true);
                                     i.putExtra(Constants.clickedUid, model.getGiftSendersUid());
                                     startActivity(i);
-                                }
-                            });
-                            gift.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    String winetype=adapter.getItem(position).getGiftType();
-                                    if(winetype.equalsIgnoreCase(Constants.regularWine)){
-                                        regular_bottle.setVisibility(View.VISIBLE);
-                                        gift.setVisibility(View.GONE);
-                                    }
-                                    if(winetype.equalsIgnoreCase(Constants.premiumWine)){
-                                        premium_bottle.setVisibility(View.VISIBLE);
-                                        gift.setVisibility(View.GONE);
-                                    }
-                                    if(winetype.equalsIgnoreCase(Constants.royalWine)){
-                                        royal_bottle.setVisibility(View.VISIBLE);
-                                        gift.setVisibility(View.GONE);
-                                    }
                                 }
                             });
                         }
