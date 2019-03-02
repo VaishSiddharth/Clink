@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     >
 
-
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_below="@+id/line"
         android:id="@+id/listView"
@@ -15,9 +14,13 @@
         android:layout_height="match_parent"
         android:divider="@color/colorAccent"/>
 
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/progress_bar"
+    <ImageView
+        android:padding="72dp"
+        android:id="@+id/emptyView"
+        android:visibility="gone"
+        android:src="@drawable/nonotification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
+
 </RelativeLayout>

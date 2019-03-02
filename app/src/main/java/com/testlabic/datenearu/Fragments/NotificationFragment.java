@@ -49,7 +49,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class NotificationFragment extends Fragment {
     private static final String TAG = NotificationFragment.class.getSimpleName();
     private FirebaseListAdapter<ModelNotification> adapter;
-    private GoogleProgressBar bar;
+    private ImageView emptyView;
     private Query reference;
     private int notifCount =-1;
     private SwipeMenuListView listView;
@@ -65,8 +65,8 @@ public class NotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_notification, container, false);
-        bar = rootView.findViewById(R.id.progress_bar);
-        bar.setVisibility(View.VISIBLE);
+        emptyView = rootView.findViewById(R.id.emptyView);
+        emptyView.setVisibility(View.VISIBLE);
         listView = rootView.findViewById(R.id.listView);
         
         //Mark sample_last_message notifications read and then display
@@ -127,7 +127,7 @@ public class NotificationFragment extends Fragment {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             
-            bar.setVisibility(View.GONE);
+            emptyView.setVisibility(View.GONE);
             
             Query query = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Notifications)

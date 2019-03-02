@@ -68,7 +68,7 @@
                 android:layout_height="40dp"
                 android:padding="5dp"
                 android:layout_gravity="center"
-                android:src="@drawable/barrelpng"/>
+                android:src="@drawable/barrel"/>
         </LinearLayout>
 
 

@@ -4,38 +4,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-        <include
-            layout="@layout/toolbar_home"
+        <androidx.appcompat.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/toolbar"
-            />
+            android:background="#ffffff"
+            android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                        <customfonts.MyTextView_SF_Pro_Display_Bold
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Messages"
+                            android:textSize="20sp"
+                            android:textColor="#3b3b3b"/>
+
+
+                        <ImageView
+                            android:layout_marginRight="15dp"
+                            android:layout_width="16dp"
+                            android:visibility="invisible"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_search_magnifier_interface_symbol"/>
+
+                </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <View
             android:layout_width="match_parent"
-            android:background="@color/appcolor"
-            android:id="@+id/line"
             android:layout_below="@+id/toolbar"
-            android:layout_height="0.7dp"/>
+            android:id="@+id/line"
+            android:visibility="invisible"
+            android:background="@color/appcolor"
+            android:layout_height="1dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cRecylerView"
             android:layout_below="@+id/line"
             android:layout_width="match_parent"
+            android:visibility="visible"
             android:background="#fff"
             android:padding="4dp"
             android:layout_height="wrap_content">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/emptyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="gone"
+            android:padding="72dp"
+            android:src="@drawable/nomessagespng"
             android:layout_centerInParent="true" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler4"
+            android:visibility="visible"
             android:layout_below="@+id/cRecylerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -44,7 +45,7 @@ public class AllMessagesListFragment extends Fragment {
     
     private static final String TAG = AllMessagesListFragment.class.getSimpleName();
     private LastMessageAdapter adapter;
-    private GoogleProgressBar bar;
+    private ImageView emptyView;
     private RecyclerView recyclerview;
     private ArrayList<ModelLastMessage> list;
     private String status= null;
@@ -60,13 +61,13 @@ public class AllMessagesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_messages_list, container, false);
         recyclerview = (view).findViewById(R.id.recycler4);
-        bar = view.findViewById(R.id.progress_bar);
+        emptyView = view.findViewById(R.id.emptyView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
        // ((LinearLayoutManager) layoutManager).setReverseLayout(true);
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         cRecyclerView = view.findViewById(R.id.cRecylerView);
-        bar.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.VISIBLE);
         return view;
         
     }
@@ -82,9 +83,9 @@ public class AllMessagesListFragment extends Fragment {
         childEventListener = reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable final String s) {
-                if(bar!=null)
-                    bar.setVisibility(View.GONE);
+                
                 if (dataSnapshot.getValue(ModelContact.class) != null) {
+                    emptyView.setVisibility(View.GONE);
                     ModelContact contact = dataSnapshot.getValue(ModelContact.class);
                     if (contact != null) {
                         final String name = contact.getName();

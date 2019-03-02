@@ -256,10 +256,10 @@
 
                     <ImageView
                         android:id="@+id/onlineStatus"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
                         android:layout_marginStart="4dp"
-                        android:src="@drawable/onlinestatuspng"
+                        android:src="@drawable/onlinestatus"
                         android:visibility="invisible" />
                 </LinearLayout>
 
