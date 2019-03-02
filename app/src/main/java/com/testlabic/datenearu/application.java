@@ -6,15 +6,19 @@ import android.util.Log;
 
 import com.facebook.FacebookSdk;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
+
+import androidx.annotation.NonNull;
 
 public class application extends Application {
     private static application Instance;
@@ -33,6 +37,20 @@ public class application extends Application {
         FirebaseDatabase.getInstance().setPersistenceEnabled(false);
         FirebaseDatabase.getInstance().goOnline();
         //setup test connection!
+    
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseAuth.AuthStateListener stateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser()!=null)
+                {
+                    Constants.uid = firebaseAuth.getUid();
+                    Log.e("app", "Subscribed");
+                    FirebaseMessaging.getInstance().subscribeToTopic(Constants.uid);
+                }
+            }
+        };
+        auth.addAuthStateListener(stateListener);
         setUpConnectionTest();
     }
     

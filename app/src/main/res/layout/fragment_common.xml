@@ -94,7 +94,7 @@
                                 android:clipChildren="true"
                                 android:clipToPadding="true"
                                 android:hapticFeedbackEnabled="true"
-                                android:src="@drawable/final_app_logo_png" />
+                                android:src="@drawable/cheers" />
                         </com.skyfishjy.library.RippleBackground>
 
 
