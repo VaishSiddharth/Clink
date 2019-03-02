@@ -66,8 +66,9 @@
                 android:id="@+id/fill_bottle"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:padding="5dp"
                 android:layout_gravity="center"
-                android:src="@drawable/bottle_8"/>
+                android:src="@drawable/barrelpng"/>
         </LinearLayout>
 
 

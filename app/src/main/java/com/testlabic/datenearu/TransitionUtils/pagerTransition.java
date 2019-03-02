@@ -350,7 +350,7 @@ public class pagerTransition extends Fragment {
                     points.setText(set);
 
                     //code for bottle image
-                    if (current >= 0 && current <= 50) {
+                    /*if (current >= 0 && current <= 50) {
                         bottle.setImageResource(R.drawable.bottle_1);
                     } else if (current > 50 && current <= 100) {
                         bottle.setImageResource(R.drawable.bottle_2);
@@ -382,7 +382,7 @@ public class pagerTransition extends Fragment {
                         bottle.setImageResource(R.drawable.bottle_15);
                     } else {
                         bottle.setImageResource(R.drawable.bottle_16);
-                    }
+                    }*/
 
                     points.setOnClickListener(new View.OnClickListener() {
                         @Override

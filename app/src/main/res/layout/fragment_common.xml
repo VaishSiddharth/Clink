@@ -86,7 +86,7 @@
                             app:rb_rippleAmount="3"
                             app:rb_scale="6">
 
-                            <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton xmlns:rfab="http://schemas.android.com/apk/res-auto"
+                            <ImageView
                                 android:id="@+id/attempt_match"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -94,11 +94,7 @@
                                 android:clipChildren="true"
                                 android:clipToPadding="true"
                                 android:hapticFeedbackEnabled="true"
-                                rfab:rfab_color_normal="@color/appcolor"
-                                rfab:rfab_drawable="@drawable/logoapp1"
-                                rfab:rfab_shadow_color="#997A5BFE"
-                                rfab:rfab_shadow_radius="10dp"
-                                rfab:rfab_size="normal" />
+                                android:src="@drawable/final_app_logo_png" />
                         </com.skyfishjy.library.RippleBackground>
 
 
@@ -263,7 +259,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_marginStart="4dp"
-                        android:src="@drawable/ic_online_"
+                        android:src="@drawable/onlinestatuspng"
                         android:visibility="invisible" />
                 </LinearLayout>
 

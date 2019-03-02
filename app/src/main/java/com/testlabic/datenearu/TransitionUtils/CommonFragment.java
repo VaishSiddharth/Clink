@@ -85,7 +85,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private ImageView imageView;
     private TextView name;
     private FloatingActionButton like;
-    private RapidFloatingActionButton match;
+    private ImageView match;
     private String imageUrl;
     private String nameS;
     private String ageS;
