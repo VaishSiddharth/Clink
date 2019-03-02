@@ -28,6 +28,7 @@ import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 
 import java.util.HashMap;
 
@@ -85,8 +86,15 @@ public class Transparent_wine_types extends Activity {
                 final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(Transparent_wine_types.this, SweetAlertDialog.PROGRESS_TYPE)
                         .setContentText("Loading");
                 sweetAlertDialog.show();
-              
+                
     
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(Transparent_wine_types.this));
+    
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(Transparent_wine_types.this));
                 
                 ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
                 if (modelSubscr != null) {

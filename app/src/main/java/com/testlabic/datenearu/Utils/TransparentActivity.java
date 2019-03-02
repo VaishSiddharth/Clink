@@ -21,6 +21,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cooltechworks.views.ScratchImageView;
@@ -116,6 +117,16 @@ public class TransparentActivity extends Activity {
         btn.setBackground(ContextCompat.getDrawable(TransparentActivity.this, R.drawable.button_4_dialogue));
         Button btn1 = alertDialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(TransparentActivity.this, R.drawable.button_4_dialogue));
+        btn.setTypeface(Utils.SFPRoLight(this));
+        btn1.setTypeface(Utils.SFPRoLight(this));
+    
+        TextView title = alertDialog.findViewById(R.id.title_text);
+        if(title!=null)
+            title.setTypeface(Utils.SFProRegular(this));
+    
+        TextView contentText = alertDialog.findViewById(R.id.content_text);
+        if(contentText!=null)
+            contentText.setTypeface(Utils.SFPRoLight(this));
     }
     
     private void sendNotificationToOtherUser(SweetAlertDialog sweetAlertDialog) {

@@ -39,12 +39,15 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.HashMap;
 
 import com.testlabic.datenearu.Adapters.View_Pager_Adapter;
+import com.testlabic.datenearu.Utils.Utils;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.relex.circleindicator.CircleIndicator;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
+
+import static java.security.AccessController.getContext;
 
 public class ClickedUser extends AppCompatActivity implements View.OnClickListener {
     
@@ -142,6 +145,17 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     
         Button btn = alertDialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+    
+         {
+             btn.setTypeface(Utils.SFPRoLight(this));
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            if(title!=null)
+                title.setTypeface(Utils.SFProRegular(this));
+        
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            if(contentText!=null)
+                contentText.setTypeface(Utils.SFPRoLight(this));
+        }
     }
     
     private void acceptRequest(String item, final SweetAlertDialog sDialog) {
@@ -304,7 +318,17 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
         Button btn1 = alertDialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+        {
+            if(btn!=null)
+                btn.setTypeface(Utils.SFPRoLight(this));
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            if(title!=null)
+                title.setTypeface(Utils.SFProRegular(this));
         
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            if(contentText!=null)
+                contentText.setTypeface(Utils.SFPRoLight(this));
+        }
     }
     
     private void BuyPoints() {
@@ -424,6 +448,17 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                 alertDialog.show();
                 Button btn = alertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+                {
+                    if(btn!=null)
+                        btn.setTypeface(Utils.SFPRoLight(this));
+                    TextView title = alertDialog.findViewById(R.id.title_text);
+                    if(title!=null)
+                        title.setTypeface(Utils.SFProRegular(this));
+        
+                    TextView contentText = alertDialog.findViewById(R.id.content_text);
+                    if(contentText!=null)
+                        contentText.setTypeface(Utils.SFPRoLight(this));
+                }
             } else {
                 executeLikeFunction();
                 Toast.makeText(ClickedUser.this, "Liked!", Toast.LENGTH_SHORT).show();
@@ -460,7 +495,9 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     KonfettiView konfettiView = findViewById(R.id.viewKonfetti);
                                     konfettiView.build()
-                                            .addColors(Color.BLUE, Color.GREEN, Color.MAGENTA)
+                                            .addColors(getApplicationContext().getResources().getColor(R.color.appcolor),
+                                                    getApplicationContext().getResources().getColor(R.color.yellow),
+                                                    getApplicationContext().getResources().getColor(R.color.appcolor))
                                             .setDirection(0.0, 359.0)
                                             .setSpeed(1f, 5f)
                                             .setFadeOutEnabled(true)
@@ -497,6 +534,18 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                 btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
                                 Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+                                {
+                                   
+                                    btn.setTypeface(Utils.SFPRoLight(ClickedUser.this));
+                                    btn1.setTypeface(Utils.SFPRoLight(ClickedUser.this));
+                                    TextView title = alertDialog.findViewById(R.id.title_text);
+                                    if(title!=null)
+                                        title.setTypeface(Utils.SFProRegular(ClickedUser.this));
+        
+                                    TextView contentText = alertDialog.findViewById(R.id.content_text);
+                                    if(contentText!=null)
+                                        contentText.setTypeface(Utils.SFPRoLight(ClickedUser.this));
+                                }
                             } else
                                 Toast.makeText(ClickedUser.this, "Sorry an error occured", Toast.LENGTH_SHORT).show();
                         }

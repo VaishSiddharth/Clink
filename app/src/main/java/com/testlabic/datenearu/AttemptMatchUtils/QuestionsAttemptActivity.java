@@ -6,10 +6,12 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.stepstone.stepper.StepperLayout;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -62,6 +64,13 @@ public class QuestionsAttemptActivity extends AppCompatActivity {
                 .show();
         Button btn=sweetAlertDialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
-    }
+        btn.setTypeface(Utils.SFPRoLight(this));
+        TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+        if(title!=null)
+            title.setTypeface(Utils.SFProRegular(this));
+    
+        TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+        if(contentText!=null)
+            contentText.setTypeface(Utils.SFPRoLight(this));    }
     
 }

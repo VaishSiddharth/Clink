@@ -33,6 +33,7 @@ import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 
 import java.util.HashMap;
 
@@ -117,6 +118,17 @@ public class MatchCalculator extends AppCompatActivity {
 
         Button cancel=sweetAlertDialog1.findViewById(R.id.cancel_button);
         cancel.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
+    
+        btn.setTypeface(Utils.SFPRoLight(this));
+        cancel.setTypeface(Utils.SFPRoLight(this));
+    
+        TextView title = sweetAlertDialog1.findViewById(R.id.title_text);
+        if(title!=null)
+            title.setTypeface(Utils.SFProRegular(this));
+    
+        TextView contentText = sweetAlertDialog1.findViewById(R.id.content_text);
+        if(contentText!=null)
+            contentText.setTypeface(Utils.SFPRoLight(this));
 
     }
 
@@ -283,7 +295,9 @@ public class MatchCalculator extends AppCompatActivity {
 
         KonfettiView konfettiView = findViewById(R.id.viewKonfetti);
         konfettiView.build()
-                .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                .addColors(getApplicationContext().getResources().getColor(R.color.appcolor),
+                        getApplicationContext().getResources().getColor(R.color.yellow),
+                        getApplicationContext().getResources().getColor(R.color.appcolor))
                 .setDirection(0.0, 359.0)
                 .setSpeed(1f, 5f)
                 .setFadeOutEnabled(true)
@@ -427,6 +441,17 @@ public class MatchCalculator extends AppCompatActivity {
                                         btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
                                         Button btn1=sweetAlertDialog1.findViewById(R.id.cancel_button);
                                         btn1.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
+    
+                                        btn.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+                                        btn1.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+    
+                                        TextView title = sweetAlertDialog1.findViewById(R.id.title_text);
+                                        if(title!=null)
+                                            title.setTypeface(Utils.SFProRegular(MatchCalculator.this));
+    
+                                        TextView contentText = sweetAlertDialog1.findViewById(R.id.content_text);
+                                        if(contentText!=null)
+                                            contentText.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
                                     }
                                 });
                         sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
@@ -465,6 +490,16 @@ public class MatchCalculator extends AppCompatActivity {
                         btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
                         Button btn1=sweetAlertDialog1.findViewById(R.id.cancel_button);
                         btn1.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
+                        btn.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+                        btn1.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+    
+                        TextView title = sweetAlertDialog1.findViewById(R.id.title_text);
+                        if(title!=null)
+                            title.setTypeface(Utils.SFProRegular(MatchCalculator.this));
+    
+                        TextView contentText = sweetAlertDialog1.findViewById(R.id.content_text);
+                        if(contentText!=null)
+                            contentText.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
 
                     }
                 });
@@ -474,7 +509,17 @@ public class MatchCalculator extends AppCompatActivity {
         btn.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
         Button btn1=mainDialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(this,R.drawable.button_4_dialogue));
-
+       
+        btn.setTypeface(Utils.SFPRoLight(this));
+        btn1.setTypeface(Utils.SFPRoLight(this));
+    
+        TextView title = mainDialog.findViewById(R.id.title_text);
+        if(title!=null)
+            title.setTypeface(Utils.SFProRegular(this));
+    
+        TextView contentText = mainDialog.findViewById(R.id.content_text);
+        if(contentText!=null)
+            contentText.setTypeface(Utils.SFPRoLight(this));
     }
 
     private void SendRequestMessage() {
@@ -514,5 +559,15 @@ public class MatchCalculator extends AppCompatActivity {
         alertDialog.show();
         Button btn = alertDialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this, R.drawable.button_4_dialogue));
+    
+        btn.setTypeface(Utils.SFPRoLight(this));
+    
+        TextView title = alertDialog.findViewById(R.id.title_text);
+        if(title!=null)
+            title.setTypeface(Utils.SFProRegular(this));
+    
+        TextView contentText = alertDialog.findViewById(R.id.content_text);
+        if(contentText!=null)
+            contentText.setTypeface(Utils.SFPRoLight(this));
     }
 }

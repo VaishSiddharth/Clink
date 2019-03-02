@@ -165,6 +165,8 @@ public class Transparent_gift_Activity extends Activity {
                                 .addSizes(new Size(12, 5))
                                 .setPosition(-100f, 1000f, -50f, -50f)
                                 .streamFor(300, 5000L);
+                        
+                        
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override

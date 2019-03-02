@@ -66,6 +66,7 @@ import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.TransparentActivity;
+import com.testlabic.datenearu.Utils.Utils;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ import jp.wasabeef.blurry.Blurry;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
+import okhttp3.internal.Util;
 
 /**
  * Created by velox on 2019/01/18.
@@ -123,7 +125,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         KonfettiView konfettiView = rootView.findViewById(R.id.viewKonfetti);
         ImageView male = rootView.findViewById(R.id.maleglass);
         ImageView female = rootView.findViewById(R.id.femaleglass);
-        final RippleBackground rippleBackground=(RippleBackground)rootView.findViewById(R.id.content);
+        final RippleBackground rippleBackground = (RippleBackground) rootView.findViewById(R.id.content);
         rippleBackground.startRippleAnimation();
         like_shine.init(getActivity());
         blur_view = rootView.findViewById(R.id.view_on_blur);
@@ -149,16 +151,27 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                         executeLikeFunction();
                                     }
                                 });
+                        
                         alertDialog.show();
                         Button btn = alertDialog.findViewById(R.id.confirm_button);
                         btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+                        if (getContext() != null) {
+                            if(btn!=null)
+                            btn.setTypeface(Utils.SFPRoLight(getContext()));
+                            TextView title = alertDialog.findViewById(R.id.title_text);
+                            if(title!=null)
+                            title.setTypeface(Utils.SFProRegular(getContext()));
+        
+                            TextView contentText = alertDialog.findViewById(R.id.content_text);
+                            if(contentText!=null)
+                            contentText.setTypeface(Utils.SFPRoLight(getContext()));
+                        }
                     } else {
                         executeLikeFunction();
                         Toast.makeText(getActivity(), "Liked!", Toast.LENGTH_SHORT).show();
                     }
                     likedOnce = !likedOnce;
-                }
-                else likedOnce = !likedOnce;
+                } else likedOnce = !likedOnce;
             }
         });
         message.setOnClickListener(new View.OnClickListener() {
@@ -398,17 +411,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;
             }
-
+            
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                Handler handler=new Handler();
+                Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Blurry.with(imageView.getContext()).radius(20)
                                 .sampling(2).capture(imageView).into(imageView);
                     }
-                },10);
+                }, 10);
                 return false;
             }
         }).into(imageView);
@@ -437,15 +450,19 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                     Toast.makeText(getActivity(), "You get only one try to direct message!", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            
                             @Override
                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             }
+                            
                             @Override
                             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                             }
+                            
                             @Override
                             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             }
+                            
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                             }
@@ -473,6 +490,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
         Button btn1 = alertDialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+        if (getContext() != null) {
+            if(btn!=null)
+                btn.setTypeface(Utils.SFPRoLight(getContext()));
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            if(title!=null)
+                title.setTypeface(Utils.SFProRegular(getContext()));
+        
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            if(contentText!=null)
+                contentText.setTypeface(Utils.SFPRoLight(getContext()));
+        }
     }
     
     private void moveToChatScreen() {
@@ -503,40 +531,39 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.gender = user.getGender();
         this.isBlur = user.getIsBlur();
         //Log.e(TAG, "The user is "+user.getUid());
-    
+        
     }
     
     private void setUpOnlineStatus() {
         
-        if(sendersUid==null)
+        if (sendersUid == null)
             return;
         onlineStatusRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.usersStatus).child(sendersUid)
                 .child("status");
-      
+        
         onlineStatusListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
-                if(dataSnapshot.exists()&&dataSnapshot.getValue(String.class)!=null)
-                {
+                if (dataSnapshot.exists() && dataSnapshot.getValue(String.class) != null) {
                     String stat = dataSnapshot.getValue(String.class);
-                   // Log.e(TAG, "The user "+sendersUid+ " is "+stat);
+                    // Log.e(TAG, "The user "+sendersUid+ " is "+stat);
                     if (stat != null) {
-                        if(stat.equalsIgnoreCase(Constants.online)) {
-                           // Log.e(TAG, "Showing srch ");
+                        if (stat.equalsIgnoreCase(Constants.online)) {
+                            // Log.e(TAG, "Showing srch ");
                             onlineStatus.setVisibility(View.VISIBLE);
-                        } else if(stat.equalsIgnoreCase(Constants.offline))
+                        } else if (stat.equalsIgnoreCase(Constants.offline))
                             onlineStatus.setVisibility(View.INVISIBLE);
-                    }else
+                    } else
                         onlineStatus.setVisibility(View.GONE);
                 }
                 
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         };
         onlineStatusRef.addValueEventListener(onlineStatusListener);
@@ -548,11 +575,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         removeOnlineListeners();
     }
     
-    
-    
-    private void removeOnlineListeners()
-    {
-        if(onlineStatusRef!=null&&onlineStatusListener!=null)
+    private void removeOnlineListeners() {
+        if (onlineStatusRef != null && onlineStatusListener != null)
             onlineStatusRef.removeEventListener(onlineStatusListener);
     }
     
@@ -628,7 +652,15 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
         Button btn1 = alertDialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
-        
+        if (getContext() != null) {
+            btn.setTypeface(Utils.SFPRoLight(getContext()));
+            btn1.setTypeface(Utils.SFPRoLight(getContext()));
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            title.setTypeface(Utils.SFProRegular(getContext()));
+    
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            contentText.setTypeface(Utils.SFPRoLight(getContext()));
+        }
     }
     
     private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
