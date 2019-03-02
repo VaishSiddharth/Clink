@@ -74,7 +74,7 @@ public class Transparent_many_gifts extends Activity {
                         .addShapes(Shape.RECT, Shape.CIRCLE)
                         .addSizes(new Size(8, 3))
                         .setPosition(mWidth / 2f, mHeight / 7f)
-                        .burst(1000);
+                        .burst(600);
             }
         }, 500);
 

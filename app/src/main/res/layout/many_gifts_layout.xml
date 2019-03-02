@@ -55,7 +55,8 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+            <com.skyfishjy.library.RippleBackground
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/content"
                 android:layout_width="match_parent"

@@ -117,11 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
-        SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
-        boolean trail = sharedPref.getBoolean("trialover", true);
-        if (trail) {
-            blurtrial();
-        }
+       
         
     }
     
@@ -276,12 +272,21 @@ public class MainActivity extends AppCompatActivity {
                     updateStatus(Constants.online);
                     checkForIncompleteData();
                     checkForInApps();
+                    checkForBlur();
                 }
                 
             }
         };
         mAuth.addAuthStateListener(authStateListener);
         
+    }
+    
+    private void checkForBlur() {
+        SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        boolean trail = sharedPref.getBoolean("trialover", true);
+        if (trail) {
+            blurtrial();
+        }
     }
     
     private void checkForInApps() {
