@@ -47,7 +47,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class PurchasePacks extends AppCompatActivity implements PurchasesUpdatedListener {
     private static final String TAG = PurchasePacks.class.getSimpleName();
     public BillingClient mBillingClient;
-    TextView pack1, pack2, pack3;
+    TextView pack1, pack2, pack3,pack4;
     StartAppAd startAppAd;
     
     @Override
@@ -57,6 +57,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
         pack1 = findViewById(R.id.firstPack);
         pack2 = findViewById(R.id.secondPack);
         pack3 = findViewById(R.id.thirdPack);
+        pack4 = findViewById(R.id.fourthPack);
         
         TextView rewardAd = findViewById(R.id.rewardAd);
         startAppAd = new StartAppAd(PurchasePacks.this);
