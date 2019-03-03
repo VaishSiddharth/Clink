@@ -142,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
                         
                         if (dataSnapshot.getValue() != null) {
                             long timestamp = dataSnapshot.getValue(Long.class);
-                            long epoch = System.currentTimeMillis() / 1000;
-                            long oneday = 86400;
+                            long epoch = System.currentTimeMillis();
+                            long oneday = 86400000;
                             Log.e(TAG, "The epoch and timestamps are "+ timestamp + " "+ epoch);
                             if ( epoch >= (timestamp + (5 * oneday)) && ((epoch <= timestamp + (6 * oneday)))) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                                                 HashMap<String, Object> update_blur = new HashMap<>();
                                                 update_blur.put("isBlur", false);
                                                 HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
-                                                update_blur.put("blurTrialEnded", true);
+                                                update_blur_trial_ended.put("blurTrialEnded", true);
                                                 ref1.updateChildren(update_blur);
                                                 
                                                 //also increase the time and set it to today!
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                         current -= Constants.unBlurForSevenDaysDrops;
                         HashMap<String, Object> updatePoints = new HashMap<>();
                         updatePoints.put(Constants.xPoints, current);
-                        Log.e(TAG, "Updating the drops here");
+                        Log.v(TAG, "Updating the drops here");
                         dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

@@ -37,6 +37,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -45,9 +46,11 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.soundcloud.android.crop.Crop;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -244,19 +247,46 @@ public class EditActivity extends AppCompatActivity {
         blur.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                
-                
-                
                 if (isChecked) {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
                     else {
                         if(switchedManually&&!blurTrialEnded)
                             blurProfile();
-                        else
+                        else if(blurTrialEnded)
                         {
                             blur.setChecked(false);
                             Toast.makeText(EditActivity.this, "Trial Expired!", Toast.LENGTH_SHORT).show();
+                            final SweetAlertDialog alertDialog = new SweetAlertDialog(EditActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Trial period Over!")
+                                    .setContentText("If you want to extend the blur duration by 7 days, spend 500 drops")
+                                    .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            deductDropsAndIncreaseBlurTime( sweetAlertDialog);
+                    
+                                        }
+                                    });
+                            alertDialog.show();
+                            Button btn = alertDialog.findViewById(R.id.confirm_button);
+                            btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                            Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                            btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+    
+                            {
+                                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
+        
+                                TextView title = alertDialog.findViewById(R.id.title_text);
+                                if(title!=null)
+                                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
+        
+                                TextView contentText = alertDialog.findViewById(R.id.content_text);
+                                if(contentText!=null)
+                                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                            }
+    
+                            
                         }
                     }
                 } else {
@@ -267,9 +297,84 @@ public class EditActivity extends AppCompatActivity {
                 }
             }
         });
-        setUpDetails();
+        //setUpDetails();
         blurTrialCalc();
     }
+    
+    private void deductDropsAndIncreaseBlurTime(final SweetAlertDialog sDialog) {
+        
+        DatabaseReference attemptRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+        
+        ValueEventListener attemptListener = (new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                if (modelSubscr != null) {
+                    int current = modelSubscr.getXPoints();
+                    if (current < Constants.unBlurForSevenDaysDrops) {
+                        Toast.makeText(EditActivity.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(EditActivity.this, PurchasePacks.class));
+                        
+                    } else {
+                        current -= Constants.unBlurForSevenDaysDrops;
+                        HashMap<String, Object> updatePoints = new HashMap<>();
+                        updatePoints.put(Constants.xPoints, current);
+                        Log.v(TAG, "Updating the drops here");
+                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                sDialog
+                                        .setTitleText("Increasing duration!")
+                                        .setContentText("Your profile will remain unblurred for 7 days from today!")
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+    
+                                DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
+                                        .child(Constants.userInfo).child(Constants.uid);
+                               
+                                blurProfile();
+                                
+                                HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
+                                update_blur_trial_ended.put("blurTrialEnded", false);
+                                ref1.updateChildren(update_blur_trial_ended);
+                                
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //update the blurStartTime
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                                .child(Constants.userInfo).child(Constants.uid).child("blurStartTime");
+                                        HashMap<String, Object> updateMap = new HashMap<>();
+                                        updateMap.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+                                        ref.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                sDialog.dismiss();
+                                            }
+                                        });
+                                        
+                                    }
+                                }, 2500);
+                            }
+                        });
+                        
+                    }
+                }
+                
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        attemptRef.addListenerForSingleValueEvent(attemptListener);
+        
+    }
+    
+    
     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -291,14 +396,16 @@ public class EditActivity extends AppCompatActivity {
 
                 if (dataSnapshot.getValue() != null) {
                     long timestamp = dataSnapshot.getValue(Long.class);
-                    long epoch = System.currentTimeMillis() / 1000;
-                    long oneday = 86400;
+                    long epoch = System.currentTimeMillis();
+                    long oneday = 86400000;
                     long trialend=timestamp+7*oneday;
                     long daysleft=(trialend-epoch)/oneday;
                     if(daysleft<0)
                         blur.setChecked(false);
-                    else
-                    blurinfo.setText("Blur profile ("+daysleft+" days remaining)");
+                    else {
+                        if(!blurTrialEnded)
+                        blurinfo.setText("Blur profile ("+daysleft+" days remaining)");
+                    }
                 }
             }
 
@@ -541,4 +648,9 @@ public class EditActivity extends AppCompatActivity {
         });
     }
     
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpDetails();
+    }
 }
