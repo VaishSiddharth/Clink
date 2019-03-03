@@ -73,6 +73,7 @@ public class EditActivity extends AppCompatActivity {
     StorageReference displaypics_Ref;
     UploadTask uploadTask;
     View toolbar;
+    boolean blurTrialEnded = false;
     boolean switchedManually = false;
     
     @Override
@@ -243,11 +244,21 @@ public class EditActivity extends AppCompatActivity {
         blur.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                
+                
+                
                 if (isChecked) {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
-                    else if(switchedManually)
-                        blurProfile();
+                    else {
+                        if(switchedManually&&!blurTrialEnded)
+                            blurProfile();
+                        else
+                        {
+                            blur.setChecked(false);
+                            Toast.makeText(EditActivity.this, "Trial Expired!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 } else {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
@@ -273,7 +284,7 @@ public class EditActivity extends AppCompatActivity {
     public void blurTrialCalc()
     {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.userInfo).child(Constants.uid).child("creationTime").child(Constants.timeStamp);
+                .child(Constants.userInfo).child(Constants.uid).child("blurStartTime").child(Constants.timeStamp);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -284,6 +295,9 @@ public class EditActivity extends AppCompatActivity {
                     long oneday = 86400;
                     long trialend=timestamp+7*oneday;
                     long daysleft=(trialend-epoch)/oneday;
+                    if(daysleft<0)
+                        blur.setChecked(false);
+                    else
                     blurinfo.setText("Blur profile ("+daysleft+" days remaining)");
                 }
             }
@@ -484,6 +498,9 @@ public class EditActivity extends AppCompatActivity {
                         cityLabel = cityLabel.replace(", ", "_");
                         gender = user.getGender();
                         detailsSetup = true;
+    
+                        blurTrialEnded = user.isBlurTrialEnded();
+                        
                         if (user.getIsBlur()) {
                             blur.setChecked(true);
                             switchedManually = true;
@@ -499,7 +516,8 @@ public class EditActivity extends AppCompatActivity {
                             blur.setChecked(false);
                             switchedManually = true;
                         }
-                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().
+                                child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());
                         HashMap<String, Object> update_image_url_city = new HashMap<>();
                         update_image_url_city.put("imageUrl", user.getImageUrl());
                         ref2.updateChildren(update_image_url_city);

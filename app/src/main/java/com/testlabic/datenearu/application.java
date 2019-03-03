@@ -45,7 +45,7 @@ public class application extends Application {
                 if(firebaseAuth.getCurrentUser()!=null)
                 {
                     Constants.uid = firebaseAuth.getUid();
-                    Log.e("app", "Subscribed");
+                   // Log.e("app", "Subscribed");
                     FirebaseMessaging.getInstance().subscribeToTopic(Constants.uid);
     
                     FirebaseMessaging.getInstance().subscribeToTopic(Constants.uid+"unread");
