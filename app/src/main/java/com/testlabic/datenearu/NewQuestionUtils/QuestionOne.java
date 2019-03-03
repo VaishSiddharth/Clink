@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,46 +65,7 @@ public class QuestionOne extends Fragment implements BlockingStep {
         ans2=rootView.findViewById(R.id.ans2);
         ans3=rootView.findViewById(R.id.ans3);
         ans4=rootView.findViewById(R.id.ans4);
-        refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
-                .child(Constants.uid)
-                .child("questions")
-                .child(Integer.toString(0));
-        refInit.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue(ModelQuestion.class) != null){
-                    ModelQuestion modelQuestion=dataSnapshot.getValue(ModelQuestion.class);
-                    String questionstr=modelQuestion.getQuestion();
-                    String ans1str=modelQuestion.getOptA();
-                    String ans2str=modelQuestion.getOptB();
-                    String ans3str=modelQuestion.getOptC();
-                    String ans4str=modelQuestion.getOptD();
-                    String correctAnswer = modelQuestion.getCorrectOption();
-                    question.setText(questionstr);
-                    ans1.setText(ans1str);
-                    ans2.setText(ans2str);
-                    ans3.setText(ans3str);
-                    ans4.setText(ans4str);
-                    if(correctAnswer!=null && !correctAnswer.equals(""))
-                    {
-                        skipSelection = true;
-                        if(correctAnswer.equals(ans1str))
-                        color(ans1);
-                        else
-                        if(correctAnswer.equals(ans2str))
-                            color(ans2);
-                        else if(correctAnswer.equals(ans3str))
-                        color(ans3);
-                        else if(correctAnswer.equals(ans4str))
-                        color(ans4);
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        
 
         ans1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +128,57 @@ public class QuestionOne extends Fragment implements BlockingStep {
 
         return rootView;
     }
-
+    
+    private void fillValues() {
+        refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
+                .child(Constants.uid)
+                .child("questions")
+                .child(Integer.toString(0));
+        refInit.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue(ModelQuestion.class) != null){
+                    ModelQuestion modelQuestion=dataSnapshot.getValue(ModelQuestion.class);
+                    String questionstr=modelQuestion.getQuestion();
+                    String ans1str=modelQuestion.getOptA();
+                    String ans2str=modelQuestion.getOptB();
+                    String ans3str=modelQuestion.getOptC();
+                    String ans4str=modelQuestion.getOptD();
+                    String correctAnswer = modelQuestion.getCorrectOption();
+                    question.setText(questionstr);
+                    ans1.setText(ans1str);
+                    ans2.setText(ans2str);
+                    ans3.setText(ans3str);
+                    ans4.setText(ans4str);
+                    if(correctAnswer!=null && !correctAnswer.equals(""))
+                    {
+                        skipSelection = true;
+                        if(correctAnswer.equals(ans1str))
+                            color(ans1);
+                        else
+                        if(correctAnswer.equals(ans2str))
+                            color(ans2);
+                        else if(correctAnswer.equals(ans3str))
+                            color(ans3);
+                        else if(correctAnswer.equals(ans4str))
+                            color(ans4);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+    
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        fillValues();
+    }
+    
     private void unColor(Button button) {
         button.setBackground(getResources().getDrawable(R.drawable.border_black_box));
         button.setTextColor(getResources().getColor(R.color.light_black));

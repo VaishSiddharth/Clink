@@ -1,10 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewQuestionUtils.EditQuestionTemplate">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background4"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:visibility="invisible"
+        android:hapticFeedbackEnabled="true"
+        android:src="@drawable/edit_ic"
+        app:backgroundTint="@android:color/white"
+        app:fabSize="mini"
+        app:rippleColor="#22ED7563" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Write the question here"
+            android:singleLine="true"
+            android:maxLines="3"
+            android:textSize="16sp"
+            app:met_underlineColor="@color/appcolor"
+            android:layout_gravity="left"
+            android:gravity="left"
+            app:met_floatingLabelText="About Yourself"
+            app:met_primaryColor="@color/appcolor"
+            app:met_floatingLabelTextColor="@color/appcolor"
+            app:met_floatingLabel="highlight"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/your_gender"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/opt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:singleLine="true"
+                    android:maxLines="3"
+                    android:hint="option A"
+                    android:textSize="16sp"
+                    app:met_underlineColor="@color/appcolor"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    app:met_floatingLabelText="Option A"
+                    app:met_primaryColor="@color/appcolor"
+                    app:met_floatingLabelTextColor="@color/appcolor"
+                    app:met_floatingLabel="highlight"/>
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/opt2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:singleLine="true"
+                    android:maxLines="3"
+                    android:hint="option B"
+                    android:textSize="16sp"
+                    app:met_underlineColor="@color/appcolor"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    app:met_floatingLabelText="Option B"
+                    app:met_primaryColor="@color/appcolor"
+                    app:met_floatingLabelTextColor="@color/appcolor"
+                    app:met_floatingLabel="highlight"/>
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/opt3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:singleLine="true"
+                    android:maxLines="3"
+                    android:hint="option C"
+                    android:textSize="16sp"
+                    app:met_underlineColor="@color/appcolor"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    app:met_floatingLabelText="Option C"
+                    app:met_primaryColor="@color/appcolor"
+                    app:met_floatingLabelTextColor="@color/appcolor"/>
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/opt4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_margin="8dp"
+                    android:gravity="left"
+                    android:hint="option D"
+                    android:maxLines="3"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelText="Option D"
+                    app:met_floatingLabelTextColor="@color/appcolor"
+                    app:met_primaryColor="@color/appcolor"
+                    app:met_underlineColor="@color/appcolor" />
+
+                <customfonts.Button_SF_Pro_Display_Medium
+                    android:layout_width="wrap_content"
+                    android:text="Save"
+                    android:id="@+id/save"
+                    android:textSize="20dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
