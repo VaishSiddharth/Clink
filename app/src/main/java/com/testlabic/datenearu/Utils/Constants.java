@@ -84,6 +84,8 @@ public class Constants {
     public static final String SKU_1000_drops = "1000_drops";
     public static String purchaseLogs = "purchaseLogs";
     public static String editQuestions = "editQuestions";
+    public static String databaseRef = "databaseRef";
+    public static String questionNumber = "questionNumber";
     
     public static String encrypt(String cityLabel) {
         

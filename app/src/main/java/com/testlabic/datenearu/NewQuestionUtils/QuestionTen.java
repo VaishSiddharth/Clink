@@ -159,7 +159,16 @@ public class QuestionTen extends Fragment implements BlockingStep {
             
             }
         });
-    
+        ImageView edit = rootView.findViewById(R.id.edit_question);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            
+                Intent intent = new Intent(getActivity(), EditQuestionTemplate.class);
+                intent.putExtra(Constants.questionNumber, String.valueOf(9));
+                startActivity(intent);
+            }
+        });
     
         return rootView;
     }

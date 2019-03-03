@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.NewQuestionUtils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -155,7 +156,16 @@ public class QuestionFive extends Fragment implements BlockingStep {
             
             }
         });
-    
+        ImageView edit = rootView.findViewById(R.id.edit_question);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            
+                Intent intent = new Intent(getActivity(), EditQuestionTemplate.class);
+                intent.putExtra(Constants.questionNumber, String.valueOf(4));
+                startActivity(intent);
+            }
+        });
     
         return rootView;
     }

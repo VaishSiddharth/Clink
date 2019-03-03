@@ -123,6 +123,14 @@
 
     </androidx.viewpager.widget.ViewPager>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:src="@drawable/nohere"
+        android:layout_margin="84dp"
+        android:id="@+id/emptyView"
+        android:visibility="invisible"
+        android:layout_height="match_parent" />
+
     <!--2. 底部的三个图标按钮-->
 
     <RelativeLayout

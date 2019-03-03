@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.NewQuestionUtils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -94,12 +95,9 @@ public class QuestionOne extends Fragment implements BlockingStep {
                         color(ans3);
                         else if(correctAnswer.equals(ans4str))
                         color(ans4);
-                        
                     }
-                   
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -154,6 +152,16 @@ public class QuestionOne extends Fragment implements BlockingStep {
             }
         });
 
+        ImageView edit = rootView.findViewById(R.id.edit_question);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+                Intent intent = new Intent(getActivity(), EditQuestionTemplate.class);
+                intent.putExtra(Constants.questionNumber, String.valueOf(0));
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }

@@ -44,11 +44,11 @@ public class PaperOnboardingActivity extends AppCompatActivity {
     private ArrayList<PaperOnboardingPage> getDataForOnboarding() {
         // prepare data
         PaperOnboardingPage scr1 = new PaperOnboardingPage("Hotels", "All hotels and hostels are sorted by hospitality rating",
-                Color.parseColor("#ffffff"), R.drawable.bottle_1, R.drawable.bottle_1);
+                Color.parseColor("#ffffff"), R.drawable.qnaslider, R.drawable.bottle_1);
         PaperOnboardingPage scr2 = new PaperOnboardingPage("Banks", "We carefully verify all banks before add them into the app",
-                Color.parseColor("#ffffff"), R.drawable.bottle_2, R.drawable.bottle_2);
+                Color.parseColor("#ffffff"), R.drawable.blurslider, R.drawable.bottle_2);
         PaperOnboardingPage scr3 = new PaperOnboardingPage("Stores", "All local stores are categorized for your convenience",
-                Color.parseColor("#ffffff"), R.drawable.bottle_2, R.drawable.bottle_2);
+                Color.parseColor("#ffffff"), R.drawable.giftslider, R.drawable.bottle_2);
 
         ArrayList<PaperOnboardingPage> elements = new ArrayList<>();
         elements.add(scr1);

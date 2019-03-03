@@ -111,6 +111,7 @@ public class pagerTransition extends Fragment {
     DatabaseReference ref;
     String curUsersMatchSeq;
     Boolean fetchPrefsCalledOnce = false;
+    private ImageView emptyView;
     private ChildEventListener childEventListener;
     String city;
 
@@ -141,6 +142,8 @@ public class pagerTransition extends Fragment {
         changeLocation = rootView.findViewById(R.id.changeLocation);
         points = rootView.findViewById(R.id.points);
         bottle = rootView.findViewById(R.id.fill_bottle);
+        emptyView = rootView.findViewById(R.id.emptyView);
+        emptyView.setVisibility(View.VISIBLE);
         Constants.uid = FirebaseAuth.getInstance().getUid();
         if (Constants.uid != null) {
             fetchPreferences();
@@ -740,6 +743,7 @@ public class pagerTransition extends Fragment {
 
                     //Log.e(TAG, "Called");
                     sortWithMatch();
+                    emptyView.setVisibility(View.INVISIBLE);
                     Collections.sort(displayArrayList, new Comparator<ModelUser>() {
                         @Override
                         public int compare(ModelUser v1, ModelUser v2) {

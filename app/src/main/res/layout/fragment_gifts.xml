@@ -14,8 +14,11 @@
         android:layout_height="match_parent"
         android:divider="@color/colorAccent"/>
 
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/progress_bar"
+    <ImageView
+        android:id="@+id/emptyView"
+        android:padding="72dp"
+         android:visibility="invisible"
+        android:src="@drawable/giftpng"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />

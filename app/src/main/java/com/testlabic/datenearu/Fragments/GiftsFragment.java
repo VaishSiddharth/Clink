@@ -54,7 +54,7 @@ public class GiftsFragment extends Fragment {
     private ChildEventListener listener;
     private View rootView;
     private SwipeMenuListView listView;
-    private GoogleProgressBar bar;
+    private ImageView bar;
     private FirebaseListAdapter<ModelGift> adapter;
     public GiftsFragment() {
         // Required empty public constructor
@@ -66,7 +66,7 @@ public class GiftsFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_gifts, container, false);
         listView = rootView.findViewById(R.id.listView);
-        bar = rootView.findViewById(R.id.progress_bar);
+        bar = rootView.findViewById(R.id.emptyView);
         MoveGiftsToRead();
         return rootView;
     }
