@@ -48,7 +48,7 @@ public class QuestionFour extends Fragment implements BlockingStep {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView =  inflater.inflate(R.layout.activity_question_one, container, false);
+        rootView =  inflater.inflate(R.layout.activity_question_one_editable, container, false);
         final int min = 0;
         final int max = 9;
         final int random = new Random().nextInt((max - min) + 1) + min;

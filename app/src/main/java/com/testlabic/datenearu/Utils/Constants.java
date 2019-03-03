@@ -83,6 +83,7 @@ public class Constants {
     public static final String SKU_500_drops = "500_drops";
     public static final String SKU_1000_drops = "1000_drops";
     public static String purchaseLogs = "purchaseLogs";
+    public static String editQuestions = "editQuestions";
     
     public static String encrypt(String cityLabel) {
         

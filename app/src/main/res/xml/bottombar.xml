@@ -1,20 +1,20 @@
 <tabs >
     <tab
         id="@+id/tab_home"
-        icon="@drawable/ic_home"
+        icon="@drawable/ic_hom"
         inActiveColor="#4De9e9e9"
         activeColor="#FF7A5BFE"/>
 
     <tab
         id="@+id/tab_message"
-        icon="@drawable/ic_messages"
+        icon="@drawable/ic_message"
         barColorWhenSelected="#fff"
         inActiveColor="#4De9e9e9"
         activeColor="#FF7A5BFE"/>
 
     <tab
         id="@+id/tab_notif"
-        icon="@drawable/ic_notif"
+        icon="@drawable/ic_notifi"
         inActiveColor="#4De9e9e9"
         activeColor="#FF7A5BFE"/>
         >

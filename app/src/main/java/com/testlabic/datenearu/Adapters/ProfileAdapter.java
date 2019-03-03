@@ -17,6 +17,7 @@ import com.testlabic.datenearu.Activities.Transparent_gift_Activity;
 import com.testlabic.datenearu.NewQuestionUtils.QuestionSetup;
 import com.testlabic.datenearu.ProfileUtils.AboutEditor;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.ArrayList;
 
@@ -64,7 +65,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             holder.profileItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(new Intent(context, QuestionSetup.class));
+                    context.startActivity(new Intent(context, QuestionSetup.class).putExtra(Constants.editQuestions, true));
                 }
             });
            
