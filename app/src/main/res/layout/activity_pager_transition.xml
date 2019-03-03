@@ -126,7 +126,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:src="@drawable/nohere"
-        android:layout_margin="84dp"
+        android:layout_margin="90dp"
         android:id="@+id/emptyView"
         android:visibility="invisible"
         android:layout_height="match_parent" />

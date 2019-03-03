@@ -67,6 +67,7 @@ public class GiftsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_gifts, container, false);
         listView = rootView.findViewById(R.id.listView);
         bar = rootView.findViewById(R.id.emptyView);
+        bar.setVisibility(View.VISIBLE);
         MoveGiftsToRead();
         return rootView;
     }

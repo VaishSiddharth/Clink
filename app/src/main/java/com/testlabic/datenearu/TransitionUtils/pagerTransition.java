@@ -217,9 +217,7 @@ public class pagerTransition extends Fragment {
                 }
             });
         }
-
         return rootView;
-
     }
 
     @Override

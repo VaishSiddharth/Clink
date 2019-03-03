@@ -17,21 +17,12 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="74.7dp"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center_horizontal"
-            />
-
-        <ImageView
             android:layout_width="73dp"
             android:layout_height="90dp"
             android:layout_gravity="center"
-            android:layout_marginTop="12.7dp"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:id="@+id/applogo"
             android:src="@drawable/final_app_logo_png" />
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -65,7 +56,6 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginLeft="1dp"
                 android:textSize="12sp"
-
                 android:text="Continue with Facebook"
                 android:textColor="#3b3b3b" />
         </LinearLayout>
@@ -95,7 +85,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="1dp"
                 android:textSize="12sp"
-
                 android:text="Continue with Google"
                 android:textColor="#3b3b3b" />
 
@@ -112,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="17dp"
+            android:visibility="invisible"
             android:orientation="horizontal">
 
             <View
@@ -147,6 +137,7 @@
             android:paddingLeft="55dp"
             android:paddingRight="55dp"
             android:paddingTop="12dp"
+            android:visibility="invisible"
             android:paddingBottom="12dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="13dp"
@@ -166,20 +157,20 @@
                 android:layout_height="wrap_content"
                 android:text="Existing user?"
                 android:textSize="11.5sp"
+                android:visibility="invisible"
                 android:textColor="#B3ffffff"/>
 
             <customfonts.MyTextView_SF_Pro_Display_Semibold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Login now"
+                android:visibility="invisible"
+
                 android:layout_marginLeft="9dp"
                 android:textSize="11.5sp"
                 android:textColor="#ffffff"/>
 
         </LinearLayout>
-
-
-
 
 
 
