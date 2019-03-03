@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.TransitionUtils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
@@ -177,7 +178,49 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDmInfoDialog();
+                //get user's Gender
+                
+                final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
+                String gender = sharedPreferences.getString(Constants.userGender, null);
+                if(gender==null)
+                {
+                    Toast.makeText(getActivity(), "Just a sec", Toast.LENGTH_SHORT).show();
+                    
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.userInfo)
+                            .child(Constants.uid)
+                            .child("gender");
+                    
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue(String.class)!=null)
+                            {
+                                String gender = dataSnapshot.getValue(String.class);
+                                if(gender!=null) {
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString(Constants.userGender, gender).apply();
+                                }
+                            }
+                        }
+    
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                        }
+                    });
+                    
+                    //get the gender
+                }
+                else
+                {
+                    if(gender.equals("male"))
+                        Toast.makeText(getActivity(), "Sorry, only for ladies!", Toast.LENGTH_SHORT).show();
+                    
+                    else
+                        showDmInfoDialog();
+                }
+               
                 //Toast.makeText(getActivity(), "Under Progress", Toast.LENGTH_SHORT).show();
             }
         });

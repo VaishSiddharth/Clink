@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 
 import java.util.HashMap;
 
@@ -240,6 +241,17 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                             alertDialog.show();
                     Button btn = alertDialog.findViewById(R.id.confirm_button);
                     btn.setBackground(ContextCompat.getDrawable(context, R.drawable.button_4_dialogue));
+    
+                    if(btn!=null)
+                        btn.setTypeface(Utils.SFPRoLight(context));
+                    TextView title = alertDialog.findViewById(R.id.title_text);
+                    if(title!=null)
+                        title.setTypeface(Utils.SFProRegular(context));
+    
+                    TextView contentText = alertDialog.findViewById(R.id.content_text);
+                    if(contentText!=null)
+                        contentText.setTypeface(Utils.SFPRoLight(context));
+    
                 }
             });
         } else {
@@ -284,6 +296,16 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
     
                     Button btn = alertDialog.findViewById(R.id.confirm_button);
                     btn.setBackground(ContextCompat.getDrawable(context, R.drawable.button_4_dialogue));
+                    if(btn!=null)
+                        btn.setTypeface(Utils.SFPRoLight(context));
+                    TextView title = alertDialog.findViewById(R.id.title_text);
+                    if(title!=null)
+                        title.setTypeface(Utils.SFProRegular(context));
+    
+                    TextView contentText = alertDialog.findViewById(R.id.content_text);
+                    if(contentText!=null)
+                        contentText.setTypeface(Utils.SFPRoLight(context));
+                    
                 }
             });
             
@@ -316,6 +338,16 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                         }); alertDialog.show();
                 Button btn = alertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(context, R.drawable.button_4_dialogue));
+    
+                if(btn!=null)
+                    btn.setTypeface(Utils.SFPRoLight(context));
+                TextView title = alertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(context));
+    
+                TextView contentText = alertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(context));
             }
         });
         
