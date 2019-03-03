@@ -18,6 +18,8 @@
     <color name="sweet_green">#FF7A5BFE</color>
     <color name="appcolor">#FF7A5BFE</color>
     <color name="appcolorlessopacity">#80000000</color>
+    <color name="nothere">#00F5F5F5</color>
+
 
     <color name="success_stroke_color">#FF7A5BFE</color>
     <color name="trans_success_stroke_color">#337A5BFE</color>

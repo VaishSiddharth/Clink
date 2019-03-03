@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -25,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -69,6 +72,7 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Levenshtein;
 import com.testlabic.datenearu.Utils.locationUpdater;
+import com.testlabic.datenearu.WaveDrawable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,6 +147,18 @@ public class pagerTransition extends Fragment {
         points = rootView.findViewById(R.id.points);
         bottle = rootView.findViewById(R.id.fill_bottle);
         emptyView = rootView.findViewById(R.id.emptyView);
+
+        Drawable mWaveDrawable = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mWaveDrawable = new WaveDrawable(getContext().getDrawable(R.drawable.nohere));
+        }
+        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(30);
+        ((WaveDrawable) mWaveDrawable).setWaveLength(580);
+        ((WaveDrawable) mWaveDrawable).setWaveSpeed(12);
+        //((WaveDrawable) mWaveDrawable).setLevel(20);
+        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
+        emptyView.setImageDrawable(mWaveDrawable);
+
         emptyView.setVisibility(View.VISIBLE);
         Constants.uid = FirebaseAuth.getInstance().getUid();
         if (Constants.uid != null) {

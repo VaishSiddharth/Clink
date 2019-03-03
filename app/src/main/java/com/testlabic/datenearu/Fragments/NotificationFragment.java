@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.WaveDrawable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,6 +68,18 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_notification, container, false);
         emptyView = rootView.findViewById(R.id.emptyView);
+
+        Drawable mWaveDrawable = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mWaveDrawable = new WaveDrawable(getContext().getDrawable(R.drawable.nonotification));
+        }
+        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(30);
+        ((WaveDrawable) mWaveDrawable).setWaveLength(580);
+        ((WaveDrawable) mWaveDrawable).setWaveSpeed(12);
+        //((WaveDrawable) mWaveDrawable).setLevel(20);
+        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
+        emptyView.setImageDrawable(mWaveDrawable);
+
         emptyView.setVisibility(View.VISIBLE);
         listView = rootView.findViewById(R.id.listView);
         

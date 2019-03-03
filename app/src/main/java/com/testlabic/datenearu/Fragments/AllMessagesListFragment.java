@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.Fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import com.testlabic.datenearu.Adapters.LastMessageAdapter;
+import com.testlabic.datenearu.WaveDrawable;
 
 /**
  * Created by wolfsoft4 on 21/9/18.
@@ -67,6 +69,18 @@ public class AllMessagesListFragment extends Fragment {
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         cRecyclerView = view.findViewById(R.id.cRecylerView);
+
+        Drawable mWaveDrawable = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mWaveDrawable = new WaveDrawable(getContext().getDrawable(R.drawable.nomessagespng));
+        }
+        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(30);
+        ((WaveDrawable) mWaveDrawable).setWaveLength(580);
+        ((WaveDrawable) mWaveDrawable).setWaveSpeed(12);
+        //((WaveDrawable) mWaveDrawable).setLevel(20);
+        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
+        emptyView.setImageDrawable(mWaveDrawable);
+
         emptyView.setVisibility(View.VISIBLE);
         return view;
         

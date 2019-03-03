@@ -1,6 +1,7 @@
 package com.testlabic.datenearu.Activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.WaveDrawable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -64,6 +67,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     CallbackManager callbackManager;
     LoginButton loginButton;
     SweetAlertDialog loadingDialog;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +78,31 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         loadingDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("Loading")
                 .setContentText("Wait a while...");
-        
-        
+
+        imageView=findViewById(R.id.test);
+        Drawable mWaveDrawable = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mWaveDrawable = new WaveDrawable(getDrawable(R.drawable.nohere));
+        }
+        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(30);
+        ((WaveDrawable) mWaveDrawable).setWaveLength(580);
+        ((WaveDrawable) mWaveDrawable).setWaveSpeed(12);
+        //((WaveDrawable) mWaveDrawable).setLevel(20);
+        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
+        imageView.setImageDrawable(mWaveDrawable);
         progressBar = findViewById(R.id.google_progress);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+
+        /*progressBar = findViewById(R.id.google_progress);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }*/
         /* code for signIN */
 
         /*
@@ -188,7 +209,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 if (mCurrentUser != null) {
                                     updateDatabaseWithUser(mCurrentUser, null, profile);
                                 }
-                                progressBar.setVisibility(View.INVISIBLE);
+                                imageView.setVisibility(View.INVISIBLE);
+                                //progressBar.setVisibility(View.INVISIBLE);
 
                                 startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                 finish();
@@ -197,7 +219,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     /*
                                     move to main activity
                                      */
-                                progressBar.setVisibility(View.INVISIBLE);
+                                imageView.setVisibility(View.INVISIBLE);
+                                //progressBar.setVisibility(View.INVISIBLE);
 
                                 startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                 finish();
@@ -351,7 +374,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         if (result.isSuccess()) {
             final GoogleSignInAccount account = result.getSignInAccount();
             assert account != null;
-            progressBar.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
+            //progressBar.setVisibility(View.VISIBLE);
             // Toast.makeText(LogInEmail.this , "The information received by the account is " + account.getDisplayName() , Toast.LENGTH_LONG).show();
             final AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             mAuth.signInWithCredential(credential)
@@ -375,7 +399,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     if (mCurrentUser != null) {
                                         updateDatabaseWithUser(mCurrentUser, account, null);
                                     }
-                                    progressBar.setVisibility(View.INVISIBLE);
+                                    imageView.setVisibility(View.INVISIBLE);
+                                    //progressBar.setVisibility(View.INVISIBLE);
 
                                     //startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                     // finish();
@@ -384,7 +409,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     /*
                                     move to main activity
                                      */
-                                    progressBar.setVisibility(View.INVISIBLE);
+                                    imageView.setVisibility(View.INVISIBLE);
+                                    //progressBar.setVisibility(View.INVISIBLE);
 
                                     startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                     finish();
@@ -393,7 +419,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 }
                             } else {
                                 // If sign in fails, display a message to the user.
-                                progressBar.setVisibility(View.INVISIBLE);
+                                imageView.setVisibility(View.INVISIBLE);
+                                //progressBar.setVisibility(View.INVISIBLE);
 
                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
                                 Toast.makeText(SignIn.this, "Authentication failed.",
