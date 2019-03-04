@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SymbolTable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -118,6 +119,9 @@ public class pagerTransition extends Fragment {
     private ImageView emptyView;
     private ChildEventListener childEventListener;
     String city;
+    ImageView emptyViewno;
+    TextView emptyViewtext;
+    private String location;
 
     public pagerTransition() {
         // Required empty public constructor
@@ -147,6 +151,8 @@ public class pagerTransition extends Fragment {
         points = rootView.findViewById(R.id.points);
         bottle = rootView.findViewById(R.id.fill_bottle);
         emptyView = rootView.findViewById(R.id.emptyView);
+        emptyViewno=rootView.findViewById(R.id.emptyViewno);
+        emptyViewtext=rootView.findViewById(R.id.emptyViewtext);
 
         Drawable mWaveDrawable = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -218,6 +224,42 @@ public class pagerTransition extends Fragment {
             });
         }
         return rootView;
+    }
+
+    private void nothere()
+    {
+        //if new user in new location
+        DatabaseReference ref1=FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo).child(Constants.uid).child(Constants.cityLabel);
+        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                location =dataSnapshot.getValue(String.class);
+                Log.e(TAG,location);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.cityLabels);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.hasChild(location)){
+                            Log.e(TAG,location);
+                            emptyViewtext.setVisibility(View.VISIBLE);
+                            emptyViewno.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -873,6 +915,7 @@ public class pagerTransition extends Fragment {
         //downloadList();
         //checkForNotification();
         //Log.e(TAG, "On resume called in pagerTransition!");
+        nothere();
     }
 
     public void cleanup() {

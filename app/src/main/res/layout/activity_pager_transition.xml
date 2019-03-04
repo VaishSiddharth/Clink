@@ -124,12 +124,31 @@
     </androidx.viewpager.widget.ViewPager>
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
         android:src="@drawable/nohere"
-        android:layout_margin="90dp"
         android:id="@+id/emptyView"
-        android:visibility="invisible"
-        android:layout_height="match_parent" />
+        android:visibility="gone" />
+    <ImageView
+
+        android:id="@+id/emptyViewno"
+        android:visibility="gone"
+        android:src="@drawable/nohere"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true" />
+    <TextView
+        android:id="@+id/emptyViewtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emptyViewno"
+        android:visibility="gone"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:text="We are new in this location.\n Thanks for joining us"/>
 
     <!--2. 底部的三个图标按钮-->
 

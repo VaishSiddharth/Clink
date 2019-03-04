@@ -259,6 +259,7 @@
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:layout_marginStart="4dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/onlinestatus"
                         android:visibility="invisible" />
                 </LinearLayout>
