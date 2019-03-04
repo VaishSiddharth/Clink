@@ -5,13 +5,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ads_background"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/final_app_logo_png" />
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Clink and Smile" />
+            </LinearLayout>
+
+            <com.startapp.android.publish.ads.banner.Banner
+                android:id="@+id/startAppBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="4dp">
+
+            </com.startapp.android.publish.ads.banner.Banner>
+        </FrameLayout>
+    </LinearLayout>
+
     <ru.github.igla.ferriswheel.FerrisWheelView
         android:layout_width="match_parent"
         android:id="@+id/google_progress"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         app:fwv_cabinsNumber="10"
-        app:fwv_rotateSpeed="16" />
+        app:fwv_rotateSpeed="16"
+        />
 
     <customfonts.TextViewSFProDisplayRegular
         android:layout_width="wrap_content"
@@ -24,18 +72,10 @@
         android:textColor="#212121"
         android:textSize="18sp" />
 
-    <com.startapp.android.publish.ads.banner.Banner
-        android:id="@+id/startAppBanner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"/>
-
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/viewKonfetti"
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
         android:layout_height="match_parent" />
-
-
 
 </RelativeLayout>

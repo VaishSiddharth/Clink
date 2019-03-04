@@ -5,13 +5,59 @@
     android:background="@drawable/background4"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ads_background"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/final_app_logo_png" />
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Clink and Smile" />
+            </LinearLayout>
+
+            <com.startapp.android.publish.ads.banner.Banner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="4dp">
+
+            </com.startapp.android.publish.ads.banner.Banner>
+        </FrameLayout>
+    </LinearLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/edit_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
        android:layout_gravity="end"
         android:layout_margin="16dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:hapticFeedbackEnabled="true"
         android:src="@drawable/edit_ic"
         app:backgroundTint="@android:color/white"
@@ -21,6 +67,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
 
