@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,7 +46,7 @@ import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.ArrayList;
 
-public class NewUserSetup extends AppCompatActivity  implements StepperLayout.StepperListener{
+public class NewUserSetup extends AppCompatActivity implements StepperLayout.StepperListener {
     
     private static final String TAG = NewUserSetup.class.getSimpleName();
     private static final int REQUEST_CHECK_SETTINGS = 43;
@@ -76,7 +77,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         adapter.createStep(5);
         mStepperLayout.setAdapter(adapter);
         setUpLocation();
-    
+        
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(Constants.newUserSetupDone, true).apply();
@@ -85,8 +86,8 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     private void setUpStatusbarColor() {
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.white));
-        
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.appcolor));
+            
         }
     }
     
@@ -99,32 +100,31 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    if(dataSnapshot.getValue()!=null)
-                    {
-                        ModelQuestion question = dataSnapshot.getValue(ModelQuestion.class);
-                        if(question!=null)
-                            questions.add(question);
-                    }
+                if (dataSnapshot.getValue() != null) {
+                    ModelQuestion question = dataSnapshot.getValue(ModelQuestion.class);
+                    if (question != null)
+                        questions.add(question);
+                }
             }
-    
+            
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+            
             }
-    
+            
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        
+            
             }
-    
+            
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
+            
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
         
@@ -132,13 +132,11 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
-                if(questions.size()!=0)
-                {
+                if (questions.size() != 0) {
                     //push questions to node;
                     Constants.uid = FirebaseAuth.getInstance().getUid();
-                    if(Constants.uid!=null)
-                    {
-                        Log.e(TAG,"Filling Questions!");
+                    if (Constants.uid != null) {
+                        Log.e(TAG, "Filling Questions!");
                         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.userInfo)
                                 .child(Constants.uid)
@@ -150,19 +148,19 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
                             }
                         });
                     }
-                  
+                    
                 }
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
     }
     
     private void setUpLocation() {
-    
+        
         if (mLocationManager == null) {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
@@ -188,7 +186,7 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
             } else {
                 startService(new Intent(NewUserSetup.this, LocationUpdateService.class));
             }
-        
+            
         }
     }
     
@@ -226,7 +224,6 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
                 start GPS Service here
                  */
                 startService(new Intent(NewUserSetup.this, LocationUpdateService.class));
-              
                 
             } else {
                 displayLocationSettingsRequest(NewUserSetup.this);
@@ -238,12 +235,12 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     
     @Override
     public void onCompleted(View completeButton) {
-            if(proceedAhead)
-                completeButton.setEnabled(true);
-            else {
-                completeButton.setEnabled(false);
-                Toast.makeText(NewUserSetup.this, "Wait a while!", Toast.LENGTH_SHORT).show();
-            }
+        if (proceedAhead)
+            completeButton.setEnabled(true);
+        else {
+            completeButton.setEnabled(false);
+            Toast.makeText(NewUserSetup.this, "Wait a while!", Toast.LENGTH_SHORT).show();
+        }
     }
     
     @Override
@@ -253,7 +250,6 @@ public class NewUserSetup extends AppCompatActivity  implements StepperLayout.St
     
     @Override
     public void onStepSelected(int newStepPosition) {
-    
     
     }
     

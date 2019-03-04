@@ -398,7 +398,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 //   checkAndUpdateUserInfo(user);
                                 FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                                 if (isnewUser) {
-
                                     //move to setup the account/profile
                                     //Call manual fix to update the photo of user
 

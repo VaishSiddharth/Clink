@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="16dp"
@@ -45,18 +46,17 @@
         android:layout_height="wrap_content" />
 
 
-
-    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+    <com.jaygoo.widget.RangeSeekBar
         android:layout_width="match_parent"
         android:layout_below="@id/age"
         android:layout_margin="16dp"
-        app:bar_color="#a6a6a6"
-        app:min_value="18"
-        app:max_value="50"
+        android:layout_height="wrap_content"
         android:id="@+id/age_seekbar"
-        app:left_thumb_color="@color/shy_moment"
-        app:right_thumb_color="@color/shy_moment"
-            android:layout_height="wrap_content"/>
+        app:rsb_min="18"
+        app:rsb_max="50"
+        app:rsb_mode="range"
+        />
+
 
     <customfonts.MyTextView_SF_Pro_Display_Light
         android:layout_width="wrap_content"

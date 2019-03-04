@@ -38,10 +38,6 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
-import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
-import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -53,6 +49,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jaygoo.widget.OnRangeChangedListener;
+import com.jaygoo.widget.RangeSeekBar;
 import com.startapp.android.publish.ads.banner.Banner;
 import com.takusemba.spotlight.OnSpotlightStateChangedListener;
 import com.takusemba.spotlight.OnTargetStateChangedListener;
@@ -107,7 +105,7 @@ public class pagerTransition extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private ImageButton filterList;
-    private CrystalRangeSeekbar age_seek;
+    private RangeSeekBar age_seek;
     private SeekBar distance_seek;
     private LatLong currentUsersLatLong;
     private ModelPrefs prefs;
@@ -592,14 +590,7 @@ public class pagerTransition extends Fragment {
         final TextView tvMin = filterDialogView.findViewById(R.id.minAge);
         final TextView tvMax = filterDialogView.findViewById(R.id.maxAge);
         final TextView tvAgeRange = filterDialogView.findViewById(R.id.ageRange);
-        // set listener
-        age_seek.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
-            @Override
-            public void valueChanged(Number minValue, Number maxValue) {
-                tvMin.setText(String.valueOf(minValue));
-                tvMax.setText(String.valueOf(maxValue));
-            }
-        });
+       
 
 // set final value listener
         if (prefs != null) {
@@ -610,44 +601,61 @@ public class pagerTransition extends Fragment {
             tvMin.setText("18");
             tvMax.setText("50");
 
-            age_seek.setMaxStartValue(maxAge).apply();
-            age_seek.setMinStartValue(minAge).apply();
+            age_seek.setProgressColor(getResources().getColor(R.color.appcolor));
+            age_seek.setValue(minAge, maxAge);
+           
         }
-
-        age_seek.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
+        
+        age_seek.setOnRangeChangedListener(new OnRangeChangedListener() {
             @Override
-            public void finalValue(Number minValue, Number maxValue) {
-
+            public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
+    
+                view.setProgressColor(getResources().getColor(R.color.appcolor));
+                tvMin.setText((int)leftValue+"");
+                tvMax.setText((int)rightValue+"");
+                
                 updateMinAge = new HashMap<>();
-                updateMinAge.put("minAge", minValue.intValue());
-
+                updateMinAge.put("minAge", leftValue);
+    
                 updateMaxAge = new HashMap<>();
-                updateMaxAge.put("maxAge", maxValue.intValue());
-
-                Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
-
+                updateMaxAge.put("maxAge", rightValue);
+    
+                Log.e("CRS=>", String.valueOf(leftValue) + " : " + String.valueOf(rightValue));
+    
                 //update the preferences
-
+    
                 final DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.userPreferences)
                         .child(Constants.uid);
-
+    
                 refPrefs.updateChildren(updateMinAge).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         refPrefs.updateChildren(updateMaxAge).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                            
+                    
                             }
                         });
-    
+            
                     }
                 });
+            }
+    
+            @Override
+            public void onStartTrackingTouch(RangeSeekBar view, boolean isLeft) {
+        
+            }
+    
+            @Override
+            public void onStopTrackingTouch(RangeSeekBar view, boolean isLeft) {
+        
                 
-             
+                
             }
         });
+        
+        
 
         double dist = prefs != null ? prefs.getDistanceLimit() : 0.0;
         distance.setText(String.valueOf((int) dist) + " km");
