@@ -43,6 +43,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.HelpUtils.Adapter;
 import com.testlabic.datenearu.HelpUtils.ModelMainResults;
 import com.testlabic.datenearu.Models.ApiClient;
@@ -52,6 +53,7 @@ import com.testlabic.datenearu.HelpUtils.NearbyRestaurant;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -404,23 +406,102 @@ public class chatFullScreen extends AppCompatActivity {
     
     private void DisplayHelpDialog() {
         final LayoutInflater factory = LayoutInflater.from(this);
-        final View helpDialog = factory.inflate(R.layout.help_layout, null);
+        //final View helpDialog = factory.inflate(R.layout.help_layout, null);
     
         final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-               // .setTitleText("Help for you")
-                .setCancelText("Cancel")
-                .setCustomView(helpDialog);
-        dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-            @Override
-            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    sweetAlertDialog.dismissWithAnimation();
-            }
-        });
+                .setTitleText("Help for you")
+                .setContentText("Can't think of anything to ask your date? Tap to get some intersting questions!")
+                .setConfirmText("5 drops")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(final SweetAlertDialog sweetAlertDialog) {
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.xPoints)
+                                .child(Constants.uid);
+                        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() != null) {
+                                    ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                                    if (modelSubscr != null) {
+                                        int current = modelSubscr.getXPoints();
+                                        if (current < Constants.dateQuestionPoints) {
+                                            Toast.makeText(chatFullScreen.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                                            BuyPoints();
+                                        } else {
+                        
+                                            current -= Constants.dateQuestionPoints;
+                                            HashMap<String, Object> updatePoints = new HashMap<>();
+                                            updatePoints.put(Constants.xPoints, current);
+                                            dataSnapshot.getRef().updateChildren(updatePoints);
+                        
+                                            final View questionListDialog = factory.inflate(R.layout.date_questions, null);
+                        
+                                            final SweetAlertDialog dialog = new SweetAlertDialog(chatFullScreen.this, SweetAlertDialog.NORMAL_TYPE)
+                                                    // .setTitleText("Help for you")
+                                                    // .setCancelText("Cancel")
+                                                    .setCustomView(questionListDialog);
+                        
+                                            ListView listView = questionListDialog.findViewById(R.id.listView);
+                        
+                                            Query databaseRef = FirebaseDatabase.getInstance().getReference().child("DatingHelp").child("DatingQuestions");
+                        
+                                            FirebaseListOptions<String> options = new FirebaseListOptions.Builder<String>()
+                                                    .setLayout(R.layout.sample_date_question)
+                                                    .setQuery(databaseRef, String.class)
+                                                    .build();
+                        
+                                            final FirebaseListAdapter<String> adapter = new FirebaseListAdapter<String>(options) {
+                                                @Override
+                                                protected void populateView(View v, final String model, int position) {
+                                                    TextView questionText = v.findViewById(R.id.questionText);
+                                                    questionText.setText(model);
+                                
+                                                    questionText.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                           
+                                                            String text = model.replace("\"", "");
+                                                            chatEditText1.setText(text);
+                                                            dialog.dismiss();
+                                                            sweetAlertDialog.dismiss();
+                                                        }
+                                                    });
+                                                }
+                                            };
+                        
+                                            adapter.startListening();
+                        
+                                            listView.setAdapter(adapter);
+                                            dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    adapter.stopListening();
+                                                    sweetAlertDialog.dismiss();
+                                
+                                                }
+                                            });
+                                            dialog.show();
+                        
+                                        }
+                                    }
+                                }
+                            }
         
-        TextView dateQuestions = helpDialog.findViewById(R.id.dateQuestions);
-        TextView datePlaces = helpDialog.findViewById(R.id.place);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+                            }
+                        });
+    
+                    }
+                });
         
-        datePlaces.setOnClickListener(new View.OnClickListener() {
+        
+        //TextView dateQuestions = helpDialog.findViewById(R.id.dateQuestions);
+        //TextView datePlaces = helpDialog.findViewById(R.id.place);
+        
+        /*datePlaces.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //get the mid point, then get restaurants near you!
@@ -465,93 +546,17 @@ public class chatFullScreen extends AppCompatActivity {
                 
                
             }
-        });
+        });*/
         
-        dateQuestions.setOnClickListener(new View.OnClickListener() {
+        /*dateQuestions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
     
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.xPoints)
-                        .child(Constants.uid);
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
-                            if (modelSubscr != null) {
-                                int current = modelSubscr.getXPoints();
-                                if (current < Constants.dateQuestionPoints) {
-                                    Toast.makeText(chatFullScreen.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
-                                    BuyPoints();
-                                } else {
-                        
-                                    current -= Constants.dateQuestionPoints;
-                                    HashMap<String, Object> updatePoints = new HashMap<>();
-                                    updatePoints.put(Constants.xPoints, current);
-                                    dataSnapshot.getRef().updateChildren(updatePoints);
-    
-                                    final View questionListDialog = factory.inflate(R.layout.date_questions, null);
-    
-                                    final SweetAlertDialog dialog = new SweetAlertDialog(chatFullScreen.this, SweetAlertDialog.NORMAL_TYPE)
-                                            // .setTitleText("Help for you")
-                                            // .setCancelText("Cancel")
-                                            .setCustomView(questionListDialog);
-    
-                                    ListView listView = questionListDialog.findViewById(R.id.listView);
-    
-                                    Query databaseRef = FirebaseDatabase.getInstance().getReference().child("DatingHelp").child("DatingQuestions");
-    
-                                    FirebaseListOptions<String> options = new FirebaseListOptions.Builder<String>()
-                                            .setLayout(R.layout.sample_date_question)
-                                            .setQuery(databaseRef, String.class)
-                                            .build();
-    
-                                    final FirebaseListAdapter<String> adapter = new FirebaseListAdapter<String>(options) {
-                                        @Override
-                                        protected void populateView(View v, final String model, int position) {
-                                            TextView questionText = v.findViewById(R.id.questionText);
-                                            questionText.setText(model);
-            
-                                            questionText.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    String text = model.replace("\"", "");
-                                                    chatEditText1.setText(text);
-                                                    dialog.dismiss();
-                                                }
-                                            });
-                                        }
-                                    };
-    
-                                    adapter.startListening();
-    
-                                    listView.setAdapter(adapter);
-                                    dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                        @Override
-                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                            adapter.stopListening();
-                                            sweetAlertDialog.dismiss();
-            
-                                        }
-                                    });
-                                    dialog.show();
-                        
-                                }
-                            }
-                        }
-                    }
-        
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-                    }
-                });
                 
                 
             }
-        });
+        });*/
         
         
         dialog.show();
@@ -560,10 +565,21 @@ public class chatFullScreen extends AppCompatActivity {
         btn.setBackground(ContextCompat.getDrawable(chatFullScreen.this, R.drawable.button_4_dialogue));
         Button btn1 = dialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(chatFullScreen.this, R.drawable.button_4_dialogue));
+        
+        btn1.setTypeface(Utils.SFPRoLight(this));
+        btn.setTypeface(Utils.SFPRoLight(this));
+        TextView title = dialog.findViewById(R.id.title_text);
+        if(title!=null)
+            title.setTypeface(Utils.SFProRegular(this));
+    
+        TextView contentText = dialog.findViewById(R.id.content_text);
+        if(contentText!=null)
+            contentText.setTypeface(Utils.SFPRoLight(this));
+        
     }
     
     private void BuyPoints() {
-    
+            startActivity(new Intent(this, PurchasePacks.class));
     }
     
     public static LatLong midPoint(double lat1, double lon1, double lat2, double lon2){

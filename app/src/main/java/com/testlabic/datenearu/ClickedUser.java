@@ -550,10 +550,10 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                                                         .child(Constants.LikeInfo)
-                                                        .child(clickedUid)
-                                                        .child(Constants.uid);
-                                                String index = "0";
-                                                databaseReference.setValue(index);
+                                                        .child(Constants.uid)
+                                                        .child(clickedUid);
+                                                //String index = "0";
+                                                databaseReference.setValue(null);
                                                 sendNotificationToOtherUser(sweetAlertDialog);
                                             }
                                         })

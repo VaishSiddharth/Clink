@@ -92,12 +92,12 @@ public class TransparentActivity extends Activity {
                 .setConfirmButton("Sure", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
+    
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.LikeInfo)
-                                .child(sendersUid)
-                                .child(Constants.uid);
-                        String index = "0";
-                        databaseReference.setValue(index);
+                                .child(Constants.uid)
+                                .child(sendersUid);
+                        databaseReference.setValue(null);
                         sendNotificationToOtherUser(sweetAlertDialog);
                     }
                 })

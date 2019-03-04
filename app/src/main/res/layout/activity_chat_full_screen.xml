@@ -31,7 +31,7 @@
             android:text="----"
             android:id="@+id/sendToName"
             android:layout_gravity="center"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="#4a4a4a"/>
 
         <ImageView
@@ -87,7 +87,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:id="@+id/emptyView"
-        android:text="Send a message to accept request and move to messages list"
+        android:text="Send a message, say hi!"
         android:textSize="13sp" />
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
