@@ -35,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.startapp.android.publish.adsCommon.StartAppAd;
+import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Fragments.AllMessagesListFragment;
@@ -82,9 +84,10 @@ public class MainActivity extends AppCompatActivity {
         
         //initialize the startappSDK
         
-        // StartAppSDK.init(this, "211455651", false);
-        
-        // StartAppAd.disableSplash();
+         StartAppSDK.init(this, "211455651", false);
+         StartAppAd.disableSplash();
+         StartAppAd.disableAutoInterstitial();
+         
         boolean moveToLocationActivity = getIntent().getBooleanExtra(Constants.moveToLocationActivity, false);
         if (moveToLocationActivity)
             startActivity(new Intent(this, locationUpdater.class));

@@ -54,18 +54,17 @@ public class MatchCalculator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_calculator);
-        TextView statusMatch = findViewById(R.id.statusMatch);
         ferrisWheelView = findViewById(R.id.google_progress);
         final int score = getIntent().getIntExtra(Constants.score, 0);
         Log.e(TAG, "The score is " + String.valueOf(score));
-        Toast.makeText(this, "The score is " + String.valueOf(score), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "The score is " + String.valueOf(score), Toast.LENGTH_SHORT).show();
         clickedUsersId = getIntent().getStringExtra(Constants.clickedUid);
         ferrisWheelView.startAnimation();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (score > 7) {
+                if (score > 5) {
                     if (clickedUsersId != null) {
                         showSuccessDialog();
                     }
@@ -81,7 +80,7 @@ public class MatchCalculator extends AppCompatActivity {
 
                 }
             }
-        }, 3000);
+        }, 8000);
 
     }
 
@@ -132,161 +131,7 @@ public class MatchCalculator extends AppCompatActivity {
 
     }
 
-    private void showWineTypes(final SweetAlertDialog mainDialog) {
-
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View wineCategory = factory.inflate(R.layout.wine_categories, null);
-
-        TextView one, two, three;
-
-        one = wineCategory.findViewById(R.id.one);
-        two = wineCategory.findViewById(R.id.two);
-        three = wineCategory.findViewById(R.id.three);
-
-        final SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-                .setCustomView(wineCategory);
-
-        alertDialog.show();
-
-        one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initateSendingWine(Constants.wineAmount, alertDialog, mainDialog);
-            }
-        });
-
-        two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initateSendingWine(800, alertDialog, mainDialog);
-            }
-        });
-
-        three.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initateSendingWine(1000, alertDialog, mainDialog);
-            }
-        });
-
-    }
-
-    private void initateSendingWine(final int wineAmount, final SweetAlertDialog secondMainDialog, final SweetAlertDialog mainDialog) {
-
-        //complete the transaction and update accordingly
-
-        final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.xPoints)
-                .child(Constants.uid);
-
-        xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.PROGRESS_TYPE)
-                        .setContentText("Loading");
-                sweetAlertDialog.show();
-                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
-                if (modelSubscr != null) {
-                    int current = modelSubscr.getXPoints();
-                    if (current < wineAmount) {
-                        Toast.makeText(MatchCalculator.this, "You don't have enough drops, buy now!", Toast.LENGTH_SHORT).show();
-                        BuyPoints();
-                    } else {
-                        current -= wineAmount;
-                        HashMap<String, Object> updatePoints = new HashMap<>();
-                        updatePoints.put(Constants.xPoints, current);
-                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                sweetAlertDialog
-                                        .setTitleText("Sending!")
-                                        .setContentText("Your wine is on its way")
-                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-
-                                //sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
-                                sendWine(wineAmount);
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        startActivity(new Intent(MatchCalculator.this,MainActivity.class)
-                                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                                        sweetAlertDialog.dismiss();
-                                        secondMainDialog.dismiss();
-                                        mainDialog.dismiss();
-                                        finish();
-                                    }
-                                }, 2500);
-                            }
-                        });
-
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void sendWine(int wineAmount) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Gifts)
-                .child(clickedUsersId).child(Constants.unread).push();
-      
-        String wineType = Constants.regularWine;
-        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        HashMap<String, Object > timeStamp = new HashMap<>();
-        timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
-        String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
-        switch (wineAmount)
-        {
-            case 500: wineType = Constants.regularWine;
-            break;
-            case 800: wineType = Constants.premiumWine;
-            break;
-            case 1000: wineType = Constants.royalWine;
-            break;
-        }
-        ModelGift gift = new ModelGift(Constants.uid, wineType, clickedUsersId, userName, url, timeStamp );
-        reference.setValue(gift).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                //add 300 drops to receivers
-
-                final DatabaseReference DROP_REF =
-                        FirebaseDatabase.getInstance().getReference().child(Constants.xPoints).child(clickedUsersId);
-
-                DROP_REF.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getValue()!=null)
-                        {
-                            ModelSubscr subscr = dataSnapshot.getValue(ModelSubscr.class);
-                            if(subscr!=null)
-                            {
-                                int current = subscr.getXPoints();
-                                current += 300;
-                                HashMap<String, Object> updatePoints = new HashMap<>();
-                                updatePoints.put(Constants.xPoints, current);
-                                DROP_REF.updateChildren(updatePoints);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        });
-    }
-
+    
     private void BuyPoints() {
         startActivity(new Intent(MatchCalculator.this, PurchasePacks.class));
     }

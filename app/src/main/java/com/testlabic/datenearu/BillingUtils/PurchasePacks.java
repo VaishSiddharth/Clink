@@ -200,10 +200,10 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                                                     .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
                                                     .build();
                                             int responseCode = mBillingClient.launchBillingFlow(PurchasePacks.this, flowParams);
-                                            Toast.makeText(PurchasePacks.this, "The response code is " + responseCode, Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(PurchasePacks.this, "The response code is " + responseCode, Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                                } else if (sku != null && sku.equals("500_drops")) {
+                                } else if (sku != null && sku.equals("200_drops")) {
                                     desc = desc + " for " + price;
                                     pack2.setText(desc);
                                     pack2.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +214,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                                                     .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
                                                     .build();
                                             int responseCode = mBillingClient.launchBillingFlow(PurchasePacks.this, flowParams);
-                                            Toast.makeText(PurchasePacks.this, "The response code is " + responseCode, Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(PurchasePacks.this, "The response code is " + responseCode, Toast.LENGTH_SHORT).show();
                                             
                                             //Purchase purchase = mBillingClient.queryPurchases(sku).getPurchasesList().get(0);
                                             
@@ -224,7 +224,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                                                     if (responseCode == BillingClient.BillingResponse.OK) {
                                                         // Handle the success of the consume operation.
                                                         // For example, increase the number of coins inside the user's basket.
-                                                        Toast.makeText(PurchasePacks.this, "Consumption successful", Toast.LENGTH_SHORT).show();
+                                                       // Toast.makeText(PurchasePacks.this, "Consumption successful", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             };
@@ -232,7 +232,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                                             
                                         }
                                     });
-                                } else if (sku != null && sku.equals("1000_drops")) {
+                                } else if (sku != null && sku.equals("500_drops")) {
                                     
                                     desc = desc + " for " + price;
                                     pack3.setText(desc);
@@ -244,8 +244,25 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                                                     .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
                                                     .build();
                                             int responseCode = mBillingClient.launchBillingFlow(PurchasePacks.this, flowParams);
-                                            Toast.makeText(PurchasePacks.this, "The response code is " + responseCode, Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(PurchasePacks.this, "The response code is " + responseCode, Toast.LENGTH_SHORT).show();
                                             
+                                        }
+                                    });
+                                }
+                                else if (sku != null && sku.equals("1000_drops")) {
+    
+                                    desc = desc + " for " + price;
+                                    pack4.setText(desc);
+                                    pack4.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                                    .setSku(sku)
+                                                    .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                                                    .build();
+                                            int responseCode = mBillingClient.launchBillingFlow(PurchasePacks.this, flowParams);
+                                            Toast.makeText(PurchasePacks.this, "The response code is " + responseCode, Toast.LENGTH_SHORT).show();
+            
                                         }
                                     });
                                 }
