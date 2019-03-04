@@ -909,12 +909,11 @@ public class pagerTransition extends Fragment {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null)
             startActivity(new Intent(getActivity(), SignIn.class));
-        else
+        else {
             Constants.uid = FirebaseAuth.getInstance().getUid();
-        //downloadList();
-        //checkForNotification();
-        //Log.e(TAG, "On resume called in pagerTransition!");
-        nothere();
+            nothere();
+        }
+       
     }
 
     public void cleanup() {

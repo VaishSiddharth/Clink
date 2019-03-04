@@ -45,9 +45,8 @@ public class QuestionNine extends Fragment implements BlockingStep {
     HashMap<String, Object> correctOption;
     DatabaseReference refInit;
     private boolean skipSelection = false;
-    
-    
     @Nullable
+    
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView =  inflater.inflate(R.layout.activity_question_one_editable, container, false);
@@ -184,7 +183,6 @@ public class QuestionNine extends Fragment implements BlockingStep {
     {
         String text = button.getText().toString();
         correctOption = new HashMap<>();
-        
         correctOption.put("correctOption", text );
         
         button.setBackground(getResources().getDrawable(R.drawable.full_black_box));

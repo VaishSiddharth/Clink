@@ -66,7 +66,7 @@ public class ProfileFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     
-    Integer inbox[] = {R.drawable.ic_inbox, R.drawable.ic_like, R.drawable.ic_profile, R.drawable.ic_settings};
+    Integer inbox[] = {R.drawable.ic_inbox, R.drawable.ic_edit, R.drawable.ic_profile, R.drawable.ic_settings};
     Integer arrow[] = {R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp,
             R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp};
     String txttrades[] = {"My Questions", "Edit Profile", "About you", "Sign Out"};
@@ -97,14 +97,6 @@ public class ProfileFragment extends Fragment {
         /*
         fill profile details
          */
-        
-        displayImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), UploadPhotos.class);
-                startActivity(i);
-            }
-        });
         
         fillProfile();
         

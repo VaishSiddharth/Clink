@@ -68,7 +68,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     LoginButton loginButton;
     SweetAlertDialog loadingDialog;
     ImageView imageView;
-    ImageView applogo;
+    //ImageView applogo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +80,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 .setContentText("Wait a while...");
 
         imageView=findViewById(R.id.test);
-        applogo = findViewById(R.id.applogo);
+        //applogo = findViewById(R.id.applogo);
         WaveDrawable mWaveDrawable = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             mWaveDrawable = new WaveDrawable(getDrawable(R.drawable.nohere));
@@ -379,7 +379,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         if (result.isSuccess()) {
             final GoogleSignInAccount account = result.getSignInAccount();
             assert account != null;
-            applogo.setVisibility(View.INVISIBLE);
+            //applogo.setVisibility(View.INVISIBLE);
             imageView.setVisibility(View.VISIBLE);
             //progressBar.setVisibility(View.VISIBLE);
             // Toast.makeText(LogInEmail.this , "The information received by the account is " + account.getDisplayName() , Toast.LENGTH_LONG).show();

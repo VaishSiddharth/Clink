@@ -14,7 +14,7 @@
         android:layout_margin="16dp"
         android:visibility="visible"
         android:hapticFeedbackEnabled="true"
-        android:src="@drawable/edit_ic"
+        android:src="@drawable/ic_edit"
         app:backgroundTint="@color/appcolor"
         app:fabSize="mini"
         app:rippleColor="@color/appcolorlessopacity" />

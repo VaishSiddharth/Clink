@@ -21,7 +21,7 @@
 
     <tab
         id="@+id/tab_profile"
-        icon="@drawable/ic_profile"
+        icon="@drawable/ic_profil"
         inActiveColor="#4De9e9e9"
         activeColor="#FF7A5BFE"/>
 
