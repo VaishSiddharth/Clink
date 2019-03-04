@@ -45,13 +45,13 @@ public class PaperOnboardingActivity extends AppCompatActivity {
         // prepare data
         PaperOnboardingPage scr1 = new PaperOnboardingPage("Attempt cheers",
                 "Use quiz to get quality matches, there's now something you can do in a dating app",
-                Color.parseColor("#ffffff"), R.drawable.qnaslider, R.drawable.onlinestatuspng);
+                Color.parseColor("#ffffff"), R.drawable.qnaslider, R.drawable.ic_online_);
         PaperOnboardingPage scr2 = new PaperOnboardingPage("Blur your profile",
                 "Get comfortable with the app, go incognito for first 7 days for free",
-                Color.parseColor("#ffffff"), R.drawable.blurslider, R.drawable.onlinestatuspng);
+                Color.parseColor("#ffffff"), R.drawable.blurslider, R.drawable.ic_online_);
         PaperOnboardingPage scr3 = new PaperOnboardingPage("Send gifts",
                 "Hmmm, can't get through the quiz? send gifts to get noticed",
-                Color.parseColor("#ffffff"), R.drawable.giftslider, R.drawable.onlinestatuspng);
+                Color.parseColor("#ffffff"), R.drawable.giftslider, R.drawable.ic_online_);
         
         ArrayList<PaperOnboardingPage> elements = new ArrayList<>();
         elements.add(scr1);
