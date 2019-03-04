@@ -274,6 +274,9 @@ public class NotificationFragment extends Fragment {
                         break;
                     case 1:
                         // delete
+                        
+                        
+                        
                         break;
                 }
                 // false : close the menu; true : not close the menu

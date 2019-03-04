@@ -107,13 +107,37 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                 }
             });
         } else {
-            attemptMatch.setText("Accept!");
-            attemptMatch.setOnClickListener(new View.OnClickListener() {
+            //check if the user can accept the connection!
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.acceptHistory)
+                    .child(Constants.uid)
+                    .child(clickedUid)
+                    ;
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onClick(View v) {
-                    ShowAConfirmationDialog(clickedUid);
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.exists())
+                    {
+                        //accept request now!
+                        attemptMatch.setText("Accept!");
+                        attemptMatch.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ShowAConfirmationDialog(clickedUid);
+                            }
+                        });
+                    }
+                    else
+                        attemptMatch.setVisibility(View.GONE);
+                    
+                }
+    
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+        
                 }
             });
+           
         }
     }
     
@@ -222,6 +246,14 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                             .setConfirmText("OK")
                                             .setConfirmClickListener(null)
                                             .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                    // add the transaction to accept list
+    
+                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                            .child(Constants.acceptHistory)
+                                            .child(Constants.uid)
+                                            .child(clickedUid)
+                                            ;
+                                    reference.setValue("0");
                                     
                                     Handler h = new Handler();
                                     h.postDelayed(new Runnable() {

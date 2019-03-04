@@ -322,6 +322,8 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                             @Override
                             public void onClick(final SweetAlertDialog sweetAlertDialog) {
                                 
+                                sweetAlertDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+                                
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                         .child(Constants.Messages)
                                         .child(Constants.uid).child(Constants.contacts)
@@ -329,8 +331,20 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                                 reference.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        mainDialog.dismiss();
-                                        sweetAlertDialog.dismiss();
+                                        //delete the messages also!
+                                        
+                                        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()
+                                                .child(Constants.CHATS)
+                                                .child(Constants.uid)
+                                                .child(uid);
+                                        reference1.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                mainDialog.dismiss();
+                                                sweetAlertDialog.dismiss();
+                                            }
+                                        });
+                                       
                                     }
                                 });
                                 
