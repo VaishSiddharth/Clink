@@ -87,6 +87,7 @@ public class Constants {
     public static String databaseRef = "databaseRef";
     public static String questionNumber = "questionNumber";
     public static int unBlurForSevenDaysDrops = 500;
+    public static String acceptHistory = "acceptHistory";
     
     public static String encrypt(String cityLabel) {
         

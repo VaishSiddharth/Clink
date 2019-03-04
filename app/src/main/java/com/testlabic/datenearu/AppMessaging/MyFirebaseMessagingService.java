@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.AppMessaging;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,14 +21,20 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.testlabic.datenearu.Activities.MainActivity;
+import com.testlabic.datenearu.ChatUtils.chatFullScreen;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Constants;
 
+import java.util.List;
 import java.util.Map;
 
 import androidx.core.app.NotificationCompat;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MessagingService";
+    private static String chatFullScreenActivity = chatFullScreen.class.getName();
+    private static String clickedUser = ClickedUser.class.getName();
     
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -37,7 +44,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
     
     private void showNotification(String title, String body, Map<String, String> data) {
-        Intent intent = new Intent(this, MainActivity.class);
+    
+        Intent intent;
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        String currentActivity = taskInfo.get(0).topActivity.getClassName();
+    
+        String sendToUid = data.get("sendToUid");
+        String sendToName = data.get("sendToName");
+        
+        if(sendToName!=null&&sendToUid!=null)
+        {
+            intent = new Intent(this, chatFullScreen.class);
+            intent.putExtra(Constants.sendToName, sendToName);
+            intent.putExtra(Constants.sendToUid, sendToUid);
+            
+        }
+        else
+        {
+            intent = new Intent(this, MainActivity.class);
+        }
+        
+       
+       
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         Context context = getApplicationContext();
@@ -48,12 +77,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(body)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setPriority(Notification.PRIORITY_HIGH);
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(body));;
         //.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setSound(alarmSound);
         builder.setAutoCancel(true);
-        builder.setContentIntent(pendingIntent);
+        //builder.setContentIntent(pendingIntent);
         
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -68,5 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             builder.setSmallIcon(R.drawable.icon1);
         }
         notificationManager.notify(0, builder.build());
+    
+        
     }
 }
