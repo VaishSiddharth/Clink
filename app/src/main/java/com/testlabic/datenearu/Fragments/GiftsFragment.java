@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.WaveDrawable;
 
 import java.util.Date;
 
@@ -55,6 +57,8 @@ public class GiftsFragment extends Fragment {
     private View rootView;
     private SwipeMenuListView listView;
     private ImageView bar;
+    ImageView emptyViewno;
+    TextView emptyViewtext;
     private FirebaseListAdapter<ModelGift> adapter;
     public GiftsFragment() {
         // Required empty public constructor
@@ -67,9 +71,44 @@ public class GiftsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_gifts, container, false);
         listView = rootView.findViewById(R.id.listView);
         bar = rootView.findViewById(R.id.emptyView);
+
+        Drawable mWaveDrawable = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mWaveDrawable = new WaveDrawable(getContext().getDrawable(R.drawable.giftpng));
+        }
+        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(30);
+        ((WaveDrawable) mWaveDrawable).setWaveLength(580);
+        ((WaveDrawable) mWaveDrawable).setWaveSpeed(12);
+        //((WaveDrawable) mWaveDrawable).setLevel(20);
+        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
+        bar.setImageDrawable(mWaveDrawable);
+        emptyViewno=rootView.findViewById(R.id.emptyViewno);
+        emptyViewtext=rootView.findViewById(R.id.emptyViewtext);
         bar.setVisibility(View.VISIBLE);
         MoveGiftsToRead();
         return rootView;
+    }
+    private void nogift()
+    {
+        //if new user then no notification present
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Gifts);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(Constants.uid)){
+                    //Log.e(TAG,"no notification");
+                    emptyViewtext.setVisibility(View.VISIBLE);
+                    emptyViewno.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
     private void MoveGiftsToRead() {
         
@@ -125,7 +164,7 @@ public class GiftsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
-                bar.setVisibility(View.GONE);
+                bar.setVisibility(View.INVISIBLE);
                 
                 Query query = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.Gifts)
@@ -245,6 +284,7 @@ public class GiftsFragment extends Fragment {
         super.onResume();
         if (adapter != null)
             adapter.startListening();
+        nogift();
     }
     
     @Override

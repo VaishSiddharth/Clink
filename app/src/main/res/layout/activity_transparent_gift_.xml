@@ -136,7 +136,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:gravity="center"
-            android:src="@drawable/gift" />
+            android:src="@drawable/giftpng" />
 
     </com.jackpocket.scratchoff.views.ScratchableLinearLayout>
 </RelativeLayout>

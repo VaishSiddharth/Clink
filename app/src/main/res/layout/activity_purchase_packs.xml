@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/background4"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/background4"
     tools:context=".BillingUtils.PurchasePacks">
 
     <ImageView
-        android:layout_width="wrap_content"
         android:id="@+id/finish"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_margin="16dp"
+        android:layout_marginLeft="8dp"
         android:src="@drawable/ic_left" />
 
 
@@ -20,93 +22,121 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingTop="250dp"
-        android:layout_alignParentEnd="true"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:layout_margin="4dp"
-            android:layout_weight="1">
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/transparent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:background="@drawable/gradient_setupuser_shade"
-
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/button_4_dialogue">
 
                 <customfonts.TextViewSFProDisplayRegular
-                    android:id="@+id/firstPack"
+                    android:id="@+id/fourthPack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:textColor="#fff"
-                    android:text="XXXX" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_margin="4dp"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:background="@drawable/gradient_setupuser_shade"
-
-                android:layout_height="match_parent" >
-
-                <customfonts.TextViewSFProDisplayRegular
-                    android:layout_width="wrap_content"
-                    android:padding="16dp"
                     android:text="XXXX"
-                    android:textColor="#fff"
-
-                    android:id="@+id/secondPack"
-                    android:layout_height="wrap_content" />
+                    android:textColor="#fff" />
 
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_margin="4dp"
-            android:layout_height="100dp"
-            android:layout_weight="1">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:background="@drawable/gradient_setupuser_shade"
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/transparent">
 
-                android:layout_height="match_parent" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_4_dialogue">
 
-                <customfonts.TextViewSFProDisplayRegular
-                    android:layout_width="wrap_content"
-                    android:text="XXXX"
-                    android:padding="16dp"
-                    android:textColor="#fff"
-                    android:id="@+id/thirdPack"
-                    android:layout_height="wrap_content" />
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/firstPack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="XXXX"
+                        android:textColor="#fff" />
 
-            </LinearLayout>
+                </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/transparent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_4_dialogue">
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/secondPack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="XXXX"
+                        android:textColor="#fff" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/transparent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_4_dialogue">
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/thirdPack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="XXXX"
+                        android:textColor="#fff" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
     </LinearLayout>
 
     <customfonts.TextViewSFProDisplayRegular
         android:id="@+id/rewardAd"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="99dp"
+        android:layout_gravity="bottom"
         android:gravity="center"
         android:text="Watch an ad and get 20 points" />
-</RelativeLayout>
+</LinearLayout>

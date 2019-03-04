@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,8 @@ public class NotificationFragment extends Fragment {
     private ChildEventListener listener;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
     private View rootView;
+    ImageView emptyViewno;
+    TextView emptyViewtext;
     public NotificationFragment() {
         // Required empty public constructor
     }
@@ -79,6 +82,8 @@ public class NotificationFragment extends Fragment {
         //((WaveDrawable) mWaveDrawable).setLevel(20);
         ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
         emptyView.setImageDrawable(mWaveDrawable);
+        emptyViewno=rootView.findViewById(R.id.emptyViewno);
+        emptyViewtext=rootView.findViewById(R.id.emptyViewtext);
 
         emptyView.setVisibility(View.VISIBLE);
         listView = rootView.findViewById(R.id.listView);
@@ -87,6 +92,28 @@ public class NotificationFragment extends Fragment {
         
         MoveNotifToRead();
         return rootView;
+    }
+    private void nonotification()
+    {
+        //if new user then no notification present
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Notifications);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(Constants.uid)){
+                    //Log.e(TAG,"no notification");
+                    emptyViewtext.setVisibility(View.VISIBLE);
+                    emptyViewno.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
     
  private void MoveNotifToRead() {
@@ -269,6 +296,7 @@ public class NotificationFragment extends Fragment {
         super.onResume();
         if (adapter != null)
             adapter.startListening();
+        nonotification();
     }
     
     @Override

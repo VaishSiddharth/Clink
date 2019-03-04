@@ -16,10 +16,28 @@
 
     <ImageView
         android:id="@+id/emptyView"
-        android:padding="72dp"
-         android:visibility="invisible"
         android:src="@drawable/giftpng"
+        android:visibility="gone"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true" />
+    <ImageView
+
+        android:id="@+id/emptyViewno"
+        android:visibility="gone"
+        android:src="@drawable/giftpng"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true" />
+    <TextView
+        android:id="@+id/emptyViewtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_below="@id/emptyViewno"
+        android:visibility="gone"
+        android:layout_margin="5dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:text="Your Gifts will appear here."/>
 </RelativeLayout>

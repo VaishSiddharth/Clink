@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -57,6 +58,8 @@ public class AllMessagesListFragment extends Fragment {
     ValueEventListener valueEventListener;
     ChildEventListener childEventListener;
     Query reference;
+    ImageView emptyViewno;
+    TextView emptyViewtext;
     
     @Nullable
     @Override
@@ -69,6 +72,8 @@ public class AllMessagesListFragment extends Fragment {
         recyclerview.setLayoutManager(layoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         cRecyclerView = view.findViewById(R.id.cRecylerView);
+        emptyViewno=view.findViewById(R.id.emptyViewno);
+        emptyViewtext=view.findViewById(R.id.emptyViewtext);
 
         Drawable mWaveDrawable = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -84,6 +89,29 @@ public class AllMessagesListFragment extends Fragment {
         emptyView.setVisibility(View.VISIBLE);
         return view;
         
+    }
+    private void nomessages()
+    {
+        //if new user then no message present
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Messages);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(Constants.uid)){
+                    //Log.e(TAG,"no messages");
+                    emptyViewtext.setVisibility(View.VISIBLE);
+                    emptyViewno.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
     
     private void downloadDataAndSetAdapter() {
@@ -166,6 +194,7 @@ public class AllMessagesListFragment extends Fragment {
         if (cAdapter != null)
             cAdapter.startListening();
         downloadDataAndSetAdapter();
+        nomessages();
         
     }
     
