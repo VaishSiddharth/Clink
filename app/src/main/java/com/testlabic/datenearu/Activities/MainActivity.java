@@ -147,9 +147,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.e(TAG, "The epoch and timestamps are "+ timestamp + " "+ epoch);
                             if ( epoch >= (timestamp + (5 * oneday)) && ((epoch <= timestamp + (6 * oneday)))) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                                        .setTitleText("Trial period Over!!")
-                                        .setContentText("Tomorrow your profile will be unblured")
-                                        .setCancelText("Leave")
+                                        .setTitleText("Reminder!")
+                                        .setContentText("Tomorrow your profile will be unblurred, to continue with blurred profile you'll have to spend 500 drops tomorrow ")
+                                        .setCancelText("Okay")
                                         .setConfirmButton("Buy Drops", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
