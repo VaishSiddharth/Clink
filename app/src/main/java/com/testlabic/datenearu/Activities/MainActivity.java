@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
@@ -29,14 +30,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Fragments.AllMessagesListFragment;
 import com.testlabic.datenearu.Fragments.NotificationParent;
 import com.testlabic.datenearu.Models.ModelGift;
+import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.PaperOnboardingActivity;
@@ -50,6 +54,7 @@ import java.util.List;
 import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.ProfileFragment;
 import com.testlabic.datenearu.Utils.Transparent_likeback;
+import com.testlabic.datenearu.Utils.Utils;
 import com.testlabic.datenearu.Utils.locationUpdater;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener authStateListener;
     private boolean shownLikeBacks = false;
     private static boolean manygiftsactivity=true;
+    private static boolean shownUnblurOnce = false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void blurtrial() {
-        
         //TODO: check for blur condition if on then only display this message
         //code for blur trial
         Handler handler = new Handler();
@@ -130,20 +135,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.userInfo).child(Constants.uid).child("creationTime").child(Constants.timeStamp);
+                        .child(Constants.userInfo).child(Constants.uid).child("blurStartTime").child(Constants.timeStamp);
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         
-                        if (dataSnapshot.getValue() != null) {
+                        if (dataSnapshot.getValue(Long.class) != null) {
                             long timestamp = dataSnapshot.getValue(Long.class);
-                            long epoch = System.currentTimeMillis() / 1000;
-                            long oneday = 86400;
-                            if ((epoch + (5 * oneday) >= timestamp) && ((epoch + (6 * oneday)) <= timestamp)) {
+                            long epoch = System.currentTimeMillis();
+                            long oneday = 86400000;
+                            Log.e(TAG, "The epoch and timestamps are "+ timestamp + " "+ epoch);
+                            if ( epoch >= (timestamp + (5 * oneday)) && ((epoch <= timestamp + (6 * oneday)))) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                                        .setTitleText("Trial period Over!!")
-                                        .setContentText("Tomorrow your profile will be unblured")
-                                        .setCancelText("Leave")
+                                        .setTitleText("Reminder!")
+                                        .setContentText("Tomorrow your profile will be unblurred, to continue with blurred profile you'll have to spend 500 drops tomorrow ")
+                                        .setCancelText("Okay")
                                         .setConfirmButton("Buy Drops", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -156,27 +162,59 @@ public class MainActivity extends AppCompatActivity {
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
                                 Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+    
+                              
+                                {
+                                    btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
+                                    btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
+    
+                                    TextView title = alertDialog.findViewById(R.id.title_text);
+                                    if(title!=null)
+                                        title.setTypeface(Utils.SFProRegular(MainActivity.this));
+        
+                                    TextView contentText = alertDialog.findViewById(R.id.content_text);
+                                    if(contentText!=null)
+                                        contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
+                                }
                                 
                             }
-                            if ((epoch + (7 * oneday)) <= timestamp) {
+                            if ( epoch >= (timestamp + (7 * oneday))) {
                                 final SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                                        .setTitleText("Trial period Over!!")
-                                        .setContentText("If you press Cancel your profile will be unblured")
+                                        .setTitleText("Trial period Over!")
+                                        .setContentText("If you press Cancel your profile will be unblured to users when viewed, to extend the time by 7 days spend 500 drops")
                                         .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            public void onClick(final SweetAlertDialog sweetAlertDialog) {
                                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
                                                         .child(Constants.userInfo).child(Constants.uid);
                                                 HashMap<String, Object> update_blur = new HashMap<>();
                                                 update_blur.put("isBlur", false);
+                                                HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
+                                                update_blur_trial_ended.put("blurTrialEnded", true);
                                                 ref1.updateChildren(update_blur);
-                                                sweetAlertDialog.dismiss();
+                                                
+                                                //also increase the time and set it to today!
+    
+                                                //update the blurStartTime
+                                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.userInfo).child(Constants.uid).child("blurStartTime");
+                                                HashMap<String, Object> updateMap = new HashMap<>();
+                                                updateMap.put(Constants.timeStamp, null);
+                                                ref.updateChildren(updateMap);
+                                                
+                                                ref1.updateChildren(update_blur_trial_ended).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        sweetAlertDialog.dismiss();
+                                                    }
+                                                });
+                                               
                                             }
                                         })
-                                        .setConfirmButton("Buy Drops", new SweetAlertDialog.OnSweetClickListener() {
+                                        .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                startActivity(new Intent(MainActivity.this, PurchasePacks.class));
+                                                deductDropsAndIncreaseBlurTime( sweetAlertDialog);
                                                 
                                             }
                                         });
@@ -186,12 +224,26 @@ public class MainActivity extends AppCompatActivity {
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
                                 Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+    
+                                {
+                                    btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
+                                    btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
+        
+                                    TextView title = alertDialog.findViewById(R.id.title_text);
+                                    if(title!=null)
+                                        title.setTypeface(Utils.SFProRegular(MainActivity.this));
+        
+                                    TextView contentText = alertDialog.findViewById(R.id.content_text);
+                                    if(contentText!=null)
+                                        contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
+                                }
+                                
                                 
                                 //code so that does not run again and again
-                                SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                                /*SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 editor.putBoolean("trialover", false);
-                                editor.commit();
+                                editor.commit();*/
                             }
                             //Log.e(TAG, String.valueOf(timestamp));
                         }
@@ -203,8 +255,74 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, 5000);
+        }, 3000);
         
+    }
+    
+    private void deductDropsAndIncreaseBlurTime(final SweetAlertDialog sDialog) {
+    
+        DatabaseReference attemptRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+    
+        ValueEventListener attemptListener = (new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                if (modelSubscr != null) {
+                    int current = modelSubscr.getXPoints();
+                    if (current < Constants.unBlurForSevenDaysDrops) {
+                        Toast.makeText(MainActivity.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, PurchasePacks.class));
+    
+                    } else {
+                        current -= Constants.unBlurForSevenDaysDrops;
+                        HashMap<String, Object> updatePoints = new HashMap<>();
+                        updatePoints.put(Constants.xPoints, current);
+                        Log.v(TAG, "Updating the drops here");
+                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                sDialog
+                                        .setTitleText("Increasing duration!")
+                                        .setContentText("Your profile will remain unblurred for 7 days from today!")
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            
+                                
+                                
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //update the blurStartTime
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                                .child(Constants.userInfo).child(Constants.uid).child("blurStartTime");
+                                        HashMap<String, Object> updateMap = new HashMap<>();
+                                        updateMap.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+                                        ref.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                sDialog.dismiss();
+                                            }
+                                        });
+                                        
+                                    }
+                                }, 2500);
+                            }
+                        });
+                    
+                    }
+                }
+            
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        attemptRef.addListenerForSingleValueEvent(attemptListener);
+    
     }
     
     private void checkForNotification() {
@@ -284,8 +402,10 @@ public class MainActivity extends AppCompatActivity {
     private void checkForBlur() {
         SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
         boolean trail = sharedPref.getBoolean("trialover", true);
-        if (trail) {
+        if (!shownUnblurOnce)
+        {
             blurtrial();
+            shownUnblurOnce = true;
         }
     }
     

@@ -1,16 +1,12 @@
 package com.testlabic.datenearu.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BlurMaskFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.ToolbarWidgetWrapper;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,8 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,17 +31,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.sackcentury.shinebuttonlib.ShineButton;
 import com.soundcloud.android.crop.Crop;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -73,6 +69,7 @@ public class EditActivity extends AppCompatActivity {
     StorageReference displaypics_Ref;
     UploadTask uploadTask;
     View toolbar;
+    boolean blurTrialEnded = false;
     boolean switchedManually = false;
     
     @Override
@@ -246,8 +243,45 @@ public class EditActivity extends AppCompatActivity {
                 if (isChecked) {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
-                    else if(switchedManually)
-                        blurProfile();
+                    else {
+                        if(switchedManually&&!blurTrialEnded)
+                            blurProfile(false);
+                        else if(blurTrialEnded)
+                        {
+                            blur.setChecked(false);
+                            Toast.makeText(EditActivity.this, "Trial Expired!", Toast.LENGTH_SHORT).show();
+                            final SweetAlertDialog alertDialog = new SweetAlertDialog(EditActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Trial period Over!")
+                                    .setContentText("If you want to extend the blur duration by 7 days, spend 500 drops")
+                                    .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            deductDropsAndIncreaseBlurTime( sweetAlertDialog);
+                    
+                                        }
+                                    });
+                            alertDialog.show();
+                            Button btn = alertDialog.findViewById(R.id.confirm_button);
+                            btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                            Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                            btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+    
+                            {
+                                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
+        
+                                TextView title = alertDialog.findViewById(R.id.title_text);
+                                if(title!=null)
+                                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
+        
+                                TextView contentText = alertDialog.findViewById(R.id.content_text);
+                                if(contentText!=null)
+                                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                            }
+    
+                            
+                        }
+                    }
                 } else {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
@@ -256,9 +290,84 @@ public class EditActivity extends AppCompatActivity {
                 }
             }
         });
-        setUpDetails();
+        //setUpDetails();
         blurTrialCalc();
     }
+    
+    private void deductDropsAndIncreaseBlurTime(final SweetAlertDialog sDialog) {
+        
+        DatabaseReference attemptRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+        
+        ValueEventListener attemptListener = (new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                if (modelSubscr != null) {
+                    int current = modelSubscr.getXPoints();
+                    if (current < Constants.unBlurForSevenDaysDrops) {
+                        Toast.makeText(EditActivity.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(EditActivity.this, PurchasePacks.class));
+                        
+                    } else {
+                        current -= Constants.unBlurForSevenDaysDrops;
+                        HashMap<String, Object> updatePoints = new HashMap<>();
+                        updatePoints.put(Constants.xPoints, current);
+                        Log.v(TAG, "Updating the drops here");
+                        dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                sDialog
+                                        .setTitleText("Increasing duration!")
+                                        .setContentText("Your profile will remain unblurred for 7 days from today!")
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+    
+                                DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
+                                        .child(Constants.userInfo).child(Constants.uid);
+                               
+                                blurProfile(true);
+                                
+                                HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
+                                update_blur_trial_ended.put("blurTrialEnded", false);
+                                ref1.updateChildren(update_blur_trial_ended);
+                                
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //update the blurStartTime
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                                .child(Constants.userInfo).child(Constants.uid).child("blurStartTime");
+                                        HashMap<String, Object> updateMap = new HashMap<>();
+                                        updateMap.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+                                        ref.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                sDialog.dismiss();
+                                            }
+                                        });
+                                        
+                                    }
+                                }, 2500);
+                            }
+                        });
+                        
+                    }
+                }
+                
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        attemptRef.addListenerForSingleValueEvent(attemptListener);
+        
+    }
+    
+    
     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -273,18 +382,23 @@ public class EditActivity extends AppCompatActivity {
     public void blurTrialCalc()
     {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.userInfo).child(Constants.uid).child("creationTime").child(Constants.timeStamp);
+                .child(Constants.userInfo).child(Constants.uid).child("blurStartTime").child(Constants.timeStamp);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.getValue() != null) {
                     long timestamp = dataSnapshot.getValue(Long.class);
-                    long epoch = System.currentTimeMillis() / 1000;
-                    long oneday = 86400;
+                    long epoch = System.currentTimeMillis();
+                    long oneday = 86400000;
                     long trialend=timestamp+7*oneday;
                     long daysleft=(trialend-epoch)/oneday;
-                    blurinfo.setText("Blur profile ("+daysleft+" days remaining)");
+                    if(daysleft<=0)
+                        blur.setChecked(false);
+                    else {
+                        if(!blurTrialEnded)
+                        blurinfo.setText("Blur profile ("+daysleft+" days remaining)");
+                    }
                 }
             }
 
@@ -436,7 +550,7 @@ public class EditActivity extends AppCompatActivity {
         
     }
     
-    private void blurProfile() {
+    private void blurProfile(final boolean hidePreview) {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid);
         
@@ -453,6 +567,7 @@ public class EditActivity extends AppCompatActivity {
                 ref2.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        if(hidePreview)
                         startActivity(new Intent(EditActivity.this, ProfilePreview.class));
                     }
                 });
@@ -484,6 +599,9 @@ public class EditActivity extends AppCompatActivity {
                         cityLabel = cityLabel.replace(", ", "_");
                         gender = user.getGender();
                         detailsSetup = true;
+    
+                        blurTrialEnded = user.isBlurTrialEnded();
+                        
                         if (user.getIsBlur()) {
                             blur.setChecked(true);
                             switchedManually = true;
@@ -499,7 +617,8 @@ public class EditActivity extends AppCompatActivity {
                             blur.setChecked(false);
                             switchedManually = true;
                         }
-                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().
+                                child(Constants.cityLabels).child(Constants.encrypt(user.getCityLabel())).child(user.getGender()).child(user.getUid());
                         HashMap<String, Object> update_image_url_city = new HashMap<>();
                         update_image_url_city.put("imageUrl", user.getImageUrl());
                         ref2.updateChildren(update_image_url_city);
@@ -523,4 +642,9 @@ public class EditActivity extends AppCompatActivity {
         });
     }
     
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpDetails();
+    }
 }

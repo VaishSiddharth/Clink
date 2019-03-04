@@ -68,7 +68,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     LoginButton loginButton;
     SweetAlertDialog loadingDialog;
     ImageView imageView;
-
+    ImageView applogo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +80,20 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 .setContentText("Wait a while...");
 
         imageView=findViewById(R.id.test);
-        Drawable mWaveDrawable = null;
+        applogo = findViewById(R.id.applogo);
+        WaveDrawable mWaveDrawable = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             mWaveDrawable = new WaveDrawable(getDrawable(R.drawable.nohere));
         }
-        ((WaveDrawable) mWaveDrawable).setWaveAmplitude(30);
-        ((WaveDrawable) mWaveDrawable).setWaveLength(580);
-        ((WaveDrawable) mWaveDrawable).setWaveSpeed(12);
+        if (mWaveDrawable != null) {
+            mWaveDrawable.setWaveAmplitude(30);
+            mWaveDrawable.setWaveLength(580);
+            mWaveDrawable.setWaveSpeed(12);
+            mWaveDrawable.setIndeterminate(true);
+        }
+       
         //((WaveDrawable) mWaveDrawable).setLevel(20);
-        ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
+       
         imageView.setImageDrawable(mWaveDrawable);
         progressBar = findViewById(R.id.google_progress);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -257,7 +262,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         HashMap<String, Object> timeStamp = new HashMap<>();
         timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
         ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
-                , "NA", null, null, null, mCurrentUser.getUid(), lastName, -1, timeStamp);
+                , "NA", null, null, null, mCurrentUser.getUid(), lastName, -1, timeStamp, timeStamp);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
@@ -374,6 +379,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         if (result.isSuccess()) {
             final GoogleSignInAccount account = result.getSignInAccount();
             assert account != null;
+            applogo.setVisibility(View.INVISIBLE);
             imageView.setVisibility(View.VISIBLE);
             //progressBar.setVisibility(View.VISIBLE);
             // Toast.makeText(LogInEmail.this , "The information received by the account is " + account.getDisplayName() , Toast.LENGTH_LONG).show();

@@ -2,14 +2,17 @@ package com.testlabic.datenearu.NewUserSetupUtils;
 
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.testlabic.datenearu.NewQuestionUtils.QuestionsStepperAdapter;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.Utils.Utils;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -62,7 +65,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
     private void showInstructionDialog() {
         SweetAlertDialog alertDialog = new SweetAlertDialog(this)
                 .setTitleText("Last step!")
-                .setContentText("Answer these ten questions about yourself, these questions will then be used to get a match for you!")
+                .setContentText("If you were to date yourself, how you would you answer these questions...!")
                 .setConfirmText("Yes, go ahead!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -76,5 +79,18 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
         btn.setBackground(ContextCompat.getDrawable(QuestionsEnteringNewUser.this, R.drawable.button_4_dialogue));
         Button btn1 = alertDialog.findViewById(R.id.cancel_button);
         btn1.setBackground(ContextCompat.getDrawable(QuestionsEnteringNewUser.this, R.drawable.button_4_dialogue));
+        {
+            btn.setTypeface(Utils.SFPRoLight(this));
+            btn1.setTypeface(Utils.SFPRoLight(this));
+    
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            if (title != null)
+                title.setTypeface(Utils.SFProRegular(this));
+            
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            if (contentText != null)
+                contentText.setTypeface(Utils.SFPRoLight(this));
+        }
+        
     }
 }

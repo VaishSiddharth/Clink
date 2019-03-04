@@ -11,7 +11,20 @@ public class ModelUser {
     private String image2;
     private String image3;
     private String image1;
+    private boolean blurTrialEnded;
+    
+    public boolean isBlurTrialEnded() {
+        return blurTrialEnded;
+    }
+    
     private HashMap<String, Object> creationTime;
+    
+    public HashMap<String, Object> getBlurStartTime() {
+        return blurStartTime;
+    }
+    
+    private HashMap<String, Object> blurStartTime;
+    
     public String getImage1() {
         return image1;
     }
@@ -102,7 +115,8 @@ public class ModelUser {
     }
     
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
-            , String about, String uid, String userLastName, int numeralAge, HashMap<String, Object> creationTime ) {
+            , String about, String uid, String userLastName, int numeralAge, HashMap<String, Object> creationTime
+    , HashMap<String, Object> blurStartTime) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
@@ -113,6 +127,7 @@ public class ModelUser {
         this.userLastName = userLastName;
         this.numeralAge = numeralAge;
         this.creationTime = creationTime;
+        this.blurStartTime = blurStartTime;
     }
     
     public int getNumeralAge() {
