@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         
-                        if (dataSnapshot.getValue() != null) {
+                        if (dataSnapshot.getValue(Long.class) != null) {
                             long timestamp = dataSnapshot.getValue(Long.class);
                             long epoch = System.currentTimeMillis();
                             long oneday = 86400000;
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                                                         .child(Constants.userInfo).child(Constants.uid).child("blurStartTime");
                                                 HashMap<String, Object> updateMap = new HashMap<>();
-                                                updateMap.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+                                                updateMap.put(Constants.timeStamp, null);
                                                 ref.updateChildren(updateMap);
                                                 
                                                 ref1.updateChildren(update_blur_trial_ended).addOnSuccessListener(new OnSuccessListener<Void>() {
