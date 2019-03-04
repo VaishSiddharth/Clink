@@ -69,7 +69,7 @@ public class EditActivity extends AppCompatActivity {
     ImageView image1, nameWrap, image2, image3,previewprofile,backbutton;
     ProgressBar bar1, bar2, bar3;
     Switch blur;
-    CircularImageView remove_dp1, remove_dp2, remove_dp3;
+    ImageView remove_dp1, remove_dp2, remove_dp3;
     String cityLabel, gender;
     Boolean detailsSetup = false;
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -450,6 +450,7 @@ public class EditActivity extends AppCompatActivity {
                         bar2.setVisibility(View.VISIBLE);
                         bar1.setVisibility(View.INVISIBLE);
                         bar3.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getApplicationContext(),"Please wait image is being uploaded",Toast.LENGTH_LONG).show();
                         
                         break;
                     case "image3":
@@ -458,6 +459,7 @@ public class EditActivity extends AppCompatActivity {
                         bar3.setVisibility(View.VISIBLE);
                         bar1.setVisibility(View.INVISIBLE);
                         bar2.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getApplicationContext(),"Please wait image is being uploaded",Toast.LENGTH_LONG).show();
                         
                         break;
                     default:
@@ -466,6 +468,7 @@ public class EditActivity extends AppCompatActivity {
                         bar1.setVisibility(View.VISIBLE);
                         bar2.setVisibility(View.INVISIBLE);
                         bar3.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getApplicationContext(),"Please wait image is being uploaded",Toast.LENGTH_LONG).show();
                         
                         break;
                 }
@@ -541,6 +544,7 @@ public class EditActivity extends AppCompatActivity {
                 bar1.setVisibility(View.INVISIBLE);
                 bar2.setVisibility(View.INVISIBLE);
                 bar3.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(),"Image uploaded Successfully!!",Toast.LENGTH_LONG).show();
                 
             }
         });

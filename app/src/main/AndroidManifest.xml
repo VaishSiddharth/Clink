@@ -39,7 +39,8 @@
             android:name=".Activities.Transparent_gift_Activity"
             android:theme="@style/Theme.Transparent" />
         <activity android:name=".AttemptMatchUtils.QuestionsAttemptActivity" />
-        <activity android:name=".Activities.EditActivity" />
+        <activity android:name=".Activities.EditActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PaperOnboardingActivity" />
         <activity android:name=".Activities.SignIn" />
         <activity android:name=".Login" />
