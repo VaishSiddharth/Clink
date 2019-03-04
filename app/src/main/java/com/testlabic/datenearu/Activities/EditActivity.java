@@ -1,16 +1,12 @@
 package com.testlabic.datenearu.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BlurMaskFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.ToolbarWidgetWrapper;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,8 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,7 +37,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.sackcentury.shinebuttonlib.ShineButton;
 import com.soundcloud.android.crop.Crop;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelSubscr;
@@ -252,7 +245,7 @@ public class EditActivity extends AppCompatActivity {
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
                     else {
                         if(switchedManually&&!blurTrialEnded)
-                            blurProfile();
+                            blurProfile(false);
                         else if(blurTrialEnded)
                         {
                             blur.setChecked(false);
@@ -333,7 +326,7 @@ public class EditActivity extends AppCompatActivity {
                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
                                         .child(Constants.userInfo).child(Constants.uid);
                                
-                                blurProfile();
+                                blurProfile(true);
                                 
                                 HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
                                 update_blur_trial_ended.put("blurTrialEnded", false);
@@ -400,7 +393,7 @@ public class EditActivity extends AppCompatActivity {
                     long oneday = 86400000;
                     long trialend=timestamp+7*oneday;
                     long daysleft=(trialend-epoch)/oneday;
-                    if(daysleft<0)
+                    if(daysleft<=0)
                         blur.setChecked(false);
                     else {
                         if(!blurTrialEnded)
@@ -557,7 +550,7 @@ public class EditActivity extends AppCompatActivity {
         
     }
     
-    private void blurProfile() {
+    private void blurProfile(final boolean hidePreview) {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid);
         
@@ -574,6 +567,7 @@ public class EditActivity extends AppCompatActivity {
                 ref2.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        if(hidePreview)
                         startActivity(new Intent(EditActivity.this, ProfilePreview.class));
                     }
                 });
