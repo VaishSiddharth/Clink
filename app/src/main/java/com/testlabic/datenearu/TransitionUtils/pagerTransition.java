@@ -235,7 +235,6 @@ public class pagerTransition extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 location =dataSnapshot.getValue(String.class);
-                Log.e(TAG,location);
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.cityLabels);
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
