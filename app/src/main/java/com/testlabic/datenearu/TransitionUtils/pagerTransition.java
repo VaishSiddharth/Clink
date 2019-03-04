@@ -377,6 +377,7 @@ public class pagerTransition extends Fragment {
                                 public void onEnded() {
                                     SharedPreferences.Editor editor = wmbPreference.edit();
                                     editor.putBoolean("SHOW18", false).apply();
+                                    editor.putBoolean("SHOW20",true).apply();
                                     //Toast.makeText(getContext(), "spotlight is ended", Toast.LENGTH_SHORT).show();
                                 }
                             })

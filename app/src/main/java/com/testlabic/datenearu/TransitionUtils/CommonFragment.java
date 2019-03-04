@@ -263,10 +263,10 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     
     public void setShowcaseView() {
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean isFirstRun = wmbPreference.getBoolean("SHOW20", true);
+        boolean isFirstRun = wmbPreference.getBoolean("SHOW20", false);
         boolean isFirstRun1 = wmbPreference.getBoolean("SHOW21", true);
         //Log.e(TAG, String.valueOf(isFirstRun));
-        if ((isFirstRun) && (!isFirstRun1)) {//make isFirstRun
+        if ((isFirstRun)) {//make isFirstRun
             rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
