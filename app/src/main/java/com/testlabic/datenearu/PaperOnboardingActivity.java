@@ -44,13 +44,13 @@ public class PaperOnboardingActivity extends AppCompatActivity {
     private ArrayList<PaperOnboardingPage> getDataForOnboarding() {
         // prepare data
         PaperOnboardingPage scr1 = new PaperOnboardingPage("Attempt cheers",
-                "All hotels and hostels are sorted by hospitality rating",
+                "Use quiz to get quality matches, there's now something you can do in a dating app",
                 Color.parseColor("#ffffff"), R.drawable.qnaslider, R.drawable.onlinestatuspng);
-        PaperOnboardingPage scr2 = new PaperOnboardingPage("Blur your profile!",
-                "We carefully verify all banks before add them into the app",
+        PaperOnboardingPage scr2 = new PaperOnboardingPage("Blur your profile",
+                "Get comfortable with the app, go incognito for first 7 days for free",
                 Color.parseColor("#ffffff"), R.drawable.blurslider, R.drawable.onlinestatuspng);
-        PaperOnboardingPage scr3 = new PaperOnboardingPage("Send gifts to get noticed!",
-                "All local stores are categorized for your convenience",
+        PaperOnboardingPage scr3 = new PaperOnboardingPage("Send gifts",
+                "Hmmm, can't get through the quiz? send gifts to get noticed",
                 Color.parseColor("#ffffff"), R.drawable.giftslider, R.drawable.onlinestatuspng);
         
         ArrayList<PaperOnboardingPage> elements = new ArrayList<>();

@@ -298,8 +298,8 @@ public class pagerTransition extends Fragment {
                     final SimpleTarget simpleTarget1 = new SimpleTarget.Builder((Activity) getContext())
                             .setPoint(imageX1, imageY1)
                             .setShape(new Circle(100f)) // or RoundedRectangle()
-                            .setTitle("the title")
-                            .setDescription("the description")
+                            .setTitle(getString(R.string.filter_showcase))
+                            .setDescription(getString(R.string.filters_desc))
                             .setOverlayPoint(100f, imageY1 + imageRadius1 + 100f)
                             .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
                                 @Override
@@ -322,8 +322,8 @@ public class pagerTransition extends Fragment {
                     final SimpleTarget simpleTarget2 = new SimpleTarget.Builder((Activity) getContext())
                             .setPoint(imageX2, imageY2)
                             .setShape(new Circle(100f)) // or RoundedRectangle()
-                            .setTitle("the title")
-                            .setDescription("the description")
+                            .setTitle(getString(R.string.location_title))
+                            .setDescription(getString(R.string.location_description))
                             .setOverlayPoint(100f, imageY2 + imageRadius2 + 100f)
                             .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
                                 @Override
@@ -346,8 +346,8 @@ public class pagerTransition extends Fragment {
                     final SimpleTarget simpleTarget3 = new SimpleTarget.Builder((Activity) getContext())
                             .setPoint(imageX3, imageY3)
                             .setShape(new Circle(100f)) // or RoundedRectangle()
-                            .setTitle("the title")
-                            .setDescription("the description")
+                            .setTitle(getString(R.string.drops_showcase))
+                            .setDescription(getString(R.string.drops_description))
                             .setOverlayPoint(100f, imageY3 + imageRadius3 + 100f)
                             .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
                                 @Override

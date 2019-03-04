@@ -17,5 +17,13 @@
     <string name="confirmation2">You can do changes later, continue?</string>
     <string name="tab_title">Setup</string>
     <string name="default_notification_channel_id">test</string>
+    <string name="drops_showcase">Drops</string>
+    <string name="drops_description">Everything here runs with drops, the more the better, tap to buy more drops when needed</string>
+    <string name="location_title">Your current location!</string>
+    <string name="location_description">Tap to change location co-ordinates or city.</string>
+    <string name="card_title">User card!</string>
+    <string name="card_desc">Tap on a profile to like, message or attempt cheers, double tap to view profile.</string>
+    <string name="filter_showcase">Filters</string>
+    <string name="filters_desc">Tap here to filter results according to you need</string>
 
 </resources>
