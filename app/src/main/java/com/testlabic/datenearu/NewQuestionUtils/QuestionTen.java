@@ -225,7 +225,7 @@ public class QuestionTen extends Fragment implements BlockingStep {
                                     .child(Constants.userInfo)
                                     .child(Constants.uid);
                             HashMap<String, Object> updateBoolean = new HashMap<>();
-                            updateBoolean.put("isQuestionaireComplete", true);
+                            updateBoolean.put("questionaireComplete", true);
                             reference.updateChildren(updateBoolean).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -313,7 +313,7 @@ public class QuestionTen extends Fragment implements BlockingStep {
                                                 .setContentText("Best of luck!")
                                                 .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);*/
                                         Intent i = new Intent(getActivity(), MainActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(i);
                                     }
                                 });
@@ -322,8 +322,8 @@ public class QuestionTen extends Fragment implements BlockingStep {
                             {
                                 //move to Main activity anyway!
                                 Intent i = new Intent(getActivity(), MainActivity.class);
-                                i.putExtra(Constants.moveToLocationActivity, true);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                               // i.putExtra(Constants.moveToLocationActivity, true);
+                               // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Inte);
                                 startActivity(i);
                             }
                         }

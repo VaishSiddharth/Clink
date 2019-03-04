@@ -57,10 +57,10 @@ public class ModelUser {
     private String matchAlgo;
     private double matchIndex;
     private boolean isBlur;
-    private boolean isQuestionaireComplete;
+    private boolean questionaireComplete;
     
     public boolean isQuestionaireComplete() {
-        return isQuestionaireComplete;
+        return questionaireComplete;
     }
     
     public boolean isBlur() {

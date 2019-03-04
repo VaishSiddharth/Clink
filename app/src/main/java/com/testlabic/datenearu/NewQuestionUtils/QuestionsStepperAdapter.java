@@ -15,7 +15,6 @@ public class QuestionsStepperAdapter extends AbstractFragmentStepAdapter {
     @Override
     public Step createStep(int position) {
         if(position==0) {
-
             return new QuestionOne();
         }
         else

@@ -197,6 +197,7 @@ public class QuestionOne extends Fragment implements BlockingStep {
 
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+        Log.e("Ques", "Ans is "+skipSelection);
         if(skipSelection)
             callback.goToNextStep();
         else

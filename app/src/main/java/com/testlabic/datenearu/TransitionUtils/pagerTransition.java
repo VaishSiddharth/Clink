@@ -479,7 +479,7 @@ public class pagerTransition extends Fragment {
 
     private void showFilterDialog() {
 
-        LayoutInflater factory = LayoutInflater.from(getContext());
+        final LayoutInflater factory = LayoutInflater.from(getContext());
         final View filterDialogView = factory.inflate(R.layout.filter_dialog, null);
         /*final AlertDialog deleteDialog = new AlertDialog.Builder(getContext()).create();
         deleteDialog.setView(filterDialogView);
@@ -591,8 +591,20 @@ public class pagerTransition extends Fragment {
                         .child(Constants.userPreferences)
                         .child(Constants.uid);
 
-                refPrefs.updateChildren(updateMaxAge);
-                refPrefs.updateChildren(updateMinAge);
+                refPrefs.updateChildren(updateMinAge).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        refPrefs.updateChildren(updateMaxAge).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            
+                            }
+                        });
+    
+                    }
+                });
+                
+             
             }
         });
 
@@ -634,12 +646,15 @@ public class pagerTransition extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             //sweetAlertDialog.dismissWithAnimation();
-                            downloadList();
+                            fetchPrefsCalledOnce = false;
+                            fetchPreferences();
 
                         }
                     });
-                } else
-                    downloadList();
+                } else {
+                    fetchPrefsCalledOnce = false;
+                    fetchPreferences();
+                }
 
             }
         });

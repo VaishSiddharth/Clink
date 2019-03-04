@@ -50,7 +50,7 @@
             android:layout_margin="15dp"
             android:layout_gravity="center"
             android:textColor="#212121"
-            android:text="Write about yourself!"
+            android:text="Write about yourself (you can edit later)"
             android:textSize="18sp" />
 
         <ImageView
@@ -307,6 +307,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@null"
+                android:visibility="gone"
                 android:contentDescription="@null"
                 android:src="@drawable/insert_image"
                 />
@@ -316,6 +317,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@null"
+                android:visibility="gone"
                 android:contentDescription="@null"
                 android:src="@drawable/insert_link"
                 />

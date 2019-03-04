@@ -128,7 +128,9 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
                         KonfettiView konfettiView = findViewById(R.id.viewKonfetti);
                         konfettiView.build()
-                                .addColors(Color.YELLOW, Color.GREEN, Color.BLACK, Color.MAGENTA)
+                                .addColors(getApplicationContext().getResources().getColor(R.color.appcolor),
+                                        getApplicationContext().getResources().getColor(R.color.yellow),
+                                        getApplicationContext().getResources().getColor(R.color.appcolor))
                                 .setDirection(0.0, 359.0)
                                 .setSpeed(1f, 5f)
                                 .setFadeOutEnabled(true)

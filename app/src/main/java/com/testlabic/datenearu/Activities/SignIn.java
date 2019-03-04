@@ -272,7 +272,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             public void onSuccess(Void aVoid) {
                 // add 500 xPoints for a new user!
                 HashMap<String, Object> updatePoints = new HashMap<>();
-                updatePoints.put(Constants.xPoints, 500);
+                updatePoints.put(Constants.xPoints, 1000);
     
                 DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.xPoints)

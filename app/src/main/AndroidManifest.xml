@@ -45,12 +45,14 @@
         <activity android:name=".Login" />
         <activity
             android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 

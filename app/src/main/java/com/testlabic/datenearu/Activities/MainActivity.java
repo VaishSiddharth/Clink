@@ -42,7 +42,9 @@ import com.testlabic.datenearu.Fragments.NotificationParent;
 import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewQuestionUtils.QuestionSetup;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
+import com.testlabic.datenearu.NewUserSetupUtils.QuestionsEnteringNewUser;
 import com.testlabic.datenearu.PaperOnboardingActivity;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private int giftUnopened = 0;
     FirebaseAuth.AuthStateListener authStateListener;
     private boolean shownLikeBacks = false;
-    private static boolean manygiftsactivity=true;
+    private static boolean manygiftsactivity = true;
     private static boolean shownUnblurOnce = false;
     
     @Override
@@ -123,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
-       
         
     }
     
@@ -144,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
                             long timestamp = dataSnapshot.getValue(Long.class);
                             long epoch = System.currentTimeMillis();
                             long oneday = 86400000;
-                            Log.e(TAG, "The epoch and timestamps are "+ timestamp + " "+ epoch);
-                            if ( epoch >= (timestamp + (5 * oneday)) && ((epoch <= timestamp + (6 * oneday)))) {
+                            Log.e(TAG, "The epoch and timestamps are " + timestamp + " " + epoch);
+                            if (epoch >= (timestamp + (5 * oneday)) && ((epoch <= timestamp + (6 * oneday)))) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Reminder!")
-                                        .setContentText("Tomorrow your profile will be unblurred, to continue with blurred profile you'll have to spend 500 drops tomorrow ")
+                                        .setContentText("Tomorrow your profile will be un-blurred, to continue with blurred profile you'll have to spend 500 drops tomorrow ")
                                         .setCancelText("Okay")
                                         .setConfirmButton("Buy Drops", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
@@ -162,23 +163,22 @@ public class MainActivity extends AppCompatActivity {
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
                                 Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
-    
-                              
+                                
                                 {
                                     btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
                                     btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
-    
+                                    
                                     TextView title = alertDialog.findViewById(R.id.title_text);
-                                    if(title!=null)
+                                    if (title != null)
                                         title.setTypeface(Utils.SFProRegular(MainActivity.this));
-        
+                                    
                                     TextView contentText = alertDialog.findViewById(R.id.content_text);
-                                    if(contentText!=null)
+                                    if (contentText != null)
                                         contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
                                 }
                                 
                             }
-                            if ( epoch >= (timestamp + (7 * oneday))) {
+                            if (epoch >= (timestamp + (7 * oneday))) {
                                 final SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Trial period Over!")
                                         .setContentText("If you press Cancel your profile will be unblured to users when viewed, to extend the time by 7 days spend 500 drops")
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                                                 ref1.updateChildren(update_blur);
                                                 
                                                 //also increase the time and set it to today!
-    
+                                                
                                                 //update the blurStartTime
                                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                                                         .child(Constants.userInfo).child(Constants.uid).child("blurStartTime");
@@ -208,13 +208,13 @@ public class MainActivity extends AppCompatActivity {
                                                         sweetAlertDialog.dismiss();
                                                     }
                                                 });
-                                               
+                                                
                                             }
                                         })
                                         .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                deductDropsAndIncreaseBlurTime( sweetAlertDialog);
+                                                deductDropsAndIncreaseBlurTime(sweetAlertDialog);
                                                 
                                             }
                                         });
@@ -224,20 +224,19 @@ public class MainActivity extends AppCompatActivity {
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
                                 Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
-    
+                                
                                 {
                                     btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
                                     btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
-        
+                                    
                                     TextView title = alertDialog.findViewById(R.id.title_text);
-                                    if(title!=null)
+                                    if (title != null)
                                         title.setTypeface(Utils.SFProRegular(MainActivity.this));
-        
+                                    
                                     TextView contentText = alertDialog.findViewById(R.id.content_text);
-                                    if(contentText!=null)
+                                    if (contentText != null)
                                         contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
                                 }
-                                
                                 
                                 //code so that does not run again and again
                                 /*SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
@@ -260,11 +259,11 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void deductDropsAndIncreaseBlurTime(final SweetAlertDialog sDialog) {
-    
+        
         DatabaseReference attemptRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.xPoints)
                 .child(Constants.uid);
-    
+        
         ValueEventListener attemptListener = (new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -274,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
                     if (current < Constants.unBlurForSevenDaysDrops) {
                         Toast.makeText(MainActivity.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, PurchasePacks.class));
-    
+                        
                     } else {
                         current -= Constants.unBlurForSevenDaysDrops;
                         HashMap<String, Object> updatePoints = new HashMap<>();
@@ -287,8 +286,6 @@ public class MainActivity extends AppCompatActivity {
                                         .setTitleText("Increasing duration!")
                                         .setContentText("Your profile will remain unblurred for 7 days from today!")
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                            
-                                
                                 
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
@@ -310,19 +307,19 @@ public class MainActivity extends AppCompatActivity {
                                 }, 2500);
                             }
                         });
-                    
+                        
                     }
                 }
-            
+                
             }
-        
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
             }
         });
         attemptRef.addListenerForSingleValueEvent(attemptListener);
-    
+        
     }
     
     private void checkForNotification() {
@@ -402,8 +399,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkForBlur() {
         SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
         boolean trail = sharedPref.getBoolean("trialover", true);
-        if (!shownUnblurOnce)
-        {
+        if (!shownUnblurOnce) {
             blurtrial();
             shownUnblurOnce = true;
         }
@@ -519,25 +515,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    
     private void checkForNewGifts() {
         shownGifts = true;
         giftUnopened = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Gifts)
                 .child(Constants.uid).child(Constants.unread);
-
+        
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
+                
                 giftUnopened = (int) dataSnapshot.getChildrenCount();
                 giftUnopened += count;
                 //Log.e(TAG, giftUnopened+" yyy");
                 bottomBar = findViewById(R.id.bottomBar);
                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                 if (giftUnopened > 0) {
-
+                    
                     nearby.setBadgeCount(giftUnopened);
                     //initiate transparent activity and pass data
                     Handler handler = new Handler();
@@ -549,31 +545,29 @@ public class MainActivity extends AppCompatActivity {
                                     ModelGift modelGift = snapshot.getValue(ModelGift.class);
                                     startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
                                             .putExtra(Constants.giftModel, modelGift));
-
+                                    
                                 }
-                            if(dataSnapshot.getChildrenCount() >1&& manygiftsactivity) {
-                                manygiftsactivity=false;
+                            if (dataSnapshot.getChildrenCount() > 1 && manygiftsactivity) {
+                                manygiftsactivity = false;
                                 startActivity(new Intent(MainActivity.this, Transparent_many_gifts.class));
-
+                                
                             }
                         }
                     }, 2500);
-
-
+                    
                     // Remove the badge when you're done with it.
                 } else
                     nearby.removeBadge();
-
+                
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
         });
     }
-
-
+    
     private void checkForIncompleteData() {
         
         //SharedPreferences sharedPreferences = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
@@ -595,15 +589,28 @@ public class MainActivity extends AppCompatActivity {
                             //reRun Activity to fill info!
                             Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(MainActivity.this, NewUserSetup.class));
-                        } else if (user.getCityLabel() == null) {
-                            Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(MainActivity.this, locationUpdater.class));
+                        }  else if (!user.isQuestionaireComplete()) {
+                            Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
+                            Handler h = new Handler();
+                            h.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(MainActivity.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                                }
+                            }, 1500);
                         }
-                   /* if(!user.isQuestionaireComplete())
-                    {
-                        Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, QuestionSetup.class));
-                    }*/
+                        
+                        else
+                             if (user.isQuestionaireComplete()&&user.getCityLabel() == null) {
+                            Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
+                            Handler h = new Handler();
+                            h.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(MainActivity.this, locationUpdater.class));
+                                }
+                            }, 1500);
+                        }
                     }
                     
                 }

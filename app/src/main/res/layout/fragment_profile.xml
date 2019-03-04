@@ -100,7 +100,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="425"
+                    android:text="---"
                     android:id="@+id/points"
                     android:textSize="13sp"
                     android:textColor="#3b3b3b"/>
@@ -108,7 +108,7 @@
                 <customfonts.BrushFlowFont
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SPoints"
+                    android:text="Drops"
                     android:textSize="13sp"
                     android:textColor="#a9a9b0"/>
 

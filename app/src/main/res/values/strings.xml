@@ -8,9 +8,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="refresh">Refresh</string>
     <string name="title_activity_maps">Map</string>
-    <string name="match_instruction">Looks interesting?\n\nYou can attempt match to know if you would go togethor.\n\n
-        <i>For free users, there is only one chance in a day for three days.\n\n
-    Go premium to unleash!</i></string>
+    <string name="match_instruction">Looks interesting?\n\nYou can attempt match to know if you would go togethor.</string>
     <string name="question_instruction">Tap on an option and swipe the card for next question!</string>
     <string name="matchSuccess"><b>Match Success!</b>\n\nCongrats we believe you will be able to make it work!\n\n We will notify the other person and you can then connect if she agrees!</string>
     <string name="confirmation">Continue match analysis?</string>
