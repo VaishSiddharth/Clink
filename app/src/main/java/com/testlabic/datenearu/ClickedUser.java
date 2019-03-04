@@ -248,8 +248,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     private void showDialog() {
         
         alertDialog = new SweetAlertDialog(this)
-                .setTitleText("Attempt match?")
-                .setContentText("You will have to answer ten questions, and if you win you get a chance to connect")
+                .setTitleText("Attempt cheers?")
+                .setContentText("You will have to answer ten questions, and if you do that right, you get a chance to connect")
                 .setConfirmText("100 drops")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override

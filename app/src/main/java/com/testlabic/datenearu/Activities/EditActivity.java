@@ -333,7 +333,24 @@ public class EditActivity extends AppCompatActivity {
                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
                                         .child(Constants.userInfo).child(Constants.uid);
                                
-                                blurProfile();
+                               //blur profile
+    
+                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                        .child(Constants.userInfo).child(Constants.uid);
+    
+                                // first update userinfo then update child under city label node.
+    
+                                final HashMap<String, Object> updateBlur = new HashMap<>();
+                                updateBlur.put(Constants.isBlur, true);
+                                reference.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+            
+                                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
+                                                .child(Constants.cityLabels).child(cityLabel).child(gender).child(Constants.uid);
+                                        ref2.updateChildren(updateBlur);
+                                    }
+                                });
                                 
                                 HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
                                 update_blur_trial_ended.put("blurTrialEnded", false);
