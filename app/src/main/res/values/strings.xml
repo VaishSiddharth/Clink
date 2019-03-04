@@ -19,7 +19,7 @@
     <string name="default_notification_channel_id">test</string>
     <string name="drops_showcase">Drops</string>
     <string name="drops_description">Everything here runs with \ndrops, the more the better, \ntap to buy more drops when needed</string>
-    <string name="location_title">Your current location!</string>
+    <string name="location_title">Your current location</string>
     <string name="location_description">Tap to change location \nco-ordinates or city.</string>
     <string name="card_title">User card!</string>
     <string name="card_desc">Tap on a profile to \nlike, message or attempt cheers, double tap to view profile.</string>
