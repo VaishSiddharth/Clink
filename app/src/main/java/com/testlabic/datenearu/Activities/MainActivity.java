@@ -78,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
     private static boolean shownUnblurOnce = false;
     
     @Override
+    protected void onStop() {
+        super.onStop();
+        updateStatus(Constants.offline);
+    }
+    
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -668,21 +674,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (Constants.uid != null)
-            updateStatus(Constants.offline);
+            updateStatus(null);
     }
     
     private void updateStatus(final String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(Constants.status, status);
+        
+        final HashMap<String, Object> offlineTime = new HashMap<>();
+        offlineTime.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+        
         if (Constants.uid == null)
             return;
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
                 .child(Constants.uid);
         reference.updateChildren(updateStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                if (status.equals(Constants.online)) {
-                
+                if (status.equals(null)) {
+                    reference.updateChildren(offlineTime);
                 }
             }
         });
