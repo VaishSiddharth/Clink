@@ -63,7 +63,7 @@ public class EditActivity extends AppCompatActivity {
     
     String imageId = "image1";
     
-    private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/profile.jpeg?alt=media&token=d50ac046-46b4-480d-a612-e3d5c8519717";
+    private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/final_app_logo1.png?alt=media&token=e9463a91-4f57-412d-a4be-c26d2e06d84e";
     private static final String TAG = EditActivity.class.getSimpleName();
     TextView name, age, about,blurinfo;
     ImageView image1, nameWrap, image2, image3,previewprofile,backbutton;
@@ -129,9 +129,17 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        image1.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.profile));
-                        uri_update_db(default_uri_dp, "image1");
+                        bar1.setVisibility(View.VISIBLE);
                         sweetAlertDialog.dismiss();
+                        Handler handler=new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                image1.setImageResource(R.drawable.final_app_logo1bw);
+                                uri_update_db(default_uri_dp, "image1");
+                                bar1.setVisibility(View.GONE);
+                            }
+                        },1000);
                     }
                 });
                 sweetAlertDialog.setCancelText("No");
@@ -147,9 +155,18 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        image2.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.profile));
-                        uri_update_db(default_uri_dp, "image2");
                         sweetAlertDialog.dismiss();
+                        bar2.setVisibility(View.VISIBLE);
+                        Handler handler=new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                bar2.setVisibility(View.GONE);
+                                image2.setImageResource(R.drawable.final_app_logo1bw);
+                                uri_update_db(default_uri_dp, "image2");
+
+                            }
+                        },1000);
                     }
                 });
                 sweetAlertDialog.setCancelText("No");
@@ -165,9 +182,19 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        image3.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.profile));
-                        uri_update_db(default_uri_dp, "image3");
                         sweetAlertDialog.dismiss();
+                        bar3.setVisibility(View.VISIBLE);
+                        Handler handler=new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                bar3.setVisibility(View.GONE);
+                                image3.setImageResource(R.drawable.final_app_logo1bw);
+                                uri_update_db(default_uri_dp, "image3");
+
+
+                            }
+                        },1000);
                     }
                 });
                 sweetAlertDialog.setCancelText("No");
@@ -544,7 +571,7 @@ public class EditActivity extends AppCompatActivity {
                 bar1.setVisibility(View.INVISIBLE);
                 bar2.setVisibility(View.INVISIBLE);
                 bar3.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(),"Image uploaded Successfully!!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Successful!!",Toast.LENGTH_LONG).show();
                 
             }
         });
