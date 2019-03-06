@@ -185,7 +185,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temporary_chat_full_screen);
-        Toast.makeText(this, "TemporaryChat", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "TemporaryChat", Toast.LENGTH_SHORT).show();
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         bar = findViewById(R.id.progress_bar);
         bar.setVisibility(View.VISIBLE);
@@ -211,8 +211,6 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
         if (myUid == null)
             return;
-        
-       
         
         //checkIfItsTemporaryContact();
         
@@ -247,7 +245,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
         rootView = findViewById(R.id.rootView);
         
-        EmojIconActions emojIcon = new EmojIconActions(temporaryChatFullScreen.this, rootView, chatEditText1, emojis, "#495C66", "#DCE1E2", "#E6EBEF");
+        EmojIconActions emojIcon = new EmojIconActions(temporaryChatFullScreen.this, rootView, chatEditText1,
+                emojis, "#495C66", "#DCE1E2", "#E6EBEF");
         emojIcon.ShowEmojIcon();
         
         emojIcon.addEmojiconEditTextList(chatEditText1);
@@ -269,9 +268,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
                 DisplayHelpDialog();
-                
             }
         });
         
@@ -281,21 +278,13 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 
                 if (listAdapter != null) {
                     ChatMessage message = (ChatMessage) listAdapter.getItem(i);
-                    /*
-                    Get the reference and then delete the msg from your side
-                     */
-                    
+                    //Get the reference and then delete the msg from your side
                     showDeleteMsgBox(message);
-                    
                 }
-                
                 return false;
             }
         });
-        
     }
-    
-    
     private void checkBlockStatus() {
         
         //Check if the other person blocked me or I blocked the other user
@@ -345,6 +334,14 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     
     @Override
     public void onBackPressed() {
+    
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.enabledMultiMsgs)
+                .child(Constants.uid)
+                .child(sendToUid)
+                ;
+        reference.setValue(null);
+        
         if (getIntent().getBooleanExtra(Constants.refresh, false)) {
             Intent i = new Intent(this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -828,7 +825,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                         blockRef.setValue("0").addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(temporaryChatFullScreen.this, "Blocked by other User", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(temporaryChatFullScreen.this, "Blocked by other User", Toast.LENGTH_SHORT).show();
                                 
                             }
                         });
@@ -841,7 +838,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                         blockRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(temporaryChatFullScreen.this, "Unblocked", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(temporaryChatFullScreen.this, "Unblocked", Toast.LENGTH_SHORT).show();
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                         .child(Constants.enabledMultiMsgs)
                                         .child(Constants.uid)
