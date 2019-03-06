@@ -27,14 +27,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Activities.Transparent_wine_types;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.ChatUtils.chatFullScreen;
+import com.testlabic.datenearu.ChatUtils.temporaryChatFullScreen;
+import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelMessage;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Utils;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -49,7 +54,8 @@ public class MatchCalculator extends AppCompatActivity {
     private String clickedUsersId;
     private FerrisWheelView ferrisWheelView;
     SweetAlertDialog sweetAlertDialog1;
-
+    private String nameS;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +174,7 @@ public class MatchCalculator extends AppCompatActivity {
                 String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                 String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.";
 
-                long timeStamp = -1 * new java.util.Date().getTime();
+                long timeStamp = -1 * new Date().getTime();
                 String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
                 ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, false);
 
@@ -193,110 +199,10 @@ public class MatchCalculator extends AppCompatActivity {
                                 .setConfirmButton("Send message?", new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                                        final LayoutInflater factory = LayoutInflater.from(MatchCalculator.this);
-                                        final View editTextDialog = factory.inflate(R.layout.dialog_edittext, null);
-                                        final EditText editText = editTextDialog.findViewById(R.id.ediText);
-
-                                        SweetAlertDialog sweetAlertDialog1=new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.NORMAL_TYPE);
-                                        // .setTitleText("Send a one-time message (25 pts)?")
-                                        sweetAlertDialog1.setCustomView(editTextDialog);
-                                        sweetAlertDialog1.setConfirmButton("25 drops", new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(final SweetAlertDialog sDialog) {
-
-                                                //display edit text
-                                                //complete transaction
-
-                                                sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
-                                                final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
-                                                        .child(Constants.xPoints)
-                                                        .child(Constants.uid);
-
-                                                xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                        ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
-                                                        if (modelSubscr != null) {
-                                                            int current = modelSubscr.getXPoints();
-                                                            if (current < Constants.oneTimeMessageCost) {
-                                                                Toast.makeText(MatchCalculator.this, "You don't have enough drops, buy now!", Toast.LENGTH_SHORT).show();
-                                                                BuyPoints();
-                                                            } else {
-                                                                current -= Constants.oneTimeMessageCost;
-                                                                HashMap<String, Object> updatePoints = new HashMap<>();
-                                                                updatePoints.put(Constants.xPoints, current);
-                                                                dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                    @Override
-                                                                    public void onSuccess(Void aVoid) {
-
-                                                                        //first update notification
-
-                                                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                                                                                .child(Constants.Notifications)
-                                                                                .child(clickedUsersId).child(Constants.unread).push();
-                                                                        String messageText = editText.getText().toString();
-
-                                                                        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                                                                        String message = userName + " has sent you a one time message!\n\n" + "\"" + messageText + "\"";
-
-                                                                        long timeStamp = -1 * new java.util.Date().getTime();
-                                                                        String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
-                                                                        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, true);
-
-                                                                        reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                            @Override
-                                                                            public void onSuccess(Void aVoid) {
-
-                                                                                sDialog
-                                                                                        .setTitleText("Message Sent!")
-                                                                                        .setContentText("Best of luck!")
-                                                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                                                                                sDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
-
-                                                                                Handler handler = new Handler();
-                                                                                handler.postDelayed(new Runnable() {
-                                                                                    @Override
-                                                                                    public void run() {
-                                                                                        Intent i = new Intent(MatchCalculator.this, MainActivity.class);
-                                                                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                                                        startActivity(i);                                                                                        sDialog.dismiss();
-                                                                                    }
-                                                                                }, 2500);
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                });
-                                                            }
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                    }
-                                                });
-
-                                            }
-                                        });
-
-                                        sweetAlertDialog1.show();
-                                        Button btn=sweetAlertDialog1.findViewById(R.id.confirm_button);
-                                        btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
-                                        Button btn1=sweetAlertDialog1.findViewById(R.id.cancel_button);
-                                        btn1.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
-    
-                                        btn.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
-                                        btn1.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
-    
-                                        TextView title = sweetAlertDialog1.findViewById(R.id.title_text);
-                                        if(title!=null)
-                                            title.setTypeface(Utils.SFProRegular(MatchCalculator.this));
-    
-                                        TextView contentText = sweetAlertDialog1.findViewById(R.id.content_text);
-                                        if(contentText!=null)
-                                            contentText.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+                                        
+                                        sendOneTimeTempMessage(sweetAlertDialog, clickedUsersId);
+                                        Toast.makeText(MatchCalculator.this, "Fresh code here!", Toast.LENGTH_SHORT).show();
+                                   
                                     }
                                 });
                         sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
@@ -366,26 +272,108 @@ public class MatchCalculator extends AppCompatActivity {
         if(contentText!=null)
             contentText.setTypeface(Utils.SFPRoLight(this));
     }
-
-    private void SendRequestMessage() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Messages)
-                .child(clickedUsersId).child(Constants.requestMessages)
-                .child(Constants.uid);
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-
-            String photoUrl = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
-            String name = String.valueOf(user.getDisplayName());
-            long timeStamp = new java.util.Date().getTime();
-            String txt = "Hey! We seem to have a lot of similarities, do you wish to talk?";
-            ModelMessage message = new ModelMessage(photoUrl, name, timeStamp, txt);
-            reference.setValue(message);
+    
+    private void sendOneTimeTempMessage(SweetAlertDialog sweetAlertDialog, String clickedUsersId) {
+    
+    
+    
+    }
+    
+    private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
+        if (item != null) {
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(Constants.uid)
+                    .child(Constants.contacts)
+                    .child(item);
+            
+            final DatabaseReference receiver = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(item);
+            receiver.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    
+                    if (dataSnapshot.getValue() != null) {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            nameS = user.getUserName();
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), true, user.getUid());
+                            ref.setValue(contact);
+                        }
+                    }
+                    
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
+            
+            /*
+            
+            Similarly setup contact for the other user
+             */
+            
+            final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(item)
+                    .child(Constants.contacts)
+                    .child(Constants.uid);
+            
+            DatabaseReference receiver2 = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.userInfo)
+                    .child(Constants.uid);
+            receiver2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    
+                    if (dataSnapshot.getValue() != null) {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), true, user.getUid());
+                            ref2.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sDialog
+                                            .setTitleText("Success!")
+                                            .setContentText("You can only send one message until you receive a reply")
+                                            .setConfirmText("OK")
+                                            .setConfirmClickListener(null)
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                    
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            moveToTempChatScreen();
+                                        }
+                                    }, 2500);
+                                   
+                                }
+                            });
+                        }
+                    }
+                    
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                
+                }
+            });
         }
     }
-
-
+    
+    private void moveToTempChatScreen() {
+        Intent i = new Intent(MatchCalculator.this, temporaryChatFullScreen.class);
+        i.putExtra(Constants.sendToUid, clickedUsersId);
+        i.putExtra(Constants.sendToName, nameS);
+        startActivity(i);
+    
+    }
+    
     @Override
     public void onBackPressed() {
         SweetAlertDialog alertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
@@ -415,4 +403,110 @@ public class MatchCalculator extends AppCompatActivity {
         if(contentText!=null)
             contentText.setTypeface(Utils.SFPRoLight(this));
     }
+    
+    /*
+    
+                                        final LayoutInflater factory = LayoutInflater.from(MatchCalculator.this);
+                                        final View editTextDialog = factory.inflate(R.layout.dialog_edittext, null);
+                                        final EditText editText = editTextDialog.findViewById(R.id.ediText);
+
+                                        SweetAlertDialog sweetAlertDialog1=new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.NORMAL_TYPE);
+                                        // .setTitleText("Send a one-time message (25 pts)?")
+                                        sweetAlertDialog1.setCustomView(editTextDialog);
+                                        sweetAlertDialog1.setConfirmButton("25 drops", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(final SweetAlertDialog sDialog) {
+
+                                                //display edit text
+                                                //complete transaction
+
+                                                sDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setEnabled(false);
+                                                final DatabaseReference xPointsRef = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.xPoints)
+                                                        .child(Constants.uid);
+
+                                                xPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                        ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                                                        if (modelSubscr != null) {
+                                                            int current = modelSubscr.getXPoints();
+                                                            if (current < Constants.oneTimeMessageCost) {
+                                                                Toast.makeText(MatchCalculator.this, "You don't have enough drops, buy now!", Toast.LENGTH_SHORT).show();
+                                                                BuyPoints();
+                                                            } else {
+                                                                current -= Constants.oneTimeMessageCost;
+                                                                HashMap<String, Object> updatePoints = new HashMap<>();
+                                                                updatePoints.put(Constants.xPoints, current);
+                                                                dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+
+                                                                        //first update notification
+                                                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                                                                .child(Constants.Notifications)
+                                                                                .child(clickedUsersId).child(Constants.unread).push();
+                                                                        String messageText = editText.getText().toString();
+
+                                                                        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                                                                        String message = userName + " has sent you a one time message!\n\n" + "\"" + messageText + "\"";
+
+                                                                        long timeStamp = -1 * new java.util.Date().getTime();
+                                                                        String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+                                                                        ModelNotification notification = new ModelNotification(message, Constants.uid, timeStamp, url, true);
+
+                                                                        reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+
+                                                                                sDialog
+                                                                                        .setTitleText("Message Sent!")
+                                                                                        .setContentText("Best of luck!")
+                                                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                                                sDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
+
+                                                                                Handler handler = new Handler();
+                                                                                handler.postDelayed(new Runnable() {
+                                                                                    @Override
+                                                                                    public void run() {
+                                                                                        Intent i = new Intent(MatchCalculator.this, MainActivity.class);
+                                                                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                                        startActivity(i);                                                                                        sDialog.dismiss();
+                                                                                    }
+                                                                                }, 2500);
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                            }
+                                        });
+
+                                        sweetAlertDialog1.show();
+                                        Button btn=sweetAlertDialog1.findViewById(R.id.confirm_button);
+                                        btn.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
+                                        Button btn1=sweetAlertDialog1.findViewById(R.id.cancel_button);
+                                        btn1.setBackground(ContextCompat.getDrawable(MatchCalculator.this,R.drawable.button_4_dialogue));
+    
+                                        btn.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+                                        btn1.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+    
+                                        TextView title = sweetAlertDialog1.findViewById(R.id.title_text);
+                                        if(title!=null)
+                                            title.setTypeface(Utils.SFProRegular(MatchCalculator.this));
+    
+                                        TextView contentText = sweetAlertDialog1.findViewById(R.id.content_text);
+                                        if(contentText!=null)
+                                            contentText.setTypeface(Utils.SFPRoLight(MatchCalculator.this));
+     */
 }
