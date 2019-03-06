@@ -294,30 +294,6 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
     }
     
-    private void checkIfItsTemporaryContact() {
-        
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Messages)
-                .child(Constants.uid)
-                .child(Constants.contacts)
-                .child(sendToUid)
-                .child("timeStamp");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    //show temporary contact info
-                    isTemporaryContact = true;
-                    Toast.makeText(temporaryChatFullScreen.this, "This is a temporary contact, and will disappear if you don't reply in 24 hours!", Toast.LENGTH_SHORT).show();
-                }
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
-    }
     
     private void checkBlockStatus() {
         
@@ -839,8 +815,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                         //unblock the user and set contact to not temporary
                         DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.blockList)
-                                .child(sendToUid)
-                                .child(Constants.uid);
+                                .child(Constants.uid)
+                                .child(sendToUid);
                         blockRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

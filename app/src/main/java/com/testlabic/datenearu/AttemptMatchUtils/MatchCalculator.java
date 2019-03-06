@@ -379,6 +379,7 @@ public class MatchCalculator extends AppCompatActivity {
         Intent i = new Intent(MatchCalculator.this, temporaryChatFullScreen.class);
         i.putExtra(Constants.sendToUid, clickedUsersId);
         i.putExtra(Constants.sendToName, nameS);
+        i.putExtra(Constants.tempUid, Constants.uid);
         i.putExtra(Constants.refresh, true);
         startActivity(i);
     
