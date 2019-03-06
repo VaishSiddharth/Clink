@@ -571,7 +571,7 @@ public class EditActivity extends AppCompatActivity {
                 bar1.setVisibility(View.INVISIBLE);
                 bar2.setVisibility(View.INVISIBLE);
                 bar3.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(),"Image uploaded Successfully!!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Successful!!",Toast.LENGTH_LONG).show();
                 
             }
         });

@@ -1,96 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-        <androidx.appcompat.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
-            android:background="#ffffff"
-            android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                        <customfonts.MyTextView_SF_Pro_Display_Bold
-                            android:layout_weight="1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Messages"
-                            android:textSize="20sp"
-                            android:textColor="#3b3b3b"/>
-
-
-                        <ImageView
-                            android:layout_marginRight="15dp"
-                            android:layout_width="16dp"
-                            android:visibility="invisible"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_search_magnifier_interface_symbol"/>
-
-                </LinearLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:id="@+id/line"
-            android:visibility="invisible"
-            android:background="@color/appcolor"
-            android:layout_height="1dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cRecylerView"
-            android:layout_below="@+id/line"
-            android:layout_width="match_parent"
-            android:visibility="visible"
-            android:background="#fff"
-            android:padding="4dp"
-            android:layout_height="wrap_content">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <ImageView
-            android:id="@+id/emptyView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:visibility="gone"
-            android:src="@drawable/nomessagespng"
-            android:layout_centerInParent="true" />
-        <ImageView
-            android:id="@+id/emptyViewno"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:visibility="gone"
-            android:src="@drawable/nomessagespng"
-            android:layout_centerInParent="true" />
-        <TextView
-            android:id="@+id/emptyViewtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/emptyViewno"
-            android:visibility="gone"
-            android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:textSize="12sp"
-            android:text="Your messages will appear here."/>
+            android:orientation="horizontal">
+
+            <customfonts.MyTextView_SF_Pro_Display_Bold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Messages"
+                android:textColor="#3b3b3b"
+                android:textSize="20sp" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler4"
-            android:visibility="visible"
-            android:layout_below="@+id/cRecylerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_search_magnifier_interface_symbol"
+                android:visibility="invisible" />
 
-        </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
 
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/shadow" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cRecylerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line"
+        android:padding="4dp"
+        android:visibility="visible">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <ImageView
+        android:id="@+id/emptyView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/nomessagespng"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/emptyViewno"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/nomessagespng"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/emptyViewtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emptyViewno"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Your messages will appear here."
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/cRecylerView"
+        android:visibility="visible">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </RelativeLayout>

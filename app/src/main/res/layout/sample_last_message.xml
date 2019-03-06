@@ -7,9 +7,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.7dp"
+        android:layout_height="2dp"
         android:layout_below="@+id/toolbar"
-        android:background="#efefef" />
+        android:background="@drawable/shadow" />
 
     <LinearLayout
         android:id="@+id/linear"
@@ -148,6 +148,11 @@
         </LinearLayout>
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@drawable/gradient_setupuser" />
+
 
 
 
