@@ -58,9 +58,10 @@
             <com.skyfishjy.library.RippleBackground
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/content"
+                android:id="@+id/contentreg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 app:rb_color="@color/appcolor"
                 app:rb_duration="3000"
                 app:rb_radius="4dp"
@@ -68,12 +69,54 @@
                 app:rb_scale="6">
 
                 <ImageView
-                    android:id="@+id/gift"
+                    android:id="@+id/giftreg"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:src="@drawable/gift"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
+            </com.skyfishjy.library.RippleBackground>
+            <com.skyfishjy.library.RippleBackground
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/contentpre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:rb_color="@color/red"
+                app:rb_duration="3000"
+                app:rb_radius="4dp"
+                app:rb_rippleAmount="4"
+                app:rb_scale="6">
+
+                <ImageView
+                    android:id="@+id/giftpre"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/gift"
+                    android:visibility="gone" />
+            </com.skyfishjy.library.RippleBackground>
+            <com.skyfishjy.library.RippleBackground
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/contentroy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:rb_color="@color/yellow"
+                app:rb_duration="3000"
+                app:rb_radius="4dp"
+                app:rb_rippleAmount="4"
+                app:rb_scale="6">
+
+                <ImageView
+                    android:id="@+id/giftroy"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/gift"
+                    android:visibility="gone" />
             </com.skyfishjy.library.RippleBackground>
 
             <customfonts.BrushFlowFont
