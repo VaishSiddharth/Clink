@@ -90,6 +90,7 @@ public class Constants {
     public static String acceptHistory = "acceptHistory";
     public static int newUserDrops = 1000;
     public static String tempUid = "tempUid";
+    public static String enabledMultiMsgs = "enabledMultiMsgs";
     
     public static String encrypt(String cityLabel) {
         
