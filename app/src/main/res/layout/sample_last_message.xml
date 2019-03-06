@@ -44,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+
                 <customfonts.TextViewSFProDisplayRegular
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
@@ -53,14 +54,13 @@
                     android:textColor="#212121"/>
 
                 <ImageView
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginTop="9dp"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_gravity="center"
                     android:id="@+id/onlineStatus"
-                    android:visibility="invisible"
-                    android:background="@drawable/ic_online_"/>
+                    android:visibility="gone"
+                    android:background="@drawable/onlinestatus"/>
 
                 <TextView
                     android:id="@+id/numberOfNewMessages"

@@ -31,11 +31,19 @@
                 android:layout_gravity="center"/>
 
             <ImageView
-                android:layout_width="10dp"
                 android:id="@+id/statusOnline"
-                android:visibility="invisible"
-                android:layout_height="10dp"
-                android:src="@drawable/ic_online_" />
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_alignStart="@+id/image"
+                android:layout_alignTop="@+id/image"
+                android:layout_alignEnd="@+id/image"
+                android:layout_alignBottom="@+id/image"
+                android:layout_marginStart="46dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/onlinestatus"
+                android:visibility="invisible" />
 
         </RelativeLayout>
                 <customfonts.MyTextView_SF_Pro_Display_Bold
