@@ -726,7 +726,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         if (user != null) {
                             HashMap<String, Object> timeStamp = new HashMap<>();
                             timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine(), null);
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), false, null);
                             ref.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -772,7 +772,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                         if (user != null) {
                             HashMap<String, Object> timeStamp = new HashMap<>();
                             timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine(), null);
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), false, null);
                             ref2.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

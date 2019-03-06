@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
         
         //initialize the startappSDK
         
-         StartAppSDK.init(this, "211455651", false);
-         StartAppAd.disableSplash();
-         StartAppAd.disableAutoInterstitial();
+         //StartAppSDK.init(this, "211455651", false);
+         //StartAppAd.disableSplash();
+         //StartAppAd.disableAutoInterstitial();
          
         boolean moveToLocationActivity = getIntent().getBooleanExtra(Constants.moveToLocationActivity, false);
         if (moveToLocationActivity)

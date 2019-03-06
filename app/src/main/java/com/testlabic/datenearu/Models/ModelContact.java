@@ -4,49 +4,37 @@ import java.util.HashMap;
 
 public class ModelContact {
     
-    String name;
-    String image;
-    String uid;
-    String oneLine;
-    Boolean blockStatus;
-    HashMap<String, Object> timeStamp;
-    Boolean directMessage;
+    private String name;
+    private String image;
+    private String uid;
+    private Boolean temporaryContact;
+    private String tempUid;
+    private boolean blockStatus;
     
-    public HashMap<String, Object> getTimeStamp() {
-        return timeStamp;
+    public boolean getBlockStatus() {
+        return blockStatus;
     }
     
-    public Boolean getBlockStatus() {
-        return blockStatus;
+    public Boolean getTemporaryContact() {
+        return temporaryContact;
+    }
+    
+    public String getTempUid() {
+        return tempUid;
     }
     
     public ModelContact() {
     }
     
-    public String getOneLine() {
     
-        return oneLine;
-    }
-    
-    public Boolean getDirectMessage() {
-        return directMessage;
-    }
-    
-    public ModelContact(String name, String image, String uid, String oneLine, HashMap<String, Object> timeStamp) {
+    public ModelContact(String name, String image, String uid,
+                        Boolean temporaryContact
+    , String tempUid) {
         this.name = name;
         this.image = image;
         this.uid = uid;
-        this.oneLine = oneLine;
-        this.timeStamp = timeStamp;
-    }
-    
-    public ModelContact(String name, String image, String uid, String oneLine, HashMap<String, Object> timeStamp, Boolean directMessage) {
-        this.name = name;
-        this.image = image;
-        this.uid = uid;
-        this.oneLine = oneLine;
-        this.timeStamp = timeStamp;
-        this.directMessage = directMessage;
+        this.temporaryContact = temporaryContact;
+        this.tempUid = tempUid;
     }
     
     public String getName() {

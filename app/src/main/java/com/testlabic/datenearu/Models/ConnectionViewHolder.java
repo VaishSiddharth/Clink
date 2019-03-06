@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
+import com.testlabic.datenearu.ChatUtils.temporaryChatFullScreen;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Utils;
@@ -87,7 +88,7 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
         
         name.setText(model.getName());
         Glide.with(context).load(getBiggerImage(model.getImage())).into(photo);
-        if(model.getBlockStatus()!=null&&model.getBlockStatus())
+        if(model.getBlockStatus())
         {
             //show connection as blocked
             name.setTextColor(Color.GRAY);
@@ -95,7 +96,7 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
             //about.setText("Long press to unblock");
         }
         else
-        if(model.getBlockStatus()!=null&&!model.getBlockStatus())
+        if(!model.getBlockStatus())
         {
             name.setTextColor(context.getResources().getColor(R.color.read_color));
            // about.setText(model.getOneLine());
@@ -104,12 +105,22 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, chatFullScreen.class);
-            
-                i.putExtra(Constants.sendToUid, model.getUid());
-            
-                i.putExtra(Constants.sendToName, model.getName());
-                context.startActivity(i);
+    
+                if(model.getTemporaryContact())
+                {
+                    Intent i = new Intent(context, temporaryChatFullScreen.class);
+                    i.putExtra(Constants.sendToUid, model.getUid());
+                    i.putExtra(Constants.sendToName, model.getName());
+                    context.startActivity(i);
+                }
+                else
+                {
+                    Intent i = new Intent(context, chatFullScreen.class);
+                    i.putExtra(Constants.sendToUid, model.getUid());
+                    i.putExtra(Constants.sendToName, model.getName());
+                    context.startActivity(i);
+                }
+                
             }
         });
     
@@ -121,8 +132,8 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
             }
         });
         timer.setVisibility(View.GONE);
-        if(model.getTimeStamp()!=null)
-            setUpTimer(timer, (long) model.getTimeStamp().get(Constants.timeStamp), model.getUid());
+        /*if(model.getTimeStamp()!=null)
+            setUpTimer(timer, (long) model.getTimeStamp().get(Constants.timeStamp), model.getUid());*/
     
     }
     

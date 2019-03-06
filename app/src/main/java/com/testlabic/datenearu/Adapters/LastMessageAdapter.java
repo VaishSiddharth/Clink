@@ -25,6 +25,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
+import com.testlabic.datenearu.ChatUtils.temporaryChatFullScreen;
 import com.testlabic.datenearu.Models.ModelLastMessage;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
@@ -148,12 +149,23 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         holder.linear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
-                Intent i = new Intent(context, chatFullScreen.class);
-                i.putExtra(Constants.sendToUid, lastMessage.getUid());
-                i.putExtra(Constants.sendToName, lastMessage.getName());
-                
-                context.startActivity(i);
+                if(lastMessage.getTemporaryContact()!=null&&lastMessage.getTemporaryContact())
+                {
+                    Intent i = new Intent(context, temporaryChatFullScreen.class);
+                    i.putExtra(Constants.sendToUid, lastMessage.getUid());
+                    i.putExtra(Constants.sendToName, lastMessage.getName());
+                    if(lastMessage.getTempUid()!=null)
+                    i.putExtra(Constants.tempUid, lastMessage.getTempUid());
+                    context.startActivity(i);
+                }
+                else
+                {
+                    Intent i = new Intent(context, chatFullScreen.class);
+                    i.putExtra(Constants.sendToUid, lastMessage.getUid());
+                    i.putExtra(Constants.sendToName, lastMessage.getName());
+                    context.startActivity(i);
+                }
+               
             }
         });
     }
