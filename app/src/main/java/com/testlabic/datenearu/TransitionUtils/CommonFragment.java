@@ -281,8 +281,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                     final SimpleTarget simpleTarget1 = new SimpleTarget.Builder((Activity) getContext())
                             .setPoint(imageX1, imageY1)
                             .setShape(new Circle(400f)) // or RoundedRectangle()
-                            .setTitle("the title")
-                            .setDescription("the description")
+                            .setTitle("Profile")
+                            .setDescription("Tap on it and see details about them\nYou can also attempt Cheers")
                             .setOverlayPoint(100f, imageY1 + imageRadius1 + 300f)
                             .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
                                 @Override
@@ -297,7 +297,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                             })
                             .build();
                     //second target
-                    int[] imagelocation2 = {0, 0};
+                    /*int[] imagelocation2 = {0, 0};
                     match.getLocationInWindow(imagelocation2);
                     final float imageX2 = imagelocation2[0] + match.getMeasuredWidth() / 2f;
                     final float imageY2 = imagelocation2[1] + match.getMeasuredHeight() / 2f;
@@ -319,7 +319,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                     // do something
                                 }
                             })
-                            .build();
+                            .build();*/
                     //third target
                     /*int[] imagelocation3 = {0, 0};
                     bottle.getLocationInWindow(imagelocation3);
@@ -348,7 +348,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                             .setOverlayColor(R.color.background)
                             .setDuration(1000L)
                             .setAnimation(new DecelerateInterpolator(2f))
-                            .setTargets(simpleTarget1, simpleTarget2)
+                            .setTargets(simpleTarget1)
                             .setClosedOnTouchedOutside(true)
                             .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
                                 @Override
