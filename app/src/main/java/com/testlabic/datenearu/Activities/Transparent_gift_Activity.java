@@ -51,6 +51,7 @@ public class Transparent_gift_Activity extends Activity {
     ImageView bottletype;
     DatabaseReference moveReadRef;
     ChildEventListener childEventListener;
+    TextView points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class Transparent_gift_Activity extends Activity {
         setContentView(R.layout.activity_transparent_gift_);
         modelGift = (ModelGift) getIntent().getSerializableExtra(Constants.giftModel);
         premium_bottle = findViewById(R.id.premium_bottle);
+        points=findViewById(R.id.points);
         completeScreen = findViewById(R.id.scratch_view_behind);
         completeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +91,7 @@ public class Transparent_gift_Activity extends Activity {
         String url = modelGift.getGiftSendersImageUrl();
         Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagePerson);
         String message = modelGift.getGiftSendersName() + " has sent you a gift (Tap to see Profile) ";
+
         namePerson.setText(message);
         namePerson.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +103,49 @@ public class Transparent_gift_Activity extends Activity {
                 startActivity(i);
             }
         });
+        imagePerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Transparent_gift_Activity.this, ClickedUser.class);
+                i.putExtra(Constants.comingFromNotif, true);
+                i.putExtra(Constants.clickedUid, modelGift.getGiftSendersUid());
+                finish();
+                startActivity(i);
+            }
+        });
+
+
+        switch (modelGift.getGiftType())
+        {
+            case "Regular Wine" : bottletype.setImageResource(R.drawable.regular_bottle);
+
+                points.setText("+200 drops");
+                royal_bottle.setVisibility(View.GONE);
+                premium_bottle.setVisibility(View.GONE);
+                regular_bottle.setVisibility(View.VISIBLE);
+                break;
+
+
+            case "Premium Wine" : bottletype.setImageResource(R.drawable.premium_bottle);
+
+                points.setText("+500 drops");
+                royal_bottle.setVisibility(View.GONE);
+                regular_bottle.setVisibility(View.GONE);
+                premium_bottle.setVisibility(View.VISIBLE);
+                break;
+
+
+            case "Royal Wine" :bottletype.setImageResource(R.drawable.royal_bottle);
+
+                points.setText("+1000 drops");
+                premium_bottle.setVisibility(View.INVISIBLE);
+                regular_bottle.setVisibility(View.INVISIBLE);
+                royal_bottle.setVisibility(View.VISIBLE);
+
+                break;
+
+
+        }
 
         ScratchoffController controller = new ScratchoffController(this)
                 .setThresholdPercent(0.20d)
@@ -110,7 +156,7 @@ public class Transparent_gift_Activity extends Activity {
                     @Override
                     public void run() {
 
-                        AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
+                        /*AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
                         switch (modelGift.getGiftType())
                         {
                             case "Regular Wine" : bottletype.setImageResource(R.drawable.regular_bottle);
@@ -122,6 +168,7 @@ public class Transparent_gift_Activity extends Activity {
                                 //premium_bottle.startAnimation(anim2);
                                 royal_bottle.setVisibility(View.GONE);
                                 premium_bottle.setVisibility(View.GONE);
+                                regular_bottle.setVisibility(View.VISIBLE);
                                 break;
 
 
@@ -134,10 +181,11 @@ public class Transparent_gift_Activity extends Activity {
                                 //premium_bottle.startAnimation(anim2);
                                 royal_bottle.setVisibility(View.GONE);
                                 regular_bottle.setVisibility(View.GONE);
+                                premium_bottle.setVisibility(View.VISIBLE);
                                 break;
 
 
-                            case "Royal Wine" :
+                            case "Royal Wine" :bottletype.setImageResource(R.drawable.royal_bottle);
 
                                 anim2.setStartOffset(100);
                                 anim2.setDuration(1000);
@@ -146,11 +194,12 @@ public class Transparent_gift_Activity extends Activity {
                                 //premium_bottle.startAnimation(anim2);
                                 premium_bottle.setVisibility(View.INVISIBLE);
                                 regular_bottle.setVisibility(View.INVISIBLE);
-                                bottletype.setImageResource(R.drawable.royal_bottle);
+                                royal_bottle.setVisibility(View.VISIBLE);
+
                                 break;
 
 
-                        }
+                        }*/
 
                         KonfettiView viewKonfetti = findViewById(R.id.viewKonfetti);
                         viewKonfetti.build()

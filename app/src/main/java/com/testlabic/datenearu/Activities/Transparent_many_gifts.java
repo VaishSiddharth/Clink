@@ -39,12 +39,13 @@ import com.testlabic.datenearu.Utils.Constants;
 
 public class Transparent_many_gifts extends Activity {
 
-    ImageView imagePerson, gift, premium_bottle, royal_bottle, regular_bottle;
+    ImageView imagePerson, gift, premium_bottle, royal_bottle, regular_bottle,giftreg,giftroy,giftpre;
     TextView namePerson;
     private int count = 0;
     private FirebaseListAdapter<ModelGift> adapter;
     private ListView listView;
     private int giftUnopened;
+    TextView points;
 
     DatabaseReference moveReadRef;
     ChildEventListener childEventListener;
@@ -109,12 +110,17 @@ public class Transparent_many_gifts extends Activity {
                             premium_bottle = v.findViewById(R.id.premium_bottle);
                             royal_bottle = v.findViewById(R.id.royal_bottle);
                             regular_bottle = v.findViewById(R.id.regular_bottle);
-                            gift = v.findViewById(R.id.gift);
-                            final RippleBackground rippleBackground = (RippleBackground) v.findViewById(R.id.content);
-                            rippleBackground.startRippleAnimation();
+                            giftreg = v.findViewById(R.id.giftreg);
+                            points=v.findViewById(R.id.points);
+                            giftpre = v.findViewById(R.id.giftpre);
+                            giftroy = v.findViewById(R.id.giftroy);
+                            final RippleBackground rippleBackgroundroy = (RippleBackground) v.findViewById(R.id.contentroy);
+                            final RippleBackground rippleBackgroundpre = (RippleBackground) v.findViewById(R.id.contentpre);
+                            final RippleBackground rippleBackgroundreg = (RippleBackground) v.findViewById(R.id.contentreg);
                             String winetype = model.getGiftType().toLowerCase().replaceAll("\\s+", "");
                             int resID = getApplicationContext().getResources().getIdentifier(winetype, "drawable", getApplicationContext().getPackageName());
-                            gift.setImageResource(resID);
+
+
                             Glide.with(Transparent_many_gifts.this)
                                     .load(model.getGiftSendersImageUrl()).into(imagePerson);
                             String message = model.getGiftSendersName()
@@ -129,6 +135,49 @@ public class Transparent_many_gifts extends Activity {
                                     startActivity(i);
                                 }
                             });
+                            if(model.getGiftType().equalsIgnoreCase("Regular wine"))
+                            {
+                                points.setText("+200 drops");
+                                giftreg.setImageResource(resID);
+                                rippleBackgroundreg.startRippleAnimation();
+                                rippleBackgroundpre.stopRippleAnimation();
+                                rippleBackgroundroy.stopRippleAnimation();
+                                rippleBackgroundreg.setVisibility(View.VISIBLE);
+                                giftreg.setVisibility(View.VISIBLE);
+                                giftpre.setVisibility(View.GONE);
+                                giftroy.setVisibility(View.GONE);
+                                rippleBackgroundroy.setVisibility(View.GONE);
+                                rippleBackgroundpre.setVisibility(View.GONE);
+
+                            }
+                            else if (model.getGiftType().equalsIgnoreCase("Premium wine"))
+                            {
+                                points.setText("+500 drops");
+                                giftpre.setImageResource(resID);
+                                rippleBackgroundpre.startRippleAnimation();
+                                rippleBackgroundroy.stopRippleAnimation();
+                                rippleBackgroundreg.stopRippleAnimation();
+                                rippleBackgroundpre.setVisibility(View.VISIBLE);
+                                giftpre.setVisibility(View.VISIBLE);
+                                giftreg.setVisibility(View.GONE);
+                                giftroy.setVisibility(View.GONE);
+                                rippleBackgroundroy.setVisibility(View.GONE);
+                                rippleBackgroundreg.setVisibility(View.GONE);
+                            }
+                            else if(model.getGiftType().equalsIgnoreCase("Royal wine"))
+                            {
+                                points.setText("+1000 drops");
+                                giftroy.setImageResource(resID);
+                                rippleBackgroundroy.startRippleAnimation();
+                                rippleBackgroundpre.stopRippleAnimation();
+                                rippleBackgroundreg.stopRippleAnimation();
+                                rippleBackgroundroy.setVisibility(View.VISIBLE);
+                                giftroy.setVisibility(View.VISIBLE);
+                                giftreg.setVisibility(View.GONE);
+                                giftpre.setVisibility(View.GONE);
+                                rippleBackgroundreg.setVisibility(View.GONE);
+                                rippleBackgroundpre.setVisibility(View.GONE);
+                            }
                         }
                     };
                     listView.setAdapter(adapter);
@@ -152,7 +201,7 @@ public class Transparent_many_gifts extends Activity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.e(TAG, "count = " + dataSnapshot.getChildrenCount());
+                //Log.e(TAG, "count = " + dataSnapshot.getChildrenCount());
                 dataSnapshot.getRef().setValue(null);
                 moveReadRef.removeEventListener(childEventListener);
             }
@@ -173,7 +222,7 @@ public class Transparent_many_gifts extends Activity {
         childEventListener = moveReadRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.e(TAG, "Triggered");
+                //Log.e(TAG, "Triggered");
                 if (dataSnapshot.getValue() != null) {
                     ModelGift notification = dataSnapshot.getValue(ModelGift.class);
                     String pushKey = dataSnapshot.getKey();
@@ -211,7 +260,7 @@ public class Transparent_many_gifts extends Activity {
 
     @Override
     public void onBackPressed() {
-        Log.e(TAG, "backpressed");
+        //Log.e(TAG, "backpressed");
         super.onBackPressed();
         removeListeners();
     }

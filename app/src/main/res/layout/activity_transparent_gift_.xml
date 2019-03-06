@@ -55,7 +55,7 @@
         android:layout_below="@+id/nameperson"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:text="+1000 drops"
+        android:text="+NA drops"
         android:textColor="@color/appcolor"
         android:textSize="15sp" />
 
@@ -76,7 +76,7 @@
             android:layout_marginTop="115dp"
             android:layout_marginBottom="115dp"
             android:src="@drawable/premium_bottle"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/royal_bottle"
@@ -87,7 +87,7 @@
             android:layout_marginTop="115dp"
             android:layout_marginBottom="115dp"
             android:src="@drawable/royal_bottle"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/regular_bottle"
