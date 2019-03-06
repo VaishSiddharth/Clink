@@ -9,10 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.icu.text.SymbolTable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -28,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -37,10 +33,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -62,7 +56,6 @@ import com.testlabic.datenearu.ArchitectureUtils.ViewModels.CityLabelModel;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PointLabelModel;
 import com.testlabic.datenearu.ArchitectureUtils.ViewModels.PrefsModel;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
-import com.testlabic.datenearu.Login;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelPrefs;
 import com.testlabic.datenearu.Models.ModelSubscr;
@@ -87,7 +80,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Aviharsh on 2016/9/18.
  */
 public class pagerTransition extends Fragment {
-
+    
     private static final String TAG = pagerTransition.class.getSimpleName();
     private TextView indicatorTv;
     private ViewPager viewPager;
@@ -119,25 +112,23 @@ public class pagerTransition extends Fragment {
     String city;
     ImageView emptyViewno;
     TextView emptyViewtext;
-    private String location;
-
+    
     public pagerTransition() {
         // Required empty public constructor
     }
-
+    
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        
     }
-
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
+        
         rootView = inflater.inflate(R.layout.activity_pager_transition, viewPager, false);
-
+        
         sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
         curUsersMatchSeq = sharedPreferences.getString(Constants.matchAlgo, null);
@@ -149,9 +140,9 @@ public class pagerTransition extends Fragment {
         points = rootView.findViewById(R.id.points);
         bottle = rootView.findViewById(R.id.fill_bottle);
         emptyView = rootView.findViewById(R.id.emptyView);
-        emptyViewno=rootView.findViewById(R.id.emptyViewno);
-        emptyViewtext=rootView.findViewById(R.id.emptyViewtext);
-
+        emptyViewno = rootView.findViewById(R.id.emptyViewno);
+        emptyViewtext = rootView.findViewById(R.id.emptyViewtext);
+        
         Drawable mWaveDrawable = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             mWaveDrawable = new WaveDrawable(getContext().getDrawable(R.drawable.nohere));
@@ -162,14 +153,14 @@ public class pagerTransition extends Fragment {
         //((WaveDrawable) mWaveDrawable).setLevel(20);
         ((WaveDrawable) mWaveDrawable).setIndeterminate(true);
         emptyView.setImageDrawable(mWaveDrawable);
-
+        
         emptyView.setVisibility(View.VISIBLE);
         Constants.uid = FirebaseAuth.getInstance().getUid();
         if (Constants.uid != null) {
             fetchPreferences();
             setUpPoints();
         }
-
+        
         changeLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,7 +174,7 @@ public class pagerTransition extends Fragment {
                 showFilterDialog();
             }
         });
-
+        
         hideAd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,19 +182,18 @@ public class pagerTransition extends Fragment {
                 banner.hideBanner();
             }
         });
-
-
+        
         setShowcaseView();
-
+        
         //setupCityLabelLocation
-
+        
         // Obtain a new or prior instance of ViewModel from the
         // ViewModelProviders utility class.
         if (Constants.uid != null) {
             CityLabelModel viewModel = ViewModelProviders.of(this).get(CityLabelModel.class);
-
+            
             LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
-
+            
             liveData.observe(this, new Observer<DataSnapshot>() {
                 @Override
                 public void onChanged(@Nullable DataSnapshot dataSnapshot) {
@@ -211,7 +201,7 @@ public class pagerTransition extends Fragment {
                         // Log.e(TAG, "Setting value using architecture " + dataSnapshot.getValue());
                         if (dataSnapshot.getValue() != null) {
                             String value = dataSnapshot.getValue(String.class);
-
+                            
                             if (value != null) {
                                 editor.putString(Constants.cityLabel, value).apply();
                                 changeLocation.setText(Constants.decrypt(value));
@@ -223,49 +213,26 @@ public class pagerTransition extends Fragment {
         }
         return rootView;
     }
-
-    private void nothere()
-    {
-        //if new user in new location
-        DatabaseReference ref1=FirebaseDatabase.getInstance().getReference()
-                .child(Constants.userInfo).child(Constants.uid).child(Constants.cityLabel);
-        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                location =dataSnapshot.getValue(String.class);
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.cityLabels);
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(!dataSnapshot.hasChild(location)){
-                            Log.e(TAG,location);
-                            emptyViewtext.setVisibility(View.VISIBLE);
-                            emptyViewno.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    
+    private void nothere(boolean b) {
+        if (b) {
+            emptyViewtext.setVisibility(View.VISIBLE);
+            emptyViewno.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            emptyViewtext.setVisibility(View.INVISIBLE);
+            emptyViewno.setVisibility(View.INVISIBLE);
+        }
     }
-
+    
     @Override
     public void onPause() {
         super.onPause();
         //Log.e(TAG, "Paused pagerTransition");
         cleanup();
     }
-
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -277,9 +244,9 @@ public class pagerTransition extends Fragment {
                 fetchPreferences();
             }
         }
-
+        
     }
-
+    
     public void setShowcaseView() {
         final SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean isFirstRun = wmbPreference.getBoolean("SHOW18", true);
@@ -306,7 +273,7 @@ public class pagerTransition extends Fragment {
                                 public void onStarted(SimpleTarget target) {
                                     // do something
                                 }
-
+                                
                                 @Override
                                 public void onEnded(SimpleTarget target) {
                                     // do something
@@ -330,7 +297,7 @@ public class pagerTransition extends Fragment {
                                 public void onStarted(SimpleTarget target) {
                                     // do something
                                 }
-
+                                
                                 @Override
                                 public void onEnded(SimpleTarget target) {
                                     // do something
@@ -354,7 +321,7 @@ public class pagerTransition extends Fragment {
                                 public void onStarted(SimpleTarget target) {
                                     // do something
                                 }
-
+                                
                                 @Override
                                 public void onEnded(SimpleTarget target) {
                                     // do something
@@ -365,35 +332,34 @@ public class pagerTransition extends Fragment {
                             .setOverlayColor(R.color.background)
                             .setDuration(1000L)
                             .setAnimation(new DecelerateInterpolator(2f))
-                            .setTargets(simpleTarget1,simpleTarget2,simpleTarget3)
+                            .setTargets(simpleTarget1, simpleTarget2, simpleTarget3)
                             .setClosedOnTouchedOutside(true)
                             .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
                                 @Override
                                 public void onStarted() {
                                     //Toast.makeText(getContext(), "spotlight is started", Toast.LENGTH_SHORT).show();
                                 }
-
+                                
                                 @Override
                                 public void onEnded() {
                                     SharedPreferences.Editor editor = wmbPreference.edit();
                                     editor.putBoolean("SHOW18", false).apply();
-                                    editor.putBoolean("SHOW20",true).apply();
+                                    editor.putBoolean("SHOW20", true).apply();
                                     //Toast.makeText(getContext(), "spotlight is ended", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .start();
                 }
             });
-
+            
         }
-
+        
     }
     
-
     private void setUpPoints() {
         PointLabelModel viewModel = ViewModelProviders.of(this).get(PointLabelModel.class);
         LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
-
+        
         liveData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
@@ -405,7 +371,7 @@ public class pagerTransition extends Fragment {
                     int current = modelSubscr.getXPoints();
                     String set = String.valueOf(current) + " drops";
                     points.setText(set);
-
+                    
                     //code for bottle image
                     /*if (current >= 0 && current <= 50) {
                         bottle.setImageResource(R.drawable.bottle_1);
@@ -440,26 +406,26 @@ public class pagerTransition extends Fragment {
                     } else {
                         bottle.setImageResource(R.drawable.bottle_16);
                     }*/
-
+                    
                     points.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            
                             startActivity(new Intent(getActivity(), PurchasePacks.class));
                         }
                     });
                 }
             }
         });
-
+        
     }
-
+    
     private void fetchPreferences() {
-
+        
         // Log.e(TAG, "The boolean is "+fetchPrefsCalledOnce);
         PrefsModel prefsModel = ViewModelProviders.of(this).get(PrefsModel.class);
         LiveData<DataSnapshot> snapshotLiveData = prefsModel.getDataSnapshotLiveData();
-
+        
         snapshotLiveData.observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(@Nullable DataSnapshot dataSnapshot) {
@@ -474,9 +440,9 @@ public class pagerTransition extends Fragment {
                         city = sharedPreferences.getString(Constants.cityLabel, null);
                         if (city == null) {
                             CityLabelModel viewModel = ViewModelProviders.of(pagerTransition.this).get(CityLabelModel.class);
-
+                            
                             LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
-
+                            
                             liveData.observe(pagerTransition.this, new Observer<DataSnapshot>() {
                                 @Override
                                 public void onChanged(@Nullable DataSnapshot dataSnapshot) {
@@ -495,7 +461,7 @@ public class pagerTransition extends Fragment {
                 }
             }
         });
-
+        
         // get lat long
         DatabaseReference latLong = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo)
@@ -508,33 +474,32 @@ public class pagerTransition extends Fragment {
                     currentUsersLatLong = dataSnapshot.getValue(LatLong.class);
                 }
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
+        
     }
-
-
+    
     private void showFilterDialog() {
-
+        
         final LayoutInflater factory = LayoutInflater.from(getContext());
         final View filterDialogView = factory.inflate(R.layout.filter_dialog, null);
         /*final AlertDialog deleteDialog = new AlertDialog.Builder(getContext()).create();
         deleteDialog.setView(filterDialogView);
         deleteDialog.show();*/
-
+        
         final SweetAlertDialog dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("Filters")
                 .setConfirmText("Save")
                 .setCustomView(filterDialogView);
-
+        
         RadioGroup genderGroup = filterDialogView.findViewById(R.id.genderRadio);
         RadioButton maleRButton = filterDialogView.findViewById(R.id.maleRadio);
         RadioButton femaleRButton = filterDialogView.findViewById(R.id.femaleRadio);
         final TextView distance = filterDialogView.findViewById(R.id.distance_value);
-
+        
         if (prefs != null) {
             if (prefs.getPreferedGender().equals(Constants.male)) {
                 maleRButton.setChecked(true);
@@ -544,7 +509,7 @@ public class pagerTransition extends Fragment {
                 maleRButton.setChecked(false);
             }
         }
-
+        
         genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -553,25 +518,25 @@ public class pagerTransition extends Fragment {
                     DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.userPreferences)
                             .child(Constants.uid);
-
+                    
                     HashMap<String, Object> updateMap = new HashMap<>();
                     updateMap.put(Constants.preferedGender, Constants.male);
                     // Toast.makeText(getActivity(), "Getting new results", Toast.LENGTH_SHORT).show();
                     refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-
+                            
                             editor.putString(Constants.userIntrGender, Constants.male).apply();
                             downloadList();
                         }
                     });
-
+                    
                 } else {
                     //update preferences
                     DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.userPreferences)
                             .child(Constants.uid);
-
+                    
                     HashMap<String, Object> updateMap = new HashMap<>();
                     updateMap.put(Constants.preferedGender, Constants.female);
                     // Toast.makeText(getActivity(), "Getting new results", Toast.LENGTH_SHORT).show();
@@ -587,11 +552,10 @@ public class pagerTransition extends Fragment {
         });
         age_seek = filterDialogView.findViewById(R.id.age_seekbar);
         distance_seek = filterDialogView.findViewById(R.id.distance_seekbar);
-
+        
         final TextView tvMin = filterDialogView.findViewById(R.id.minAge);
         final TextView tvMax = filterDialogView.findViewById(R.id.maxAge);
         final TextView tvAgeRange = filterDialogView.findViewById(R.id.ageRange);
-       
 
 // set final value listener
         if (prefs != null) {
@@ -601,87 +565,83 @@ public class pagerTransition extends Fragment {
             tvAgeRange.setText(age_range);
             tvMin.setText("18");
             tvMax.setText("50");
-
+            
             age_seek.setProgressColor(getResources().getColor(R.color.appcolor));
             age_seek.setValue(minAge, maxAge);
-           
+            
         }
         
         age_seek.setOnRangeChangedListener(new OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
-    
+                
                 view.setProgressColor(getResources().getColor(R.color.appcolor));
-                tvMin.setText((int)leftValue+"");
-                tvMax.setText((int)rightValue+"");
+                tvMin.setText((int) leftValue + "");
+                tvMax.setText((int) rightValue + "");
                 
                 updateMinAge = new HashMap<>();
                 updateMinAge.put("minAge", leftValue);
-    
+                
                 updateMaxAge = new HashMap<>();
                 updateMaxAge.put("maxAge", rightValue);
-    
+                
                 Log.e("CRS=>", String.valueOf(leftValue) + " : " + String.valueOf(rightValue));
-    
+                
                 //update the preferences
-    
+                
                 final DatabaseReference refPrefs = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.userPreferences)
                         .child(Constants.uid);
-    
+                
                 refPrefs.updateChildren(updateMinAge).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         refPrefs.updateChildren(updateMaxAge).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                    
+                            
                             }
                         });
-            
+                        
                     }
                 });
             }
-    
+            
             @Override
             public void onStartTrackingTouch(RangeSeekBar view, boolean isLeft) {
-        
+            
             }
-    
+            
             @Override
             public void onStopTrackingTouch(RangeSeekBar view, boolean isLeft) {
-        
-                
-                
+            
             }
         });
         
-        
-
         double dist = prefs != null ? prefs.getDistanceLimit() : 0.0;
         distance.setText(String.valueOf((int) dist) + " km");
         distance_seek.setProgress((int) dist);
-
+        
         distance_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                
                 distance.setText(String.valueOf((int) (double) progress + 10) + " km");
                 // update the database
-
+                
                 updateMap = new HashMap<>();
                 updateMap.put("distanceLimit", (double) progress + 10);
-
+                
             }
-
+            
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+            
             }
-
+            
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+            
             }
         });
         dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -698,34 +658,33 @@ public class pagerTransition extends Fragment {
                             //sweetAlertDialog.dismissWithAnimation();
                             fetchPrefsCalledOnce = false;
                             fetchPreferences();
-
+                            
                         }
                     });
                 } else {
                     fetchPrefsCalledOnce = false;
                     fetchPreferences();
                 }
-
+                
             }
         });
         dialog.show();
         Button btn = dialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_4_dialogue));
-
+        
     }
-
-  
+    
     private void fillViewPager(final ArrayList<ModelUser> displayArrayList) {
-
+        
         indicatorTv = (TextView) rootView.findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-
+        
         viewPager.setPageTransformer(false, new CustPagerTransformer(getActivity()));
-
+        
         for (int i = 0; i < displayArrayList.size(); i++) {
             fragments.add(new CommonFragment());
         }
-
+        
         if (getActivity() != null) {
             adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
                 @Override
@@ -734,50 +693,50 @@ public class pagerTransition extends Fragment {
                     fragment.bindData(displayArrayList.get(position));
                     return fragment;
                 }
-
+                
                 @Override
                 public int getCount() {
                     return displayArrayList.size();
                 }
             };
-
+            
             viewPager.setAdapter(adapter);
-
+            
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 }
-
+                
                 @Override
                 public void onPageSelected(int position) {
                     updateIndicatorTv();
                 }
-
+                
                 @Override
                 public void onPageScrollStateChanged(int state) {
-
+                
                 }
             });
             updateIndicatorTv();
         }
-
+        
     }
-
+    
     private void downloadList() {
-
+        
         displayArrayList = new ArrayList<>();
         displayArrayList.clear();
         Log.e(TAG, "Download list called with " + city);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
-
+        
         if (city == null) {
             fetchPrefsCalledOnce = false;
             fetchPreferences();
         } else {
-
+            
             ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.cityLabels).child(Constants.encrypt(city)).child(interestedGender);
-
+            
             //Log.e(TAG, "download list called "+ ref);
             childEventListener = new ChildEventListener() {
                 @Override
@@ -789,27 +748,27 @@ public class pagerTransition extends Fragment {
                         }
                     }
                 }
-
+                
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Log.e(TAG, "The child changed triggeres");
                     downloadList();
                 }
-
+                
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                     Log.e(TAG, "The child removerd triggeres");
                     downloadList();
                 }
-
+                
                 @Override
                 public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                
                 }
-
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                
                 }
             };
             ref.addChildEventListener(childEventListener);
@@ -817,10 +776,15 @@ public class pagerTransition extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //populate adapter
-
+                    
                     //sort the arraylist here using LevenshteinDistance algorithm
-
+                    
                     //Log.e(TAG, "Called");
+                    
+                    if (!dataSnapshot.exists())
+                        nothere(true);
+                    else
+                        nothere(false);
                     sortWithMatch();
                     emptyView.setVisibility(View.INVISIBLE);
                     Collections.sort(displayArrayList, new Comparator<ModelUser>() {
@@ -833,21 +797,21 @@ public class pagerTransition extends Fragment {
                     });
                     fillViewPager(displayArrayList);
                 }
-
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                
                 }
             });
         }
     }
-
+    
     private void sortWithMatch() {
-
+        
         final Levenshtein l = new Levenshtein();
-
+        
         for (final ModelUser user : displayArrayList) {
-
+            
             //  Log.e(TAG, "The match seq is "+ curUsersMatchSeq);
             if (user.getMatchAlgo() != null) {
                 double s = l.distance(curUsersMatchSeq, user.getMatchAlgo());
@@ -855,9 +819,9 @@ public class pagerTransition extends Fragment {
                 // Log.e(TAG, "The match index is "+ s);
             }
         }
-
+        
     }
-
+    
     private void filterList(ModelUser item) {
         //pass the item through the filters and then add them to the list for adaper;
         //1. Age filter
@@ -867,9 +831,9 @@ public class pagerTransition extends Fragment {
             displayArrayList.add(item);
         }
     }
-
+    
     private double distanceBetweenThem(LatLong location) {
-
+        
         //  if(currentUsersLatLong!=null)
         // return distance(currentUsersLatLong.getLatitude(), currentUsersLatLong.getLongitude(), location.getLatitude(), location.getLongitude());
         // LevenshteinDistance.Compute(baseString, stringtoTest)
@@ -879,7 +843,7 @@ public class pagerTransition extends Fragment {
           /*
     Calculating the distances in kilometer
      */
-
+    
     private double distance(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1))
@@ -893,15 +857,15 @@ public class pagerTransition extends Fragment {
         //Log.e(TAG, "The distance is " + dist);
         return (dist);
     }
-
+    
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
-
+    
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
-
+    
     /**
      * 更新指示器
      */
@@ -910,8 +874,7 @@ public class pagerTransition extends Fragment {
         int currentItem = viewPager.getCurrentItem() + 1;
         indicatorTv.setText(Html.fromHtml("<font color='#12edf0'>" + currentItem + "</font>  /  " + totalNum));
     }
-
-
+    
     @Override
     public void onResume() {
         super.onResume();
@@ -920,19 +883,17 @@ public class pagerTransition extends Fragment {
             startActivity(new Intent(getActivity(), SignIn.class));
         else {
             Constants.uid = FirebaseAuth.getInstance().getUid();
-            nothere();
         }
-       
+        
     }
-
+    
     public void cleanup() {
         // We're being destroyed, let go of our mListener and forget about all of the mModels
         if (ref != null && childEventListener != null)
             ref.removeEventListener(childEventListener);
-
+        
     }
-
-
+    
     @Override
     public void onDestroy() {
         cleanup();

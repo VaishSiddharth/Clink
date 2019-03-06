@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                             long timestamp = dataSnapshot.getValue(Long.class);
                             long epoch = System.currentTimeMillis();
                             long oneday = 86400000;
-                            Log.e(TAG, "The epoch and timestamps are " + timestamp + " " + epoch);
+                            //Log.e(TAG, "The epoch and timestamps are " + timestamp + " " + epoch);
                             if (epoch >= (timestamp + (5 * oneday)) && ((epoch <= timestamp + (6 * oneday)))) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Reminder!")
@@ -691,7 +691,7 @@ public class MainActivity extends AppCompatActivity {
         reference.updateChildren(updateStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                if (status.equals(null)) {
+                if (status == null) {
                     reference.updateChildren(offlineTime);
                 }
             }
