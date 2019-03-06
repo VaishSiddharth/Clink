@@ -183,7 +183,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_full_screen);
+        setContentView(R.layout.activity_temporary_chat_full_screen);
         Toast.makeText(this, "TemporaryChat", Toast.LENGTH_SHORT).show();
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         bar = findViewById(R.id.progress_bar);
@@ -823,7 +823,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     //block the user from other users side;
-                    
+                    Log.e(TAG, "The temp uid is "+ tempUid);
                     if (tempUid != null && tempUid.equals(Constants.uid)) {
                         DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.blockList)
