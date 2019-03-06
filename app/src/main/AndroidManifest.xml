@@ -142,6 +142,7 @@
         <activity
             android:name=".Utils.Transparent_likeback"
             android:theme="@style/Theme.Transparent" />
+        <activity android:name=".ChatUtils.temporaryChatFullScreen" />
 
         <service android:name=".AppMessaging.MyFirebaseMessagingService">
             <intent-filter>

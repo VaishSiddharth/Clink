@@ -7,32 +7,25 @@ public class ModelContact {
     private String name;
     private String image;
     private String uid;
-    private String oneLine;
-    private Boolean blockStatus;
-    private HashMap<String, Object> timeStamp;
     private Boolean temporaryContact;
     private String tempUid;
+    private boolean blockStatus;
     
-    public HashMap<String, Object> getTimeStamp() {
-        return timeStamp;
+    public boolean getBlockStatus() {
+        return blockStatus;
     }
     
-    public Boolean getBlockStatus() {
-        return blockStatus;
+    public Boolean getTemporaryContact() {
+        return temporaryContact;
+    }
+    
+    public String getTempUid() {
+        return tempUid;
     }
     
     public ModelContact() {
     }
     
-   
-    
-    public ModelContact(String name, String image, String uid, String oneLine, HashMap<String, Object> timeStamp) {
-        this.name = name;
-        this.image = image;
-        this.uid = uid;
-        this.oneLine = oneLine;
-        this.timeStamp = timeStamp;
-    }
     
     public ModelContact(String name, String image, String uid,
                         Boolean temporaryContact

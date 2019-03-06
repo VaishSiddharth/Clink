@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fliply</string>
+    <string name="app_name">Cling</string>
     <string name="facebook_app_id">2151080058553450</string>
     <string name="fb_login_protocol_scheme">fb2151080058553450</string>
     <string name="loading_message">Just a moment...</string>

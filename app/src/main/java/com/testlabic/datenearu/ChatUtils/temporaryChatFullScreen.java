@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.HelpUtils.Adapter;
 import com.testlabic.datenearu.HelpUtils.ModelMainResults;
@@ -87,6 +89,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     ImageView imageView, help, emojis;
     boolean isTemporaryContact = false;
     private View rootView;
+    private String tempUid;
     private ArrayList<ChatMessage> messages = new ArrayList<>();
     private EmojiconEditText chatEditText1;
     private EditText.OnKeyListener keyListener = new View.OnKeyListener() {
@@ -101,7 +104,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 EditText editText = (EditText) v;
                 
                 if (v == chatEditText1) {
-                   // if(isTemporaryContact)
+                    // if(isTemporaryContact)
                     //    deleteRef();
                     sendMessage(editText.getText().toString(), isOnlineForCurrentUser);
                 }
@@ -116,7 +119,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     };
     
     private void deleteRef() {
-        DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
                 .child(Constants.contacts)
@@ -133,13 +136,10 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     private ImageView.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            
             if (v == enterChatView1) {
                 sendMessage(chatEditText1.getText().toString(), isOnlineForCurrentUser);
             }
-            
             chatEditText1.setText("");
-            
         }
     };
     
@@ -184,7 +184,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_full_screen);
-        
+        Toast.makeText(this, "TemporaryChat", Toast.LENGTH_SHORT).show();
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         bar = findViewById(R.id.progress_bar);
         bar.setVisibility(View.VISIBLE);
@@ -204,15 +204,17 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
         sendToName = i.getStringExtra(Constants.sendToName);
         
+        tempUid = i.getStringExtra(Constants.tempUid);
+        
         myUid = FirebaseAuth.getInstance().getUid();
         
         if (myUid == null)
             return;
-    
-        checkBlockStatus();
+        
+       
         
         //checkIfItsTemporaryContact();
-    
+        
         fillMessageArray(sendToUid, myUid);
         
         toolbarName = findViewById(R.id.sendToName);
@@ -231,8 +233,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
         //hide chat box for blocked users and show snackbar
         layout = findViewById(R.id.layout);
-        
-        
+        checkBlockStatus();
         TextView emptyView = findViewById(R.id.emptyView);
         
         enterChatView1 = (ImageView) findViewById(R.id.enter_chat1);
@@ -242,10 +243,10 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         help = findViewById(R.id.help);
         
         emojis = findViewById(R.id.emojis);
-    
+        
         rootView = findViewById(R.id.rootView);
-    
-        EmojIconActions emojIcon=new EmojIconActions(temporaryChatFullScreen.this ,rootView,chatEditText1,emojis,"#495C66","#DCE1E2","#E6EBEF");
+        
+        EmojIconActions emojIcon = new EmojIconActions(temporaryChatFullScreen.this, rootView, chatEditText1, emojis, "#495C66", "#DCE1E2", "#E6EBEF");
         emojIcon.ShowEmojIcon();
         
         emojIcon.addEmojiconEditTextList(chatEditText1);
@@ -267,7 +268,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            
+                
                 DisplayHelpDialog();
                 
             }
@@ -294,8 +295,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     }
     
     private void checkIfItsTemporaryContact() {
-    
-        DatabaseReference ref  = FirebaseDatabase.getInstance().getReference()
+        
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Messages)
                 .child(Constants.uid)
                 .child(Constants.contacts)
@@ -304,17 +305,16 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists())
-                        {
-                            //show temporary contact info
-                            isTemporaryContact = true;
-                            Toast.makeText(temporaryChatFullScreen.this, "This is a temporary contact, and will disappear if you don't reply in 24 hours!", Toast.LENGTH_SHORT).show();
-                        }
+                if (dataSnapshot.exists()) {
+                    //show temporary contact info
+                    isTemporaryContact = true;
+                    Toast.makeText(temporaryChatFullScreen.this, "This is a temporary contact, and will disappear if you don't reply in 24 hours!", Toast.LENGTH_SHORT).show();
+                }
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
     }
@@ -322,95 +322,48 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     private void checkBlockStatus() {
         
         //Check if the other person blocked me or I blocked the other user
-        reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.blockList)
-                .child(Constants.uid);
-       listener =  reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    if(dataSnapshot.getValue(String.class)!=null)
-                    {
-                        String blockedUid = dataSnapshot.getValue(String.class);
-                        if(sendToUid.equals(blockedUid))
-                        {
-                            //hide the chat edit text
-                            layout.setVisibility(View.GONE);
-                            Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_INDEFINITE).show();
-                        }
-                    }
-            }
-    
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
-            }
-    
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        
-            }
-    
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
-            }
-    
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-        
-            }
-        });
-      
-       //check another reference
         reference2 = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.blockList)
-                .child(sendToUid);
-        
-        reference2.addChildEventListener(new ChildEventListener() {
+                .child(sendToUid)
+                .child(Constants.uid)
+        ;
+        final Snackbar snackbar = Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_INDEFINITE);
+        reference2.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(dataSnapshot.getValue(String.class)!=null)
-                {
-                    String blockedUid = dataSnapshot.getValue(String.class);
-                    if(Constants.uid.equals(blockedUid))
-                    {
-                        //hide the chat edit text
-                        layout.setVisibility(View.GONE);
-                        Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_INDEFINITE).show();
-                    }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    layout.setVisibility(View.GONE);
+                    snackbar.show();
+                } else {
+                    layout.setVisibility(View.VISIBLE);
+                    snackbar.dismiss();
                 }
             }
-    
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
-            }
-    
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        
-            }
-    
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        
-            }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
+    }
+    
+    @Override
+    public void onBackPressed() {
+        if (getIntent().getBooleanExtra(Constants.refresh, false)) {
+            Intent i = new Intent(this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        } else super.onBackPressed();
         
     }
     
     private void DisplayHelpDialog() {
         final LayoutInflater factory = LayoutInflater.from(this);
         //final View helpDialog = factory.inflate(R.layout.help_layout, null);
-    
+        
         final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("Help for you")
-                .setContentText("Can't think of anything to ask your date? Tap to get some intersting questions!")
+                .setContentText("Can't think of anything to ask your date? Tap to get some intersting questions!\n")
                 .setConfirmText("5 drops")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -429,38 +382,38 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                                             Toast.makeText(temporaryChatFullScreen.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
                                             BuyPoints();
                                         } else {
-                        
+                                            
                                             current -= Constants.dateQuestionPoints;
                                             HashMap<String, Object> updatePoints = new HashMap<>();
                                             updatePoints.put(Constants.xPoints, current);
                                             dataSnapshot.getRef().updateChildren(updatePoints);
-                        
+                                            
                                             final View questionListDialog = factory.inflate(R.layout.date_questions, null);
-                        
+                                            
                                             final SweetAlertDialog dialog = new SweetAlertDialog(temporaryChatFullScreen.this, SweetAlertDialog.NORMAL_TYPE)
                                                     // .setTitleText("Help for you")
                                                     // .setCancelText("Cancel")
                                                     .setCustomView(questionListDialog);
-                        
+                                            
                                             ListView listView = questionListDialog.findViewById(R.id.listView);
-                        
+                                            
                                             Query databaseRef = FirebaseDatabase.getInstance().getReference().child("DatingHelp").child("DatingQuestions");
-                        
+                                            
                                             FirebaseListOptions<String> options = new FirebaseListOptions.Builder<String>()
                                                     .setLayout(R.layout.sample_date_question)
                                                     .setQuery(databaseRef, String.class)
                                                     .build();
-                        
+                                            
                                             final FirebaseListAdapter<String> adapter = new FirebaseListAdapter<String>(options) {
                                                 @Override
                                                 protected void populateView(View v, final String model, int position) {
                                                     TextView questionText = v.findViewById(R.id.questionText);
                                                     questionText.setText(model);
-                                
+                                                    
                                                     questionText.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {
-                                                           
+                                                            
                                                             String text = model.replace("\"", "");
                                                             chatEditText1.setText(text);
                                                             dialog.dismiss();
@@ -469,34 +422,33 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                                                     });
                                                 }
                                             };
-                        
+                                            
                                             adapter.startListening();
-                        
+                                            
                                             listView.setAdapter(adapter);
                                             dialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                                 @Override
                                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                     adapter.stopListening();
                                                     sweetAlertDialog.dismiss();
-                                
+                                                    
                                                 }
                                             });
                                             dialog.show();
-                        
+                                            
                                         }
                                     }
                                 }
                             }
-        
+                            
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+                            
                             }
                         });
-    
+                        
                     }
                 });
-        
         
         //TextView dateQuestions = helpDialog.findViewById(R.id.dateQuestions);
         //TextView datePlaces = helpDialog.findViewById(R.id.place);
@@ -558,9 +510,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             }
         });*/
         
-        
         dialog.show();
-    
+        
         Button btn = dialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(temporaryChatFullScreen.this, R.drawable.button_4_dialogue));
         Button btn1 = dialog.findViewById(R.id.cancel_button);
@@ -569,20 +520,20 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         btn1.setTypeface(Utils.SFPRoLight(this));
         btn.setTypeface(Utils.SFPRoLight(this));
         TextView title = dialog.findViewById(R.id.title_text);
-        if(title!=null)
+        if (title != null)
             title.setTypeface(Utils.SFProRegular(this));
-    
+        
         TextView contentText = dialog.findViewById(R.id.content_text);
-        if(contentText!=null)
+        if (contentText != null)
             contentText.setTypeface(Utils.SFPRoLight(this));
         
     }
     
     private void BuyPoints() {
-            startActivity(new Intent(this, PurchasePacks.class));
+        startActivity(new Intent(this, PurchasePacks.class));
     }
     
-    public static LatLong midPoint(double lat1, double lon1, double lat2, double lon2){
+    public static LatLong midPoint(double lat1, double lon1, double lat2, double lon2) {
         
         double dLon = Math.toRadians(lon2 - lon1);
         
@@ -607,8 +558,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 .child(Constants.userInfo)
                 .child(Constants.uid)
                 .child(Constants.location);
-    
-    
+        
         final DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo)
                 .child(Constants.sendToUid)
@@ -619,8 +569,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
                 final LatLong latLong = dataSnapshot.getValue(LatLong.class);
-                if(latLong!=null)
-                {
+                if (latLong != null) {
                     reference2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -631,29 +580,29 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                                 
                             }
                         }
-    
+                        
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+                        
                         }
                     });
                 }
                 
             }
-    
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+            
             }
         });
         
     }
     
     private void getPlaces(LatLong midPoint) {
-    
+        
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-            
+        
         String location = "26.7824186,80.9285919";
         
         Call<ModelMainResults> call = apiService.getNearByResults(location, 5000, "restaurant", API_KEY);
@@ -662,26 +611,27 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<ModelMainResults> call, Response<ModelMainResults> response) {
                 if (response.body() != null) {
-    
+                    
                     ArrayList<NearbyRestaurant> restaurants = response.body().getResults();
                     
                     showRestaurantsInDialog(restaurants);
                 }
             }
+            
             @Override
             public void onFailure(Call<ModelMainResults> call, Throwable t) {
                 Log.e(TAG, t.toString());
             }
             
         });
-    
+        
     }
     
     private void showRestaurantsInDialog(final ArrayList<NearbyRestaurant> restaurants) {
-    
+        
         final LayoutInflater factory = LayoutInflater.from(this);
         final View helpDialog = factory.inflate(R.layout.restaurants_layout, null);
-    
+        
         final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
                 // .setTitleText("Help for you")
                 .setCancelText("Cancel")
@@ -694,7 +644,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         });
         
         //show adapter
-    
+        
         ListView listView = helpDialog.findViewById(R.id.listView);
         Adapter adapter = new Adapter(temporaryChatFullScreen.this, restaurants);
         listView.setAdapter(adapter);
@@ -702,10 +652,10 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    NearbyRestaurant restaurant = restaurants.get(position);
-                    String text = "Wanna catch a bite at "+restaurant.getName()+"?";
-                    chatEditText1.setText(text);
-                    dialog.dismissWithAnimation();
+                NearbyRestaurant restaurant = restaurants.get(position);
+                String text = "Wanna catch a bite at " + restaurant.getName() + "?";
+                chatEditText1.setText(text);
+                dialog.dismissWithAnimation();
             }
         });
         
@@ -765,18 +715,16 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     }
     
     private void fillMessageArray(final String sendToUid, final String myUid) {
-        
         /*
        Delete unreads
          */
-        DatabaseReference delRef =  FirebaseDatabase.getInstance().getReference()
+        DatabaseReference delRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.CHATS + Constants.unread).child(Constants.uid + Constants.unread).child(sendToUid);
         delRef.setValue(null);
         
         if (sendToUid != null) {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.CHATS).child(myUid).child(sendToUid);
-            
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -785,7 +733,6 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                     msgReferenceListUsersCopy.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ChatMessage message = snapshot.getValue(ChatMessage.class);
-                        
                         if (message != null) {
                             messages.add(message);
                             String key = snapshot.getKey();
@@ -795,11 +742,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                             msgReferenceList.add(reference);
                             msgReferenceListUsersCopy.add(snapshot.getRef());
                         }
-                        
                     }
-                    
                     listAdapter.notifyDataSetChanged();
-                    
                 }
                 
                 @Override
@@ -808,7 +752,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 }
             });
         }
-        if(bar!=null)
+        if (bar != null)
             bar.setVisibility(View.GONE);
     }
     
@@ -829,7 +773,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 if (dataSnapshot.getValue(String.class) != null) {
                     isOnlineForCurrentUser = true;
                 }
-               // Log.e(TAG, "User is offline move to unread");
+                // Log.e(TAG, "User is offline move to unread");
                 isOnlineForCurrentUser = false;
                 // send message to unread
             }
@@ -843,6 +787,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     }
     
     private void sendMessage(final String messageText, boolean isOnlineOtherUser) {
+        
+        //only allow sending message once and then block
         
         if (messageText.trim().length() == 0)
             return;
@@ -875,8 +821,51 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         ref.setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                {
+                if (task.isSuccessful()) {
+                    //block the user from other users side;
+                    
+                    if (tempUid != null && tempUid.equals(Constants.uid)) {
+                        DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.blockList)
+                                .child(sendToUid)
+                                .child(Constants.uid);
+                        blockRef.setValue("0").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(temporaryChatFullScreen.this, "Blocked by other User", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else if (tempUid != null) {
+                        //unblock the user and set contact to not temporary
+                        DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.blockList)
+                                .child(sendToUid)
+                                .child(Constants.uid);
+                        blockRef.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(temporaryChatFullScreen.this, "Unblocked", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        
+                        DatabaseReference sendersRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.Messages)
+                                .child(Constants.uid)
+                                .child(Constants.contacts)
+                                .child(sendToUid);
+                        HashMap<String, Object> temporaryContact = new HashMap<>();
+                        temporaryContact.put("temporaryContact", false);
+                        
+                        sendersRef.updateChildren(temporaryContact);
+                        
+                        DatabaseReference receiversRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.Messages)
+                                .child(sendToUid)
+                                .child(Constants.contacts)
+                                .child(Constants.uid);
+                        receiversRef.updateChildren(temporaryContact);
+                        
+                    }
                     ref.updateChildren(sentSuccessupdate);
                 }
             }
@@ -891,7 +880,6 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         if (pushKey != null) {
             myRef = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.CHATS).child(myUid).child(sendToUid).child(pushKey);
-            
             
             myRef.setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -920,14 +908,12 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         super.onPause();
         updateStatus(Constants.status + sendToUid, Constants.offline);
         
-        
     }
     
     @Override
     protected void onDestroy() {
-       
-        if(listener!=null)
-        {
+        
+        if (listener != null) {
             reference.removeEventListener(listener);
         }
         super.onDestroy();

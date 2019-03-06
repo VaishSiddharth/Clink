@@ -275,12 +275,17 @@ public class MatchCalculator extends AppCompatActivity {
     
     private void sendOneTimeTempMessage(SweetAlertDialog sweetAlertDialog, String clickedUsersId) {
     
-    
+            acceptRequest(clickedUsersId, sweetAlertDialog);
     
     }
     
     private void acceptRequest(final String item, final SweetAlertDialog sDialog) {
+        
+        sDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
+        sDialog.findViewById(R.id.cancel_button).setVisibility(View.GONE);
+        
         if (item != null) {
+            sDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(Constants.uid)
@@ -343,13 +348,16 @@ public class MatchCalculator extends AppCompatActivity {
                                             .setConfirmClickListener(null)
                                             .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                     
+                                    sDialog.findViewById(R.id.confirm_button).setVisibility(View.GONE);
+                                    
                                     Handler handler = new Handler();
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+                                            sDialog.dismiss();
                                             moveToTempChatScreen();
                                         }
-                                    }, 2500);
+                                    }, 3500);
                                    
                                 }
                             });
@@ -364,12 +372,14 @@ public class MatchCalculator extends AppCompatActivity {
                 }
             });
         }
+        
     }
     
     private void moveToTempChatScreen() {
         Intent i = new Intent(MatchCalculator.this, temporaryChatFullScreen.class);
         i.putExtra(Constants.sendToUid, clickedUsersId);
         i.putExtra(Constants.sendToName, nameS);
+        i.putExtra(Constants.refresh, true);
         startActivity(i);
     
     }

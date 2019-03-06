@@ -202,7 +202,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                     if (dataSnapshot.getValue() != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine(), null);
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), false, null);
                             ref.setValue(contact);
                         }
                     }
@@ -236,7 +236,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                     if (dataSnapshot.getValue() != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), user.getOneLine(), null);
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), false, null);
                             ref2.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
