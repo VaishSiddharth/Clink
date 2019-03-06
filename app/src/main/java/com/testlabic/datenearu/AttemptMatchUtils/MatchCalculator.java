@@ -303,7 +303,7 @@ public class MatchCalculator extends AppCompatActivity {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
                             nameS = user.getUserName();
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), true, user.getUid());
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), true, Constants.uid);
                             ref.setValue(contact);
                         }
                     }
@@ -337,7 +337,7 @@ public class MatchCalculator extends AppCompatActivity {
                     if (dataSnapshot.getValue() != null) {
                         ModelUser user = dataSnapshot.getValue(ModelUser.class);
                         if (user != null) {
-                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), true, user.getUid());
+                            ModelContact contact = new ModelContact(user.getUserName(), user.getImageUrl(), user.getUid(), true, Constants.uid);
                             ref2.setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

@@ -134,7 +134,8 @@ public class AllMessagesListFragment extends Fragment {
                         final String imageUrl = contact.getImage();
                         final String uid = contact.getUid();
                         ModelLastMessage message = new ModelLastMessage(name, imageUrl
-                                , uid, null, -1000000000, null, null, status, null, contact.getTemporaryContact(), contact.getTempUid());
+                                , uid, null, -1000000000, null, null, status,
+                                null, contact.getTemporaryContact(), contact.getTempUid());
                         list.add(message);
      
                     }}}
