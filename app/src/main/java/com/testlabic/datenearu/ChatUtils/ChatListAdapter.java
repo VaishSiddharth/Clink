@@ -87,15 +87,15 @@ public class ChatListAdapter extends BaseAdapter {
                 } else {
                     v = convertView;
                     holder1 = (ViewHolder1) v.getTag();
-
+                    holder1.messageTextView.setText(Html.fromHtml(Emoji.replaceEmoji(message.getMessage(),
+                            holder1.messageTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16))
+                            + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"));
+                    holder1.timeTextView.setText(SIMPLE_DATE_FORMAT.format(message.getSendingTime()));
+                    if(message.getSentPhotoUrl()!=null)
+                        Glide.with(context).load(message.getSentPhotoUrl()).into(holder1.imageView);
                 }
                       //holder1.sendersName.setVisibility(View.GONE);
-                holder1.messageTextView.setText(Html.fromHtml(Emoji.replaceEmoji(message.getMessage(),
-                        holder1.messageTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16))
-                        + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"));
-                holder1.timeTextView.setText(SIMPLE_DATE_FORMAT.format(message.getSendingTime()));
-                if(message.getSentPhotoUrl()!=null)
-                Glide.with(context).load(message.getSentPhotoUrl()).into(holder1.imageView);
+               
                 
             } else if (message.getSentFrom().equals(myUid)) {
 

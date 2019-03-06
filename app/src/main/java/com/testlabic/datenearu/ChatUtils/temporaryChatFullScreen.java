@@ -817,10 +817,10 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         ref.setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
+                if (task.isSuccessful()&&!goSimple) {
                     //block the user from other users side;
                     Log.e(TAG, "The temp uid is "+ tempUid + " and goSimple is "+ goSimple);
-                    if (tempUid != null && tempUid.equals(Constants.uid) &&!goSimple) {
+                    if (tempUid != null && tempUid.equals(Constants.uid)) {
                         DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.blockList)
                                 .child(sendToUid)
