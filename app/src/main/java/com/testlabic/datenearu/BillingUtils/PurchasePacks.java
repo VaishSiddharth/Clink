@@ -104,7 +104,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             
-                                            Toast.makeText(PurchasePacks.this, "You received 20 points, watch again to get more!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(PurchasePacks.this, "You received 5 drops, watch again to get more!", Toast.LENGTH_SHORT).show();
                                             Handler handler = new Handler();
                                             handler.postDelayed(new Runnable() {
                                                 @Override

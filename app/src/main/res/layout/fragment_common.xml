@@ -59,7 +59,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:hapticFeedbackEnabled="true"
-                            android:src="@drawable/ic_message_square"
+                            android:src="@drawable/dm"
                             app:backgroundTint="@android:color/white"
                             app:fabSize="mini"
                             app:rippleColor="#22ED7563" />
