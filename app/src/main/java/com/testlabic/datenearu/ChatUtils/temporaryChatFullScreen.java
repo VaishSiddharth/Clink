@@ -90,6 +90,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     boolean isTemporaryContact = false;
     private View rootView;
     private String tempUid;
+    private boolean goSimple = false;
     private ArrayList<ChatMessage> messages = new ArrayList<>();
     private EmojiconEditText chatEditText1;
     private EditText.OnKeyListener keyListener = new View.OnKeyListener() {
@@ -321,6 +322,25 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             
             }
         });
+        
+        DatabaseReference multliMsgEnabledref = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.enabledMultiMsgs)
+                .child(sendToUid)
+                .child(Constants.uid);
+        
+        multliMsgEnabledref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                    goSimple = true;
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
     }
     
     @Override
@@ -799,8 +819,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     //block the user from other users side;
-                    Log.e(TAG, "The temp uid is "+ tempUid);
-                    if (tempUid != null && tempUid.equals(Constants.uid)) {
+                    Log.e(TAG, "The temp uid is "+ tempUid + " and goSimple is "+ goSimple);
+                    if (tempUid != null && tempUid.equals(Constants.uid) &&!goSimple) {
                         DatabaseReference blockRef = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.blockList)
                                 .child(sendToUid)
@@ -809,6 +829,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(temporaryChatFullScreen.this, "Blocked by other User", Toast.LENGTH_SHORT).show();
+                                
                             }
                         });
                     } else if (tempUid != null) {
@@ -821,6 +842,12 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(temporaryChatFullScreen.this, "Unblocked", Toast.LENGTH_SHORT).show();
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                        .child(Constants.enabledMultiMsgs)
+                                        .child(Constants.uid)
+                                        .child(sendToUid)
+                                        ;
+                                reference.setValue("0");
                             }
                         });
                         

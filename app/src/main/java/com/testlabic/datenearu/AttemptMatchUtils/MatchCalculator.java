@@ -201,7 +201,7 @@ public class MatchCalculator extends AppCompatActivity {
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                                         
                                         sendOneTimeTempMessage(sweetAlertDialog, clickedUsersId);
-                                        Toast.makeText(MatchCalculator.this, "Fresh code here!", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(MatchCalculator.this, "Fresh code here!", Toast.LENGTH_SHORT).show();
                                    
                                     }
                                 });
