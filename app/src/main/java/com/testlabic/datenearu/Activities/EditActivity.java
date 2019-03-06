@@ -63,7 +63,7 @@ public class EditActivity extends AppCompatActivity {
     
     String imageId = "image1";
     
-    private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/final_app_logo1.png?alt=media&token=95a6fff5-fd69-43da-ae1c-21806ba81690";
+    private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/final_app_logo1.png?alt=media&token=e9463a91-4f57-412d-a4be-c26d2e06d84e";
     private static final String TAG = EditActivity.class.getSimpleName();
     TextView name, age, about,blurinfo;
     ImageView image1, nameWrap, image2, image3,previewprofile,backbutton;
@@ -135,7 +135,7 @@ public class EditActivity extends AppCompatActivity {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                image1.setImageResource(R.drawable.final_app_logo1);
+                                image1.setImageResource(R.drawable.final_app_logo1bw);
                                 uri_update_db(default_uri_dp, "image1");
                                 bar1.setVisibility(View.GONE);
                             }
@@ -162,7 +162,7 @@ public class EditActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 bar2.setVisibility(View.GONE);
-                                image2.setImageResource(R.drawable.final_app_logo1);
+                                image2.setImageResource(R.drawable.final_app_logo1bw);
                                 uri_update_db(default_uri_dp, "image2");
 
                             }
@@ -188,8 +188,8 @@ public class EditActivity extends AppCompatActivity {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                bar1.setVisibility(View.GONE);
-                                image3.setImageResource(R.drawable.final_app_logo1);
+                                bar3.setVisibility(View.GONE);
+                                image3.setImageResource(R.drawable.final_app_logo1bw);
                                 uri_update_db(default_uri_dp, "image3");
 
 
