@@ -190,6 +190,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
 
     private void handleFacebookAccessToken(AccessToken token, final Profile profile) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
+        imageView.setVisibility(View.VISIBLE);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -407,8 +408,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     imageView.setVisibility(View.INVISIBLE);
                                     //progressBar.setVisibility(View.INVISIBLE);
 
-                                    //startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                                    // finish();
+                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                                     finish();
 
                                 } else {
                                     /*
@@ -417,7 +418,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     imageView.setVisibility(View.INVISIBLE);
                                     //progressBar.setVisibility(View.INVISIBLE);
 
-                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                                    startActivity(new Intent(SignIn.this, MainActivity.class));
                                     finish();
                                     //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                     // finish();

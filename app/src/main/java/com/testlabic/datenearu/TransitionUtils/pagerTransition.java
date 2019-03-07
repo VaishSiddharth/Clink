@@ -828,7 +828,13 @@ public class pagerTransition extends Fragment {
         // Log.e(TAG, "Filtering with "+String.valueOf(prefs));
         if (prefs != null && item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge()
                 && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit()) {
-            displayArrayList.add(item);
+            if(item.getUid()!=null) {
+                if(!item.getUid().equals(Constants.uid))
+                    displayArrayList.add(item);
+            }
+            else
+                displayArrayList.add(item);
+           
         }
     }
     

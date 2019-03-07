@@ -83,13 +83,13 @@
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
-        <customfonts.MyTextView_SF_Pro_Display_Bold
+        <customfonts.MyTextView_SF_Pro_Display_Medium
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:text="Find a Clink"
+            android:text="Find your clink"
             android:textColor="#3b3b3b"
             android:textSize="20sp" />
 
