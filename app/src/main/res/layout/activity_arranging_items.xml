@@ -1,206 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
-
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:paddingLeft="50dp"
-    android:paddingRight="50dp" >
+    android:layout_height="fill_parent">
 
-
-    <customfonts.TextViewSFProDisplayRegular
-        android:layout_width="wrap_content"
-        android:id="@+id/head"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:layout_below="@+id/toolbar"
-        android:textColor="#212121"
-        android:layout_marginTop="8dp"
-        android:padding="4dp"
-        android:text="What is the best way of finding a partner(Drag the numbers to the options priority wise!)"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@+id/head"
-        android:id="@+id/optionLL"
-        android:layout_marginTop="16dp"
-        android:layout_height="wrap_content">
-
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/choice_1"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-            android:textColor="#212121"
-        android:background="@drawable/rounded_corners"
-        android:padding="16dp"
-        android:text="A) The eye catcher:Physical features"
-        />
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp">
+
 
         <customfonts.TextViewSFProDisplayRegular
-        android:id="@+id/choice_2"
-            android:textColor="#212121"
-
-            android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@drawable/rounded_corners"
-            android:padding="16dp"
-        android:text="B) I am Sapiosexual (intelligence n intellectual ability)"
-    />
-
-        <customfonts.TextViewSFProDisplayRegular
-        android:id="@+id/choice_3"
-            android:textColor="#212121"
-
-            android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@drawable/rounded_corners"
-            android:padding="16dp"
-        android:text="C) Must be helpful, caring and compassionate towards you and society"
-        />
-
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/choice_4"
-            android:layout_width="fill_parent"
+            android:id="@+id/head"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="What is the best way of finding a partner(Drag the numbers to the options priority wise!)"
             android:textColor="#212121"
+            android:textSize="16sp" />
 
-            android:layout_margin="8dp"
-            android:background="@drawable/rounded_corners"
-            android:padding="16dp"
-            android:text="D) Has an ambition in life and is serious towards it"
-             />
-
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/choice_5"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/optionLL"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#212121"
+            android:layout_below="@+id/head"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
 
-            android:layout_margin="8dp"
-            android:background="@drawable/rounded_corners"
-            android:padding="16dp"
-            android:text="E) has proved his/her metal (secured a good job)"
-             />
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/choice_1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_corners"
+                android:padding="16dp"
+                android:text="A) The eye catcher:Physical features"
+                android:textColor="#212121" />
 
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/choice_6"
-            android:textColor="#212121"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/rounded_corners"
-            android:padding="16dp"
-            android:text="F) Understands you and your nature."
-             />
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/choice_2"
+                android:layout_width="fill_parent"
 
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_corners"
+                android:padding="16dp"
+                android:text="B) I am Sapiosexual (intelligence n intellectual ability)"
+                android:textColor="#212121" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:id="@+id/choiceLL"
-        android:layout_below="@+id/optionLL"
-        android:layout_height="wrap_content">
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/option_1"
-            android:textColor="@color/white"
-            android:background="@drawable/option_background"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="16dp"
-            android:gravity="center"
-            android:text="1" />
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/choice_3"
+                android:layout_width="fill_parent"
 
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/option_2"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:textColor="@color/white"
-            android:background="@drawable/option_background"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_corners"
+                android:padding="16dp"
+                android:text="C) Must be helpful, caring and compassionate towards you and society"
+                android:textColor="#212121" />
 
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:text="2" />
+            <LinearLayout
+                android:id="@+id/choiceLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/optionLL"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/option_3"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:textColor="@color/white"
-            android:background="@drawable/option_background"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:text="3" />
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/option_4"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:textColor="@color/white"
-            android:background="@drawable/option_background"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="4" />
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/option_1"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/option_background"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/white" />
 
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/option_5"
-            android:textColor="@color/white"
-            android:background="@drawable/option_background"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:text="5" />
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/option_2"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/option_background"
 
-        <customfonts.TextViewSFProDisplayRegular
-            android:id="@+id/option_6"
-            android:textColor="@color/white"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:background="@drawable/option_background"
-            android:layout_height="45dp"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:text="6" />
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/white" />
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/option_3"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/option_background"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/white" />
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/option_4"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/option_background"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="@color/white" />
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/option_5"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/option_background"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="@color/white" />
+
+                <customfonts.TextViewSFProDisplayRegular
+                    android:id="@+id/option_6"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/option_background"
+                    android:gravity="center"
+                    android:text="6"
+                    android:textColor="@color/white" />
 
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/choiceLL"
-       android:id="@+id/reset"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:src="@drawable/ic_refresh" />
+            <ImageView
+                android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/ic_refresh" />
 
-    <customfonts.MyTextView_SF_Pro_Display_Light
-        android:layout_width="match_parent"
-        android:layout_below="@+id/reset"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="*1 being the highest priority and 6 the lowest"
-        android:layout_height="wrap_content" />
+            <customfonts.MyTextView_SF_Pro_Display_Light
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reset"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="*1 being the highest priority and 6 the lowest" />
 
-</RelativeLayout>
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/choice_4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+
+                android:background="@drawable/rounded_corners"
+                android:padding="16dp"
+                android:text="D) Has an ambition in life and is serious towards it"
+                android:textColor="#212121" />
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/choice_5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+
+                android:background="@drawable/rounded_corners"
+                android:padding="16dp"
+                android:text="E) has proved his/her metal (secured a good job)"
+                android:textColor="#212121" />
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:id="@+id/choice_6"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_corners"
+                android:padding="16dp"
+                android:text="F) Understands you and your nature."
+                android:textColor="#212121" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 </ScrollView>

@@ -2,10 +2,11 @@
     android:shape="oval"
     >
     <gradient
-        android:endColor="@color/shy_moment"
-        android:centerColor="@color/shy_moment"
-        android:startColor="@color/shy_moment"
-        android:angle="270" />
+        android:type="linear"
+        android:startColor="#FF7A5BFE"
+        android:centerColor="#E68868FC"
+        android:endColor="#FF8C6CFB"
+        android:angle="45" />
     <corners
         android:radius="50dp" />
     <padding

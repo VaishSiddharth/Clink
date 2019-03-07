@@ -417,7 +417,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     imageView.setVisibility(View.INVISIBLE);
                                     //progressBar.setVisibility(View.INVISIBLE);
 
-                                    startActivity(new Intent(SignIn.this, MainActivity.class));
+                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
                                     finish();
                                     //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                     // finish();
