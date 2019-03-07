@@ -37,17 +37,15 @@ import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.startapp.android.publish.adsCommon.StartAppAd;
 import com.startapp.android.publish.adsCommon.StartAppSDK;
-import com.testlabic.datenearu.AttemptMatchUtils.QuestionsAttemptActivity;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Fragments.AllMessagesListFragment;
 import com.testlabic.datenearu.Fragments.NotificationParent;
+import com.testlabic.datenearu.AppIntro.IntroActivity;
 import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
-import com.testlabic.datenearu.NewQuestionUtils.QuestionSetup;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.NewUserSetupUtils.QuestionsEnteringNewUser;
-import com.testlabic.datenearu.PaperOnboardingActivity;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.TransitionUtils.pagerTransition;
 import com.testlabic.datenearu.Utils.Constants;
@@ -55,7 +53,6 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.HashMap;
 import java.util.List;
 
-import com.testlabic.datenearu.Fragments.NotificationFragment;
 import com.testlabic.datenearu.Fragments.ProfileFragment;
 import com.testlabic.datenearu.Utils.Transparent_likeback;
 import com.testlabic.datenearu.Utils.Utils;
@@ -385,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 Log.e(TAG, "Firebase auth changed!");
                 if (firebaseAuth.getCurrentUser() == null) {
-                    startActivity(new Intent(MainActivity.this, PaperOnboardingActivity.class));
+                    startActivity(new Intent(MainActivity.this, IntroActivity.class));
                     finish();
                 } else {
                     Constants.uid = firebaseAuth.getUid();

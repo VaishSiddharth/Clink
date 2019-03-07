@@ -95,5 +95,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
     implementation 'com.github.Jay-Goo:RangeSeekBar:v2.0.4'
 
+    implementation 'com.github.AppIntro:AppIntro:v5.1.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

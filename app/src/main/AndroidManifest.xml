@@ -49,7 +49,7 @@
         <activity
             android:name=".Activities.EditActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".PaperOnboardingActivity" />
+        <activity android:name=".AppIntro.IntroActivity" />
         <activity android:name=".Activities.SignIn" />
         <activity android:name=".Login" />
         <activity
