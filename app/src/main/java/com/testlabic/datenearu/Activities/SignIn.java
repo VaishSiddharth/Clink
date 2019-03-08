@@ -218,8 +218,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 imageView.setVisibility(View.INVISIBLE);
                                 //progressBar.setVisibility(View.INVISIBLE);
 
-                                startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                                finish();
 
                             } else {
                                     /*
@@ -407,9 +405,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     }
                                     imageView.setVisibility(View.INVISIBLE);
                                     //progressBar.setVisibility(View.INVISIBLE);
-
-                                    startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                                     finish();
+                                    
 
                                 } else {
                                     /*
