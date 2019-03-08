@@ -675,6 +675,7 @@ public class pagerTransition extends Fragment {
     }
     
     private void fillViewPager(final ArrayList<ModelUser> displayArrayList) {
+        
         indicatorTv = (TextView) rootView.findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         

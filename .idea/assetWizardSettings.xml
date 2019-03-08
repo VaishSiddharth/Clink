@@ -57,8 +57,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\velox\Downloads\eye.png" />
-                                      <entry key="outputName" value="eye" />
+                                      <entry key="imageAsset" value="C:\Users\velox\Downloads\location.png" />
+                                      <entry key="outputName" value="location" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="7a5bfe" />
                                     </map>

@@ -75,7 +75,8 @@
                         android:clipToPadding="false"
                         android:orientation="horizontal">
 
-                        <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+                        <com.skyfishjy.library.RippleBackground
+                            xmlns:android="http://schemas.android.com/apk/res/android"
                             xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/content"
                             android:layout_width="match_parent"
@@ -104,7 +105,6 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:hapticFeedbackEnabled="true"
-                            android:src="@drawable/logoapp1"
                             android:visibility="gone"
                             app:backgroundTint="@color/appcolor"
                             app:fabSize="auto"
@@ -241,7 +241,7 @@
                         android:layout_height="13dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="3dp"
-                        android:src="@drawable/male_glass1"
+                        android:src="@drawable/male_glass"
                         android:visibility="gone" />
 
                     <customfonts.MyTextView_SF_Pro_Display_Medium

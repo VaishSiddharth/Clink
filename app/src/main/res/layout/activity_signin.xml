@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/signinbackground"
+    android:background="@drawable/signin_back"
     tools:context="com.testlabic.datenearu.Activities.SignIn">
 
     <LinearLayout
@@ -19,13 +19,13 @@
             android:id="@+id/applogo"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/final_app_logo1"
+            android:src="@drawable/app_logo"
             android:visibility="visible" />
         <ImageView
             android:id="@+id/applogotext"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/signlogotext"
+            android:src="@drawable/clink"
             android:visibility="visible" />
 
     </LinearLayout>
