@@ -34,7 +34,7 @@ public class application extends Application {
     
         FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().setLogLevel(Logger.Level.DEBUG);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(false);
         FirebaseDatabase.getInstance().goOnline();
         //setup test connection!
     

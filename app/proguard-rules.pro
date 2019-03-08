@@ -21,3 +21,37 @@
 #-renamesourcefileattribute SourceFile
 -keep class com.jpardogo.android.googleprogressbar.** { *; }
 -keep class com.android.vending.billing.**
+-ignorewarnings
+
+-keep class * {
+    public private *;
+}
+
+-keep class com.testlab.datenearu.Models.** { *; }
+
+
+-keep class com.testlab.datenearu.viewHolders.** { *; }
+
+-keep class com.testlab.datenearu.Adapters.** { *; }
+
+-keep class com.testlab.datenearu.ArchitectureUtils.** { *; }
+
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+
+-keep class com.startapp.** {
+      *;
+}
+
+-keep class com.truenet.** {
+      *;
+}
+
+-keepattributes Exceptions, InnerClasses, Signature, Deprecated, SourceFile, LineNumberTable, *Annotation*, EnclosingMethod
+-dontwarn android.webkit.JavascriptInterface
+-dontwarn com.startapp.**
+
+-dontwarn org.jetbrains.annotations.**

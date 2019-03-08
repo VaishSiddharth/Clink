@@ -70,7 +70,7 @@ public class MatchCalculator extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (score > 5) {
+                if (score > 3) {
                     if (clickedUsersId != null) {
                         showSuccessDialog();
                     }

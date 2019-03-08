@@ -1,6 +1,5 @@
 package com.testlabic.datenearu.Utils;
 
-import androidx.annotation.NonNull;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
@@ -17,16 +16,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.jackpocket.scratchoff.ScratchoffController;
-import com.testlabic.datenearu.ChatUtils.ChatMessage;
 import com.testlabic.datenearu.ChatUtils.chatFullScreen;
-import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelGift;
 import com.testlabic.datenearu.R;
 

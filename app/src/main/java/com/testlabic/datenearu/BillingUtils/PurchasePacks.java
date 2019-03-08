@@ -196,7 +196,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
                                         @Override
                                         public void onClick(View v) {
                                             BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                                                    .setSku("android.test.purchased")
+                                                    .setSku(sku)
                                                     .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
                                                     .build();
                                             int responseCode = mBillingClient.launchBillingFlow(PurchasePacks.this, flowParams);

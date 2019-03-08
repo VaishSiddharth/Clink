@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.testlabic.datenearu.Models.ChatMessage;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 

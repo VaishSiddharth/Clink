@@ -6,14 +6,14 @@ android {
         applicationId "com.testlabic.datenearu"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 6
+        versionCode 7
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }

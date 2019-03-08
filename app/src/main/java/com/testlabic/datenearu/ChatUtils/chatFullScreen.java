@@ -48,6 +48,7 @@ import com.testlabic.datenearu.HelpUtils.Adapter;
 import com.testlabic.datenearu.HelpUtils.ModelMainResults;
 import com.testlabic.datenearu.Models.ApiClient;
 import com.testlabic.datenearu.Models.ApiInterface;
+import com.testlabic.datenearu.Models.ChatMessage;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.HelpUtils.NearbyRestaurant;
 import com.testlabic.datenearu.Models.ModelSubscr;

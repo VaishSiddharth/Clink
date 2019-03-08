@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +44,7 @@ import com.testlabic.datenearu.HelpUtils.ModelMainResults;
 import com.testlabic.datenearu.HelpUtils.NearbyRestaurant;
 import com.testlabic.datenearu.Models.ApiClient;
 import com.testlabic.datenearu.Models.ApiInterface;
+import com.testlabic.datenearu.Models.ChatMessage;
 import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
@@ -56,7 +56,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

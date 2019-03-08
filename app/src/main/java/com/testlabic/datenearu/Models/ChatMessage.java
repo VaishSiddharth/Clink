@@ -1,4 +1,4 @@
-package com.testlabic.datenearu.ChatUtils;
+package com.testlabic.datenearu.Models;
 
 /**
  * Created by root on 8/1/18.
