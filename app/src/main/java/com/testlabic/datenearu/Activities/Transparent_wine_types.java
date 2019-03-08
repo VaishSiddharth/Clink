@@ -84,7 +84,7 @@ public class Transparent_wine_types extends Activity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 
                 final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(Transparent_wine_types.this, SweetAlertDialog.PROGRESS_TYPE)
-                        .setContentText("Loading");
+                        .setContentText("Loading.");
                 sweetAlertDialog.show();
                 
     
