@@ -443,6 +443,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
 
     @Override
     public void onBackPressed() {
+        finishAffinity();
         super.onBackPressed();
         moveTaskToBack(true);
     }

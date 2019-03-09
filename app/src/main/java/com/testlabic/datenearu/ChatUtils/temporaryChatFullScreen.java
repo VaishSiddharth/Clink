@@ -85,7 +85,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
-    ImageView imageView, help, emojis;
+    ImageView imageView, help, emojis,back;
     boolean isTemporaryContact = false;
     private View rootView;
     private String tempUid;
@@ -188,6 +188,14 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         bar = findViewById(R.id.progress_bar);
         bar.setVisibility(View.VISIBLE);
+
+        back=findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));

@@ -20,10 +20,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.testlabic.datenearu.PaperOnboardingActivity;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.WaveDrawable;
 
 public class SplashScreen extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 3000;
-    ImageView applogo;
+    ImageView applogo,imageView;
     ImageView line1;
     Animation uptodown,downtoup;
     @Override
@@ -35,6 +36,23 @@ public class SplashScreen extends AppCompatActivity {
         applogo =findViewById(R.id.applogo);
         uptodown = AnimationUtils.loadAnimation(this,R.anim.uptodown);
         downtoup = AnimationUtils.loadAnimation(this,R.anim.downtoup);
+
+        imageView=findViewById(R.id.test);
+        //applogo = findViewById(R.id.applogo);
+        WaveDrawable mWaveDrawable = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mWaveDrawable = new WaveDrawable(getDrawable(R.drawable.nohere));
+        }
+        if (mWaveDrawable != null) {
+            mWaveDrawable.setWaveAmplitude(30);
+            mWaveDrawable.setWaveLength(580);
+            mWaveDrawable.setWaveSpeed(12);
+            mWaveDrawable.setIndeterminate(true);
+        }
+
+        //((WaveDrawable) mWaveDrawable).setLevel(20);
+
+        imageView.setImageDrawable(mWaveDrawable);
         //line1.setAnimation(uptodown);
         //line3.setAnimation(downtoup);
         AlphaAnimation anim1 = new AlphaAnimation(0.0f, 1.0f);

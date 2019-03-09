@@ -673,7 +673,13 @@ public class MainActivity extends AppCompatActivity {
         if (Constants.uid != null)
             updateStatus(null);
     }
-    
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+        super.onBackPressed();
+    }
+
     private void updateStatus(final String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(Constants.status, status);

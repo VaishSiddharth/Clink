@@ -122,7 +122,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         TextView age = rootView.findViewById(R.id.age);
         TextView oneLine = rootView.findViewById(R.id.oneLine);
         onlineStatus = rootView.findViewById(R.id.onlineStatus);
-        FloatingActionButton message = rootView.findViewById(R.id.message_fab);
+        ShineButton message = rootView.findViewById(R.id.message_fab);
+        message.init(getActivity());
         //like = rootView.findViewById(R.id.like_fab);
         final ShineButton like_shine = rootView.findViewById(R.id.like_shiny);
         KonfettiView konfettiView = rootView.findViewById(R.id.viewKonfetti);
@@ -144,7 +145,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                     if (isFirstTime) {
                         SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                                 .setTitleText("How it works?")
-                                .setContentText("When you like someone, we don't tell them that, but if they like you back, it'll be a match!")
+                                .setContentText("When you like someone, we don't tell them that, but if they like you back, it'll be a match!\n")
                                 .setConfirmButton("ok, like!", new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -217,7 +218,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 else
                 {
                     if(gender.equals("male"))
-                        Toast.makeText(getActivity(), "Sorry, only for girls!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Sorry, only for girls", Toast.LENGTH_SHORT).show();
                     
                     else
                         showDmInfoDialog();
@@ -477,7 +478,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private void showDmInfoDialog() {
         SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("How does it work?")
-                .setContentText("You will be added as a connection and can have a talk, but remember you don't get another chance if you are blocked/deleted by the other person!")
+                .setContentText("You will be added as a connection and can have a talk, but remember you don't get another chance if you are blocked/deleted by the other person!\n")
                 .setConfirmButton("Okay!", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {
@@ -630,7 +631,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         
         SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity())
                 .setTitleText("Attempt cheers?")
-                .setContentText("You will have to answer ten questions, and if you do that right, you get a chance to connect")
+                .setContentText("You will have to answer ten questions, and if you do that right, you get a chance to connect\n")
                 .setConfirmText("100 drops")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -657,7 +658,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                                         current -= Constants.attemptTestPoints;
                                         HashMap<String, Object> updatePoints = new HashMap<>();
                                         updatePoints.put(Constants.xPoints, current);
-                                        Log.e(TAG, "Updating the drops here");
+                                        Log.e(TAG, "Updating the drops here\n");
                                         dataSnapshot.getRef().updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {

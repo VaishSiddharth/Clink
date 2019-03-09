@@ -65,7 +65,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
     private void showInstructionDialog() {
         SweetAlertDialog alertDialog = new SweetAlertDialog(this)
                 .setTitleText("Last step!")
-                .setContentText("If you were to date yourself, how you would you answer these questions...!")
+                .setContentText("If you were to date yourself, how you would you answer these questions...!\n")
                 .setConfirmText("Yes, go ahead!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
