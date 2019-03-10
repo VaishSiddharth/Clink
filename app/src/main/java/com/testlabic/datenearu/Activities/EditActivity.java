@@ -106,6 +106,9 @@ public class EditActivity extends AppCompatActivity {
         blurinfo=findViewById(R.id.blurinfo);
 
 
+        image1.setImageResource(R.drawable.final_app_logo1bw);
+        image2.setImageResource(R.drawable.final_app_logo1bw);
+        image3.setImageResource(R.drawable.final_app_logo1bw);
         backbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,7 +211,7 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(EditActivity.this, SweetAlertDialog.NORMAL_TYPE);
                 sweetAlertDialog.setTitle("Image");
-                sweetAlertDialog.setContentText("Change picture by clicking on any one of them");
+                sweetAlertDialog.setContentText("Change picture by clicking on any one of them\n");
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -232,7 +235,7 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(EditActivity.this, SweetAlertDialog.NORMAL_TYPE);
                 sweetAlertDialog.setTitle("Image");
-                sweetAlertDialog.setContentText("Change picture by clicking on any one of them");
+                sweetAlertDialog.setContentText("Change picture by clicking on any one of them\n");
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -253,7 +256,7 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(EditActivity.this, SweetAlertDialog.NORMAL_TYPE);
                 sweetAlertDialog.setTitle("Image");
-                sweetAlertDialog.setContentText("Change picture by clicking on any one of them");
+                sweetAlertDialog.setContentText("Change picture by clicking on any one of them\n");
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -286,7 +289,7 @@ public class EditActivity extends AppCompatActivity {
                             Toast.makeText(EditActivity.this, "Trial Expired!", Toast.LENGTH_SHORT).show();
                             final SweetAlertDialog alertDialog = new SweetAlertDialog(EditActivity.this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Trial period Over!")
-                                    .setContentText("If you want to extend the blur duration by 7 days, spend 500 drops")
+                                    .setContentText("If you want to extend the blur duration by 7 days, spend 500 drops\n")
                                     .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
                                         public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -318,7 +321,7 @@ public class EditActivity extends AppCompatActivity {
                     }
                 } else {
                     if (!detailsSetup)
-                        Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditActivity.this, "Wait a moment and try again please!\n", Toast.LENGTH_SHORT).show();
                     else if(switchedManually)
                         unBlurProfile();
                 }
@@ -354,7 +357,7 @@ public class EditActivity extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 sDialog
                                         .setTitleText("Increasing duration!")
-                                        .setContentText("Your profile will remain unblurred for 7 days from today!")
+                                        .setContentText("Your profile will remain unblurred for 7 days from today!\n")
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
     
                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()

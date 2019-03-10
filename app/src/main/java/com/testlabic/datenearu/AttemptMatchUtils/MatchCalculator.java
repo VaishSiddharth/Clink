@@ -97,7 +97,7 @@ public class MatchCalculator extends AppCompatActivity {
 
         sweetAlertDialog1 = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
         sweetAlertDialog1.setTitleText("Oops...")
-                .setContentText("Too different answers!\n\nHmmm, you can send a bottle of wine, s/he may notice you!")
+                .setContentText("Too different answers!\n\nHmmm, you can send a bottle of wine, s/he may notice you!\n")
                 .setCustomImage(R.drawable.wine_bottle)
                 .setConfirmButton("Send Wine", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -160,7 +160,7 @@ public class MatchCalculator extends AppCompatActivity {
 
         final SweetAlertDialog mainDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
         mainDialog.setTitleText("You passed!");
-        mainDialog.setContentText("Do you want us to notify the other person, and then if he/she wants, will be able to connect with you!");
+        mainDialog.setContentText("Do you want us to notify the other person, and then if he/she wants, will be able to connect with you!\n");
         mainDialog.setConfirmButton("Sure!", new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(final SweetAlertDialog sweetAlertDialog) {
@@ -172,7 +172,7 @@ public class MatchCalculator extends AppCompatActivity {
                                       constructing message!
                                   */
                 String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.";
+                String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.\n";
 
                 long timeStamp = -1 * new Date().getTime();
                 String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
@@ -187,7 +187,7 @@ public class MatchCalculator extends AppCompatActivity {
                         sweetAlertDialog.showCancelButton(false);
                         sweetAlertDialog
                                 .setTitleText("Done!")
-                                .setContentText("We wish you hear back soon!")
+                                .setContentText("We wish you hear back soon!\n")
                                 .setCancelButton("Leave it", new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -221,7 +221,7 @@ public class MatchCalculator extends AppCompatActivity {
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         SweetAlertDialog sweetAlertDialog1=new SweetAlertDialog(MatchCalculator.this, SweetAlertDialog.WARNING_TYPE);
                         sweetAlertDialog1.setTitleText("Are you sure?");
-                        sweetAlertDialog1.setContentText("You don't want him/her to know?");
+                        sweetAlertDialog1.setContentText("You don't want him/her to know?\n");
                         sweetAlertDialog1.setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -343,7 +343,7 @@ public class MatchCalculator extends AppCompatActivity {
                                 public void onSuccess(Void aVoid) {
                                     sDialog
                                             .setTitleText("Success!")
-                                            .setContentText("You can only send one message until you receive a reply")
+                                            .setContentText("You can only send one message until you receive a reply\n")
                                             .setConfirmText("OK")
                                             .setConfirmClickListener(null)
                                             .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
