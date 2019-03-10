@@ -43,6 +43,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
+import com.testlabic.datenearu.Adapters.ChatListAdapter;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.HelpUtils.Adapter;
 import com.testlabic.datenearu.HelpUtils.ModelMainResults;

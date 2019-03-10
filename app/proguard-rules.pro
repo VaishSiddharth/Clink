@@ -27,15 +27,19 @@
     public private *;
 }
 
--keep class com.testlab.datenearu.Models.** { *; }
+-keep class com.testlabic.datenearu.Models.** { *; }
+
+-keep class com.testlabic.datenearu.viewHolders.** { *; }
+
+-keep class com.testlabic.datenearu.Adapters.** { *; }
 
 
--keep class com.testlab.datenearu.viewHolders.** { *; }
+-keep class com.testlabic.datenearu.TransitionUtils.** { *; }
 
--keep class com.testlab.datenearu.Adapters.** { *; }
+-keep class com.testlabic.datenearu.ArchitectureUtils.** { *; }
 
--keep class com.testlab.datenearu.ArchitectureUtils.** { *; }
-
+-keep class com.testlabic.datenearu.NewQuestionUtils.** { *; }
+-keep class com.testlabic.datenearu.AttemptMatchUtils.** { *; }
 
 -keepattributes Signature
 -keepattributes *Annotation*

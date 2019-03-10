@@ -218,7 +218,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 {
                     if(gender.equals("male"))
                         Toast.makeText(getActivity(), "Sorry, only for girls!", Toast.LENGTH_SHORT).show();
-                    
                     else
                         showDmInfoDialog();
                 }

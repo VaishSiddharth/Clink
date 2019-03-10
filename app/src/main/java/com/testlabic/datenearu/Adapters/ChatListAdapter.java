@@ -1,4 +1,4 @@
-package com.testlabic.datenearu.ChatUtils;
+package com.testlabic.datenearu.Adapters;
 
 import android.content.Context;
 import androidx.core.content.ContextCompat;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.testlabic.datenearu.ChatUtils.AndroidUtilities;
+import com.testlabic.datenearu.ChatUtils.Emoji;
 import com.testlabic.datenearu.Models.ChatMessage;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;

@@ -6,7 +6,7 @@ android {
         applicationId "com.testlabic.datenearu"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 7
+        versionCode 8
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -14,6 +14,8 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            useProguard true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
@@ -33,9 +35,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha02'
     implementation 'com.github.florent37:arclayout:1.0.3'
     implementation 'me.relex:circleindicator:1.2.2@aar'
-    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    implementation 'com.google.android.material:material:1.1.0-alpha04'
     implementation 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    implementation 'com.google.android.material:material:1.1.0-alpha04'
     implementation 'com.roughike:bottom-bar:2.3.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
@@ -56,7 +58,7 @@ dependencies {
     implementation 'com.jpardogo.googleprogressbar:library:1.2.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.baoyz.swipemenulistview:library:1.3.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.3.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.3.21"
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.github.Joinersa:OoOAlertDialog:1.0.3'
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
@@ -94,7 +96,6 @@ dependencies {
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
     implementation 'com.github.Jay-Goo:RangeSeekBar:v2.0.4'
-
     implementation 'com.github.AppIntro:AppIntro:v5.1.0'
 
 }
