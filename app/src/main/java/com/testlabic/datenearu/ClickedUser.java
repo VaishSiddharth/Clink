@@ -96,6 +96,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         male=findViewById(R.id.maleglass);
         female=findViewById(R.id.femaleglass);
         name = findViewById(R.id.name);
+        age = findViewById(R.id.age);
         about = findViewById(R.id.about);
         //
         
@@ -281,7 +282,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         
         alertDialog = new SweetAlertDialog(this)
                 .setTitleText("Attempt cheers?")
-                .setContentText("You will have to answer ten questions, and if you do that right, you get a chance to connect")
+                .setContentText("You will have to answer some questions, and if you do that right, you get a chance to connect")
                 .setConfirmText("100 drops")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -326,7 +327,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        startActivity(new Intent(ClickedUser.this, QuestionsAttemptActivity.class).putExtra(Constants.clickedUid, clickedUid));
+                                                        startActivity(new Intent(ClickedUser.this,
+                                                                QuestionsAttemptActivity.class).putExtra(Constants.clickedUid, clickedUid));
                                                         sDialog.dismiss();
                                                     }
                                                 }, 2500);
@@ -381,7 +383,12 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null && user.getUserName() != null)
                         name.setText(user.getUserName());
-                    
+    
+                    if (user != null) {
+                        String ageS = user.getNumeralAge()+"";
+                        age.setText(ageS);
+                    }
+    
                     if (user != null && user.getAbout() != null) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             about.setText(Html.fromHtml(user.getAbout(), Html.FROM_HTML_MODE_COMPACT));

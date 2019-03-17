@@ -99,7 +99,7 @@
                         android:layout_marginRight="20dp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="20 yr"
+                        android:text="NA"
                         android:textColor="#3b3b3b"
                         android:textSize="20sp" />
                 </LinearLayout>
