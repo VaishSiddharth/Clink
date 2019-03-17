@@ -88,7 +88,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="115dp"
             android:layout_marginBottom="115dp"
-            android:src="@drawable/regular_bottle"
+            android:src="@drawable/regularwine"
             android:visibility="gone" />
     </RelativeLayout>
 

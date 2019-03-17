@@ -1,5 +1,6 @@
 package com.testlabic.datenearu.AttemptMatchUtils;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -181,6 +182,34 @@ public class AttemptQuestionFive extends Fragment implements BlockingStep {
 
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
+        if (ansSelected) {
+            // show progress and update the question on the DB
+        
+            // increment the score for right answer in the sharedPref
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            int score = sharedPreferences.getInt(clickedUid, 0);
+            if(markedOption!=null&&markedOption.equals(correctAnswer))
+            {
+                score += 1;
+                Editor editor = sharedPreferences.edit();
+                editor.putInt(clickedUid, score).apply();
+            
+                Intent i = new Intent(getActivity(), MatchCalculator.class);
+                i.putExtra(Constants.score, score);
+                i.putExtra(Constants.clickedUid, clickedUid);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(getActivity(), MatchCalculator.class);
+                i.putExtra(Constants.score, score);
+                i.putExtra(Constants.clickedUid, clickedUid);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        }
+        else {
+            Toast.makeText(getActivity(), "Please Answer", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

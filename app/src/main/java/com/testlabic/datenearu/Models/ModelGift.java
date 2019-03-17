@@ -10,7 +10,7 @@ public class ModelGift  implements Serializable {
     private String giftReceiversUid;
     private String giftSendersName;
     private String giftSendersImageUrl;
-    private HashMap<String, Object> timeStamp;
+    private long timeStamp;
     
     public ModelGift()
     {}
@@ -35,11 +35,11 @@ public class ModelGift  implements Serializable {
         return giftSendersImageUrl;
     }
     
-    public HashMap<String, Object> getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
     
-    public ModelGift(String giftSendersUid, String giftType, String giftReceiversUid, String giftSendersName, String giftSendersImageUrl, HashMap<String, Object> timeStamp) {
+    public ModelGift(String giftSendersUid, String giftType, String giftReceiversUid, String giftSendersName, String giftSendersImageUrl, long timeStamp) {
         
         this.giftSendersUid = giftSendersUid;
         this.giftType = giftType;

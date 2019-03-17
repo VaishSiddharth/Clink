@@ -88,7 +88,7 @@ public class LocationUpdateService extends Service
                         .child(Constants.userInfo).child(uid);
         
                 final HashMap<String, Object> updateCityLabel = new HashMap<>();
-                updateCityLabel.put("cityLabel", cityLabel);
+                updateCityLabel.put("cityLabel", Constants.all_location);
                 
                 reference.updateChildren(updateCityLabel).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -103,7 +103,6 @@ public class LocationUpdateService extends Service
                             public void onSuccess(Void aVoid) {
                                 Log.e(TAG, "Killing the service here!");
                                 stopSelf();
-    
                             }
                         });
                     }

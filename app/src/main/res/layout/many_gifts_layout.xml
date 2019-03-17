@@ -154,7 +154,7 @@
             android:layout_height="70dp"
             android:layout_margin="20dp"
             android:layout_weight="0.5"
-            android:src="@drawable/regular_bottle"
+            android:src="@drawable/regularwine"
             android:visibility="gone" />
 
     </LinearLayout>

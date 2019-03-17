@@ -1,10 +1,13 @@
 package com.testlabic.datenearu.NewQuestionUtils;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
+import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Models.ModelQuestion;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
@@ -218,7 +224,115 @@ public class QuestionFive extends Fragment implements BlockingStep {
     
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
+        if(skipSelection) {
+            if(getActivity()!=null)
+                getActivity().finish();
+        } else
+        if (ansSelected) {
+            // show progress and update the question on the DB
+        
+            dialog.show();
+            refInit.updateChildren(correctOption).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    dialog.dismiss();
+                    if(getActivity()!=null)
+                    {
+                        if(getActivity().getIntent().getBooleanExtra(Constants.setupQuestions, false))
+                        {
+                            UpdateXPoints();
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                    .child(Constants.userInfo)
+                                    .child(Constants.uid);
+                            HashMap<String, Object> updateBoolean = new HashMap<>();
+                            updateBoolean.put("questionaireComplete", true);
+                            reference.updateChildren(updateBoolean).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    DuplicateUserInfoToCityLabelNode();
+                                }
+                            });
+                        
+                        }
+                        else
+                            getActivity().finish();
+                    }
+                
+                }
+            });
+        
+        }
+        else {
+            Toast.makeText(getActivity(), "Please Answer", Toast.LENGTH_SHORT).show();
+        }
     
+    }
+    
+    private void UpdateXPoints() {
+        Constants.uid = FirebaseAuth.getInstance().getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+        HashMap<String, Object> updatePoints = new HashMap<>();
+        updatePoints.put(Constants.xPoints, Constants.newUserDrops);
+        reference.updateChildren(updatePoints);
+    }
+    
+    
+    private void DuplicateUserInfoToCityLabelNode() {
+        {
+            DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
+                    .child(Constants.uid);
+            refInit.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue(ModelUser.class) != null) {
+                        ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                        if (user != null) {
+                            String gender = user.getGender();
+                            String cityLabel = user.getCityLabel();
+                            if (cityLabel != null && gender != null) {
+                                cityLabel = cityLabel.replace(", ", "_");
+                                DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
+                                        .child(cityLabel).child(gender).child(Constants.uid);
+                                final String finalCityLabel = cityLabel;
+                                refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString(Constants.cityLabel, finalCityLabel).apply();
+                                        
+                                        //show success message and then
+                                        //move to main activity now!
+                
+                                       /* sweetAlertDialog
+                                                .setTitleText("Done!")
+                                                .setContentText("Best of luck!")
+                                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);*/
+                                        Intent i = new Intent(getActivity(), MainActivity.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(i);
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                //move to Main activity anyway!
+                                Intent i = new Intent(getActivity(), MainActivity.class);
+                                // i.putExtra(Constants.moveToLocationActivity, true);
+                                // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Inte);
+                                startActivity(i);
+                            }
+                        }
+                    }
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
     }
     
     @Override

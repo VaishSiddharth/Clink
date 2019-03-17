@@ -71,16 +71,21 @@ public class Age extends Fragment implements BlockingStep {
             @Override
             public void onDatePick(Date dateSelected) {
                 //...
-                DateFormat outputFormat = new SimpleDateFormat("dd MMM yyyy");
+                DateFormat outputFormat = new SimpleDateFormat("dd MM yyyy");
                 outputDateStr = outputFormat.format(dateSelected);
                 Log.e("Date is ", outputDateStr);
                 hideKeyboard(getActivity());
                 
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
             
                 if (outputDateStr.length() > 4) {
                     int birthYear = Integer.parseInt(outputDateStr.substring(outputDateStr.length() - 4));
+                    int birthMonth = Integer.parseInt(outputDateStr.substring(3,5));
                     age = currentYear - birthYear;
+                    
+                    if(currentMonth>birthMonth)
+                        age--;
                     String uid = FirebaseAuth.getInstance().getUid();
                     HashMap<String, Object> updateAgeMap = new HashMap<>();
                     updateAgeMap.put(Constants.numeralAge, age);

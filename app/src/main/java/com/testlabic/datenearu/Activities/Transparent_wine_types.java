@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Utils;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class Transparent_wine_types extends Activity {
@@ -43,22 +45,46 @@ public class Transparent_wine_types extends Activity {
         clickedUsersId = getIntent().getStringExtra(Constants.clickedUid);
     
         TextView one, two, three;
+        ImageView rg, pr, ry;
     
+        rg=findViewById(R.id.rgbottle);
+        pr =findViewById(R.id.prbottle);
+        ry = findViewById(R.id.rybottle);
         one = findViewById(R.id.one);
         two = findViewById(R.id.two);
         three = findViewById(R.id.three);
     
+        rg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initateSendingWine(200);
+            }
+        });
+        
+        pr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initateSendingWine(500);
+            }
+        });
+        
+        ry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initateSendingWine(1000);
+            }
+        });
        one.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initateSendingWine(Constants.wineAmount);
+                initateSendingWine(200);
             }
         });
     
        two.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initateSendingWine(800);
+                initateSendingWine(500);
             }
         });
     
@@ -148,14 +174,15 @@ public class Transparent_wine_types extends Activity {
         
         String wineType = Constants.regularWine;
         String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        HashMap<String, Object > timeStamp = new HashMap<>();
-        timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+        //HashMap<String, Object > timeStamp = new HashMap<>();
+        //timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+        long timeStamp = -1 * new Date().getTime();
         String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
         switch (wineAmount)
         {
-            case 500: wineType = Constants.regularWine;
+            case 200: wineType = Constants.regularWine;
                 break;
-            case 800: wineType = Constants.premiumWine;
+            case 500: wineType = Constants.premiumWine;
                 break;
             case 1000: wineType = Constants.royalWine;
                 break;
@@ -178,7 +205,7 @@ public class Transparent_wine_types extends Activity {
                             if(subscr!=null)
                             {
                                 int current = subscr.getXPoints();
-                                current += wineAmount-200;
+                                current += wineAmount;
                                 HashMap<String, Object> updatePoints = new HashMap<>();
                                 updatePoints.put(Constants.xPoints, current);
                                 DROP_REF.updateChildren(updatePoints);

@@ -29,7 +29,7 @@ public class AttemptQuestionsStepperAdapter extends AbstractFragmentStepAdapter 
         else
         if(position==4)
             return new AttemptQuestionFive();
-        else
+       /* else
             if(position==5)
                 return new AttemptQuestionSix();
         else
@@ -43,7 +43,7 @@ public class AttemptQuestionsStepperAdapter extends AbstractFragmentStepAdapter 
             return new AttemptQuestionNine();
         else
         if(position==9)
-            return new AttemptQuestionTen();
+            return new AttemptQuestionTen();*/
 
         //  Bundle b = new Bundle();
         //  b.putInt(CURRENT_STEP_POSITION_KEY, position);
@@ -53,6 +53,6 @@ public class AttemptQuestionsStepperAdapter extends AbstractFragmentStepAdapter 
 
     @Override
     public int getCount() {
-        return 10;
+        return 5;
     }
 }

@@ -33,6 +33,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -567,6 +570,16 @@ public class EditActivity extends AppCompatActivity {
             HashMap<String, Object> update_image_url_city = new HashMap<>();
             update_image_url_city.put("imageUrl", uri);
             ref2.updateChildren(update_image_url_city);
+    
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setPhotoUri(Uri.parse(uri))
+                    .build();
+    
+            if (user != null) {
+                user.updateProfile(profileUpdates);
+            }
         }
         ref.updateChildren(updateimage).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -574,8 +587,8 @@ public class EditActivity extends AppCompatActivity {
                 bar1.setVisibility(View.INVISIBLE);
                 bar2.setVisibility(View.INVISIBLE);
                 bar3.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(),"Successful!!",Toast.LENGTH_LONG).show();
-                
+                Toast.makeText(getApplicationContext(),"Successful!",Toast.LENGTH_LONG).show();
+                setUpDetails();
             }
         });
     }

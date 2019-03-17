@@ -88,9 +88,11 @@ public class Constants {
     public static String questionNumber = "questionNumber";
     public static int unBlurForSevenDaysDrops = 500;
     public static String acceptHistory = "acceptHistory";
-    public static int newUserDrops = 1000;
+    public static int newUserDrops = 2000;
     public static String tempUid = "tempUid";
     public static String enabledMultiMsgs = "enabledMultiMsgs";
+    public static String all_location = "All Locations";
+    public static int questionsCount = 5;
     
     public static String encrypt(String cityLabel) {
         

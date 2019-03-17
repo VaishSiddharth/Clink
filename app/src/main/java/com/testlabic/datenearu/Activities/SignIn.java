@@ -261,7 +261,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         HashMap<String, Object> timeStamp = new HashMap<>();
         timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
         ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
-                , "NA", null, null, null, mCurrentUser.getUid(), lastName, -1, timeStamp, timeStamp);
+                , "NA", null, Constants.all_location, null, mCurrentUser.getUid(), lastName, -1, timeStamp, timeStamp);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());
@@ -297,9 +297,9 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
 
     private String modifiedImageUrl() {
 
-        /*
-        update user's profile first
-         */
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null&&FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()==null)
+            return "";
+        //update user's profile first
         String modifiedImageUrl = null;
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -431,10 +431,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                         }
                     });
         }
-    }
-
-    private void uploadQuestions(String uid) {
-    
     }
 
     @Override

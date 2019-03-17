@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,14 +26,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
+import com.testlabic.datenearu.Activities.MainActivity;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -113,28 +123,33 @@ public class SeriousItems extends Fragment implements BlockingStep {
     
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+    
+    }
+    
+    @Override
+    public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
         if(count==6) {
             dialog.show();
-           // Toast.makeText(getActivity(), "All done go! "+count, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), "All done go! "+count, Toast.LENGTH_SHORT).show();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userInfo)
                     .child(Constants.uid)
                     .child("matchAlgo");
-                    
+        
             String seq = "";
             //getting values from treemap
             for(int i=1; i<7; i++)
                 seq += order.get(i);
-            
+        
             //Log.e(TAG, "The sequence is "+seq);
             final String finalSeq = seq;
-    
+        
             DatabaseReference prefRef = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.userPreferences)
                     .child(Constants.uid)
                     .child("matchAlgo");
             prefRef.setValue(seq);
-            
+        
             reference.setValue(seq).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -142,17 +157,65 @@ public class SeriousItems extends Fragment implements BlockingStep {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(Constants.matchAlgo, finalSeq).apply();
                     dialog.hide();
-                    callback.goToNextStep();
+                    DuplicateUserInfo();
+                    UpdateXPoints();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(getActivity(), QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                        }
+                    }, 300);
                 }
             });
         }
         else
             Toast.makeText(getActivity(), "Order all items priority wise", Toast.LENGTH_SHORT).show();
     }
+    private void UpdateXPoints() {
+        Constants.uid = FirebaseAuth.getInstance().getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.xPoints)
+                .child(Constants.uid);
+        HashMap<String, Object> updatePoints = new HashMap<>();
+        updatePoints.put(Constants.xPoints, Constants.newUserDrops);
+        reference.updateChildren(updatePoints);
+    }
     
-    @Override
-    public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
+    private void DuplicateUserInfo() {
     
+        DatabaseReference refInit = FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
+                .child(Constants.uid);
+        refInit.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue(ModelUser.class) != null) {
+                    ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                    if (user != null) {
+                        String gender = user.getGender();
+                        String cityLabel = user.getCityLabel();
+                        if (cityLabel != null && gender != null) {
+                            cityLabel = cityLabel.replace(", ", "_");
+                            DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
+                                    .child(cityLabel).child(gender).child(Constants.uid);
+                            final String finalCityLabel = cityLabel;
+                            refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString(Constants.cityLabel, finalCityLabel).apply();
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
     
     @Override

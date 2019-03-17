@@ -525,9 +525,10 @@ public class pagerTransition extends Fragment {
                     refPrefs.updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            
                             editor.putString(Constants.userIntrGender, Constants.male).apply();
-                            downloadList();
+                            fetchPrefsCalledOnce = false;
+                            fetchPreferences();
+                            dialog.dismiss();
                         }
                     });
                     
@@ -544,7 +545,9 @@ public class pagerTransition extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             editor.putString(Constants.userIntrGender, Constants.female).apply();
-                            downloadList();
+                            fetchPrefsCalledOnce = false;
+                            fetchPreferences();
+                            dialog.dismiss();
                         }
                     });
                 }
@@ -564,7 +567,7 @@ public class pagerTransition extends Fragment {
             String age_range = "(" + minAge + " - " + maxAge + " yrs)";
             tvAgeRange.setText(age_range);
             tvMin.setText("18");
-            tvMax.setText("50");
+            tvMax.setText("70");
             
             age_seek.setProgressColor(getResources().getColor(R.color.appcolor));
             age_seek.setValue(minAge, maxAge);
@@ -620,17 +623,17 @@ public class pagerTransition extends Fragment {
         
         double dist = prefs != null ? prefs.getDistanceLimit() : 0.0;
         distance.setText(String.valueOf((int) dist) + " km");
-        distance_seek.setProgress((int) dist);
+        distance_seek.setProgress((int) dist/10);
         
         distance_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 
-                distance.setText(String.valueOf((int) (double) progress + 10) + " km");
+                distance.setText(String.valueOf((int) (double) progress * 10) + " km");
                 // update the database
                 
                 updateMap = new HashMap<>();
-                updateMap.put("distanceLimit", (double) progress + 10);
+                updateMap.put("distanceLimit", (double) progress*10);
                 
             }
             
@@ -752,13 +755,18 @@ public class pagerTransition extends Fragment {
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Log.e(TAG, "The child changed triggeres");
+                    
                     downloadList();
+                    if(adapter!=null)
+                        adapter.notifyDataSetChanged();
                 }
                 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                     Log.e(TAG, "The child removerd triggeres");
                     downloadList();
+                    if(adapter!=null)
+                        adapter.notifyDataSetChanged();
                 }
                 
                 @Override
@@ -840,9 +848,11 @@ public class pagerTransition extends Fragment {
     
     private double distanceBetweenThem(LatLong location) {
         
-        //  if(currentUsersLatLong!=null)
-        // return distance(currentUsersLatLong.getLatitude(), currentUsersLatLong.getLongitude(), location.getLatitude(), location.getLongitude());
+          if(currentUsersLatLong!=null&&location!=null) {
+              return distance(currentUsersLatLong.getLatitude(), currentUsersLatLong.getLongitude(), location.getLatitude(), location.getLongitude());
+          }
         // LevenshteinDistance.Compute(baseString, stringtoTest)
+        else
         return 0.0;
     }
 

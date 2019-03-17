@@ -189,7 +189,8 @@ public class GiftsFragment extends Fragment {
                         String message = model.getGiftSendersName() + " has sent you a "+ model.getGiftType() + " Tap to view profile!";
                         
                         txt.setText(message);
-                        time.setText(setTime((Long) model.getTimeStamp().get(Constants.timeStamp)));
+                        time.setText(setTime((Long) model.getTimeStamp()));
+                        if(getActivity()!=null)
                         Glide.with(getActivity()).load(model.getGiftSendersImageUrl()).into(photo);
                     }
                 };

@@ -40,6 +40,7 @@ import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class TransparentActivity extends Activity {
@@ -160,8 +161,9 @@ public class TransparentActivity extends Activity {
     
         //constructing message
         
-        HashMap<String, Object > timeStamp2 = new HashMap<>();
-        timeStamp2.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+       //// HashMap<String, Object > timeStamp2 = new HashMap<>();
+       // timeStamp2.put(Constants.timeStamp, ServerValue.TIMESTAMP);
+        long timeStamp2 = -1* new Date().getTime();
         ModelGift likeBack = new ModelGift(Constants.uid, null, sendersUid, userName,url, timeStamp2);
         reference2.setValue(likeBack);
         

@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
                             long epoch = System.currentTimeMillis();
                             long oneday = 86400000;
                             //Log.e(TAG, "The epoch and timestamps are " + timestamp + " " + epoch);
-                            if (epoch >= (timestamp + (5 * oneday)) && ((epoch <= timestamp + (6 * oneday)))) {
+                            if (epoch >= (timestamp + (6 * oneday)) && ((epoch <= timestamp + (7 * oneday)))) {
                                 SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                                        .setTitleText("Reminder!")
+                                        .setTitleText("Reminder (for blurred profiles)")
                                         .setContentText("Tomorrow your profile will be un-blurred, to continue with blurred profile you'll have to spend 500 drops tomorrow ")
                                         .setCancelText("Okay")
                                         .setConfirmButton("Buy Drops", new SweetAlertDialog.OnSweetClickListener() {
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             if (epoch >= (timestamp + (7 * oneday))) {
                                 final SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                                        .setTitleText("Trial period Over!")
+                                        .setTitleText("Trial period Over (for blurred profiles)")
                                         .setContentText("If you press Cancel your profile will be unblured to users when viewed, to extend the time by 7 days spend 500 drops")
                                         .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
@@ -198,7 +198,10 @@ public class MainActivity extends AppCompatActivity {
                                                 HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
                                                 update_blur_trial_ended.put("blurTrialEnded", true);
                                                 ref1.updateChildren(update_blur);
-                                                
+                                                //String gender =
+                                                DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
+                                                        .child(Constants.cityLabels).child("male").child(Constants.uid);
+                                                ref2.updateChildren(update_blur);
                                                 //also increase the time and set it to today!
                                                 
                                                 //update the blurStartTime
@@ -506,10 +509,11 @@ public class MainActivity extends AppCompatActivity {
                 .child(Constants.Gifts)
                 .child(Constants.uid)
                 .child(Constants.unread);
+        Log.e(TAG, "Check for checking called!");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists()&&dataSnapshot.getValue(ModelGift.class)!=null) {
                     if (!shownGifts)
                         checkForNewGifts();
                 }
@@ -549,6 +553,7 @@ public class MainActivity extends AppCompatActivity {
                             if (dataSnapshot.getChildrenCount() < 2)
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     ModelGift modelGift = snapshot.getValue(ModelGift.class);
+                                    Log.e(TAG, "Started gift once ");
                                     startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
                                             .putExtra(Constants.giftModel, modelGift));
                                     
@@ -596,27 +601,38 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(MainActivity.this, NewUserSetup.class));
                         }  else if (!user.isQuestionaireComplete()) {
-                            Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
+                            BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
+                            nearby.setBadgeCount(1);
                             Handler h = new Handler();
                             h.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    startActivity(new Intent(MainActivity.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                                   // startActivity(new Intent(MainActivity.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                                   
                                 }
                             }, 1500);
                         }
                         
                         else
-                             if (user.isQuestionaireComplete()&&user.getCityLabel() == null) {
-                            Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
+                             if (user.getAbout() == null) {
+                           // Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
+                                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
+                                 nearby.setBadgeCount(1);
                             Handler h = new Handler();
                             h.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    startActivity(new Intent(MainActivity.this, locationUpdater.class));
+                                    //startActivity(new Intent(MainActivity.this, locationUpdater.class));
                                 }
                             }, 1500);
                         }
+                        else
+                             {
+                                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
+                                 nearby.removeBadge();
+                             }
+                            
                     }
                     
                 }

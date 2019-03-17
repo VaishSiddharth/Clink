@@ -37,11 +37,11 @@ public class QuestionSetup extends AppCompatActivity implements StepperLayout.St
         questionsStepperAdapter.createStep(2);
         questionsStepperAdapter.createStep(3);
         questionsStepperAdapter.createStep(4);
-        questionsStepperAdapter.createStep(5);
+       /* questionsStepperAdapter.createStep(5);
         questionsStepperAdapter.createStep(6);
         questionsStepperAdapter.createStep(7);
         questionsStepperAdapter.createStep(8);
-        questionsStepperAdapter.createStep(9);
+        questionsStepperAdapter.createStep(9);*/
         mStepperLayout.setAdapter(questionsStepperAdapter);
 
     }

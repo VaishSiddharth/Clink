@@ -1,10 +1,12 @@
 package com.testlabic.datenearu.NewUserSetupUtils;
+
 import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,14 +46,14 @@ public class Name extends Fragment implements BlockingStep {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView =  inflater.inflate(R.layout.activity_name, container, false);
+        rootView = inflater.inflate(R.layout.activity_name, container, false);
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
         next = rootView.findViewById(R.id.next);
         inputName = rootView.findViewById(R.id.input_name);
         inputLastName = rootView.findViewById(R.id.input_name_last);
-    
-        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+        
+        dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("In progress")
                 .setContentText(".....");
         
@@ -59,29 +65,27 @@ public class Name extends Fragment implements BlockingStep {
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                
+                    
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
-                    if(user!=null)
-                    {
+                    if (user != null) {
                         String firstName = user.getUserName();
                         String lastName = user.getUserLastName();
                         inputName.setText(firstName);
                         inputLastName.setText(lastName);
                     }
                 }
-            
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 
                 }
             });
             String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        
+            
         }
         return rootView;
     }
     
-  
     @Nullable
     @Override
     public VerificationError verifyStep() {
@@ -100,18 +104,15 @@ public class Name extends Fragment implements BlockingStep {
     
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-
+        
         dialog.show();
         callback.getStepperLayout().showProgress("Operation in progress, please wait...");
-        String name = inputName.getText().toString();
+        final String name = inputName.getText().toString();
         String lastName = inputLastName.getText().toString();
-        if(name.matches("") && lastName.matches(""))
-        {
+        if (name.matches("") && lastName.matches("")) {
             Toast.makeText(getActivity(), "Your name can't be nothing, type it first", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            if(reference!=null)
-            {
+        } else {
+            if (reference != null) {
                 HashMap<String, Object> userNameToUpdate = new HashMap<>();
                 HashMap<String, Object> userLastNameToUpdate = new HashMap<>();
                 userNameToUpdate.put("userName", name);
@@ -121,8 +122,20 @@ public class Name extends Fragment implements BlockingStep {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                     callback.goToNextStep();
+                                
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(name)
+                                        .build();
+                                
+                                if (user != null) {
+                                    user.updateProfile(profileUpdates);
+                                }
+                                
                                 dialog.dismiss();
+                                callback.goToNextStep();
+                                
                             }
                         });
             }

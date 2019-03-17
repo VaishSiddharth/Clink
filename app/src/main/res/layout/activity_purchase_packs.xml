@@ -139,7 +139,7 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:text="Watch an ad and get 20 points" />
+        android:text="Watch an ad and get 10 drops" />
 
     <LinearLayout
         android:layout_width="match_parent"

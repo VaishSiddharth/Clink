@@ -22,7 +22,6 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
     @Override
     public Step createStep(int position) {
         if(position==0) {
-          
             return new Name();
         }
         else
@@ -37,9 +36,6 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
         else
             if(position==4)
                 return new SeriousItems();
-        else
-            if(position==5)
-                return new AboutYouEditor();
         
       //  Bundle b = new Bundle();
       //  b.putInt(CURRENT_STEP_POSITION_KEY, position);
@@ -69,7 +65,7 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
                 builder
                         .setEndButtonLabel("NEXT")
                         .setBackButtonLabel("BACK")
-                        .setTitle("Intrest");
+                        .setTitle("Gender");
                 break;
             case 3:
                 builder
@@ -79,15 +75,9 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
                 break;
             case 4:
                 builder
-                        .setEndButtonLabel("NEXT")
-                        .setBackButtonLabel("BACK")
-                        .setTitle("Fill to find");
-                break;
-            case 5:
-                builder
                         .setEndButtonLabel("COMPLETE")
                         .setBackButtonLabel("BACK")
-                        .setTitle("Everything about you");
+                        .setTitle("Priorities");
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported position: " + position);
@@ -97,6 +87,6 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public int getCount() {
-        return 6;
+        return 5;
     }
 }

@@ -33,11 +33,11 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
         questionsStepperAdapter.createStep(2);
         questionsStepperAdapter.createStep(3);
         questionsStepperAdapter.createStep(4);
-        questionsStepperAdapter.createStep(5);
-        questionsStepperAdapter.createStep(6);
-        questionsStepperAdapter.createStep(7);
-        questionsStepperAdapter.createStep(8);
-        questionsStepperAdapter.createStep(9);
+       // questionsStepperAdapter.createStep(5);
+        //questionsStepperAdapter.createStep(6);
+       // questionsStepperAdapter.createStep(7);
+       // questionsStepperAdapter.createStep(8);
+       // questionsStepperAdapter.createStep(9);
         mStepperLayout.setAdapter(questionsStepperAdapter);
         
     }
@@ -65,7 +65,7 @@ public class QuestionsEnteringNewUser extends AppCompatActivity implements Stepp
     private void showInstructionDialog() {
         SweetAlertDialog alertDialog = new SweetAlertDialog(this)
                 .setTitleText("Last step!")
-                .setContentText("If you were to date yourself, how you would you answer these questions...!\n")
+                .setContentText("If you were to date yourself, how you would you answer these 5 questions...!\n")
                 .setConfirmText("Yes, go ahead!")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override

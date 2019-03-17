@@ -58,7 +58,7 @@
             android:layout_weight="5"
             android:textColor="#212121"
             android:layout_gravity="center"
-            android:text="Use Current Location"
+            android:text="Update Co-ordinates"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -74,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
+            android:visibility="invisible"
             android:text="Choose from the list"
             />
 

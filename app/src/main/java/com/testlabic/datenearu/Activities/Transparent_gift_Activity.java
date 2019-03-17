@@ -60,14 +60,16 @@ public class Transparent_gift_Activity extends Activity {
         modelGift = (ModelGift) getIntent().getSerializableExtra(Constants.giftModel);
         premium_bottle = findViewById(R.id.premium_bottle);
         points=findViewById(R.id.points);
+        moveGiftToRead();
         completeScreen = findViewById(R.id.scratch_view_behind);
         completeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Log.e("Trans", "The value of tap twice is "+ tapTwice);
-                if (tapTwice)
+                if (tapTwice) {
+                    removeListeners();
                     finish();
-                else {
+                } else {
                     tapTwice = true;
                     Handler h = new Handler();
                     h.postDelayed(new Runnable() {
@@ -117,7 +119,7 @@ public class Transparent_gift_Activity extends Activity {
 
         switch (modelGift.getGiftType())
         {
-            case "Regular Wine" : bottletype.setImageResource(R.drawable.regular_bottle);
+            case "Regular Wine" : bottletype.setImageResource(R.drawable.regularwine);
 
                 points.setText("+200 drops");
                 royal_bottle.setVisibility(View.GONE);
@@ -227,25 +229,12 @@ public class Transparent_gift_Activity extends Activity {
                     }
                 })
                 .attach(findViewById(R.id.scratch_view), findViewById(R.id.scratch_view_behind));
-        moveGiftToRead();
+       
 
     }
     private void removeListeners() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.Gifts)
-                .child(Constants.uid).child(Constants.unread);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataSnapshot.getRef().setValue(null);
-                moveReadRef.removeEventListener(childEventListener);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    
+        moveReadRef.removeEventListener(childEventListener);
     }
 
     @Override
@@ -271,7 +260,12 @@ public class Transparent_gift_Activity extends Activity {
                                 .child(Constants.Gifts)
                                 .child(Constants.uid).child(Constants.read).child(pushKey);
                         //Log.e("Trans", "THe ref to push to reaad" + reference);
-                        reference.setValue(notification);
+                        reference.setValue(notification).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                dataSnapshot.getRef().setValue(null);
+                            }
+                        });
                     }
                 }
             }

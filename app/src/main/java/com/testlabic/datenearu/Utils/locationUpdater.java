@@ -100,7 +100,7 @@ public class locationUpdater extends AppCompatActivity {
         alertDialog = new SweetAlertDialog(locationUpdater.this, SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("Updating")
                 .setContentText(".......");
-        populateListView();
+        //populateListView();
         
         myCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,7 +353,19 @@ public class locationUpdater extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid).child(Constants.location);
     
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.cityLabels)
+                .child(Constants.all_location)
+                .child(gender)
+                .child(Constants.uid)
+                .child(Constants.location);
         reference.setValue(latLong);
+        reference1.setValue(latLong).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                finish();
+            }
+        });
     }
     
     private void DuplicateUserInfoToCityLabelNode(final String cityLabel) {
@@ -541,13 +553,13 @@ public class locationUpdater extends AppCompatActivity {
                     cityLabel = cityName + "_" + stateName + "_" + countryName;
                     Log.e(TAG, "City Label from location cordinates is "+cityLabel);
                     updateCityLabel = new HashMap<>();
-                    updateCityLabel.put("cityLabel", cityLabel);
+                    updateCityLabel.put("cityLabel", Constants.all_location);
                     updateLocationCoordinates(location);
             
                     //UserInfoModel userInfoModel = ViewModelProviders.of(this).get(UserInfoModel.class);
             
                     //LiveData<DataSnapshot> liveData = userInfoModel.getDataSnapshotLiveData();
-                    updateCityLabelAndData();
+                    //updateCityLabelAndData();
             
                 } catch (IOException e) {
                     e.printStackTrace();

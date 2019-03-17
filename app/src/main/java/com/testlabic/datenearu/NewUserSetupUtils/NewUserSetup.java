@@ -45,6 +45,7 @@ import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class NewUserSetup extends AppCompatActivity implements StepperLayout.StepperListener {
     
@@ -55,6 +56,7 @@ public class NewUserSetup extends AppCompatActivity implements StepperLayout.Ste
     ArrayList<ModelQuestion> questions;
     MyStepperAdapter adapter;
     private LocationManager mLocationManager = null;
+    int maxSize = 0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,45 +94,59 @@ public class NewUserSetup extends AppCompatActivity implements StepperLayout.Ste
     }
     
     private void downloadQuestions() {
+        // random list of
         questions = new ArrayList<>();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.Questions);
         //do changes later..
-        
-        reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getValue() != null) {
-                    ModelQuestion question = dataSnapshot.getValue(ModelQuestion.class);
-                    if (question != null)
-                        questions.add(question);
-                }
-            }
-            
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            
-            }
-            
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            
-            }
-            
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            
-            }
-        });
-        
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                //randomizing the questions, download all the questions in the list and then shuffle the list
+                //and take first ten questions out of it!
+                maxSize = (int) dataSnapshot.getChildrenCount();
+                
+                Log.e(TAG, "The max number of questions is  " + maxSize);
+                if (maxSize < 1)
+                    return;
+                ArrayList<Integer> randomList = new ArrayList<>(maxSize);
+                for (int i = 0; i < maxSize; i++)
+                    randomList.add(i);
+                Collections.shuffle(randomList);
+                //now take first ten from these!
+                for (int j = 0; j < Constants.questionsCount; j++) {
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.Questions)
+                            .child(String.valueOf(randomList.get(j)));
+                    Log.e(TAG, "The random value is " + randomList.get(j));
+                    final int finalJ = j;
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() != null) {
+                                ModelQuestion question = dataSnapshot.getValue(ModelQuestion.class);
+                                if (question != null) {
+                                    //update questions here!
+                                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
+                                            .child(Constants.userInfo)
+                                            .child(Constants.uid)
+                                            .child(Constants.questions)
+                                            .child(String.valueOf(finalJ));
+                                    userRef.setValue(question);
+                                    
+                                }
+                            }
+                        }
+                        
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        
+                        }
+                    });
+                }
+                
+                Collections.shuffle(questions);
                 
                 if (questions.size() != 0) {
                     //push questions to node;

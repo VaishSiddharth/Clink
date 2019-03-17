@@ -85,6 +85,17 @@ public class Gender extends Fragment implements BlockingStep {
                         editor.putString(Constants.userGender, Constants.male).apply();
                     }
                 });
+    
+                iGenderSelected = false;
+                color(intr_female);
+                unColor(intr_male);
+                reference.updateChildren(updateFemaleI).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        iGenderSelected = true;
+                        editor.putString(Constants.userIntrGender, Constants.female).apply();
+                    }
+                });
             }
         });
     
@@ -101,8 +112,23 @@ public class Gender extends Fragment implements BlockingStep {
                         editor.putString(Constants.userGender, Constants.female).apply();
                     }
                 });
+    
+                iGenderSelected = false;
+                unColor(intr_female);
+                color(intr_male);
+                reference.updateChildren(updateMaleI).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        iGenderSelected = true;
+                        editor.putString(Constants.userIntrGender, Constants.male).apply();
+                    }
+                });
             }
-        });
+            
+            
+        }
+        
+        );
     
         intr_male.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,16 +178,16 @@ public class Gender extends Fragment implements BlockingStep {
         int minAge =-1, maxAge =-1;
         String gender = sharedPreferences.getString(Constants.userGender, null);
         String preferredGender = sharedPreferences.getString(Constants.userIntrGender, null);
-        if(gender.equals(Constants.male)) {
+        /*if(gender.equals(Constants.male)) {
             minAge = userAge<23?18: userAge-5;
             maxAge = userAge;
         }
-        else
+        else*/
         {
-            maxAge = userAge+5;
-            minAge = userAge;
+            maxAge = 70;
+            minAge = 18;
         }
-        ModelPrefs prefs = new ModelPrefs(15.0, minAge, maxAge, preferredGender );
+        ModelPrefs prefs = new ModelPrefs(1000.0, minAge, maxAge, preferredGender );
         reference.setValue(prefs);
         
         
