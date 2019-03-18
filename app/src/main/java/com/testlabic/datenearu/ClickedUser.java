@@ -55,7 +55,7 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
     ShineButton f1;
     ImageView backbutton;
     boolean first = true;
-    String imageUrl, imageUrl2, imageUrl3;
+    String imageUrl,imageUrl1, imageUrl2, imageUrl3;
     private TextView name, about, age;
     private ViewPager viewPager;
     private CircleIndicator circleIndicator;
@@ -427,12 +427,13 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                     }
                     //setupImages now
                     if (user != null) {
+                        imageUrl1=user.getImage1();
                         imageUrl = user.getImageUrl();
                         imageUrl2 = user.getImage2();
                         imageUrl3 = user.getImage3();
                         //Log.e(TAG, imageUrl+ " "+ imageUrl2);
                         isBlur = user.getIsBlur();
-                        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl, imageUrl2, imageUrl3, isBlur);
+                        view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl1, imageUrl2, imageUrl3, isBlur);
                         viewPager.setAdapter(view_pager_adapter);
                         circleIndicator.setViewPager(viewPager);
                         view_pager_adapter.registerDataSetObserver(circleIndicator.getDataSetObserver());

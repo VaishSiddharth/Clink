@@ -48,6 +48,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.testlabic.datenearu.Activities.EditActivity;
 import com.testlabic.datenearu.Activities.MainActivity;
+import com.testlabic.datenearu.Activities.ProfilePreview;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
@@ -86,7 +87,7 @@ public class ProfileFragment extends Fragment {
     private ArrayList<ProfileModel> profileModelArrayList;
     private View rootView;
     private TextView username, desc;
-    private ImageView displayImage,remove_dp,edit;
+    private ImageView displayImage,remove_dp,edit,profilepreview;
     private TextView points, buy;
     View edit_dp;
     String gender,cityLabel;
@@ -104,8 +105,7 @@ public class ProfileFragment extends Fragment {
     String txthistory[] = {"Your questions for matches", "Improve your profile", "Tap to Edit", "Logout from app"};
     
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         username = rootView.findViewById(R.id.username);
@@ -117,6 +117,13 @@ public class ProfileFragment extends Fragment {
         bar=edit_dp.findViewById(R.id.progress_bar);
         points = rootView.findViewById(R.id.points);
         buy = rootView.findViewById(R.id.buy);
+        profilepreview=rootView.findViewById(R.id.profilepreview);
+        profilepreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ProfilePreview.class));
+            }
+        });
 
         remove_dp.setOnClickListener(new View.OnClickListener() {
             @Override
