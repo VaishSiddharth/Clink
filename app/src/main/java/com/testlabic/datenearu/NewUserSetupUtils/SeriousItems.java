@@ -298,7 +298,7 @@ public class SeriousItems extends Fragment implements BlockingStep {
                     //if(dropTarget.getText().toString().charAt(0) == dropped.getText().toString().charAt(0))
                     {
                         //stop displaying the view where it was before it was dragged
-                        view.setVisibility(View.INVISIBLE);
+                        view.setVisibility(View.GONE);
                         //update the text in the target view to reflect the data being dropped
                         char alpha = (char)dropTarget.getText().charAt(0);
                         char num = dropped.getText().charAt(0);
