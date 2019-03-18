@@ -242,11 +242,21 @@ public class EditActivity extends AppCompatActivity {
                         imageId = "image1";
                     }
                 });
+                sweetAlertDialog.setCancelButton("View", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        startActivity(new Intent(EditActivity.this,ProfileImageView.class).putExtra("image","1"));
+
+                    }
+                });
                 
                 sweetAlertDialog.show();
                 
                 Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
+                btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 
             }
         });
@@ -268,9 +278,19 @@ public class EditActivity extends AppCompatActivity {
                         imageId = "image2";
                     }
                 });
+                sweetAlertDialog.setCancelButton("View", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        startActivity(new Intent(EditActivity.this,ProfileImageView.class).putExtra("image","2"));
+
+                    }
+                });
                 sweetAlertDialog.show();
                 Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
+                btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
     
             }
         });
@@ -291,10 +311,20 @@ public class EditActivity extends AppCompatActivity {
                         imageId = "image3";
                     }
                 });
+                sweetAlertDialog.setCancelButton("View", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        startActivity(new Intent(EditActivity.this,ProfileImageView.class).putExtra("image","3"));
+
+                    }
+                });
                 
                 sweetAlertDialog.show();
                 Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
+                btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
     
     
             }

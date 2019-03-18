@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutpv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="#E6000000"
+    android:orientation="vertical">
+
+    <customfonts.MyTextView_SF_Pro_Display_Bold
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_margin="30dp"
+        android:text="This is how your Profile will look like to people"
+        android:textColor="#FFFFFF"
+        android:shadowColor="@color/black"
+        android:textSize="20sp"
+        android:visibility="gone"
+        />
+
+    <com.testlabic.datenearu.TransitionUtils.AspectRatioCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/card_extra_height"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="10dp">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imagepv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/final_app_logo1bw"
+                android:scaleType="centerCrop"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_setupuser_shade"/>
+            <View
+                android:id="@+id/view_on_blurpv"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_darker_fragment_blur"/>
+
+        </FrameLayout>
+
+    </com.testlabic.datenearu.TransitionUtils.AspectRatioCardView>
+
+</LinearLayout>
