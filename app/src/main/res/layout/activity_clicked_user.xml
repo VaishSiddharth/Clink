@@ -45,12 +45,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <customfonts.MyTextView_SF_Pro_Display_Light
+                    android:id="@+id/attempt_match"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_4_dialogue"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:textAllCaps="true"
+                    android:text="Attempt Cheers"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="23dp"
                 android:orientation="vertical">
 
                 <customfonts.TextViewSFProDisplayRegular
@@ -139,27 +159,6 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
                     android:background="#A3979797" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal">
-
-                <customfonts.MyTextView_SF_Pro_Display_Light
-                    android:id="@+id/attempt_match"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_4_dialogue"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:textAllCaps="true"
-                    android:text="Attempt Cheers"
-                    android:textColor="#ffffff"
-                    android:textSize="15sp" />
 
             </LinearLayout>
         </LinearLayout>

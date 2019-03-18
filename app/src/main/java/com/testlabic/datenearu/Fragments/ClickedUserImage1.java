@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import jp.wasabeef.blurry.Blurry;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +41,10 @@ public class ClickedUserImage1 extends Fragment {
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_clicked_user_image1,container,false);
         final ImageView imageView = view.findViewById(R.id.photos);
-        if (getArguments() != null) {
+        if (getArguments().getString(Constants.imageUrl) != null) {
             imageUrl = getArguments().getString(Constants.imageUrl);
             boolean isBlur = getArguments().getBoolean(Constants.isBlur);
-            //Log.e(TAG, "Image url : reached here "+imageUrl);
+            //Log.e(TAG, "checking "+imageUrl.toString());
             if(!isBlur)
             Glide.with(getContext()).load
                     ( imageUrl).into(imageView);

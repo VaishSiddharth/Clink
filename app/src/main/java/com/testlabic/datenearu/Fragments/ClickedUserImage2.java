@@ -39,7 +39,7 @@ public class ClickedUserImage2 extends Fragment {
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_clicked_user_image1,container,false);
         final ImageView imageView = view.findViewById(R.id.photos);
-        if (getArguments() != null) {
+        if (getArguments().getString(Constants.imageUrl) != null) {
             imageUrl = getArguments().getString(Constants.imageUrl);
             boolean isBlur = getArguments().getBoolean(Constants.isBlur);
             //Log.e(TAG, "Image url : "+imageUrl);
