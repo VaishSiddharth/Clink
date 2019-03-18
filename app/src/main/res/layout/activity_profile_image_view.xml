@@ -27,6 +27,7 @@
 
     <com.testlabic.datenearu.TransitionUtils.AspectRatioCardView
         android:layout_width="match_parent"
+        android:id="@+id/cardview"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/card_extra_height"
@@ -60,5 +61,12 @@
         </FrameLayout>
 
     </com.testlabic.datenearu.TransitionUtils.AspectRatioCardView>
+    <ImageView
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:src="@drawable/ic_action_next"
+        android:background="@drawable/button_4_dialogue"/>
 
 </LinearLayout>
