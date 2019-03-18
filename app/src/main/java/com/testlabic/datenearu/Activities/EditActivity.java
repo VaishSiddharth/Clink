@@ -604,15 +604,7 @@ public class EditActivity extends AppCompatActivity {
             update_image_url_city.put("imageUrl", uri);
             ref2.updateChildren(update_image_url_city);
     
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setPhotoUri(Uri.parse(uri))
-                    .build();
-    
-            if (user != null) {
-                user.updateProfile(profileUpdates);
-            }
+           
         }
         ref.updateChildren(updateimage).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

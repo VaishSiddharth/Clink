@@ -39,6 +39,10 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     private DatabaseReference onlineStatusRef;
     private ValueEventListener onlineStatusListener;
     
+    public ArrayList<ModelLastMessage> getAllModelArrayList() {
+        return allModelArrayList;
+    }
+    
     private String setTime(long timestampCreatedLong) {
         Date dateObj = new Date(timestampCreatedLong);
         long epoch = dateObj.getTime();

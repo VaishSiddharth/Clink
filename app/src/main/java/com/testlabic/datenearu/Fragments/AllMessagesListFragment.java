@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -161,8 +162,9 @@ public class AllMessagesListFragment extends Fragment {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                
                 //sort messages with time
+    
+              
                 Collections.sort(list, new Comparator<ModelLastMessage>() {
                     @Override
                     public int compare(ModelLastMessage v1, ModelLastMessage v2) {
@@ -173,6 +175,25 @@ public class AllMessagesListFragment extends Fragment {
     
                 adapter = new LastMessageAdapter(getActivity(), list);
                 recyclerview.setAdapter(adapter);
+    
+    
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<ModelLastMessage> lastMessages= adapter.getAllModelArrayList();
+                        Collections.sort(lastMessages, new Comparator<ModelLastMessage>() {
+                            @Override
+                            public int compare(ModelLastMessage v1, ModelLastMessage v2) {
+                                long sub = v2.getTimeStamp() + (v1.getTimeStamp());
+                                return (int) sub;
+                            }
+                        });
+    
+                        adapter = new LastMessageAdapter(getActivity(),lastMessages);
+                        recyclerview.setAdapter(adapter);
+                    }
+                },200);
     
             }
     
