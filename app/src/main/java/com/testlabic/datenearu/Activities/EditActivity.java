@@ -54,6 +54,8 @@ import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Utils;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -150,6 +152,10 @@ public class EditActivity extends AppCompatActivity {
                 });
                 sweetAlertDialog.setCancelText("No");
                 sweetAlertDialog.show();
+                Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
+                btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
             }
         });
         remove_dp2.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +183,10 @@ public class EditActivity extends AppCompatActivity {
                 });
                 sweetAlertDialog.setCancelText("No");
                 sweetAlertDialog.show();
+                Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
+                btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
             }
         });
         remove_dp3.setOnClickListener(new View.OnClickListener() {
@@ -205,6 +215,10 @@ public class EditActivity extends AppCompatActivity {
                 });
                 sweetAlertDialog.setCancelText("No");
                 sweetAlertDialog.show();
+                Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
+                btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
+                btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
             }
         });
         
@@ -219,10 +233,13 @@ public class EditActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         
-                        Crop.pickImage(EditActivity.this);
+                        //Crop.pickImage(EditActivity.this);
+                        CropImage.activity()
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .start(EditActivity.this);
                         sweetAlertDialog.dismiss();
                         
-                        imageId = "imageUrl";
+                        imageId = "image1";
                     }
                 });
                 
@@ -242,7 +259,10 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Crop.pickImage(EditActivity.this);
+                        //Crop.pickImage(EditActivity.this);
+                        CropImage.activity()
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .start(EditActivity.this);
                         
                         sweetAlertDialog.dismiss();
                         imageId = "image2";
@@ -263,7 +283,10 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Crop.pickImage(EditActivity.this);
+                        //Crop.pickImage(EditActivity.this);
+                        CropImage.activity()
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .start(EditActivity.this);
                         sweetAlertDialog.dismiss();
                         imageId = "image3";
                     }
@@ -428,12 +451,22 @@ public class EditActivity extends AppCompatActivity {
     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                handleCrop(resultCode, resultUri,null);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                handleCrop(resultCode, null,error);
+            }
+        }
         
-        if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+        /*if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
             beginCrop(data.getData());
         } else if (requestCode == Crop.REQUEST_CROP) {
-            handleCrop(resultCode, data);
-        }
+            //handleCrop(resultCode, data);
+        }*/
         
     }
     public void blurTrialCalc()
@@ -472,14 +505,14 @@ public class EditActivity extends AppCompatActivity {
         Crop.of(source, destination).asSquare().start(this);
     }
     
-    private void handleCrop(int resultCode, Intent result) {
+    private void handleCrop(int resultCode, Uri result, Exception error) {
         if (resultCode == RESULT_OK) {
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Crop.getOutput(result));
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), result);
                 switch (imageId) {
                     case "image2":
                         displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/2.jpg");
-                        image2.setImageURI(Crop.getOutput(result));
+                        image2.setImageURI(result);
                         bar2.setVisibility(View.VISIBLE);
                         bar1.setVisibility(View.INVISIBLE);
                         bar3.setVisibility(View.INVISIBLE);
@@ -488,7 +521,7 @@ public class EditActivity extends AppCompatActivity {
                         break;
                     case "image3":
                         displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/3.jpg");
-                        image3.setImageURI(Crop.getOutput(result));
+                        image3.setImageURI(result);
                         bar3.setVisibility(View.VISIBLE);
                         bar1.setVisibility(View.INVISIBLE);
                         bar2.setVisibility(View.INVISIBLE);
@@ -497,7 +530,7 @@ public class EditActivity extends AppCompatActivity {
                         break;
                     default:
                         displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/1.jpg");
-                        image1.setImageURI(Crop.getOutput(result));
+                        image1.setImageURI(result);
                         bar1.setVisibility(View.VISIBLE);
                         bar2.setVisibility(View.INVISIBLE);
                         bar3.setVisibility(View.INVISIBLE);
@@ -511,7 +544,7 @@ public class EditActivity extends AppCompatActivity {
             }
             
         } else if (resultCode == Crop.RESULT_ERROR) {
-            Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show();
         }
     }
     
@@ -662,9 +695,12 @@ public class EditActivity extends AppCompatActivity {
                     if (user != null && user.getUserName() != null) {
                         name.setText(user.getUserName());
                         age.setText(String.valueOf(user.getNumeralAge()));
-                        Glide.with(EditActivity.this).load(user.getImageUrl()).into(image1);
-                        Glide.with(EditActivity.this).load(user.getImage2()).into(image2);
-                        Glide.with(EditActivity.this).load(user.getImage3()).into(image3);
+                        if(user.getImageUrl()!=null)
+                            Glide.with(EditActivity.this).load(user.getImage1()).into(image1);
+                        if(user.getImage2()!=null)
+                            Glide.with(EditActivity.this).load(user.getImage2()).into(image2);
+                        if(user.getImage3()!=null)
+                            Glide.with(EditActivity.this).load(user.getImage3()).into(image3);
                         cityLabel = user.getCityLabel();
                         cityLabel = cityLabel.replace(", ", "_");
                         gender = user.getGender();

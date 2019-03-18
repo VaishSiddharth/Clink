@@ -52,6 +52,8 @@
         <activity android:name=".AppIntro.IntroActivity" />
         <activity android:name=".Activities.SignIn" />
         <activity android:name=".Login" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
         <activity
             android:name=".Activities.MainActivity"
             android:screenOrientation="portrait"

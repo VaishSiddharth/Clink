@@ -696,6 +696,11 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void updateStatus(final String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(Constants.status, status);

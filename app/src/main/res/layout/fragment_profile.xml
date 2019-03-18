@@ -31,7 +31,17 @@
             android:id="@+id/display_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/profile" />
+            android:src="@drawable/profile"
+            android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <include
+                android:id="@+id/edit_dp"
+                layout="@layout/edit_profile_images" />
+        </LinearLayout>
 
         <customfonts.MyTextView_SF_Pro_Display_Bold
             android:layout_gravity="center"

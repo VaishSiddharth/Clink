@@ -28,7 +28,7 @@
         app:civ_shadow_radius="15"
         app:civ_shadow_color="#C1BFBF"
         app:civ_shadow_gravity="center"
-        android:src="@drawable/profile"
+        android:src="@drawable/final_app_logo1bw"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
