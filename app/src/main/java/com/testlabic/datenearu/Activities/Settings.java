@@ -92,7 +92,39 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
                 .child(Constants.all_location)
                 .child(Constants.uid)
                 ;
-        
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Notifications)
+                .child(Constants.uid)
+                ;
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Gifts)
+                .child(Constants.uid)
+                ;
+        DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.LikeInfo)
+                .child(Constants.uid)
+                ;
+        DatabaseReference reference5 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.DMIds)
+                .child(Constants.uid)
+                ;
+        DatabaseReference reference6 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.Messages)
+                .child(Constants.uid)
+                ;
+        DatabaseReference reference7 = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.CHATS)
+                .child(Constants.uid)
+                ;
+    
+        reference7.setValue(null);
+        reference6.setValue(null);
+    
+        reference5.setValue(null);
+        reference4.setValue(null);
+    
+        reference2.setValue(null);
+        reference3.setValue(null);
         reference.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

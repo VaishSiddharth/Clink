@@ -101,8 +101,8 @@ public class ProfileFragment extends Fragment {
     Integer inbox[] = {R.drawable.ic_inbox, R.drawable.ic_edit, R.drawable.ic_profile, R.drawable.ic_settings};
     Integer arrow[] = {R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp,
             R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp};
-    String txttrades[] = {"My Questions", "Edit Profile", "About you", "Sign Out"};
-    String txthistory[] = {"Your questions for matches", "Improve your profile", "Tap to Edit", "Logout from app"};
+    String txttrades[] = {"My Questions", "Edit Profile", "About you", "Settings"};
+    String txthistory[] = {"Your questions for matches", "Improve your profile", "Tap to Edit", "Delete account/ Sign out"};
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
