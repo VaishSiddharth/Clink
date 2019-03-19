@@ -163,7 +163,16 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         alertDialog.show();
         Button btn = alertDialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+        if (getContext() != null) {
+            btn.setTypeface(Utils.SFPRoLight(this));
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            if(title!=null)
+                title.setTypeface(Utils.SFProRegular(this));
         
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            if(contentText!=null)
+                contentText.setTypeface(Utils.SFPRoLight(this));
+        }
     }
     
     private void ShowAConfirmationDialog(final String uid) {

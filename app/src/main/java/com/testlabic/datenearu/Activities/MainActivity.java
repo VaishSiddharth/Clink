@@ -630,24 +630,25 @@ public class MainActivity extends AppCompatActivity {
                            // Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
                                  BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
                                  nearby.setBadgeCount(1);
-                            Handler h = new Handler();
-                            h.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //startActivity(new Intent(MainActivity.this, locationUpdater.class));
-                                }
-                            }, 1500);
+                                 SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                                 SharedPreferences.Editor editor = prefs.edit();
+                                 editor.putBoolean(Constants.isAboutComplete+Constants.uid, false);
+                                 editor.apply();
                         }
+                        else if(user.getAbout()!=null)
+                             {
+                                 SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                                 SharedPreferences.Editor editor = prefs.edit();
+                                 editor.putBoolean(Constants.isAboutComplete+Constants.uid, true);
+                                 editor.apply();
+                             }
                         else
                              {
                                  BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
                                  nearby.removeBadge();
                              }
-                            
                     }
-                    
                 }
-                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 

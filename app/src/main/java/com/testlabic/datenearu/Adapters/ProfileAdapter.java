@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +63,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             /*
             Code questions part here
              */
-            
+            SharedPreferences prefs = context.getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
+    
+            boolean isQuestionaireComplete = prefs.getBoolean(Constants.isQuestionaireComplete+Constants.uid, false);
+    
+            if(!isQuestionaireComplete)
+            {
+                //TODO: Display badge on holder.profileItem
+                holder.arrow.setImageResource(R.drawable.bottle_1);
+            }
+            else
+            {
+                holder.arrow.setImageResource(R.drawable.ic_chevron_right_black_24dp);
+            }
             holder.profileItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -86,6 +100,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             /*
             Open about editor and make changes..
              */
+            SharedPreferences prefs = context.getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
+            
+            boolean isAboutComplete = prefs.getBoolean(Constants.isAboutComplete+Constants.uid, false);
+    
+            if(!isAboutComplete)
+            {
+                //TODO: Display badge on holder.profileItem
+                holder.arrow.setImageResource(R.drawable.bottle_1);
+            }
+            else
+            {
+                holder.arrow.setImageResource(R.drawable.ic_chevron_right_black_24dp);
+            }
             holder.profileItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

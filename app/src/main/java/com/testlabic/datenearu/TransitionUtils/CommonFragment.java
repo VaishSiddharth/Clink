@@ -274,7 +274,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private void showFillQuestionaireDialog() {
         SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("Before you continue")
-                .setContentText("Fill your quiz before you attempt other people's")
+                .setContentText("Fill your quiz answers before you attempt other person's")
                 .setConfirmButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -286,7 +286,16 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         alertDialog.show();
         Button btn = alertDialog.findViewById(R.id.confirm_button);
         btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
-    
+        if (getContext() != null) {
+            btn.setTypeface(Utils.SFPRoLight(getContext()));
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            if(title!=null)
+                title.setTypeface(Utils.SFProRegular(getContext()));
+        
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            if(contentText!=null)
+                contentText.setTypeface(Utils.SFPRoLight(getContext()));
+        }
     }
     
     public void setShowcaseView() {

@@ -198,7 +198,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                             boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                             Log.e(TAG, "The user is a new user or not " + isnewUser);
                             //   checkAndUpdateUserInfo(user);
