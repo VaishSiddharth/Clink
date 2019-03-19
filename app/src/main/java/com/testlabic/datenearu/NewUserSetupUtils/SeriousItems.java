@@ -156,16 +156,10 @@ public class SeriousItems extends Fragment implements BlockingStep {
                     SharedPreferences preferences = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(Constants.matchAlgo, finalSeq).apply();
-                    dialog.hide();
-                    DuplicateUserInfo();
+                  
                     UpdateXPoints();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            startActivity(new Intent(getActivity(), QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
-                        }
-                    }, 300);
+                    DuplicateUserInfo();
+                   
                 }
             });
         }
@@ -205,6 +199,9 @@ public class SeriousItems extends Fragment implements BlockingStep {
                                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString(Constants.cityLabel, finalCityLabel).apply();
+                                    dialog.dismiss();
+                                    startActivity(new Intent(getActivity(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                            |Intent.FLAG_ACTIVITY_NEW_TASK));
                                 }
                             });
                         }

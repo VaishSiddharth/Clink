@@ -39,7 +39,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class Age extends Fragment implements BlockingStep {
     
     ImageView next;
-    int age = -1;
+    private int age = -1;
     private String outputDateStr = null;
     private SweetAlertDialog dialog;
     
@@ -53,17 +53,20 @@ public class Age extends Fragment implements BlockingStep {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+    private static final String DATE_FORMAT = "MM-dd-yyyy";
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_age, container, false);
-    
+        
         LazyDatePicker lazyDatePicker = rootView.findViewById(R.id.lazyDatePicker);
-        lazyDatePicker.setDateFormat(LazyDatePicker.DateFormat.MM_DD_YYYY);
-        // lazyDatePicker.setMinDate(minDate);
-        // lazyDatePicker.setMaxDate(maxDate);
-    
-        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+        lazyDatePicker.setDateFormat(LazyDatePicker.DateFormat.DD_MM_YYYY);
+        Date minDate = LazyDatePicker.stringToDate("01-01-1948", DATE_FORMAT);
+        Date maxDate = LazyDatePicker.stringToDate("12-31-2018", DATE_FORMAT);
+         lazyDatePicker.setMinDate(minDate);
+         lazyDatePicker.setMaxDate(maxDate);
+        dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("In progress")
                 .setContentText(".....");
         
@@ -78,13 +81,13 @@ public class Age extends Fragment implements BlockingStep {
                 
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
                 int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-            
+                
                 if (outputDateStr.length() > 4) {
                     int birthYear = Integer.parseInt(outputDateStr.substring(outputDateStr.length() - 4));
-                    int birthMonth = Integer.parseInt(outputDateStr.substring(3,5));
+                    int birthMonth = Integer.parseInt(outputDateStr.substring(3, 5));
                     age = currentYear - birthYear;
                     
-                    if(currentMonth>birthMonth)
+                    if (currentMonth < birthMonth)
                         age--;
                     String uid = FirebaseAuth.getInstance().getUid();
                     HashMap<String, Object> updateAgeMap = new HashMap<>();
@@ -99,20 +102,19 @@ public class Age extends Fragment implements BlockingStep {
                     // whatever is appropriate in this case
                     throw new IllegalArgumentException("Invalid date");
                 }
-            
+                
             }
         });
         
         return rootView;
     }
     
-   
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
         dialog.show();
         if (outputDateStr != null) {
             String uid = FirebaseAuth.getInstance().getUid();
-            Log.e("Age", "uid is "+uid);
+            Log.e("Age", "uid is " + uid);
             if (uid != null) {
                 HashMap<String, Object> updateAgeMap = new HashMap<>();
                 updateAgeMap.put(Constants.dateOfBirth, outputDateStr);
@@ -122,24 +124,21 @@ public class Age extends Fragment implements BlockingStep {
                 Log.e("Age", "Click received");
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                if(age!=-1)
-                    editor.putInt(Constants.age,age ).apply();
+                if (age != -1)
+                    editor.putInt(Constants.age, age).apply();
                 reference.updateChildren(updateAgeMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                    
-                    callback.goToNextStep();
-                    dialog.dismiss();
+                        dialog.dismiss();
+                        callback.goToNextStep();
                     }
                 });
             }
-        }
-    
-        else {
+        } else {
             dialog.dismiss();
             Toast.makeText(getActivity(), "Enter your date of birth first", Toast.LENGTH_SHORT).show();
         }
-    
+        
     }
     
     @Override

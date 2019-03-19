@@ -45,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Adapters.ChatListAdapter;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.HelpUtils.Adapter;
 import com.testlabic.datenearu.HelpUtils.ModelMainResults;
 import com.testlabic.datenearu.Models.ApiClient;
@@ -227,7 +228,17 @@ public class chatFullScreen extends AppCompatActivity {
         toolbarName = findViewById(R.id.sendToName);
         
         toolbarName.setText(sendToName);
-        
+    
+        toolbarName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            
+                startActivity(new Intent(chatFullScreen.this, ClickedUser.class)
+                        .putExtra(Constants.clickedUid, sendToUid));
+            
+            }
+        });
+    
         imageView = findViewById(R.id.attach);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -344,7 +355,7 @@ public class chatFullScreen extends AppCompatActivity {
                         {
                             //hide the chat edit text
                             layout.setVisibility(View.GONE);
-                            Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_INDEFINITE).show();
+                            Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_SHORT).show();
                         }
                     }
             }

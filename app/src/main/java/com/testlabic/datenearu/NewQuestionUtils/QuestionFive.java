@@ -3,6 +3,7 @@ package com.testlabic.datenearu.NewQuestionUtils;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -55,22 +56,21 @@ public class QuestionFive extends Fragment implements BlockingStep {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView =  inflater.inflate(R.layout.activity_question_one_editable, container, false);
+        rootView = inflater.inflate(R.layout.activity_question_one_editable, container, false);
         final int min = 0;
         final int max = 9;
         final int random = new Random().nextInt((max - min) + 1) + min;
         
-        dialog =  new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
+        dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("In progress")
                 .setContentText(".....");
         
-        question=rootView.findViewById(R.id.question1);
-        ans1=rootView.findViewById(R.id.ans1);
-        ans2=rootView.findViewById(R.id.ans2);
-        ans3=rootView.findViewById(R.id.ans3);
-        ans4=rootView.findViewById(R.id.ans4);
+        question = rootView.findViewById(R.id.question1);
+        ans1 = rootView.findViewById(R.id.ans1);
+        ans2 = rootView.findViewById(R.id.ans2);
+        ans3 = rootView.findViewById(R.id.ans3);
+        ans4 = rootView.findViewById(R.id.ans4);
         
-    
         ans1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +78,7 @@ public class QuestionFive extends Fragment implements BlockingStep {
                 unColor(ans3);
                 unColor(ans4);
                 color(ans1);
-                ansSelected=true;
+                ansSelected = true;
                 skipSelection = false;
             }
         });
@@ -89,9 +89,9 @@ public class QuestionFive extends Fragment implements BlockingStep {
                 unColor(ans3);
                 unColor(ans4);
                 color(ans2);
-                ansSelected=true;
+                ansSelected = true;
                 skipSelection = false;
-            
+                
             }
         });
         ans3.setOnClickListener(new View.OnClickListener() {
@@ -101,9 +101,9 @@ public class QuestionFive extends Fragment implements BlockingStep {
                 unColor(ans1);
                 unColor(ans4);
                 color(ans3);
-                ansSelected=true;
+                ansSelected = true;
                 skipSelection = false;
-            
+                
             }
         });
         ans4.setOnClickListener(new View.OnClickListener() {
@@ -113,22 +113,22 @@ public class QuestionFive extends Fragment implements BlockingStep {
                 unColor(ans3);
                 unColor(ans1);
                 color(ans4);
-                ansSelected=true;
+                ansSelected = true;
                 skipSelection = false;
-            
+                
             }
         });
         ImageView edit = rootView.findViewById(R.id.edit_question);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            
+                
                 Intent intent = new Intent(getActivity(), EditQuestionTemplate.class);
                 intent.putExtra(Constants.questionNumber, String.valueOf(4));
                 startActivity(intent);
             }
         });
-    
+        
         return rootView;
     }
     
@@ -140,34 +140,33 @@ public class QuestionFive extends Fragment implements BlockingStep {
         refInit.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue(ModelQuestion.class) != null){
-                    ModelQuestion modelQuestion=dataSnapshot.getValue(ModelQuestion.class);
-                    String questionstr=modelQuestion.getQuestion();
-                    String ans1str=modelQuestion.getOptA();
-                    String ans2str=modelQuestion.getOptB();
-                    String ans3str=modelQuestion.getOptC();
-                    String ans4str=modelQuestion.getOptD();
+                if (dataSnapshot.getValue(ModelQuestion.class) != null) {
+                    ModelQuestion modelQuestion = dataSnapshot.getValue(ModelQuestion.class);
+                    String questionstr = modelQuestion.getQuestion();
+                    String ans1str = modelQuestion.getOptA();
+                    String ans2str = modelQuestion.getOptB();
+                    String ans3str = modelQuestion.getOptC();
+                    String ans4str = modelQuestion.getOptD();
                     String correctAnswer = modelQuestion.getCorrectOption();
                     question.setText(questionstr);
                     ans1.setText(ans1str);
                     ans2.setText(ans2str);
                     ans3.setText(ans3str);
                     ans4.setText(ans4str);
-                    if(correctAnswer!=null && !correctAnswer.equals(""))
-                    {
+                    if (correctAnswer != null && !correctAnswer.equals("")) {
                         skipSelection = true;
-                        if(correctAnswer.equals(ans1str))
+                        if (correctAnswer.equals(ans1str))
                             color(ans1);
-                        else
-                        if(correctAnswer.equals(ans2str))
+                        else if (correctAnswer.equals(ans2str))
                             color(ans2);
-                        else if(correctAnswer.equals(ans3str))
+                        else if (correctAnswer.equals(ans3str))
                             color(ans3);
-                        else if(correctAnswer.equals(ans4str))
+                        else if (correctAnswer.equals(ans4str))
                             color(ans4);
                     }
                 }
             }
+            
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             
@@ -187,12 +186,11 @@ public class QuestionFive extends Fragment implements BlockingStep {
         button.setTextColor(getResources().getColor(R.color.light_black));
     }
     
-    private void color (Button button)
-    {
+    private void color(Button button) {
         String text = button.getText().toString();
         correctOption = new HashMap<>();
         
-        correctOption.put("correctOption", text );
+        correctOption.put("correctOption", text);
         
         button.setBackground(getResources().getDrawable(R.drawable.full_black_box));
         button.setTextColor(getResources().getColor(R.color.white));
@@ -200,10 +198,9 @@ public class QuestionFive extends Fragment implements BlockingStep {
     
     @Override
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-        if(skipSelection)
+        if (skipSelection)
             callback.goToNextStep();
-        else
-        if (ansSelected) {
+        else if (ansSelected) {
             // show progress and update the question on the DB
             
             dialog.show();
@@ -215,8 +212,7 @@ public class QuestionFive extends Fragment implements BlockingStep {
                 }
             });
             
-        }
-        else {
+        } else {
             Toast.makeText(getActivity(), "Please Answer", Toast.LENGTH_SHORT).show();
         }
         
@@ -224,23 +220,20 @@ public class QuestionFive extends Fragment implements BlockingStep {
     
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
-        if(skipSelection) {
-            if(getActivity()!=null)
+        if (skipSelection) {
+            if (getActivity() != null)
                 getActivity().finish();
-        } else
-        if (ansSelected) {
+        } else if (ansSelected) {
             // show progress and update the question on the DB
-        
+            
             dialog.show();
             refInit.updateChildren(correctOption).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     dialog.dismiss();
-                    if(getActivity()!=null)
-                    {
-                        if(getActivity().getIntent().getBooleanExtra(Constants.setupQuestions, false))
-                        {
-                            UpdateXPoints();
+                    if (getActivity() != null) {
+                        if (getActivity().getIntent().getBooleanExtra(Constants.setupQuestions, false)) {
+                           // UpdateXPoints();
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                     .child(Constants.userInfo)
                                     .child(Constants.uid);
@@ -249,23 +242,22 @@ public class QuestionFive extends Fragment implements BlockingStep {
                             reference.updateChildren(updateBoolean).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    DuplicateUserInfoToCityLabelNode();
+                                    //DuplicateUserInfoToCityLabelNode();
+                                    getActivity().finish();
                                 }
                             });
-                        
-                        }
-                        else
+                            
+                        } else
                             getActivity().finish();
                     }
-                
+                    
                 }
             });
-        
-        }
-        else {
+            
+        } else {
             Toast.makeText(getActivity(), "Please Answer", Toast.LENGTH_SHORT).show();
         }
-    
+        
     }
     
     private void UpdateXPoints() {
@@ -277,7 +269,6 @@ public class QuestionFive extends Fragment implements BlockingStep {
         updatePoints.put(Constants.xPoints, Constants.newUserDrops);
         reference.updateChildren(updatePoints);
     }
-    
     
     private void DuplicateUserInfoToCityLabelNode() {
         {
@@ -302,22 +293,13 @@ public class QuestionFive extends Fragment implements BlockingStep {
                                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                         SharedPreferences.Editor editor = preferences.edit();
                                         editor.putString(Constants.cityLabel, finalCityLabel).apply();
-                                        
-                                        //show success message and then
-                                        //move to main activity now!
-                
-                                       /* sweetAlertDialog
-                                                .setTitleText("Done!")
-                                                .setContentText("Best of luck!")
-                                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);*/
-                                        Intent i = new Intent(getActivity(), MainActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(i);
+                                        //Intent i = new Intent(getActivity(), MainActivity.class);
+                                        //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        //startActivity(i);
+                                        getActivity().finish();
                                     }
                                 });
-                            }
-                            else
-                            {
+                            } else {
                                 //move to Main activity anyway!
                                 Intent i = new Intent(getActivity(), MainActivity.class);
                                 // i.putExtra(Constants.moveToLocationActivity, true);

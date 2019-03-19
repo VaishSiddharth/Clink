@@ -93,6 +93,7 @@ public class Constants {
     public static String enabledMultiMsgs = "enabledMultiMsgs";
     public static String all_location = "All Locations";
     public static int questionsCount = 5;
+    public static String isQuestionaireComplete = "isQuestionaireComplete";
     
     public static String encrypt(String cityLabel) {
         

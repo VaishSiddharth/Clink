@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_left"/>
 
-        <customfonts.MyTextView_SF_Pro_Display_Semibold
+        <customfonts.TextViewSFProDisplayRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="----"

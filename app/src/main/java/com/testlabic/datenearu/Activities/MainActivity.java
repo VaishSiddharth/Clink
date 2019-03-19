@@ -3,6 +3,7 @@ package com.testlabic.datenearu.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
@@ -596,12 +597,16 @@ public class MainActivity extends AppCompatActivity {
                     // Log.e(TAG, "Fix method called for recovery");
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null) {
-                        if (user.getUserName() == null || user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getMatchAlgo() == null) {
+                        if (user.getUserName() == null||user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getMatchAlgo() == null) {
                             //reRun Activity to fill info!
                             Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(MainActivity.this, NewUserSetup.class));
                         }  else if (!user.isQuestionaireComplete()) {
-                           // Toast.makeText(MainActivity.this, "Please fill the answers to continue!", Toast.LENGTH_SHORT).show();
+                            
+                            SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, false);
+                            editor.apply();
                             BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
                             nearby.setBadgeCount(1);
                             Handler h = new Handler();
@@ -613,7 +618,13 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }, 1500);
                         }
-                        
+                        else if(user.isQuestionaireComplete())
+                        {
+                            SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
+                            editor.apply();
+                        }
                         else
                              if (user.getAbout() == null) {
                            // Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();

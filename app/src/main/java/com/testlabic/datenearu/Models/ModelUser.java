@@ -39,7 +39,6 @@ public class ModelUser {
     
     private String age;
     private LatLong location;
-    private String cityLocation;
     private String about;
     private String cityLabel;
     
@@ -114,14 +113,14 @@ public class ModelUser {
         return creationTime;
     }
     
-    public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLocation
+    public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLabel
             , String about, String uid, String userLastName, int numeralAge, HashMap<String, Object> creationTime
     , HashMap<String, Object> blurStartTime) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
         this.location = location;
-        this.cityLocation = cityLocation;
+        this.cityLabel = cityLabel;
         this.about = about;
         this.uid = uid;
         this.userLastName = userLastName;
@@ -144,10 +143,6 @@ public class ModelUser {
     
     public String getCityLabel() {
         return cityLabel;
-    }
-    
-    public String getCityLocation() {
-        return cityLocation;
     }
     
     public String getUserName() {

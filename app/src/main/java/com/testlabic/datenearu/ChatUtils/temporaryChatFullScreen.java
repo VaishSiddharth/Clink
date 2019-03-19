@@ -40,6 +40,7 @@ import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Activities.MainActivity;
 import com.testlabic.datenearu.Adapters.ChatListAdapter;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
+import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.HelpUtils.Adapter;
 import com.testlabic.datenearu.HelpUtils.ModelMainResults;
 import com.testlabic.datenearu.HelpUtils.NearbyRestaurant;
@@ -71,7 +72,6 @@ import retrofit2.Response;
 public class temporaryChatFullScreen extends AppCompatActivity {
     
     private static final String TAG = temporaryChatFullScreen.class.getSimpleName();
-    private static final String API_KEY = "AIzaSyBUNTTjP0e2dlmag-qAQR2H_CeLHpOApOo";
     private ListView chatListView;
     private TextView toolbarName;
     private String sendToUid;
@@ -228,6 +228,16 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
         toolbarName.setText(sendToName);
         
+        toolbarName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+        
+                startActivity(new Intent(temporaryChatFullScreen.this, ClickedUser.class)
+                        .putExtra(Constants.clickedUid, sendToUid));
+                
+            }
+        });
+        
         imageView = findViewById(R.id.attach);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,7 +311,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 .child(sendToUid)
                 .child(Constants.uid)
         ;
-        final Snackbar snackbar = Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_INDEFINITE);
+        final Snackbar snackbar = Snackbar.make(layout, "You can't reply to this conversation", Snackbar.LENGTH_SHORT);
         reference2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -606,7 +616,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
         String location = "26.7824186,80.9285919";
         
-        Call<ModelMainResults> call = apiService.getNearByResults(location, 5000, "restaurant", API_KEY);
+        Call<ModelMainResults> call = apiService.getNearByResults(location, 5000, "restaurant", null);
         Log.e(TAG, "Reached getPlaces ");
         call.enqueue(new Callback<ModelMainResults>() {
             @Override

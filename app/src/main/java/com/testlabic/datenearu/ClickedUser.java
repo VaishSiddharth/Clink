@@ -1,5 +1,6 @@
 package com.testlabic.datenearu;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
@@ -34,6 +35,7 @@ import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewUserSetupUtils.QuestionsEnteringNewUser;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
@@ -104,7 +106,12 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
             attemptMatch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showDialog();
+                    SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
+                    boolean isQuestionaireComplete = prefs.getBoolean(Constants.isQuestionaireComplete+Constants.uid, false);
+                    if(isQuestionaireComplete)
+                        showDialog();
+                    else
+                        showFillQuestionaireDialog();
                 }
             });
         } else {
@@ -140,6 +147,23 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
             });
            
         }
+    }
+    
+    private void showFillQuestionaireDialog() {
+        SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("Before you continue")
+                .setContentText("Fill your quiz before you attempt other people's") .setConfirmButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        startActivity(new Intent(ClickedUser.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                    }
+                });
+        
+        alertDialog.show();
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(ClickedUser.this, R.drawable.button_4_dialogue));
+        
     }
     
     private void ShowAConfirmationDialog(final String uid) {

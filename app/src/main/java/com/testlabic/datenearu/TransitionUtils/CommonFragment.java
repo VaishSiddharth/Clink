@@ -66,6 +66,7 @@ import com.testlabic.datenearu.Models.ModelContact;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewUserSetupUtils.QuestionsEnteringNewUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.TransparentActivity;
@@ -137,7 +138,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             @Override
             public void onClick(View v) {
                 //show only first time!
-                
                 if (!likedOnce) {
                     final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     
@@ -232,8 +232,15 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         match.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(TAG, "Click received!");
-                showDialog();
+                if(getActivity()!=null)
+                {
+                    SharedPreferences prefs = getActivity().getSharedPreferences(Constants.userDetailsOff, Context.MODE_PRIVATE);
+                    boolean isQuestionaireComplete = prefs.getBoolean(Constants.isQuestionaireComplete+Constants.uid, false);
+                    if(isQuestionaireComplete)
+                        showDialog();
+                    else
+                        showFillQuestionaireDialog();
+                }
             }
         });
         name.setText(nameS);
@@ -262,6 +269,24 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         
         dragLayout.setGotoDetailListener(this);
         return rootView;
+    }
+    
+    private void showFillQuestionaireDialog() {
+        SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("Before you continue")
+                .setContentText("Fill your quiz before you attempt other people's")
+                .setConfirmButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        startActivity(new Intent(getActivity(), QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                    }
+                });
+      
+        alertDialog.show();
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+    
     }
     
     public void setShowcaseView() {

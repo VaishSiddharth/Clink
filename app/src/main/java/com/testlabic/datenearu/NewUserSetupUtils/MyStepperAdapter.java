@@ -49,31 +49,31 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
         StepViewModel.Builder builder = new StepViewModel.Builder(context)
                 .setTitle(R.string.tab_title);
         switch (position) {
-            case 0:
+           /* case 0:
                 builder
                         .setEndButtonLabel("NEXT")
                         .setBackButtonLabel("BACK")
                         .setTitle("Name");
-                break;
-            case 1:
+                break;*/
+            case 0:
                 builder
                         .setEndButtonLabel("NEXT")
                         .setBackButtonLabel("BACK")
                         .setTitle("Birthday");
                 break;
-            case 2:
+            case 1:
                 builder
                         .setEndButtonLabel("NEXT")
                         .setBackButtonLabel("BACK")
                         .setTitle("Gender");
                 break;
-            case 3:
+            case 2:
                 builder
                         .setEndButtonLabel("NEXT")
                         .setBackButtonLabel("BACK")
                         .setTitle("About you");
                 break;
-            case 4:
+            case 3:
                 builder
                         .setEndButtonLabel("COMPLETE")
                         .setBackButtonLabel("BACK")
@@ -87,6 +87,6 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 }

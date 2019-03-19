@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -28,7 +27,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,10 +50,10 @@ import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.WaveDrawable;
-
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-
+import java.util.List;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -127,8 +128,11 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
 
         googleSignIn = findViewById(R.id.gmail);
         facebookSignIn = findViewById(R.id.facebook);
+        Scope myScope = new Scope("https://www.googleapis.com/auth/user.birthday.read");
+        Scope myScope2 = new Scope(Scopes.PLUS_ME);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
+                .requestScopes(myScope, myScope2)
                 .requestEmail()
                 .requestProfile()
                 .build();
@@ -147,14 +151,9 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         facebookSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    /*
-                    Sign in Via Facebook
-                     */
             }
         });
-            /*
-            Facebook
-             */
+        
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile", "photos", "user_photos");
@@ -197,46 +196,44 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
-                            /*
-                            Call manual fix to update the photo of user
-                             */
-
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            Boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            boolean isnewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                             Log.e(TAG, "The user is a new user or not " + isnewUser);
+                            //   checkAndUpdateUserInfo(user);
                             FirebaseUser mCurrentUser = mAuth.getCurrentUser();
                             if (isnewUser) {
-                                    /*
-                                    move to setup the account/profile
-                                     */
-                                // for now update users database
+                                //move to setup the account/profile
+                                //Call manual fix to update the photo of user
+        
                                 if (mCurrentUser != null) {
                                     updateDatabaseWithUser(mCurrentUser, null, profile);
                                 }
                                 imageView.setVisibility(View.INVISIBLE);
                                 //progressBar.setVisibility(View.INVISIBLE);
-
-
+        
+        
                             } else {
-                                    /*
-                                    move to main activity
-                                     */
+                                
                                 imageView.setVisibility(View.INVISIBLE);
                                 //progressBar.setVisibility(View.INVISIBLE);
-
-                                startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
+        
+                                startActivity(new Intent(SignIn.this, MainActivity.class));
                                 finish();
-
+                                //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
+                                // finish();
                             }
                         } else {
                             // If sign in fails, display a message to the user.
+                            imageView.setVisibility(View.INVISIBLE);
+                            //progressBar.setVisibility(View.INVISIBLE);
+    
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(SignIn.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        
                         }
-                        // ...
                     }
                 });
     }
@@ -279,15 +276,13 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 xPointsRef.updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        loadingDialog.hide();
+                        loadingDialog.dismiss();
                         startActivity(new Intent(SignIn.this, NewUserSetup.class));
                         finish();
                     }
                 });
             }
         });
-
-       
     }
 
     private void signIn() {
@@ -458,6 +453,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             getWindow().setExitTransition(slide);
         }
     }
-
+    
 }
 
