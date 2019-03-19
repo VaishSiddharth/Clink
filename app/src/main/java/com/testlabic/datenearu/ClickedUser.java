@@ -102,6 +102,10 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         about = findViewById(R.id.about);
         //
         
+        boolean hideButton = getIntent().getBooleanExtra(Constants.hideButtons, false);
+        
+        if(hideButton)
+            attemptMatch.setVisibility(View.GONE);
         if (!comingFromNotif) {
             attemptMatch.setOnClickListener(new View.OnClickListener() {
                 @Override

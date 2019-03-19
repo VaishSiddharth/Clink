@@ -84,13 +84,13 @@ public class pagerTransition extends Fragment {
     private static final String TAG = pagerTransition.class.getSimpleName();
     private TextView indicatorTv;
     private ViewPager viewPager;
-    View rootView;
-    HashMap<String, Object> updateMap = null;
-    HashMap<String, Object> updateMinAge;
-    HashMap<String, Object> updateMaxAge;
+    private View rootView;
+    private HashMap<String, Object> updateMap = null;
+    private HashMap<String, Object> updateMinAge;
+    private HashMap<String, Object> updateMaxAge;
     private ShowcaseView showcaseView;
     private int counter = 0;
-    String interestedGender;
+    private String interestedGender;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
     private ArrayList<ModelUser> displayArrayList;
     private TextView changeLocation;
@@ -98,20 +98,19 @@ public class pagerTransition extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private ImageButton filterList;
-    private RangeSeekBar age_seek;
-    private SeekBar distance_seek;
     private LatLong currentUsersLatLong;
     private ModelPrefs prefs;
     private TextView points;
-    private ImageView hideAd, bottle;
-    DatabaseReference ref;
-    String curUsersMatchSeq;
-    Boolean fetchPrefsCalledOnce = false;
+    private ImageView bottle;
+    private DatabaseReference ref;
+    private String curUsersMatchSeq;
+    private Boolean fetchPrefsCalledOnce = false;
     private ImageView emptyView;
     private ChildEventListener childEventListener;
-    String city;
-    ImageView emptyViewno;
-    TextView emptyViewtext;
+    private String city;
+    private ImageView emptyViewno;
+    private TextView emptyViewtext;
+    private ArrayList<String> contactsUid;
     
     public pagerTransition() {
         // Required empty public constructor
@@ -128,14 +127,14 @@ public class pagerTransition extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         
         rootView = inflater.inflate(R.layout.activity_pager_transition, viewPager, false);
-        
+        contactsUid = new ArrayList<>();
         sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
         curUsersMatchSeq = sharedPreferences.getString(Constants.matchAlgo, null);
         city = sharedPreferences.getString(Constants.cityLabel, null);
         editor = sharedPreferences.edit();
         filterList = rootView.findViewById(R.id.filter);
-        hideAd = rootView.findViewById(R.id.hideAd);
+        ImageView hideAd = rootView.findViewById(R.id.hideAd);
         changeLocation = rootView.findViewById(R.id.changeLocation);
         points = rootView.findViewById(R.id.points);
         bottle = rootView.findViewById(R.id.fill_bottle);
@@ -157,8 +156,41 @@ public class pagerTransition extends Fragment {
         emptyView.setVisibility(View.VISIBLE);
         Constants.uid = FirebaseAuth.getInstance().getUid();
         if (Constants.uid != null) {
-            fetchPreferences();
             setUpPoints();
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.Messages)
+                    .child(Constants.uid)
+                    .child(Constants.contacts);
+            reference.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if(dataSnapshot.getKey()!=null)
+                        contactsUid .add(String.valueOf(dataSnapshot.getKey()));
+                }
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                }
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    fetchPreferences();
+                }
+    
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                }
+            });
         }
         
         changeLocation.setOnClickListener(new View.OnClickListener() {
@@ -553,8 +585,8 @@ public class pagerTransition extends Fragment {
                 }
             }
         });
-        age_seek = filterDialogView.findViewById(R.id.age_seekbar);
-        distance_seek = filterDialogView.findViewById(R.id.distance_seekbar);
+        RangeSeekBar age_seek = filterDialogView.findViewById(R.id.age_seekbar);
+        SeekBar distance_seek = filterDialogView.findViewById(R.id.distance_seekbar);
         
         final TextView tvMin = filterDialogView.findViewById(R.id.minAge);
         final TextView tvMax = filterDialogView.findViewById(R.id.maxAge);
@@ -835,7 +867,7 @@ public class pagerTransition extends Fragment {
         //1. Age filter
         // Log.e(TAG, "Filtering with "+String.valueOf(prefs));
         if (prefs != null && item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge()
-                && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit()) {
+                && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit() &&!(contactsUid.contains(item.getUid()))) {
             if(item.getUid()!=null) {
                 if(!item.getUid().equals(Constants.uid))
                     displayArrayList.add(item);

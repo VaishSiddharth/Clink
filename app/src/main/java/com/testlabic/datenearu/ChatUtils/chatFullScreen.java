@@ -234,7 +234,8 @@ public class chatFullScreen extends AppCompatActivity {
             public void onClick(View v) {
             
                 startActivity(new Intent(chatFullScreen.this, ClickedUser.class)
-                        .putExtra(Constants.clickedUid, sendToUid));
+                        .putExtra(Constants.clickedUid, sendToUid)
+                .putExtra(Constants.hideButtons, true));
             
             }
         });

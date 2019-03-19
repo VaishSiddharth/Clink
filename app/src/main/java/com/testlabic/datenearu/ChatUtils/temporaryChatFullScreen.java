@@ -233,7 +233,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             public void onClick(View v) {
         
                 startActivity(new Intent(temporaryChatFullScreen.this, ClickedUser.class)
-                        .putExtra(Constants.clickedUid, sendToUid));
+                        .putExtra(Constants.clickedUid, sendToUid).putExtra(Constants.hideButtons, true));
                 
             }
         });

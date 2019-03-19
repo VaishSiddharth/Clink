@@ -57,7 +57,7 @@ public class Constants {
     public static int retryAttemptAmount = 150;
     public static int oneTimeMessageCost = 25;
     public static int attemptTestPoints = 100;
-    public static int rewardAdPoints = 20;
+    public static int rewardAdPoints = 10;
     public static String blockList = "BlockList";
     public static String reportedUsers = "reportedUser";
     public static String comingFromNotif = "comingFromNotif";
@@ -95,6 +95,7 @@ public class Constants {
     public static int questionsCount = 5;
     public static String isQuestionaireComplete = "isQuestionaireComplete";
     public static String isAboutComplete = "isAboutcomplete";
+    public static String hideButtons = "hideButtons";
     
     public static String encrypt(String cityLabel) {
         
