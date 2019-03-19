@@ -128,11 +128,8 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
 
         googleSignIn = findViewById(R.id.gmail);
         facebookSignIn = findViewById(R.id.facebook);
-        Scope myScope = new Scope("https://www.googleapis.com/auth/user.birthday.read");
-        Scope myScope2 = new Scope(Scopes.PLUS_ME);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
-                .requestScopes(myScope, myScope2)
                 .requestEmail()
                 .requestProfile()
                 .build();

@@ -157,6 +157,7 @@ public class pagerTransition extends Fragment {
         Constants.uid = FirebaseAuth.getInstance().getUid();
         if (Constants.uid != null) {
             setUpPoints();
+            fetchPreferences();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.Messages)
                     .child(Constants.uid)
@@ -183,7 +184,7 @@ public class pagerTransition extends Fragment {
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    fetchPreferences();
+                
                 }
     
                 @Override
