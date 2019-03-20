@@ -9,10 +9,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.ToolbarWidgetWrapper;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -73,17 +75,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static java.security.AccessController.getContext;
+
 public class EditActivity extends AppCompatActivity {
-    
+
     String imageId = "image1";
     private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/final_app_logo1.png?alt=media&token=e9463a91-4f57-412d-a4be-c26d2e06d84e";
     private static final String TAG = EditActivity.class.getSimpleName();
     EditText name, age;
-    TextView  about,blurinfo,seriousitems;
-    ImageView image1, nameWrap, image2, image3,save,backbutton;
+    TextView about, blurinfo, seriousitems;
+    ImageView image1, nameWrap, image2, image3, save, backbutton;
     ProgressBar bar1, bar2, bar3;
     Switch blur;
     ImageView remove_dp1, remove_dp2, remove_dp3;
@@ -96,50 +101,50 @@ public class EditActivity extends AppCompatActivity {
     boolean blurTrialEnded = false;
     boolean switchedManually = false;
     boolean unsavedChanges = false;
-    
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         name = findViewById(R.id.name);
         age = findViewById(R.id.age);
-        
+
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        
+
             }
-    
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 unsavedChanges = true;
             }
-    
+
             @Override
             public void afterTextChanged(Editable s) {
-        
+
             }
         });
-    
-    
+
+
         age.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            
+
             }
-        
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 unsavedChanges = true;
             }
-        
+
             @Override
             public void afterTextChanged(Editable s) {
-            
+
             }
         });
-        
-    
+
+
         about = findViewById(R.id.about);
         View dp1 = findViewById(R.id.edit_dp_1);
         View dp2 = findViewById(R.id.edit_dp_2);
@@ -155,11 +160,11 @@ public class EditActivity extends AppCompatActivity {
         remove_dp1 = dp1.findViewById(R.id.remove_dp);
         remove_dp2 = dp2.findViewById(R.id.remove_dp);
         remove_dp3 = dp3.findViewById(R.id.remove_dp);
-        toolbar=findViewById(R.id.toolbar);
-        backbutton=toolbar.findViewById(R.id.backbutton1);
-        save=toolbar.findViewById(R.id.save);
-        seriousitems=findViewById(R.id.seriousitems);
-        blurinfo=findViewById(R.id.blurinfo);
+        toolbar = findViewById(R.id.toolbar);
+        backbutton = toolbar.findViewById(R.id.backbutton1);
+        save = toolbar.findViewById(R.id.save);
+        seriousitems = findViewById(R.id.seriousitems);
+        blurinfo = findViewById(R.id.blurinfo);
 
 
         image1.setImageResource(R.drawable.final_app_logo1bw);
@@ -168,7 +173,7 @@ public class EditActivity extends AppCompatActivity {
         backbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditActivity.super.onBackPressed();
+                onBackPressed();
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +188,7 @@ public class EditActivity extends AppCompatActivity {
                 startActivity(new Intent(EditActivity.this, EditSeriousItems.class));
             }
         });
-        
+
         //remove dp code
         remove_dp1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +201,7 @@ public class EditActivity extends AppCompatActivity {
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         bar1.setVisibility(View.VISIBLE);
                         sweetAlertDialog.dismiss();
-                        Handler handler=new Handler();
+                        Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -204,7 +209,7 @@ public class EditActivity extends AppCompatActivity {
                                 uri_update_db(default_uri_dp, "image1");
                                 bar1.setVisibility(View.GONE);
                             }
-                        },1000);
+                        }, 1000);
                     }
                 });
                 sweetAlertDialog.setCancelText("No");
@@ -215,15 +220,15 @@ public class EditActivity extends AppCompatActivity {
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
                 btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
                 TextView title = sweetAlertDialog.findViewById(R.id.title_text);
-                if(title!=null)
+                if (title != null)
                     title.setTypeface(Utils.SFProRegular(EditActivity.this));
-    
+
                 TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
-                if(contentText!=null)
+                if (contentText != null)
                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
             }
         });
         remove_dp2.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +242,7 @@ public class EditActivity extends AppCompatActivity {
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismiss();
                         bar2.setVisibility(View.VISIBLE);
-                        Handler handler=new Handler();
+                        Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -246,7 +251,7 @@ public class EditActivity extends AppCompatActivity {
                                 uri_update_db(default_uri_dp, "image2");
 
                             }
-                        },1000);
+                        }, 1000);
                     }
                 });
                 sweetAlertDialog.setCancelText("No");
@@ -255,18 +260,18 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
-    
+
                 btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
                 btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
                 TextView title = sweetAlertDialog.findViewById(R.id.title_text);
-                if(title!=null)
+                if (title != null)
                     title.setTypeface(Utils.SFProRegular(EditActivity.this));
-    
+
                 TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
-                if(contentText!=null)
+                if (contentText != null)
                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
             }
         });
         remove_dp3.setOnClickListener(new View.OnClickListener() {
@@ -280,7 +285,7 @@ public class EditActivity extends AppCompatActivity {
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismiss();
                         bar3.setVisibility(View.VISIBLE);
-                        Handler handler=new Handler();
+                        Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -290,7 +295,7 @@ public class EditActivity extends AppCompatActivity {
 
 
                             }
-                        },1000);
+                        }, 1000);
                     }
                 });
                 sweetAlertDialog.setCancelText("No");
@@ -299,21 +304,21 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
-    
+
                 btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
                 btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
                 TextView title = sweetAlertDialog.findViewById(R.id.title_text);
-                if(title!=null)
+                if (title != null)
                     title.setTypeface(Utils.SFProRegular(EditActivity.this));
-    
+
                 TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
-                if(contentText!=null)
+                if (contentText != null)
                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
             }
         });
-        
+
         //open gallery  or camera code on image click
         image1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -324,13 +329,13 @@ public class EditActivity extends AppCompatActivity {
                 sweetAlertDialog.setConfirmButton("Gallery", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        
+
                         //Crop.pickImage(EditActivity.this);
                         CropImage.activity()
                                 .setGuidelines(CropImageView.Guidelines.ON)
                                 .start(EditActivity.this);
                         sweetAlertDialog.dismiss();
-                        
+
                         imageId = "image1";
                     }
                 });
@@ -338,29 +343,29 @@ public class EditActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismiss();
-                        startActivity(new Intent(EditActivity.this,ProfileImageView.class).putExtra("image","1"));
+                        startActivity(new Intent(EditActivity.this, ProfileImageView.class).putExtra("image", "1"));
 
                     }
                 });
-                
+
                 sweetAlertDialog.show();
-                
+
                 Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
-    
+
                 btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
                 btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
                 TextView title = sweetAlertDialog.findViewById(R.id.title_text);
-                if(title!=null)
+                if (title != null)
                     title.setTypeface(Utils.SFProRegular(EditActivity.this));
-    
+
                 TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
-                if(contentText!=null)
+                if (contentText != null)
                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
             }
         });
         image2.setOnClickListener(new View.OnClickListener() {
@@ -376,7 +381,7 @@ public class EditActivity extends AppCompatActivity {
                         CropImage.activity()
                                 .setGuidelines(CropImageView.Guidelines.ON)
                                 .start(EditActivity.this);
-                        
+
                         sweetAlertDialog.dismiss();
                         imageId = "image2";
                     }
@@ -385,7 +390,7 @@ public class EditActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismiss();
-                        startActivity(new Intent(EditActivity.this,ProfileImageView.class).putExtra("image","2"));
+                        startActivity(new Intent(EditActivity.this, ProfileImageView.class).putExtra("image", "2"));
 
                     }
                 });
@@ -394,18 +399,18 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
-    
+
                 btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
                 btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
                 TextView title = sweetAlertDialog.findViewById(R.id.title_text);
-                if(title!=null)
+                if (title != null)
                     title.setTypeface(Utils.SFProRegular(EditActivity.this));
-    
+
                 TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
-                if(contentText!=null)
+                if (contentText != null)
                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
             }
         });
         image3.setOnClickListener(new View.OnClickListener() {
@@ -429,31 +434,31 @@ public class EditActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismiss();
-                        startActivity(new Intent(EditActivity.this,ProfileImageView.class).putExtra("image","3"));
+                        startActivity(new Intent(EditActivity.this, ProfileImageView.class).putExtra("image", "3"));
 
                     }
                 });
-                
+
                 sweetAlertDialog.show();
                 Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
-               
+
                 btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
                 btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
-    
+
                 TextView title = sweetAlertDialog.findViewById(R.id.title_text);
-                if(title!=null)
+                if (title != null)
                     title.setTypeface(Utils.SFProRegular(EditActivity.this));
-    
+
                 TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
-                if(contentText!=null)
+                if (contentText != null)
                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
-                
+
             }
         });
-        
+
         blur.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -461,10 +466,9 @@ public class EditActivity extends AppCompatActivity {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!", Toast.LENGTH_SHORT).show();
                     else {
-                        if(switchedManually&&!blurTrialEnded)
+                        if (switchedManually && !blurTrialEnded)
                             blurProfile();
-                        else if(blurTrialEnded)
-                        {
+                        else if (blurTrialEnded) {
                             blur.setChecked(false);
                             Toast.makeText(EditActivity.this, "Trial Expired!", Toast.LENGTH_SHORT).show();
                             final SweetAlertDialog alertDialog = new SweetAlertDialog(EditActivity.this, SweetAlertDialog.WARNING_TYPE)
@@ -473,8 +477,8 @@ public class EditActivity extends AppCompatActivity {
                                     .setConfirmButton("500 drops", new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
                                         public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                            deductDropsAndIncreaseBlurTime( sweetAlertDialog);
-                    
+                                            deductDropsAndIncreaseBlurTime(sweetAlertDialog);
+
                                         }
                                     });
                             alertDialog.show();
@@ -482,17 +486,17 @@ public class EditActivity extends AppCompatActivity {
                             btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                             Button btn1 = alertDialog.findViewById(R.id.cancel_button);
                             btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
-    
+
                             {
                                 btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
                                 btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
-        
+
                                 TextView title = alertDialog.findViewById(R.id.title_text);
-                                if(title!=null)
+                                if (title != null)
                                     title.setTypeface(Utils.SFProRegular(EditActivity.this));
-        
+
                                 TextView contentText = alertDialog.findViewById(R.id.content_text);
-                                if(contentText!=null)
+                                if (contentText != null)
                                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
                             }
                         }
@@ -500,74 +504,72 @@ public class EditActivity extends AppCompatActivity {
                 } else {
                     if (!detailsSetup)
                         Toast.makeText(EditActivity.this, "Wait a moment and try again please!\n", Toast.LENGTH_SHORT).show();
-                    else if(switchedManually)
+                    else if (switchedManually)
                         unBlurProfile();
                 }
             }
         });
         //setUpDetails();
         blurTrialCalc();
-    
-     
+
+
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userPreferences)
                 .child(Constants.uid)
                 .child("numberOfAns");
-    
-        final NiceSpinner niceSpinner =  findViewById(R.id.spinner);
+
+        final NiceSpinner niceSpinner = findViewById(R.id.spinner);
         List<String> dataset = new LinkedList<>(Arrays.asList("One", "Two", "Three", "Four", "Five"));
         niceSpinner.attachDataSource(dataset);
-        
-        
+
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()&&dataSnapshot.getValue()!=null)
-                {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
                     int number = dataSnapshot.getValue(Integer.class);
-                   niceSpinner.setSelectedIndex(number-1);
+                    niceSpinner.setSelectedIndex(number - 1);
                 }
             }
-    
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-        
+
             }
         });
         niceSpinner.addOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position)
-                {
-                    case 0 :
+                switch (position) {
+                    case 0:
                         reference.setValue(1);
                         break;
-    
-                    case 1 :
+
+                    case 1:
                         reference.setValue(2);
                         break;
-                    case 2 :
+                    case 2:
                         reference.setValue(3);
                         break;
-                    case 3 :
+                    case 3:
                         reference.setValue(4);
                         break;
-                    case 4 :
+                    case 4:
                         reference.setValue(5);
                         break;
                 }
             }
         });
-      
-    
+
+
     }
-    
+
     private void deductDropsAndIncreaseBlurTime(final SweetAlertDialog sDialog) {
-        
+
         DatabaseReference attemptRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.xPoints)
                 .child(Constants.uid);
-        
+
         ValueEventListener attemptListener = (new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -577,7 +579,7 @@ public class EditActivity extends AppCompatActivity {
                     if (current < Constants.unBlurForSevenDaysDrops) {
                         Toast.makeText(EditActivity.this, "You don't have enough points, buy now!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(EditActivity.this, PurchasePacks.class));
-                        
+
                     } else {
                         current -= Constants.unBlurForSevenDaysDrops;
                         HashMap<String, Object> updatePoints = new HashMap<>();
@@ -590,33 +592,33 @@ public class EditActivity extends AppCompatActivity {
                                         .setTitleText("Increasing duration!")
                                         .setContentText("Your profile will remain unblurred for 7 days from today!\n")
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-    
+
                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference()
                                         .child(Constants.userInfo).child(Constants.uid);
-                               
-                               //blur profile
-    
+
+                                //blur profile
+
                                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                                         .child(Constants.userInfo).child(Constants.uid);
-    
+
                                 // first update userinfo then update child under city label node.
-    
+
                                 final HashMap<String, Object> updateBlur = new HashMap<>();
                                 updateBlur.put(Constants.isBlur, true);
                                 reference.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-            
+
                                         DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
                                                 .child(Constants.cityLabels).child(cityLabel).child(gender).child(Constants.uid);
                                         ref2.updateChildren(updateBlur);
                                     }
                                 });
-                                
+
                                 HashMap<String, Object> update_blur_trial_ended = new HashMap<>();
                                 update_blur_trial_ended.put("blurTrialEnded", false);
                                 ref1.updateChildren(update_blur_trial_ended);
-                                
+
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -632,38 +634,37 @@ public class EditActivity extends AppCompatActivity {
                                                 sDialog.dismiss();
                                             }
                                         });
-                                        
+
                                     }
                                 }, 2500);
                             }
                         });
-                        
+
                     }
                 }
-                
+
             }
-            
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+
             }
         });
         attemptRef.addListenerForSingleValueEvent(attemptListener);
-        
+
     }
-    
-    
-    
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                handleCrop(resultCode, resultUri,null);
+                handleCrop(resultCode, resultUri, null);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
-                handleCrop(resultCode, null,error);
+                handleCrop(resultCode, null, error);
             }
         }
         
@@ -672,10 +673,10 @@ public class EditActivity extends AppCompatActivity {
         } else if (requestCode == Crop.REQUEST_CROP) {
             //handleCrop(resultCode, data);
         }*/
-        
+
     }
-    public void blurTrialCalc()
-    {
+
+    public void blurTrialCalc() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid).child("blurStartTime").child(Constants.timeStamp);
         ref.addValueEventListener(new ValueEventListener() {
@@ -686,13 +687,13 @@ public class EditActivity extends AppCompatActivity {
                     long timestamp = dataSnapshot.getValue(Long.class);
                     long epoch = System.currentTimeMillis();
                     long oneday = 86400000;
-                    long trialend=timestamp+7*oneday;
-                    long daysleft=(trialend-epoch)/oneday;
-                    if(daysleft<=0)
+                    long trialend = timestamp + 7 * oneday;
+                    long daysleft = (trialend - epoch) / oneday;
+                    if (daysleft <= 0)
                         blur.setChecked(false);
                     else {
-                        if(!blurTrialEnded)
-                        blurinfo.setText("Blur profile ("+daysleft+" days remaining)");
+                        if (!blurTrialEnded)
+                            blurinfo.setText("Blur profile (" + daysleft + " days remaining)");
                     }
                 }
             }
@@ -704,12 +705,12 @@ public class EditActivity extends AppCompatActivity {
         });
 
     }
-    
+
     private void beginCrop(Uri source) {
         Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
         Crop.of(source, destination).asSquare().start(this);
     }
-    
+
     private void handleCrop(int resultCode, Uri result, Exception error) {
         if (resultCode == RESULT_OK) {
             try {
@@ -721,8 +722,8 @@ public class EditActivity extends AppCompatActivity {
                         bar2.setVisibility(View.VISIBLE);
                         bar1.setVisibility(View.INVISIBLE);
                         bar3.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(),"Please wait image is being uploaded",Toast.LENGTH_LONG).show();
-                        
+                        Toast.makeText(getApplicationContext(), "Please wait image is being uploaded", Toast.LENGTH_LONG).show();
+
                         break;
                     case "image3":
                         displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/3.jpg");
@@ -730,8 +731,8 @@ public class EditActivity extends AppCompatActivity {
                         bar3.setVisibility(View.VISIBLE);
                         bar1.setVisibility(View.INVISIBLE);
                         bar2.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(),"Please wait image is being uploaded",Toast.LENGTH_LONG).show();
-                        
+                        Toast.makeText(getApplicationContext(), "Please wait image is being uploaded", Toast.LENGTH_LONG).show();
+
                         break;
                     default:
                         displaypics_Ref = storageRef.child("Display_Pics/" + Constants.uid + "/1.jpg");
@@ -739,20 +740,20 @@ public class EditActivity extends AppCompatActivity {
                         bar1.setVisibility(View.VISIBLE);
                         bar2.setVisibility(View.INVISIBLE);
                         bar3.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(),"Please wait image is being uploaded",Toast.LENGTH_LONG).show();
-                        
+                        Toast.makeText(getApplicationContext(), "Please wait image is being uploaded", Toast.LENGTH_LONG).show();
+
                         break;
                 }
                 uploaddp(bitmap, imageId);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
+
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show();
         }
     }
-    
+
     public void uploaddp(Bitmap bitmap, final String image_id) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
@@ -770,7 +771,7 @@ public class EditActivity extends AppCompatActivity {
                 Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        
+
                         // Continue with the task to get the download URL
                         return displaypics_Ref.getDownloadUrl();
                     }
@@ -781,7 +782,7 @@ public class EditActivity extends AppCompatActivity {
                             Uri downloadUri = task.getResult();
                             String uri = downloadUri.toString();
                             uri_update_db(uri, image_id);
-                            
+
                         } else {
                             Toast.makeText(getApplicationContext(), "Unable to get Uri", Toast.LENGTH_LONG).show();
                             // Handle failures
@@ -791,16 +792,16 @@ public class EditActivity extends AppCompatActivity {
                 });
             }
         });
-        
+
     }
-    
+
     public void uri_update_db(String uri, String image_id) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
         HashMap<String, Object> updateimage = new HashMap<>();
         updateimage.put(image_id, uri);
         //update imageurl for the current user;
-        
-        if(image_id.equals("imageUrl")&&gender!=null&&cityLabel!=null) {
+
+        if (image_id.equals("imageUrl") && gender != null && cityLabel != null) {
             DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
                     .child(Constants.cityLabels)
                     .child(Constants.encrypt(cityLabel))
@@ -808,8 +809,8 @@ public class EditActivity extends AppCompatActivity {
             HashMap<String, Object> update_image_url_city = new HashMap<>();
             update_image_url_city.put("imageUrl", uri);
             ref2.updateChildren(update_image_url_city);
-    
-           
+
+
         }
         ref.updateChildren(updateimage).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -817,52 +818,52 @@ public class EditActivity extends AppCompatActivity {
                 bar1.setVisibility(View.INVISIBLE);
                 bar2.setVisibility(View.INVISIBLE);
                 bar3.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(),"Successful!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Successful!", Toast.LENGTH_LONG).show();
                 setUpDetails();
             }
         });
     }
-    
+
     private void unBlurProfile() {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid);
-        
+
         // first update userinfo then update child under city label node.
-        
+
         final HashMap<String, Object> updateBlur = new HashMap<>();
         updateBlur.put(Constants.isBlur, false);
         reference.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                
+
                 DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.cityLabels).child(cityLabel).child(gender).child(Constants.uid);
                 ref2.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        
+
                         startActivity(new Intent(EditActivity.this, ProfilePreview.class));
                         //finish();
                     }
                 });
-                
+
             }
         });
-        
+
     }
-    
+
     private void blurProfile() {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(Constants.uid);
-        
+
         // first update userinfo then update child under city label node.
-        
+
         final HashMap<String, Object> updateBlur = new HashMap<>();
         updateBlur.put(Constants.isBlur, true);
         reference.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                
+
                 DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference()
                         .child(Constants.cityLabels).child(cityLabel).child(gender).child(Constants.uid);
                 ref2.updateChildren(updateBlur).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -871,7 +872,7 @@ public class EditActivity extends AppCompatActivity {
                         startActivity(new Intent(EditActivity.this, ProfilePreview.class));
                     }
                 });
-                
+
             }
         });
         
@@ -880,9 +881,10 @@ public class EditActivity extends AppCompatActivity {
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
         name.getPaint().setMaskFilter(filter);*/
     }
+
     private void setUpDetails() {
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
-        
+
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -891,19 +893,19 @@ public class EditActivity extends AppCompatActivity {
                     if (user != null && user.getUserName() != null) {
                         name.setText(user.getUserName());
                         age.setText(String.valueOf(user.getNumeralAge()));
-                        if(user.getImage1()!=null)
+                        if (user.getImage1() != null)
                             Glide.with(EditActivity.this).load(user.getImage1()).into(image1);
-                        if(user.getImage2()!=null)
+                        if (user.getImage2() != null)
                             Glide.with(EditActivity.this).load(user.getImage2()).into(image2);
-                        if(user.getImage3()!=null)
+                        if (user.getImage3() != null)
                             Glide.with(EditActivity.this).load(user.getImage3()).into(image3);
                         cityLabel = user.getCityLabel();
                         cityLabel = cityLabel.replace(", ", "_");
                         gender = user.getGender();
                         detailsSetup = true;
-    
+
                         blurTrialEnded = user.isBlurTrialEnded();
-                        
+
                         if (user.getIsBlur()) {
                             blur.setChecked(true);
                             switchedManually = true;
@@ -925,7 +927,7 @@ public class EditActivity extends AppCompatActivity {
                         update_image_url_city.put("imageUrl", user.getImageUrl());
                         ref2.updateChildren(update_image_url_city);
                     }
-                    
+
                     if (user != null && user.getAbout() != null) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             about.setText(Html.fromHtml(user.getAbout(), Html.FROM_HTML_MODE_COMPACT));
@@ -934,57 +936,99 @@ public class EditActivity extends AppCompatActivity {
                         }
                     }
                 }
-                
+
             }
-            
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+
             }
         });
     }
-    public void changedinfo()
-    {
+
+    public void changedinfo() {
         Toast.makeText(this, "Updating...", Toast.LENGTH_SHORT).show();
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
-    
+
         final HashMap<String, Object> updatename = new HashMap<>();
         final HashMap<String, Object> updateage = new HashMap<>();
         updatename.put(Constants.userName, name.getText().toString());
-        updateage.put(Constants.numeralAge,Integer.parseInt(age.getText().toString()));
+        updateage.put(Constants.numeralAge, Integer.parseInt(age.getText().toString()));
         ref.updateChildren(updatename);
         ref.updateChildren(updateage).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(EditActivity.this, "Update successful!", Toast.LENGTH_SHORT).show();
+                if (gender == null)
+                    return;
+                final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels)
+                        .child(Constants.all_location)
+                        .child(gender)
+                        .child(Constants.uid);
+                ref2.updateChildren(updatename).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        ref2.updateChildren(updateage).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                            }
+                        });
+                    }
+                });
+
             }
         });
-        if(gender==null)
-            return;
-        final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels)
-                .child(Constants.all_location)
-                .child(gender)
-                .child(Constants.uid);
-        ref2.updateChildren(updatename);
-        ref2.updateChildren(updateage);
-       
-
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         setUpDetails();
     }
-    
+
     @Override
     public void onBackPressed() {
-        if(unsavedChanges)
+        if (unsavedChanges)
             displayWarningMessage();
         else
             super.onBackPressed();
     }
-    
+
     private void displayWarningMessage() {
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        sweetAlertDialog.setTitle("Save Changes");
+        sweetAlertDialog.setContentText("Do you want to save the changes?");
+        sweetAlertDialog.setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+                changedinfo();
+            }
+        });
+        sweetAlertDialog.setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+                finish();
+            }
+        });
+        sweetAlertDialog.show();
+        Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+        Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+        if (getContext() != null) {
+            btn.setTypeface(Utils.SFPRoLight(this));
+            btn1.setTypeface(Utils.SFPRoLight(this));
+            TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+            if (title != null)
+                title.setTypeface(Utils.SFProRegular(this));
+
+            TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+            if (contentText != null)
+                contentText.setTypeface(Utils.SFPRoLight(this));
+        }
         //TODO: Create a dialog, add typefaces and drawables and call changedInfo() if yes is chosen by the user, do the same for top back arrow
     }
 }

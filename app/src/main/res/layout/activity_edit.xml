@@ -38,6 +38,8 @@
                         android:gravity="center">
 
                         <include
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
                             android:id="@+id/edit_dp_1"
                             layout="@layout/edit_profile_images" />
                     </LinearLayout>
@@ -47,13 +49,20 @@
                         android:layout_height="0dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
+                        android:weightSum="1"
                         android:gravity="center">
 
                         <include
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5"
                             android:id="@+id/edit_dp_2"
                             layout="@layout/edit_profile_images" />
 
                         <include
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5"
                             android:id="@+id/edit_dp_3"
                             layout="@layout/edit_profile_images" />
                     </LinearLayout>
@@ -65,8 +74,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="vertical">
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
@@ -76,6 +89,7 @@
                     android:background="@drawable/gradient_setupuser"
                     android:elevation="4dp"
                     android:outlineAmbientShadowColor="@color/appcolor" />
+
                 <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
@@ -109,10 +123,10 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:hint="Enter Your Age"
+                    android:inputType="number"
                     android:maxLines="3"
                     android:textColor="#3b3b3b"
                     android:textSize="14sp"
-                    android:inputType = "number"
                     app:met_floatingLabel="highlight"
                     app:met_floatingLabelText="Your Age"
                     app:met_floatingLabelTextColor="@color/appcolor"
@@ -131,11 +145,12 @@
 
                 <customfonts.MyTextView_SF_Pro_Display_Light
                     android:id="@+id/seriousitems"
-                    android:text="Tap to Change Priority for finding Matches"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Tap to Change Priority for finding Matches"
                     android:textColor="#3b3b3b"
                     android:textSize="14sp" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
@@ -157,9 +172,9 @@
                         android:id="@+id/blurinfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="5"
                         android:text="Blur profile "
-                        android:layout_gravity="center"
                         android:textColor="#3b3b3b"
                         android:textSize="14sp" />
 
@@ -184,13 +199,6 @@
                     android:elevation="4dp"
                     android:outlineAmbientShadowColor="@color/appcolor" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:orientation="horizontal"
-                    android:padding="0dp">
-
                 <customfonts.MyTextView_SF_Pro_Display_Light
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -203,8 +211,9 @@
                     android:id="@+id/spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp" />
-                </LinearLayout>
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -215,7 +224,6 @@
                     android:background="@drawable/gradient_setupuser"
                     android:elevation="4dp"
                     android:outlineAmbientShadowColor="@color/appcolor" />
-
 
 
                 <customfonts.TextViewSFProDisplayRegular
