@@ -4,13 +4,18 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -24,6 +29,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class Settings extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = Settings.class.getSimpleName();
@@ -64,14 +73,48 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
         deleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete_Account();
+                rating();
             }
         });
     }
+    public void rating()
+    {
+        //rating
+        final RatingDialog ratingDialog = new RatingDialog.Builder(this)
+                .threshold(5)
+                .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
+                    @Override
+                    public void onFormSubmitted(String feedback) {
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                .child("Feedbacks").child(Constants.uid);
+                        final HashMap<String, Object> updatefeedback = new HashMap<>();
+                        updatefeedback.put("review", feedback);
+                        ref.updateChildren(updatefeedback).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                delete_Account();
+                                Toast.makeText(getApplicationContext(),"We'll try to improve. Thanks",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+                }).build();
+
+        ratingDialog.show();
+        TextView positive=ratingDialog.findViewById(R.id.dialog_rating_button_positive);
+        positive.setVisibility(View.GONE);
+
+    }
     
     private void delete_Account() {
-        SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+        final SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText("Confirm Deletion")
+                .setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                })
                 .setTitleText("Are you sure you want to leave us?")
                 .setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -80,6 +123,12 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
                     }
                 });
         alertDialog.show();
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(Settings.this, R.drawable.button_4_dialogue));
+        Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(Settings.this, R.drawable.button_4_dialogue));
+        btn.setTypeface(Utils.SFPRoLight(Settings.this));
+        btn1.setTypeface(Utils.SFPRoLight(Settings.this));
     }
     
     
