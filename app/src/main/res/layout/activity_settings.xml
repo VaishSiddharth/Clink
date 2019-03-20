@@ -84,6 +84,7 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             />
 
 
