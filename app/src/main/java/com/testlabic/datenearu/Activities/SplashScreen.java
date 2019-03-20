@@ -27,6 +27,9 @@ public class SplashScreen extends AppCompatActivity {
     ImageView applogo,imageView;
     ImageView line1;
     Animation uptodown,downtoup;
+    DatabaseReference connectedRef;
+    ValueEventListener listener;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,28 +79,34 @@ public class SplashScreen extends AppCompatActivity {
                 .child("test");
         reference.setValue("Test");
         
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    Log.e("App: ", "connected");
-                    Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
-                    startActivity(mainIntent);
-                    SplashScreen.this.finish();
-                } else {
-                    Log.e("App: ", "not connected");
-                   // Toast.makeText(SplashScreen.this, "Trouble connecting? use WIFI or VPN", Toast.LENGTH_SHORT).show();
-                }
-            }
-            
-            @Override
-            public void onCancelled(DatabaseError error) {
-                //System.err.println("Listener was cancelled");
-                Log.e("App: ", "On cancelled called!");
-            }
-        });
+        connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        listener = connectedRef.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot snapshot) {
+                 boolean connected = snapshot.getValue(Boolean.class);
+                 if (connected) {
+                     Log.e("App: ", "connected");
+                     Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
+                     startActivity(mainIntent);
+                     SplashScreen.this.finish();
+                 } else {
+                     Log.e("App: ", "not connected");
+                    // Toast.makeText(SplashScreen.this, "Trouble connecting? use WIFI or VPN", Toast.LENGTH_SHORT).show();
+                 }
+             }
+             
+             @Override
+             public void onCancelled(DatabaseError error) {
+                 //System.err.println("Listener was cancelled");
+                 Log.e("App: ", "On cancelled called!");
+             }
+         });
     }
     
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(connectedRef!=null&& listener!=null)
+            connectedRef.removeEventListener(listener);
+    }
 }

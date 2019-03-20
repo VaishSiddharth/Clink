@@ -14,14 +14,19 @@ import androidx.appcompat.widget.ToolbarWidgetWrapper;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,14 +64,17 @@ import com.testlabic.datenearu.Utils.Utils;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.angmarch.views.NiceSpinner;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import io.techery.properratingbar.ProperRatingBar;
-import io.techery.properratingbar.RatingListener;
 
 public class EditActivity extends AppCompatActivity {
     
@@ -87,6 +95,7 @@ public class EditActivity extends AppCompatActivity {
     View toolbar;
     boolean blurTrialEnded = false;
     boolean switchedManually = false;
+    boolean unsavedChanges = false;
     
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -94,6 +103,43 @@ public class EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit);
         name = findViewById(R.id.name);
         age = findViewById(R.id.age);
+        
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        
+            }
+    
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                unsavedChanges = true;
+            }
+    
+            @Override
+            public void afterTextChanged(Editable s) {
+        
+            }
+        });
+    
+    
+        age.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            
+            }
+        
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                unsavedChanges = true;
+            }
+        
+            @Override
+            public void afterTextChanged(Editable s) {
+            
+            }
+        });
+        
+    
         about = findViewById(R.id.about);
         View dp1 = findViewById(R.id.edit_dp_1);
         View dp2 = findViewById(R.id.edit_dp_2);
@@ -129,7 +175,6 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 changedinfo();
-                finish();
             }
         });
         seriousitems.setOnClickListener(new View.OnClickListener() {
@@ -450,8 +495,6 @@ public class EditActivity extends AppCompatActivity {
                                 if(contentText!=null)
                                     contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
                             }
-    
-                            
                         }
                     }
                 } else {
@@ -465,11 +508,16 @@ public class EditActivity extends AppCompatActivity {
         //setUpDetails();
         blurTrialCalc();
     
-        final ProperRatingBar properRatingBar = findViewById(R.id.properRating);
+     
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userPreferences)
                 .child(Constants.uid)
                 .child("numberOfAns");
+    
+        final NiceSpinner niceSpinner =  findViewById(R.id.spinner);
+        List<String> dataset = new LinkedList<>(Arrays.asList("One", "Two", "Three", "Four", "Five"));
+        niceSpinner.attachDataSource(dataset);
+        
         
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -477,7 +525,7 @@ public class EditActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()&&dataSnapshot.getValue()!=null)
                 {
                     int number = dataSnapshot.getValue(Integer.class);
-                    properRatingBar.setRating(number);
+                   niceSpinner.setSelectedIndex(number-1);
                 }
             }
     
@@ -486,14 +534,32 @@ public class EditActivity extends AppCompatActivity {
         
             }
         });
-        
-        properRatingBar.setListener(new RatingListener() {
+        niceSpinner.addOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onRatePicked(ProperRatingBar properRatingBar) {
-               reference.setValue(properRatingBar.getRating());
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position)
+                {
+                    case 0 :
+                        reference.setValue(1);
+                        break;
+    
+                    case 1 :
+                        reference.setValue(2);
+                        break;
+                    case 2 :
+                        reference.setValue(3);
+                        break;
+                    case 3 :
+                        reference.setValue(4);
+                        break;
+                    case 4 :
+                        reference.setValue(5);
+                        break;
+                }
             }
         });
-        
+      
+    
     }
     
     private void deductDropsAndIncreaseBlurTime(final SweetAlertDialog sDialog) {
@@ -879,18 +945,46 @@ public class EditActivity extends AppCompatActivity {
     }
     public void changedinfo()
     {
+        Toast.makeText(this, "Updating...", Toast.LENGTH_SHORT).show();
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
+    
         final HashMap<String, Object> updatename = new HashMap<>();
         final HashMap<String, Object> updateage = new HashMap<>();
         updatename.put(Constants.userName, name.getText().toString());
-        updateage.put(Constants.numeralAge,age.getText().toString());
+        updateage.put(Constants.numeralAge,Integer.parseInt(age.getText().toString()));
         ref.updateChildren(updatename);
-        ref.updateChildren(updateage);
+        ref.updateChildren(updateage).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(EditActivity.this, "Update successful!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        if(gender==null)
+            return;
+        final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels)
+                .child(Constants.all_location)
+                .child(gender)
+                .child(Constants.uid);
+        ref2.updateChildren(updatename);
+        ref2.updateChildren(updateage);
+       
 
     }
     @Override
     protected void onResume() {
         super.onResume();
         setUpDetails();
+    }
+    
+    @Override
+    public void onBackPressed() {
+        if(unsavedChanges)
+            displayWarningMessage();
+        else
+            super.onBackPressed();
+    }
+    
+    private void displayWarningMessage() {
+        //TODO: Create a dialog, add typefaces and drawables and call changedInfo() if yes is chosen by the user, do the same for top back arrow
     }
 }

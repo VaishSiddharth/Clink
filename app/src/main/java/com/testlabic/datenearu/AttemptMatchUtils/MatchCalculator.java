@@ -55,13 +55,14 @@ public class MatchCalculator extends AppCompatActivity {
     private FerrisWheelView ferrisWheelView;
     SweetAlertDialog sweetAlertDialog1;
     private String nameS;
+    int score = 0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_calculator);
         ferrisWheelView = findViewById(R.id.google_progress);
-        final int score = getIntent().getIntExtra(Constants.score, 0);
+        score = getIntent().getIntExtra(Constants.score, 0);
     
         clickedUsersId = getIntent().getStringExtra(Constants.clickedUid);
         //fill minimum score here
@@ -197,7 +198,8 @@ public class MatchCalculator extends AppCompatActivity {
                                       constructing message!
                                   */
                 String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                String message = userName + " attempted match with you, and passed your test! \nConnect with him by accepting the request.\n";
+                score = score>5?5:score;
+                String message = userName + " attempted match with you, and passed your test with score of "+score+"/5" + "\nConnect with him by accepting the request.\n";
 
                 long timeStamp = -1 * new Date().getTime();
                 String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
