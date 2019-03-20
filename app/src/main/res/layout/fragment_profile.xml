@@ -1,63 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background4"
-   >
+    android:background="@drawable/background4">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
         android:clipToPadding="false"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/profilepreview"
-            android:layout_marginTop="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/eye"
-            android:layout_gravity="right"/>
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-        <ImageView
-            android:layout_gravity="center"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+            <ImageView
+                android:id="@+id/shareapp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.1"
+                android:src="@drawable/final_app_logo1" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.8"/>
+
+            <ImageView
+                android:id="@+id/profilepreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.1"
+                android:src="@drawable/eye" />
+        </LinearLayout>
+
+        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/display_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_gravity="center"
             android:src="@drawable/profile"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center">
+
             <include
                 android:id="@+id/edit_dp"
                 layout="@layout/edit_profile_images" />
         </LinearLayout>
 
         <customfonts.MyTextView_SF_Pro_Display_Bold
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
+            android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
             android:text="Ralph Ray, 24"
-            android:id="@+id/username"
             android:textColor="#3b3b3b"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
 
-            android:layout_marginTop="12dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
 
 
             <customfonts.MyTextView_SF_Pro_Display_Medium
@@ -72,14 +90,14 @@
                 android:textSize="14.3sp" />
 
             <ImageView
+                android:id="@+id/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:id="@+id/edit"
-                android:layout_marginEnd="38dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="38dp"
                 android:src="@drawable/edit_ic" />
 
         </RelativeLayout>
@@ -87,11 +105,11 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="12dp"
             android:layout_marginLeft="17dp"
+            android:layout_marginTop="12dp"
             android:layout_marginRight="17dp"
             android:layout_marginBottom="4dp"
-            android:background="@color/appcolor"/>
+            android:background="@color/appcolor" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -103,68 +121,69 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <customfonts.BrushFlowFont
-                    android:paddingTop="13dp"
-                    android:layout_gravity="center"
+                    android:id="@+id/points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="13dp"
                     android:text="---"
-                    android:id="@+id/points"
-                    android:textSize="13sp"
-                    android:textColor="#3b3b3b"/>
+                    android:textColor="#3b3b3b"
+                    android:textSize="13sp" />
 
                 <customfonts.BrushFlowFont
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Drops"
-                    android:textSize="13sp"
-                    android:textColor="#a9a9b0"/>
+                    android:textColor="#a9a9b0"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
 
             <LinearLayout
-                android:layout_marginLeft="45dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-               >
+                android:layout_marginLeft="45dp"
+                android:orientation="vertical">
+
                 <customfonts.BrushFlowFont
-                    android:paddingTop="13dp"
-                    android:layout_gravity="center"
+                    android:id="@+id/buy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="13dp"
                     android:text="+ Get More"
-                    android:id="@+id/buy"
-                    android:textSize="12sp"
-                    android:textColor="#3b3b3b"/>
+                    android:textColor="#3b3b3b"
+                    android:textSize="12sp" />
             </LinearLayout>
 
 
             <LinearLayout
-                android:layout_marginLeft="45dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="45dp"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingBottom="13dp">
+                android:paddingBottom="13dp"
+                android:visibility="gone">
+
                 <customfonts.MyTextView_SF_Pro_Display_Medium
-                    android:paddingTop="13dp"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="13dp"
                     android:text="20m"
-                    android:textSize="13sp"
-                    android:textColor="#3b3b3b"/>
+                    android:textColor="#3b3b3b"
+                    android:textSize="13sp" />
+
                 <customfonts.TextViewSFProDisplayRegular
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Resp Time"
-                    android:textSize="12sp"
-                    android:textColor="#a9a9b0"/>
+                    android:textColor="#a9a9b0"
+                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -173,13 +192,13 @@
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
             android:layout_marginTop="8dp"
-            android:background="@color/appcolor"/>
+            android:background="@color/appcolor" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#eeeef0"
-            android:id="@+id/recycler1">
+            android:background="#eeeef0">
 
         </androidx.recyclerview.widget.RecyclerView>
 

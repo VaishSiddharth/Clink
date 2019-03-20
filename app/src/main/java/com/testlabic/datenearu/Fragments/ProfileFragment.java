@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
     private ArrayList<ProfileModel> profileModelArrayList;
     private View rootView;
     private TextView username, desc;
-    private ImageView displayImage,remove_dp,edit,profilepreview;
+    private ImageView displayImage,remove_dp,edit,profilepreview,shareapp;
     private TextView points, buy;
     View edit_dp;
     String gender,cityLabel;
@@ -110,12 +110,14 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         username = rootView.findViewById(R.id.username);
+        final String appPackageName = Objects.requireNonNull(getActivity()).getPackageName();// getPackageName() from Context or Activity object
         edit_dp=rootView.findViewById(R.id.edit_dp);
         desc = rootView.findViewById(R.id.about);
         edit = rootView.findViewById(R.id.edit);
         displayImage = edit_dp.findViewById(R.id.image1);
         remove_dp=edit_dp.findViewById(R.id.remove_dp);
         bar=edit_dp.findViewById(R.id.progress_bar);
+        shareapp=rootView.findViewById(R.id.shareapp);
         points = rootView.findViewById(R.id.points);
         buy = rootView.findViewById(R.id.buy);
         profilepreview=rootView.findViewById(R.id.profilepreview);
@@ -123,6 +125,17 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), ProfilePreview.class));
+            }
+        });
+        shareapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
             }
         });
 
