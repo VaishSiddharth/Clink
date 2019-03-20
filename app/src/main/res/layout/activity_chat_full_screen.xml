@@ -30,17 +30,18 @@
             android:layout_height="wrap_content"
             android:text="----"
             android:id="@+id/sendToName"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:textSize="15sp"
             android:textColor="#4a4a4a"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:src="@drawable/ic_more"
-            android:layout_marginRight="10dp"
-            android:visibility="gone"/>
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="start"
+            android:id="@+id/image"
+            android:src="@drawable/girl1"
+            android:layout_marginRight="16dp"
+            android:visibility="visible"/>
 
 
         <ImageView

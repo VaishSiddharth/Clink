@@ -20,6 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -197,11 +199,11 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        if (Build.VERSION.SDK_INT >= 21) {
+        /*if (Build.VERSION.SDK_INT >= 21) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
             
-        }
+        }*/
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         
@@ -214,7 +216,27 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         sendToName = i.getStringExtra(Constants.sendToName);
         
         tempUid = i.getStringExtra(Constants.tempUid);
+    
+        //setup contact's image
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(sendToUid)
+                .child("imageUrl");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue(String.class)!=null)
+                {
+                    ImageView image = findViewById(R.id.image);
+                    Glide.with(imageView.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
+                }
+            }
         
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
         myUid = FirebaseAuth.getInstance().getUid();
         
         if (myUid == null)

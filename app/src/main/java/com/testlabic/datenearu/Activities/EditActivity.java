@@ -156,6 +156,17 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
+    
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
             }
         });
         remove_dp2.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +198,18 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+    
+                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
+    
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
             }
         });
         remove_dp3.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +242,18 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+    
+                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
+    
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
             }
         });
         
@@ -257,7 +292,18 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
-                
+    
+                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
+    
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
             }
         });
         image2.setOnClickListener(new View.OnClickListener() {
@@ -292,6 +338,17 @@ public class EditActivity extends AppCompatActivity {
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
     
+                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
+    
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+    
             }
         });
         image3.setOnClickListener(new View.OnClickListener() {
@@ -325,8 +382,18 @@ public class EditActivity extends AppCompatActivity {
                 btn.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(EditActivity.this, R.drawable.button_4_dialogue));
+               
+                btn.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                btn1.setTypeface(Utils.SFPRoLight(EditActivity.this));
     
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(EditActivity.this));
     
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(EditActivity.this));
+                
             }
         });
         
@@ -717,7 +784,7 @@ public class EditActivity extends AppCompatActivity {
                     if (user != null && user.getUserName() != null) {
                         name.setText(user.getUserName());
                         age.setText(String.valueOf(user.getNumeralAge()));
-                        if(user.getImageUrl()!=null)
+                        if(user.getImage1()!=null)
                             Glide.with(EditActivity.this).load(user.getImage1()).into(image1);
                         if(user.getImage2()!=null)
                             Glide.with(EditActivity.this).load(user.getImage2()).into(image2);

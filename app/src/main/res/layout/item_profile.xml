@@ -36,10 +36,27 @@
                 android:textColor="#3b3b3b"
                 android:text="My Trades"/>
 
+            <TextView
+                android:id="@+id/badge"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_chevron_right_black_24dp"
+                android:layout_gravity="right"
+                android:tint="#a9a0b0"
+                android:text="1"
+                android:gravity="center"
+                android:layout_marginTop="-14dp"
+                android:layout_marginBottom="-3dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white"
+                android:background="@drawable/circle_blue"/>
+
             <ImageView
                 android:id="@+id/arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:visibility="visible"
                 android:src="@drawable/ic_chevron_right_black_24dp"
                 android:layout_gravity="right"
                 android:tint="#a9a0b0"

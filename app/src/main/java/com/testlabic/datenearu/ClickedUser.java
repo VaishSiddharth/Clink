@@ -416,6 +416,18 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
         userInfoListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists())
+                {
+                    Toast.makeText(ClickedUser.this, "Profile Unavailable!", Toast.LENGTH_SHORT).show();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 500);
+                }
+                else
                 if (dataSnapshot.getValue() != null) {
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null && user.getUserName() != null)

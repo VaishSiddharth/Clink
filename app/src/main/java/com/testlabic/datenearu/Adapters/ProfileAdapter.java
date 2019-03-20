@@ -70,11 +70,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             if(!isQuestionaireComplete)
             {
                 //TODO: Display badge on holder.profileItem
-                holder.arrow.setImageResource(R.drawable.bottle_1);
+                holder.arrow.setVisibility(View.INVISIBLE);
+                holder.badge.setVisibility(View.VISIBLE);
             }
             else
             {
-                holder.arrow.setImageResource(R.drawable.ic_chevron_right_black_24dp);
+                holder.arrow.setVisibility(View.VISIBLE);
+                holder.badge.setVisibility(View.INVISIBLE);
             }
             holder.profileItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,11 +109,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             if(!isAboutComplete)
             {
                 //TODO: Display badge on holder.profileItem
-                holder.arrow.setImageResource(R.drawable.bottle_1);
+                holder.arrow.setVisibility(View.INVISIBLE);
+                holder.badge.setVisibility(View.VISIBLE);
             }
             else
             {
-                holder.arrow.setImageResource(R.drawable.ic_chevron_right_black_24dp);
+                holder.arrow.setVisibility(View.VISIBLE);
+                holder.badge.setVisibility(View.INVISIBLE);
             }
             holder.profileItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,7 +147,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView inbox,arrow;
         LinearLayout profileItem;
-        TextView txttrades,txthistory;
+        TextView txttrades,txthistory, badge;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -153,6 +157,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             txttrades=itemView.findViewById(R.id.txttrades);
             txthistory=itemView.findViewById(R.id.txthistory);
             profileItem = itemView.findViewById(R.id.profileItem);
+            badge = itemView.findViewById(R.id.badge);
+            
+            
         }
     }
 }

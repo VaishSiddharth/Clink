@@ -315,6 +315,23 @@ public class MainActivity extends AppCompatActivity {
                                         
                                     }
                                 }, 2500);
+    
+                                Button btn = sDialog.findViewById(R.id.confirm_button);
+                                btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+                                Button btn1 = sDialog.findViewById(R.id.cancel_button);
+                                btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+    
+                                btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
+                                btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
+    
+                                TextView title = sDialog.findViewById(R.id.title_text);
+                                if(title!=null)
+                                    title.setTypeface(Utils.SFProRegular(MainActivity.this));
+    
+                                TextView contentText = sDialog.findViewById(R.id.content_text);
+                                if(contentText!=null)
+                                    contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
+    
                             }
                         });
                         

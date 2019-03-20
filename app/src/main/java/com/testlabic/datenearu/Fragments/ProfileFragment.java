@@ -63,6 +63,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import com.testlabic.datenearu.Adapters.ProfileAdapter;
+import com.testlabic.datenearu.Utils.Utils;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -153,6 +154,18 @@ public class ProfileFragment extends Fragment {
                 btn.setBackground(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.button_4_dialogue));
                 Button btn1 = sweetAlertDialog.findViewById(R.id.cancel_button);
                 btn1.setBackground(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.button_4_dialogue));
+    
+                if (getContext() != null) {
+                    btn.setTypeface(Utils.SFPRoLight(getContext()));
+                    btn1.setTypeface(Utils.SFPRoLight(getContext()));
+                    TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                    if(title!=null)
+                        title.setTypeface(Utils.SFProRegular(getContext()));
+        
+                    TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                    if(contentText!=null)
+                        contentText.setTypeface(Utils.SFPRoLight(getContext()));
+                }
             }
         });
 
@@ -182,6 +195,14 @@ public class ProfileFragment extends Fragment {
 
                 Button btn = sweetAlertDialog.findViewById(R.id.confirm_button);
                 btn.setBackground(ContextCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.button_4_dialogue));
+                btn.setTypeface(Utils.SFPRoLight(getContext()));
+                TextView title = sweetAlertDialog.findViewById(R.id.title_text);
+                if(title!=null)
+                    title.setTypeface(Utils.SFProRegular(getContext()));
+    
+                TextView contentText = sweetAlertDialog.findViewById(R.id.content_text);
+                if(contentText!=null)
+                    contentText.setTypeface(Utils.SFPRoLight(getContext()));
 
             }
         });
@@ -281,6 +302,9 @@ public class ProfileFragment extends Fragment {
     }
     public void uri_update_db(String uri, String image_id) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
+    
+        
+    
         HashMap<String, Object> updateimage = new HashMap<>();
         updateimage.put(image_id, uri);
         //update imageurl for the current user;
@@ -311,6 +335,12 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getApplicationContext(),"Successful!",Toast.LENGTH_LONG).show();
             }
         });
+    
+        if(gender!=null) {
+            DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.cityLabels).child(Constants.all_location)
+                    .child(gender).child(Constants.uid);
+            ref2.updateChildren(updateimage);
+        }
     }
     
     private void showEditDialog(String text) {

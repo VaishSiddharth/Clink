@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:background="@color/white">
-    <TextView
+    <customfonts.MyTextView_SF_Pro_Display_Bold
         android:id="@+id/action_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/giftslider"/>
-    <TextView
+    <customfonts.TextViewSFProDisplayRegular
         android:id="@+id/description"
         android:layout_width="300dp"
         android:layout_height="wrap_content"

@@ -6,6 +6,9 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
@@ -211,6 +214,27 @@ public class chatFullScreen extends AppCompatActivity {
         Intent i = getIntent();
         
         sendToUid = i.getStringExtra(Constants.sendToUid);
+        
+        //setup contact's image
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(sendToUid)
+                .child("imageUrl");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue(String.class)!=null)
+                {
+                    ImageView image = findViewById(R.id.image);
+                    Glide.with(imageView.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
+                }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
         
         sendToName = i.getStringExtra(Constants.sendToName);
         
