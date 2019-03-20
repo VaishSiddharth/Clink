@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -51,6 +52,7 @@ import com.soundcloud.android.crop.Crop;
 import com.testlabic.datenearu.BillingUtils.PurchasePacks;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Models.ModelUser;
+import com.testlabic.datenearu.NewUserSetupUtils.SeriousItems;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Utils;
@@ -71,8 +73,9 @@ public class EditActivity extends AppCompatActivity {
     String imageId = "image1";
     private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/final_app_logo1.png?alt=media&token=e9463a91-4f57-412d-a4be-c26d2e06d84e";
     private static final String TAG = EditActivity.class.getSimpleName();
-    TextView name, age, about,blurinfo;
-    ImageView image1, nameWrap, image2, image3,previewprofile,backbutton;
+    EditText name, age;
+    TextView  about,blurinfo,seriousitems;
+    ImageView image1, nameWrap, image2, image3,save,backbutton;
     ProgressBar bar1, bar2, bar3;
     Switch blur;
     ImageView remove_dp1, remove_dp2, remove_dp3;
@@ -102,13 +105,14 @@ public class EditActivity extends AppCompatActivity {
         bar2 = dp2.findViewById(R.id.progress_bar);
         bar3 = dp3.findViewById(R.id.progress_bar);
         blur = findViewById(R.id.blurProfile);
-        nameWrap = findViewById(R.id.name_wrap);
+        //nameWrap = findViewById(R.id.name_wrap);
         remove_dp1 = dp1.findViewById(R.id.remove_dp);
         remove_dp2 = dp2.findViewById(R.id.remove_dp);
         remove_dp3 = dp3.findViewById(R.id.remove_dp);
         toolbar=findViewById(R.id.toolbar);
         backbutton=toolbar.findViewById(R.id.backbutton1);
-        previewprofile=toolbar.findViewById(R.id.previewprofile);
+        save=toolbar.findViewById(R.id.save);
+        seriousitems=findViewById(R.id.seriousitems);
         blurinfo=findViewById(R.id.blurinfo);
 
 
@@ -121,10 +125,17 @@ public class EditActivity extends AppCompatActivity {
                 EditActivity.super.onBackPressed();
             }
         });
-        previewprofile.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EditActivity.this,ProfilePreview.class));
+                changedinfo();
+                finish();
+            }
+        });
+        seriousitems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EditActivity.this, EditSeriousItems.class));
             }
         });
         
@@ -803,9 +814,8 @@ public class EditActivity extends AppCompatActivity {
         BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
         name.getPaint().setMaskFilter(filter);*/
     }
-    
     private void setUpDetails() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
         
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -867,7 +877,17 @@ public class EditActivity extends AppCompatActivity {
             }
         });
     }
-    
+    public void changedinfo()
+    {
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().getRef().child(Constants.userInfo).child(Constants.uid);
+        final HashMap<String, Object> updatename = new HashMap<>();
+        final HashMap<String, Object> updateage = new HashMap<>();
+        updatename.put(Constants.userName, name.getText().toString());
+        updateage.put(Constants.numeralAge,age.getText().toString());
+        ref.updateChildren(updatename);
+        ref.updateChildren(updateage);
+
+    }
     @Override
     protected void onResume() {
         super.onResume();

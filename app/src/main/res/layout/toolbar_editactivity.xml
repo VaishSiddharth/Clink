@@ -43,13 +43,13 @@
         app:siShape="@raw/like"
         android:visibility="gone"/>
     <ImageView
-        android:id="@+id/previewprofile"
+        android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginRight="20dp"
-        android:src="@drawable/eye"
-        android:visibility="gone"/>
+        android:src="@drawable/ic_action_save"
+        android:visibility="visible"/>
 
 
 
