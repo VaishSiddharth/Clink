@@ -20,7 +20,7 @@
             android:textColor="#000"
             android:id="@+id/circleNameInToolbar"
             android:textSize="18sp"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:gravity="bottom"
             />
     </androidx.appcompat.widget.Toolbar>
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:text="Sign Out"
             android:layout_margin ="16dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/light_black"
 
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:text="Delete Account"
             android:layout_margin ="16dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/black"
 
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:text="Share App"
             android:layout_margin ="16dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_height="wrap_content"
             />
