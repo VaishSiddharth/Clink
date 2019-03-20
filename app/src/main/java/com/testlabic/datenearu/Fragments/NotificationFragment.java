@@ -8,13 +8,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +42,7 @@ import com.testlabic.datenearu.ClickedUser;
 import com.testlabic.datenearu.Models.ModelNotification;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 import com.testlabic.datenearu.WaveDrawable;
 
 import java.text.SimpleDateFormat;
@@ -274,8 +279,7 @@ public class NotificationFragment extends Fragment {
                         break;
                     case 1:
                         // delete
-                        
-                        
+                        showConfirmDeleteAndProceed(adapter.getRef(position));
                         
                         break;
                 }
@@ -292,6 +296,41 @@ public class NotificationFragment extends Fragment {
             }
         });
         
+    }
+    
+    private void showConfirmDeleteAndProceed(final DatabaseReference ref) {
+    
+        SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Confirm Delete?")
+                .setContentText("Are you sure you want to delete?")
+                .setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(final SweetAlertDialog sweetAlertDialog) {
+                    
+                    ref.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            sweetAlertDialog.dismiss();
+                        }
+                    });
+                    
+                    }
+                });
+        alertDialog.show();
+    
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+        Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+        btn1.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+        if (getContext() != null) {
+            btn.setTypeface(Utils.SFPRoLight(getContext()));
+            btn1.setTypeface(Utils.SFPRoLight(getContext()));
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            title.setTypeface(Utils.SFProRegular(getContext()));
+        
+            TextView contentText = alertDialog.findViewById(R.id.content_text);
+            contentText.setTypeface(Utils.SFPRoLight(getContext()));
+        }
     }
     
     @Override

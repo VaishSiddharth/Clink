@@ -88,7 +88,7 @@ public class SplashScreen extends AppCompatActivity {
                     SplashScreen.this.finish();
                 } else {
                     Log.e("App: ", "not connected");
-                    Toast.makeText(SplashScreen.this, "Trouble connecting? use WIFI or VPN", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(SplashScreen.this, "Trouble connecting? use WIFI or VPN", Toast.LENGTH_SHORT).show();
                 }
             }
             

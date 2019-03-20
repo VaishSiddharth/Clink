@@ -73,7 +73,7 @@ return admin.messaging().sendToTopic(topic, payload);
 
 //notif for notification messages;
 
-exports.sendUnreadMessagesPush =functions.database.ref('/Notifications/{userId}/unread/{pushId}').onWrite((change, context) => {
+exports.sendNotificationsPush =functions.database.ref('/Notifications/{userId}/unread/{pushId}').onWrite((change, context) => {
 
 console.log("Does data even exist ? " + (change.after.val()!==null));
 if(change.after.val!==null)
@@ -88,8 +88,7 @@ var payload = {
   notification: {
     title: "New notification!",
     body: body,
-    sound: "default",
-    click_action: "chatFullScreen"
+    sound: "default"
   }
  
 };
