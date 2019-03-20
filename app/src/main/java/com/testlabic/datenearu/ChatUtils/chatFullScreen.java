@@ -201,11 +201,11 @@ public class chatFullScreen extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        if (Build.VERSION.SDK_INT >= 21) {
+        /*if (Build.VERSION.SDK_INT >= 21) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
             
-        }
+        }*/
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         
@@ -527,6 +527,10 @@ public class chatFullScreen extends AppCompatActivity {
                                                 }
                                             });
                                             dialog.show();
+                                            Button btn = dialog.findViewById(R.id.confirm_button);
+                                            btn.setBackground(ContextCompat.getDrawable(chatFullScreen.this, R.drawable.button_4_dialogue));
+                                            Button btn1 = dialog.findViewById(R.id.cancel_button);
+                                            btn1.setBackground(ContextCompat.getDrawable(chatFullScreen.this, R.drawable.button_4_dialogue));
                         
                                         }
                                     }
