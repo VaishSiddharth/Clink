@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             
             boolean isAboutComplete = prefs.getBoolean(Constants.isAboutComplete+Constants.uid, false);
     
+           // Log.e("ProfileAdapter ", "The isAbout is "+isAboutComplete);
+            
             if(!isAboutComplete)
             {
                 //TODO: Display badge on holder.profileItem

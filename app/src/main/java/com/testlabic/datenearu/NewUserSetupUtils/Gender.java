@@ -187,7 +187,7 @@ public class Gender extends Fragment implements BlockingStep {
             maxAge = 70;
             minAge = 18;
         }
-        ModelPrefs prefs = new ModelPrefs(1000.0, minAge, maxAge, preferredGender );
+        ModelPrefs prefs = new ModelPrefs(1000.0, minAge, maxAge, preferredGender,3 );
         reference.setValue(prefs);
         
         

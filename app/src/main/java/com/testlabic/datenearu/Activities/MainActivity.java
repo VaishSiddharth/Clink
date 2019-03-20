@@ -158,7 +158,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).build();
 
-        ratingDialog.show();
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ratingDialog.show();
+            }
+        }, 1000);
+       
 
     }
     
@@ -595,10 +602,10 @@ public class MainActivity extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (dataSnapshot.getChildrenCount() < 2)
+                            if (dataSnapshot.getChildrenCount() == 1)
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     ModelGift modelGift = snapshot.getValue(ModelGift.class);
-                                    Log.e(TAG, "Started gift once ");
+                                    Log.e(TAG, "Started gift once "+dataSnapshot);
                                     startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
                                             .putExtra(Constants.giftModel, modelGift));
                                     
@@ -644,8 +651,15 @@ public class MainActivity extends AppCompatActivity {
                         if (user.getUserName() == null||user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getMatchAlgo() == null) {
                             //reRun Activity to fill info!
                             Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(MainActivity.this, NewUserSetup.class));
-                        }  else if (!user.isQuestionaireComplete()) {
+                            Handler h = new Handler();
+                            h.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(MainActivity.this, NewUserSetup.class));
+    
+                                }
+                            },350);
+                        }   if (!user.isQuestionaireComplete()) {
                             
                             SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
@@ -669,7 +683,6 @@ public class MainActivity extends AppCompatActivity {
                             editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
                             editor.apply();
                         }
-                        else
                              if (user.getAbout() == null) {
                            // Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
                                  BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);

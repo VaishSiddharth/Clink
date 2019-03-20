@@ -239,11 +239,12 @@ public class QuestionFive extends Fragment implements BlockingStep {
                                     .child(Constants.uid);
                             HashMap<String, Object> updateBoolean = new HashMap<>();
                             updateBoolean.put("questionaireComplete", true);
+    
+                            
                             reference.updateChildren(updateBoolean).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    //DuplicateUserInfoToCityLabelNode();
-                                    getActivity().finish();
+                                    DuplicateUserInfoToCityLabelNode();
                                 }
                             });
                             
@@ -285,17 +286,10 @@ public class QuestionFive extends Fragment implements BlockingStep {
                             if (cityLabel != null && gender != null) {
                                 cityLabel = cityLabel.replace(", ", "_");
                                 DatabaseReference refFin = FirebaseDatabase.getInstance().getReference().child(Constants.cityLabels)
-                                        .child(cityLabel).child(gender).child(Constants.uid);
-                                final String finalCityLabel = cityLabel;
-                                refFin.setValue(dataSnapshot.getValue(ModelUser.class)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        .child(cityLabel).child(gender).child(Constants.uid).child("questionaireComplete");
+                                refFin.setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                        SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putString(Constants.cityLabel, finalCityLabel).apply();
-                                        //Intent i = new Intent(getActivity(), MainActivity.class);
-                                        //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        //startActivity(i);
                                         getActivity().finish();
                                     }
                                 });
