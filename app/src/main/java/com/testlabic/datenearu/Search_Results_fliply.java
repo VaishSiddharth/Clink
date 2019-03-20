@@ -17,7 +17,7 @@ public class Search_Results_fliply extends AppCompatActivity {
     private RecyclerView recyclerview;
     private ArrayList<Search_Results_Fliply_Model> search_results_fliply_modelArrayList;
 
-    Integer bitmap5[]={R.drawable.bitmap5,R.drawable.bitmap6,R.drawable.bitmap8,R.drawable.bitmap7};
+    Integer bitmap5[]={};
     Integer imgrs[]={R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee,R.drawable.ic_rupee};
     String txtdji[]={"DJI Phantom Pro","DJI Mavic Pro","DJI Phantom Pro","DJI Mavic Pro"};
     String txtprice[]={"1,49,000","45,000","1,49,000","45,000"};

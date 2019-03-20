@@ -62,15 +62,41 @@ public class MatchCalculator extends AppCompatActivity {
         setContentView(R.layout.activity_match_calculator);
         ferrisWheelView = findViewById(R.id.google_progress);
         final int score = getIntent().getIntExtra(Constants.score, 0);
-        Log.e(TAG, "The score is " + String.valueOf(score));
-        //Toast.makeText(this, "The score is " + String.valueOf(score), Toast.LENGTH_SHORT).show();
+    
         clickedUsersId = getIntent().getStringExtra(Constants.clickedUid);
+        //fill minimum score here
+    
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userPreferences)
+                .child(clickedUsersId)
+                .child("numberOfAns");
+    
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()&&dataSnapshot.getValue()!=null)
+                {
+                    int number = dataSnapshot.getValue(Integer.class);
+                    Constants.minimumScore = number;
+                }
+            }
+        
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        
+       
+        //Toast.makeText(this, "The score is " + String.valueOf(score), Toast.LENGTH_SHORT).show();
+    
         ferrisWheelView.startAnimation();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (score > 3) {
+                Log.e(TAG, "The score is " + String.valueOf(score) + " out of "+Constants.minimumScore);
+                if (score > Constants.minimumScore) {
                     if (clickedUsersId != null) {
                         showSuccessDialog();
                     }
@@ -98,7 +124,6 @@ public class MatchCalculator extends AppCompatActivity {
         sweetAlertDialog1 = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
         sweetAlertDialog1.setTitleText("Oops...")
                 .setContentText("Too different answers!\n\nHmmm, you can send a bottle of wine, s/he may notice you!\n")
-                .setCustomImage(R.drawable.wine_bottle)
                 .setConfirmButton("Send Wine", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {

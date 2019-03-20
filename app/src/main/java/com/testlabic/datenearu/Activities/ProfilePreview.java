@@ -86,7 +86,7 @@ public class ProfilePreview extends Activity {
                 if (user != null) {
 
                     namepv.setText(user.getUserName());
-                    agepv.setText(user.getAge());
+                    agepv.setText(String.valueOf(user.getNumeralAge()));
                     oneLinepv.setText(user.getOneLine());
                     imageUrl=user.getImageUrl();
                     isBlur=user.getIsBlur();

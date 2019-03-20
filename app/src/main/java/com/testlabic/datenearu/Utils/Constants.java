@@ -96,6 +96,7 @@ public class Constants {
     public static String isQuestionaireComplete = "isQuestionaireComplete";
     public static String isAboutComplete = "isAboutcomplete";
     public static String hideButtons = "hideButtons";
+    public static int minimumScore = 3;
     
     public static String encrypt(String cityLabel) {
         

@@ -100,6 +100,7 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'com.ablanco.zoomy:zoomy:1.1.0'
 
+    implementation 'com.github.techery:properratingbar:0.0.5'
     implementation 'com.codemybrainsout.rating:ratingdialog:1.0.8'
 }
 apply plugin: 'com.google.gms.google-services'

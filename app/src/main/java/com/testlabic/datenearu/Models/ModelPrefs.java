@@ -6,6 +6,11 @@ public class ModelPrefs {
     private int minAge;
     private int maxAge;
     private String preferedGender;
+    private int numberOfAns;
+    
+    public int getNumberOfAns() {
+        return numberOfAns;
+    }
     
     public String getMatchAlgo() {
         return matchAlgo;

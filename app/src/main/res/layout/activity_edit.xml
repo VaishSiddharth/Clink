@@ -105,6 +105,32 @@
                     android:layout_marginRight="20dp"
                     android:background="@color/white"  />
 
+                <customfonts.MyTextView_SF_Pro_Display_Light
+                    android:layout_width="wrap_content"
+                    android:text="Number of correct answers to pass quiz:"
+                    android:layout_margin="8dp"
+                    android:layout_height="wrap_content" />
+
+
+                <io.techery.properratingbar.ProperRatingBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:id="@+id/properRating"
+                    app:prb_defaultRating="3"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="4dp"
+                    app:prb_clickable="true"
+                    app:prb_tickSpacing="200dp"
+                    app:prb_symbolicTick="Q"
+                    app:prb_symbolicTickNormalColor="@android:color/darker_gray"
+                    app:prb_symbolicTickSelectedColor="@color/appcolor"
+                    app:prb_totalTicks="5"
+                    android:focusable="true" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
