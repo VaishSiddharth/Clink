@@ -63,11 +63,12 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import io.techery.properratingbar.ProperRatingBar;
+import io.techery.properratingbar.RatingListener;
 
 public class EditActivity extends AppCompatActivity {
     
     String imageId = "image1";
-    
     private static final String default_uri_dp = "https://firebasestorage.googleapis.com/v0/b/datenearu.appspot.com/o/final_app_logo1.png?alt=media&token=e9463a91-4f57-412d-a4be-c26d2e06d84e";
     private static final String TAG = EditActivity.class.getSimpleName();
     TextView name, age, about,blurinfo;
@@ -452,6 +453,36 @@ public class EditActivity extends AppCompatActivity {
         });
         //setUpDetails();
         blurTrialCalc();
+    
+        final ProperRatingBar properRatingBar = findViewById(R.id.properRating);
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userPreferences)
+                .child(Constants.uid)
+                .child("numberOfAns");
+        
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()&&dataSnapshot.getValue()!=null)
+                {
+                    int number = dataSnapshot.getValue(Integer.class);
+                    properRatingBar.setRating(number);
+                }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
+        properRatingBar.setListener(new RatingListener() {
+            @Override
+            public void onRatePicked(ProperRatingBar properRatingBar) {
+               reference.setValue(properRatingBar.getRating());
+            }
+        });
+        
     }
     
     private void deductDropsAndIncreaseBlurTime(final SweetAlertDialog sDialog) {
