@@ -158,7 +158,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).build();
 
-        ratingDialog.show();
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ratingDialog.show();
+            }
+        }, 1000);
+       
 
     }
     
@@ -595,10 +602,10 @@ public class MainActivity extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (dataSnapshot.getChildrenCount() < 2)
+                            if (dataSnapshot.getChildrenCount() == 1)
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     ModelGift modelGift = snapshot.getValue(ModelGift.class);
-                                    Log.e(TAG, "Started gift once ");
+                                    Log.e(TAG, "Started gift once "+dataSnapshot);
                                     startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
                                             .putExtra(Constants.giftModel, modelGift));
                                     
