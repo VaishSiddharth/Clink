@@ -89,6 +89,12 @@
         <activity android:name=".Search_Results_fliply" />
         <activity android:name=".QuestionUtils.QuestionsActivity" />
         <activity android:name=".Utils.locationUpdater" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_logonotification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/appcolor" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

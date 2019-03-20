@@ -70,14 +70,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Context context = getApplicationContext();
         String channelId = getString(R.string.default_notification_channel_id);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.icon1)
+                .setSmallIcon(R.drawable.ic_stat_logonotification)
                 //.setLargeIcon(bitmap)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(body));;
+                        .bigText(body));
         //.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setSound(alarmSound);
@@ -92,9 +92,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     "test",
                     NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
-            builder.setSmallIcon(R.drawable.icon1);
+            builder.setSmallIcon(R.drawable.ic_stat_logonotification);
         } else {
-            builder.setSmallIcon(R.drawable.icon1);
+            builder.setSmallIcon(R.drawable.ic_stat_logonotification);
         }
         notificationManager.notify(0, builder.build());
     

@@ -63,10 +63,9 @@
     </com.testlabic.datenearu.TransitionUtils.AspectRatioCardView>
     <ImageView
         android:id="@+id/next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:padding="5dp"
-        android:src="@drawable/ic_action_next"
-        android:background="@drawable/button_4_dialogue"/>
+        android:src="@drawable/nexta" />
 
 </LinearLayout>
