@@ -70,7 +70,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Context context = getApplicationContext();
         String channelId = getString(R.string.default_notification_channel_id);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_stat_logonotification)
+                .setSmallIcon(R.drawable.nohere)
                 //.setLargeIcon(bitmap)
                 .setContentTitle(title)
                 .setContentText(body)
@@ -92,9 +92,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     "test",
                     NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
-            builder.setSmallIcon(R.drawable.ic_stat_logonotification);
+            builder.setSmallIcon(R.drawable.nohere);
         } else {
-            builder.setSmallIcon(R.drawable.ic_stat_logonotification);
+            builder.setSmallIcon(R.drawable.nohere);
         }
         notificationManager.notify(0, builder.build());
     
