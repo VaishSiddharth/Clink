@@ -98,7 +98,6 @@ public class MatchCalculator extends AppCompatActivity {
         sweetAlertDialog1 = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
         sweetAlertDialog1.setTitleText("Oops...")
                 .setContentText("Too different answers!\n\nHmmm, you can send a bottle of wine, s/he may notice you!\n")
-                .setCustomImage(R.drawable.wine_bottle)
                 .setConfirmButton("Send Wine", new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(final SweetAlertDialog sweetAlertDialog) {

@@ -40,7 +40,7 @@ public class IntroActivity extends AppIntro {
         SliderPage sliderPage = new SliderPage();
         sliderPage.setTitle("Clink");
         sliderPage.setDescription("Working");
-        sliderPage.setImageDrawable(R.drawable.final_app_logo1);
+        sliderPage.setImageDrawable(R.drawable.final_app_logo_png);
         sliderPage.setBgColor(Color.parseColor("#ffffff"));
         //addSlide(AppIntro2Fragment.newInstance(sliderPage));
 
