@@ -25,6 +25,7 @@ import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchaseHistoryResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         changeFragment(new pagerTransition());
         
         //setCustomFontAndStyle(tabLayout1, 0);
-        
+        rating();
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(int tabId) {
@@ -133,6 +134,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
+    }
+    public void rating()
+    {
+        //rating
+        final RatingDialog ratingDialog = new RatingDialog.Builder(this)
+                .threshold(3)
+                .session(3)
+                .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
+                    @Override
+                    public void onFormSubmitted(String feedback) {
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                .child("Feedbacks").child(Constants.uid);
+                        final HashMap<String, Object> updatefeedback = new HashMap<>();
+                        updatefeedback.put("review", feedback);
+                        ref.updateChildren(updatefeedback).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(),"We'll try to improve. Thanks",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+                }).build();
+
+        ratingDialog.show();
+
     }
     
     private void blurtrial() {
