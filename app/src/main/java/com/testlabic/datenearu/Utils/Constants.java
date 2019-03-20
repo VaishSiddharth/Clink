@@ -77,6 +77,8 @@ public class Constants {
     public static String royalWine = "Royal Wine";
     public static String showDialog = "showDialog";
     public static String giftModel = "giftModel";
+    public static String userLastName="userLastName";
+    public static String userName="userName";
     
     public static final String SKU_100_drops = "100_drops";
     public static final String SKU_200_drops = "200_drops";

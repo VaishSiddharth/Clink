@@ -37,7 +37,7 @@
             app:met_underlineColor="@color/appcolor"
             android:layout_gravity="center"
             android:gravity="center"
-            app:met_floatingLabelText="About Yourself"
+            app:met_floatingLabelText="Question"
             app:met_primaryColor="@color/appcolor"
             app:met_floatingLabelTextColor="@color/appcolor"
             app:met_floatingLabel="highlight"/>

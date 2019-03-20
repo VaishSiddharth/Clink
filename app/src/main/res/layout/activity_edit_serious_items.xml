@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp">
+
+
+        <customfonts.TextViewSFProDisplayRegular
+            android:id="@+id/head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="What is the best way of finding a partner(Drag the numbers to the options priority wise!)"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/head"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:id="@+id/optionLL"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1.9"
+                    android:orientation="vertical">
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/choice_1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rounded_corners"
+                        android:padding="16dp"
+                        android:text="A) The eye catcher:Physical features"
+                        android:textColor="#212121" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/choice_2"
+                        android:layout_width="fill_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rounded_corners"
+                        android:padding="16dp"
+                        android:text="B) I am Sapiosexual (intelligence n intellectual ability)"
+                        android:textColor="#212121" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/choice_3"
+                        android:layout_width="fill_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rounded_corners"
+                        android:padding="16dp"
+                        android:text="C) Must be helpful, caring and compassionate towards you and society"
+                        android:textColor="#212121" />
+
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/choice_4"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+
+                        android:background="@drawable/rounded_corners"
+                        android:padding="16dp"
+                        android:text="D) Has an ambition in life and is serious towards it"
+                        android:textColor="#212121" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/choice_5"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+
+                        android:background="@drawable/rounded_corners"
+                        android:padding="16dp"
+                        android:text="E) has proved his/her metal (secured a good job)"
+                        android:textColor="#212121" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/choice_6"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rounded_corners"
+                        android:padding="16dp"
+                        android:text="F) Understands you and your nature."
+                        android:textColor="#212121" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/choiceLL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="0.1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/option_1"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/option_background"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/white" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/option_2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/option_background"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textColor="@color/white" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/option_3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/option_background"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="@color/white" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/option_4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/option_background"
+                        android:gravity="center"
+                        android:text="4"
+                        android:textColor="@color/white" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/option_5"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/option_background"
+                        android:gravity="center"
+                        android:text="5"
+                        android:textColor="@color/white" />
+
+                    <customfonts.TextViewSFProDisplayRegular
+                        android:id="@+id/option_6"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/option_background"
+                        android:gravity="center"
+                        android:text="6"
+                        android:textColor="@color/white" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_refresh" />
+
+            <customfonts.MyTextView_SF_Pro_Display_Light
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="*1 being the highest priority and 6 the lowest" />
+            <Button
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:background="@drawable/button_4_dialogue"
+                android:layout_margin="10dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
