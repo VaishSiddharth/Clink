@@ -89,6 +89,8 @@ public class SplashScreen extends AppCompatActivity {
                      Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
                      startActivity(mainIntent);
                      SplashScreen.this.finish();
+                     if(connectedRef!=null&& listener!=null)
+                         connectedRef.removeEventListener(listener);
                  } else {
                      Log.e("App: ", "not connected");
                     // Toast.makeText(SplashScreen.this, "Trouble connecting? use WIFI or VPN", Toast.LENGTH_SHORT).show();
@@ -106,7 +108,6 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(connectedRef!=null&& listener!=null)
-            connectedRef.removeEventListener(listener);
+       
     }
 }

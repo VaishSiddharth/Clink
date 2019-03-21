@@ -28,6 +28,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:id="@+id/share_app"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <customfonts.TextViewSFProDisplayRegular
+                android:layout_width="wrap_content"
+                android:text="Hide visibility to other users "
+                android:layout_margin ="16dp"
+                android:textSize="14sp"
+                android:layout_weight="3.5"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                />
+
+            <Switch
+                android:id="@+id/visibility"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:padding="4dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
         android:id="@+id/sign_out"
         android:layout_height="wrap_content">
         <customfonts.TextViewSFProDisplayRegular
@@ -36,11 +69,9 @@
             android:layout_margin ="16dp"
             android:textSize="14sp"
             android:textColor="@color/light_black"
-
             android:layout_height="wrap_content"
             />
-
-
+        
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -53,6 +84,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:id="@+id/delete_account"
+        android:visibility="gone"
         android:layout_height="wrap_content">
         <customfonts.TextViewSFProDisplayRegular
             android:layout_width="wrap_content"
@@ -72,20 +104,6 @@
             />
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/share_app"
-        android:layout_height="wrap_content">
-        <customfonts.TextViewSFProDisplayRegular
-            android:layout_width="wrap_content"
-            android:text="Share App"
-            android:layout_margin ="16dp"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
 
 
         <View

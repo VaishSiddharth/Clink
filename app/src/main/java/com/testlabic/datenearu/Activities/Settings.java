@@ -7,11 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +28,12 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Utils;
@@ -38,6 +45,8 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
     private static final String TAG = Settings.class.getSimpleName();
     public GoogleApiClient mGoogleApiClient;
     LinearLayout signOut, deleteAccount, shareApp;
+    DatabaseReference reference;
+    ValueEventListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +85,87 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
                 rating();
             }
         });
+        
+        setUpVisibility();
     }
+    
+    private void setUpVisibility() {
+        final Switch visibilitySwitch = findViewById(R.id.visibility);
+        SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+         final String gender = prefs.getString(Constants.userGender, null);
+        if (gender != null) {
+           
+            reference = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.cityLabels)
+                    .child(Constants.all_location)
+                    .child(gender)
+                    .child(Constants.uid);
+         
+            listener = reference.addValueEventListener(new ValueEventListener() {
+                  @Override
+                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                      if (dataSnapshot.exists()) {
+                         visibilitySwitch.setChecked(false);
+                      }
+                      else
+                          visibilitySwitch.setChecked(true);
+                  }
+      
+                  @Override
+                  public void onCancelled(@NonNull DatabaseError databaseError) {
+          
+                  }
+              });
+    
+            visibilitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked)
+                    {
+                        reference.setValue(null);
+                    }
+                    else
+                    {
+                        Toast.makeText(Settings.this, "Updating...", Toast.LENGTH_SHORT).show();
+                        DuplicateUserInfoToCityLabel(reference);
+                    }
+                    
+                }
+            });
+        }
+    }
+    
+    private void DuplicateUserInfoToCityLabel(final DatabaseReference reference) {
+        
+        DatabaseReference initRef = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(Constants.uid);
+        
+        initRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                if(dataSnapshot.getValue(ModelUser.class)!=null)
+                {
+                    ModelUser modelUser = dataSnapshot.getValue(ModelUser.class);
+                    reference.setValue(modelUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(Settings.this, "Updated", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
+    }
+    
     public void rating()
     {
         //rating
@@ -102,8 +191,18 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
 
         ratingDialog.show();
         TextView positive=ratingDialog.findViewById(R.id.dialog_rating_button_positive);
-        positive.setVisibility(View.GONE);
-
+        if (positive != null) {
+            positive.setVisibility(View.GONE);
+        }
+    
+    }
+    
+    @Override
+    protected void onStop() {
+       
+        if(reference!=null&&listener!=null)
+            reference.removeEventListener(listener);
+            super.onStop();
     }
     
     private void delete_Account() {

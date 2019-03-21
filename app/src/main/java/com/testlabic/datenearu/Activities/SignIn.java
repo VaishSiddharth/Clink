@@ -204,7 +204,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                 //Call manual fix to update the photo of user
         
                                 if (mCurrentUser != null) {
-                                    updateDatabaseWithUser(mCurrentUser, null, profile);
+                                    updateDatabaseWithUser(mCurrentUser, null, profile, false);
                                 }
                                 imageView.setVisibility(View.INVISIBLE);
                                 //progressBar.setVisibility(View.INVISIBLE);
@@ -212,13 +212,20 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         
                             } else {
                                 
-                                imageView.setVisibility(View.INVISIBLE);
+                                /*imageView.setVisibility(View.INVISIBLE);
                                 //progressBar.setVisibility(View.INVISIBLE);
         
                                 startActivity(new Intent(SignIn.this, MainActivity.class));
-                                finish();
+                                finish();*/
                                 //startActivity(new Intent(SignIn.this, MainActivity.class).putExtra(Constants.refresh, true));
                                 // finish();
+    
+                                if (mCurrentUser != null) {
+                                    updateDatabaseWithUser(mCurrentUser, null, profile, true);
+                                }
+                                imageView.setVisibility(View.INVISIBLE);
+                                //progressBar.setVisibility(View.INVISIBLE);
+    
                             }
                         } else {
                             // If sign in fails, display a message to the user.
@@ -234,7 +241,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 });
     }
 
-    private void updateDatabaseWithUser(final FirebaseUser mCurrentUser, GoogleSignInAccount account, Profile profile) {
+    private void updateDatabaseWithUser(final FirebaseUser mCurrentUser, GoogleSignInAccount account, Profile profile, final Boolean fromFacebook) {
 
         loadingDialog.show();
         
@@ -273,8 +280,13 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                     @Override
                     public void onSuccess(Void aVoid) {
                         loadingDialog.dismiss();
-                        startActivity(new Intent(SignIn.this, NewUserSetup.class));
-                        finish();
+                        if (fromFacebook) {
+                            startActivity(new Intent(SignIn.this, MainActivity.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(SignIn.this, NewUserSetup.class));
+                            finish();
+                        }
                     }
                 });
             }
@@ -392,7 +404,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                                     //Call manual fix to update the photo of user
 
                                     if (mCurrentUser != null) {
-                                        updateDatabaseWithUser(mCurrentUser, account, null);
+                                        updateDatabaseWithUser(mCurrentUser, account, null, false);
                                     }
                                     imageView.setVisibility(View.INVISIBLE);
                                     //progressBar.setVisibility(View.INVISIBLE);

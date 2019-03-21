@@ -129,7 +129,7 @@ public class pagerTransition extends Fragment {
         rootView = inflater.inflate(R.layout.activity_pager_transition, viewPager, false);
         contactsUid = new ArrayList<>();
         sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
-        interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
+        interestedGender = sharedPreferences.getString(Constants.userIntrGender, "female");
         curUsersMatchSeq = sharedPreferences.getString(Constants.matchAlgo, null);
         city = sharedPreferences.getString(Constants.cityLabel, null);
         editor = sharedPreferences.edit();
@@ -789,7 +789,7 @@ public class pagerTransition extends Fragment {
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Log.e(TAG, "The child changed triggeres");
                     
-                    downloadList();
+                    //downloadList();
                     if(adapter!=null)
                         adapter.notifyDataSetChanged();
                 }
@@ -869,6 +869,7 @@ public class pagerTransition extends Fragment {
         // Log.e(TAG, "Filtering with "+String.valueOf(prefs));
         if (prefs != null && item.getNumeralAge() >= prefs.getMinAge() && item.getNumeralAge() <= prefs.getMaxAge()
                 && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit() &&!(contactsUid.contains(item.getUid()))) {
+            
             if(item.getUid()!=null) {
                 if(!item.getUid().equals(Constants.uid))
                     displayArrayList.add(item);

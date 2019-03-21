@@ -108,4 +108,6 @@ public class Constants {
     public static String decrypt(String value) {
         return value.replace("_", ", ");
     }
+    
+    public static  String visibilityOn = "visibilityOn";
 }

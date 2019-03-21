@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     {
         //rating
         final RatingDialog ratingDialog = new RatingDialog.Builder(this)
-                .threshold(3)
+                .threshold(5)
                 .session(3)
                 .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
                     @Override
@@ -648,6 +648,25 @@ public class MainActivity extends AppCompatActivity {
                     // Log.e(TAG, "Fix method called for recovery");
                     ModelUser user = dataSnapshot.getValue(ModelUser.class);
                     if (user != null) {
+                        
+                        //update all sharedPref
+                        
+                        if(user.getGender()!=null)
+                        {
+                            SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString(Constants.userGender, user.getGender()).apply();
+                            editor.apply();
+                        }
+                        
+                        if(user.getInterestedIn()!=null)
+                        {
+                            SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString(Constants.userIntrGender, user.getGender()).apply();
+                            editor.apply();
+                        }
+                        
                         if (user.getUserName() == null||user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getMatchAlgo() == null) {
                             //reRun Activity to fill info!
                             Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
