@@ -139,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
     {
         //rating
         final RatingDialog ratingDialog = new RatingDialog.Builder(this)
-                .threshold(5)
-                .session(3)
+                .threshold(3)
+                .session(7)
                 .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
                     @Override
                     public void onFormSubmitted(String feedback) {

@@ -998,7 +998,7 @@ public class EditActivity extends AppCompatActivity {
     private void displayWarningMessage() {
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
         sweetAlertDialog.setTitle("Save Changes");
-        sweetAlertDialog.setContentText("Do you want to save the changes?");
+        sweetAlertDialog.setContentText("Do you want to save the changes?\n");
         sweetAlertDialog.setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
