@@ -103,7 +103,7 @@ public class ProfileFragment extends Fragment {
     Integer arrow[] = {R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp,
             R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp};
     String txttrades[] = {"My Questions", "Edit Profile", "About you", "Settings"};
-    String txthistory[] = {"Your questions for matches", "Improve your profile", "Tap to Edit", "Delete account/ Sign out"};
+    String txthistory[] = {"Your questions for matches", "Improve your profile", "Tap to Edit", "Hide Visibility/ Sign out"};
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
