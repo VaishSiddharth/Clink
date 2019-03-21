@@ -290,11 +290,19 @@ public class QuestionFive extends Fragment implements BlockingStep {
                                 refFin.setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = prefs.edit();
+                                        editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
+                                        editor.apply();
                                         getActivity().finish();
                                     }
                                 });
                             } else {
                                 //move to Main activity anyway!
+                                SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
+                                editor.apply();
                                 Intent i = new Intent(getActivity(), MainActivity.class);
                                 // i.putExtra(Constants.moveToLocationActivity, true);
                                 // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Inte);
