@@ -38,6 +38,8 @@ import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class QuestionFive extends Fragment implements BlockingStep {
     View rootView;
     ImageView next;
@@ -290,7 +292,7 @@ public class QuestionFive extends Fragment implements BlockingStep {
                                 refFin.setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                                        SharedPreferences prefs = getContext().getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                                         SharedPreferences.Editor editor = prefs.edit();
                                         editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
                                         editor.apply();
@@ -299,7 +301,7 @@ public class QuestionFive extends Fragment implements BlockingStep {
                                 });
                             } else {
                                 //move to Main activity anyway!
-                                SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                                SharedPreferences prefs = getContext().getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = prefs.edit();
                                 editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
                                 editor.apply();
