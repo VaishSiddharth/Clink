@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        appUpdates();
 
         //initialize the startappSDK
 
@@ -114,31 +113,29 @@ public class MainActivity extends AppCompatActivity {
         bottomBar = findViewById(R.id.bottomBar);
         mAuth = FirebaseAuth.getInstance();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        boolean refresh = getIntent().getBooleanExtra(Constants.refresh, false);
-
+    
         //on create switch to the home fragment
-        changeFragment(new pagerTransition());
+        changeFragment(new pagerTransition(), true);
 
         //setCustomFontAndStyle(tabLayout1, 0);
         rating();
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(int tabId) {
-
+    
                 if (tabId == R.id.tab_message) {
                     // switch to messages fragment
-                    changeFragment(new AllMessagesListFragment());
+                    changeFragment(new AllMessagesListFragment(), false);
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
                     nearby.removeBadge();
                 } else if (tabId == R.id.tab_home) {
                     // switch to messages fragment
-                    changeFragment(new pagerTransition());
+                    changeFragment(new pagerTransition(), true);
                 } else if (tabId == R.id.tab_profile) {
                     // switch to messages fragment
-                    changeFragment(new ProfileFragment());
+                    changeFragment(new ProfileFragment(), false);
                 } else if (tabId == R.id.tab_notif) {
-                    changeFragment(new NotificationParent());
+                    changeFragment(new NotificationParent(), false);
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                     nearby.removeBadge();
                 }
@@ -483,14 +480,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void changeFragment(Fragment fragment) {
+    private boolean currentFragPager = false;
+    
+    public void changeFragment(Fragment fragment, Boolean home) {
+        if (home)
+            currentFragPager = true;
+        else
+            currentFragPager = false;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
-
     @Override
     protected void onResume() {
         Log.e(TAG, "Main Activity onresume called! " + Constants.uid);
@@ -861,11 +862,29 @@ public class MainActivity extends AppCompatActivity {
             updateStatus(null);
 
     }
-
+    
+    private boolean doubleBackToExitPressedOnce = false;
+    
     @Override
     public void onBackPressed() {
-        finishAffinity();
-        super.onBackPressed();
+        if (doubleBackToExitPressedOnce) {
+            finishAffinity();
+            super.onBackPressed();
+            return;
+        } else if (!currentFragPager) {
+            changeFragment(new pagerTransition(), true);
+        }
+        
+        this.doubleBackToExitPressedOnce = true;
+        //Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        
+        new Handler().postDelayed(new Runnable() {
+            
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 
     @Override
