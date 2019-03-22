@@ -262,7 +262,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         HashMap<String, Object> timeStamp = new HashMap<>();
         timeStamp.put(Constants.timeStamp, ServerValue.TIMESTAMP);
         ModelUser user = new ModelUser(firstName, String.valueOf(modifiedImageUrl())
-                , "NA", null, Constants.all_location, null, mCurrentUser.getUid(), lastName, -1, timeStamp, timeStamp);
+                , "NA", null, Constants.all_location, null, mCurrentUser.getUid(), lastName, -1, timeStamp, timeStamp, "ABCDEF");
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.userInfo).child(mCurrentUser.getUid());

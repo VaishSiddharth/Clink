@@ -115,7 +115,7 @@ public class ModelUser {
     
     public ModelUser(String userName, String imageUrl, String age, LatLong location, String cityLabel
             , String about, String uid, String userLastName, int numeralAge, HashMap<String, Object> creationTime
-    , HashMap<String, Object> blurStartTime) {
+    , HashMap<String, Object> blurStartTime, String matchAlgo) {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.age = age;
@@ -127,6 +127,7 @@ public class ModelUser {
         this.numeralAge = numeralAge;
         this.creationTime = creationTime;
         this.blurStartTime = blurStartTime;
+        this.matchAlgo = matchAlgo;
     }
     
     public int getNumeralAge() {
