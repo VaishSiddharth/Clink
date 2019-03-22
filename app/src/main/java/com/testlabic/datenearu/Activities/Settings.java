@@ -122,6 +122,7 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked)
                     {
+                        rating();
                         reference.setValue(null);
                     }
                     else
@@ -174,7 +175,7 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
                 .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
                     @Override
                     public void onFormSubmitted(String feedback) {
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                        /*DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
                                 .child("Feedbacks").child(Constants.uid);
                         final HashMap<String, Object> updatefeedback = new HashMap<>();
                         updatefeedback.put("review", feedback);
@@ -184,7 +185,7 @@ public class Settings extends AppCompatActivity implements GoogleApiClient.OnCon
                                 delete_Account();
                                 Toast.makeText(getApplicationContext(),"We'll try to improve. Thanks",Toast.LENGTH_LONG).show();
                             }
-                        });
+                        });*/
 
                     }
                 }).build();

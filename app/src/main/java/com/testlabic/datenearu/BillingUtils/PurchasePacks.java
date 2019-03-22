@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
     private static final String TAG = PurchasePacks.class.getSimpleName();
     public BillingClient mBillingClient;
     TextView pack1, pack2, pack3,pack4;
+    ImageView finish;
     StartAppAd startAppAd;
     
     @Override
@@ -58,6 +60,13 @@ public class PurchasePacks extends AppCompatActivity implements PurchasesUpdated
         pack2 = findViewById(R.id.secondPack);
         pack3 = findViewById(R.id.thirdPack);
         pack4 = findViewById(R.id.fourthPack);
+        finish=findViewById(R.id.finish);
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         
         TextView rewardAd = findViewById(R.id.rewardAd);
         startAppAd = new StartAppAd(PurchasePacks.this);

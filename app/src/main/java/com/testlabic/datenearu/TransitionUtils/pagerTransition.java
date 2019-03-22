@@ -142,7 +142,13 @@ public class pagerTransition extends Fragment {
         emptyView = rootView.findViewById(R.id.emptyView);
         emptyViewno = rootView.findViewById(R.id.emptyViewno);
         emptyViewtext = rootView.findViewById(R.id.emptyViewtext);
-        
+
+        bottle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(),PurchasePacks.class));
+            }
+        });
         Drawable mWaveDrawable = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             mWaveDrawable = new WaveDrawable(getContext().getDrawable(R.drawable.nohere));
