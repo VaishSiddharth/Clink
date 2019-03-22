@@ -119,7 +119,6 @@ public class QuestionOne extends Fragment implements BlockingStep {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
                 Intent intent = new Intent(getActivity(), EditQuestionTemplate.class);
                 intent.putExtra(Constants.questionNumber, String.valueOf(0));
                 startActivity(intent);

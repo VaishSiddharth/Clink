@@ -49,10 +49,7 @@ public class EditQuestionTemplate extends AppCompatActivity implements View.OnCl
                 hint();
             }
         });
-
-
-
-
+        
 
         save.setOnClickListener(this);
     }
@@ -90,7 +87,7 @@ public class EditQuestionTemplate extends AppCompatActivity implements View.OnCl
             DatabaseReference reference =  FirebaseDatabase.getInstance().getReference().child(Constants.userInfo)
                     .child(Constants.uid)
                     .child("questions")
-                    .child(Integer.toString(0));
+                    .child(questionNumber);
             
             String ques = question.getText().toString();
             String optAs = optA.getText().toString();
