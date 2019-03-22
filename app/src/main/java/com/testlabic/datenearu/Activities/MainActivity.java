@@ -717,6 +717,9 @@ public class MainActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = prefs.edit();
                             editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
                             editor.apply();
+                            BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
+                            nearby.removeBadge();
+                            
                         }
                              if (user.getAbout() == null) {
                            // Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();

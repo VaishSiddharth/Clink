@@ -18,12 +18,13 @@ public class ModelPrefs {
     
     private String matchAlgo;
     
-    public ModelPrefs(double distanceLimit, int minAge, int maxAge, String preferedGender, int numberOfAns) {
+    public ModelPrefs(double distanceLimit, int minAge, int maxAge, String preferedGender, int numberOfAns, String matchAlgo) {
         this.distanceLimit = distanceLimit;
         this.minAge = minAge;
         this.maxAge = maxAge;
         this.preferedGender = preferedGender;
         this.numberOfAns = numberOfAns;
+        this.matchAlgo = matchAlgo;
     }
     
     public ModelPrefs() {
