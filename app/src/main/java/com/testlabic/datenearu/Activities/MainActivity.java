@@ -3,7 +3,6 @@ package com.testlabic.datenearu.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         StartAppAd.disableSplash();
         StartAppAd.disableAutoInterstitial();
         SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
-        int questions = sharedPref.getInt("isQuestionComplete",0);
+        int questions = sharedPref.getInt("isQuestionComplete", 0);
         //Log.e(TAG,"session number "+questions);
         /*SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -109,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         boolean refresh = getIntent().getBooleanExtra(Constants.refresh, false);
-       
+        
         //on create switch to the home fragment
-        changeFragment(new pagerTransition());
+        changeFragment(new pagerTransition(), true);
         
         //setCustomFontAndStyle(tabLayout1, 0);
         rating();
@@ -121,17 +120,17 @@ public class MainActivity extends AppCompatActivity {
                 
                 if (tabId == R.id.tab_message) {
                     // switch to messages fragment
-                    changeFragment(new AllMessagesListFragment());
+                    changeFragment(new AllMessagesListFragment(), false);
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_message);
                     nearby.removeBadge();
                 } else if (tabId == R.id.tab_home) {
                     // switch to messages fragment
-                    changeFragment(new pagerTransition());
+                    changeFragment(new pagerTransition(), true);
                 } else if (tabId == R.id.tab_profile) {
                     // switch to messages fragment
-                    changeFragment(new ProfileFragment());
+                    changeFragment(new ProfileFragment(), false);
                 } else if (tabId == R.id.tab_notif) {
-                    changeFragment(new NotificationParent());
+                    changeFragment(new NotificationParent(), false);
                     BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_notif);
                     nearby.removeBadge();
                 }
@@ -140,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
         });
         
     }
-    public void rating()
-    {
+    
+    public void rating() {
         //rating
         final RatingDialog ratingDialog = new RatingDialog.Builder(this)
                 .threshold(3)
@@ -156,13 +155,13 @@ public class MainActivity extends AppCompatActivity {
                         ref.updateChildren(updatefeedback).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(getApplicationContext(),"We'll try to improve. Thanks",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "We'll try to improve. Thanks", Toast.LENGTH_LONG).show();
                             }
                         });
-
+                        
                     }
                 }).build();
-
+        
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
@@ -352,23 +351,23 @@ public class MainActivity extends AppCompatActivity {
                                         
                                     }
                                 }, 2500);
-    
+                                
                                 Button btn = sDialog.findViewById(R.id.confirm_button);
                                 btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
                                 Button btn1 = sDialog.findViewById(R.id.cancel_button);
                                 btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
-    
+                                
                                 btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
                                 btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
-    
+                                
                                 TextView title = sDialog.findViewById(R.id.title_text);
-                                if(title!=null)
+                                if (title != null)
                                     title.setTypeface(Utils.SFProRegular(MainActivity.this));
-    
+                                
                                 TextView contentText = sDialog.findViewById(R.id.content_text);
-                                if(contentText!=null)
+                                if (contentText != null)
                                     contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
-    
+                                
                             }
                         });
                         
@@ -416,7 +415,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     
-    public void changeFragment(Fragment fragment) {
+    private boolean currentFragPager = false;
+    
+    public void changeFragment(Fragment fragment, Boolean home) {
+        if (home)
+            currentFragPager = true;
+        else
+            currentFragPager = false;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -445,9 +450,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    int questions=sharedPref.getInt("isQuestionComplete",0);
-                    questions=questions+1;
-                    editor.putInt("isQuestionComplete",questions);
+                    int questions = sharedPref.getInt("isQuestionComplete", 0);
+                    questions = questions + 1;
+                    editor.putInt("isQuestionComplete", questions);
                     //Log.e(TAG,"session number "+questions);
                     editor.apply();
                     Constants.uid = firebaseAuth.getUid();
@@ -575,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()&&dataSnapshot.getValue(ModelGift.class)!=null) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue(ModelGift.class) != null) {
                     if (!shownGifts)
                         checkForNewGifts();
                 }
@@ -615,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
                             if (dataSnapshot.getChildrenCount() == 1)
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     ModelGift modelGift = snapshot.getValue(ModelGift.class);
-                                    Log.e(TAG, "Started gift once "+dataSnapshot);
+                                    Log.e(TAG, "Started gift once " + dataSnapshot);
                                     startActivity(new Intent(MainActivity.this, Transparent_gift_Activity.class)
                                             .putExtra(Constants.giftModel, modelGift));
                                     
@@ -661,23 +666,21 @@ public class MainActivity extends AppCompatActivity {
                         
                         //update all sharedPref
                         
-                        if(user.getGender()!=null)
-                        {
+                        if (user.getGender() != null) {
                             SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
                             editor.putString(Constants.userGender, user.getGender()).apply();
                             editor.apply();
                         }
                         
-                        if(user.getInterestedIn()!=null)
-                        {
+                        if (user.getInterestedIn() != null) {
                             SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
                             editor.putString(Constants.userIntrGender, user.getGender()).apply();
                             editor.apply();
                         }
                         
-                        if (user.getUserName() == null||user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0) {
+                        if (user.getUserName() == null || user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0) {
                             //reRun Activity to fill info!
                             Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
                             Handler h = new Handler();
@@ -685,65 +688,61 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     startActivity(new Intent(MainActivity.this, NewUserSetup.class));
-    
+                                    
                                 }
-                            },350);
-                        }   if (!user.isQuestionaireComplete()) {
+                            }, 350);
+                        }
+                        if (!user.isQuestionaireComplete()) {
                             
                             SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
-                            editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, false);
+                            editor.putBoolean(Constants.isQuestionaireComplete + Constants.uid, false);
                             editor.apply();
                             BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
                             nearby.setBadgeCount(1);
                             SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor1 = sharedPref.edit();
-                            questionss=sharedPref.getInt("isQuestionComplete",0);
+                            questionss = sharedPref.getInt("isQuestionComplete", 0);
                             Handler h = new Handler();
                             h.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(questionss>=4) {
-                                        Log.e(TAG,"session no. "+questionss);
+                                    if (questionss >= 4) {
+                                        Log.e(TAG, "session no. " + questionss);
                                         startActivity(new Intent(MainActivity.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
                                     }
-                                   
+                                    
                                 }
                             }, 1500);
-                        }
-                        else if(user.isQuestionaireComplete())
-                        {
+                        } else if (user.isQuestionaireComplete()) {
                             SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
-                            editor.putBoolean(Constants.isQuestionaireComplete+Constants.uid, true);
+                            editor.putBoolean(Constants.isQuestionaireComplete + Constants.uid, true);
                             editor.apply();
                             BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
                             nearby.removeBadge();
                             
                         }
-                             if (user.getAbout() == null) {
-                           // Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
-                                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
-                                 nearby.setBadgeCount(1);
-                                 SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
-                                 SharedPreferences.Editor editor = prefs.edit();
-                                 editor.putBoolean(Constants.isAboutComplete+Constants.uid, false);
-                                 editor.apply();
+                        if (user.getAbout() == null) {
+                            // Toast.makeText(MainActivity.this, "Please fill the city or your location to continue!", Toast.LENGTH_SHORT).show();
+                            BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
+                            nearby.setBadgeCount(1);
+                            SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean(Constants.isAboutComplete + Constants.uid, false);
+                            editor.apply();
+                        } else if (user.getAbout() != null) {
+                            SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean(Constants.isAboutComplete + Constants.uid, true);
+                            editor.apply();
+                        } else {
+                            BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
+                            nearby.removeBadge();
                         }
-                        else if(user.getAbout()!=null)
-                             {
-                                 SharedPreferences prefs = getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
-                                 SharedPreferences.Editor editor = prefs.edit();
-                                 editor.putBoolean(Constants.isAboutComplete+Constants.uid, true);
-                                 editor.apply();
-                             }
-                        else
-                             {
-                                 BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
-                                 nearby.removeBadge();
-                             }
                     }
                 }
+                
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 
@@ -796,20 +795,38 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (Constants.uid != null)
             updateStatus(null);
-
+        
     }
-
+    
+    private boolean doubleBackToExitPressedOnce = false;
+    
     @Override
     public void onBackPressed() {
-        finishAffinity();
-        super.onBackPressed();
+        if (doubleBackToExitPressedOnce) {
+            finishAffinity();
+            super.onBackPressed();
+            return;
+        } else if (!currentFragPager) {
+            changeFragment(new pagerTransition(), true);
+        }
+        
+        this.doubleBackToExitPressedOnce = true;
+        //Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        
+        new Handler().postDelayed(new Runnable() {
+            
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
-
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-
+    
     private void updateStatus(final String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(Constants.status, status);
