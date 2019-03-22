@@ -222,10 +222,11 @@ public class QuestionFive extends Fragment implements BlockingStep {
     
     @Override
     public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
-        if (skipSelection) {
+        /*if (skipSelection) {
             if (getActivity() != null)
                 getActivity().finish();
-        } else if (ansSelected) {
+        } else*/
+            if (ansSelected) {
             // show progress and update the question on the DB
             
             dialog.show();

@@ -443,6 +443,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, IntroActivity.class));
                     finish();
                 } else {
+                    SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    int questions=sharedPref.getInt("isQuestionComplete",0);
+                    questions=questions+1;
+                    editor.putInt("isQuestionComplete",questions);
+                    //Log.e(TAG,"session number "+questions);
+                    editor.apply();
                     Constants.uid = firebaseAuth.getUid();
                     checkForNotification();
                     checkForNewMessages();
@@ -773,13 +780,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         shownLikeBacks = false;
-        SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        int questions=sharedPref.getInt("isQuestionComplete",0);
-        questions=questions+1;
-        editor.putInt("isQuestionComplete",questions);
-        //Log.e(TAG,"session number "+questions);
-        editor.apply();
+        
         shownGifts = false;
         updateStatus(Constants.offline);
         if (mAuth != null && authStateListener != null)
