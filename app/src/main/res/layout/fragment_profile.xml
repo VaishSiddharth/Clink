@@ -66,40 +66,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:text="Ralph Ray, 24"
+            android:layout_marginTop="7dp"
+            android:text="--------------------------"
             android:textColor="#3b3b3b"
             android:textSize="20sp" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+            android:layout_gravity="center"
+            android:gravity="center"
+
+            android:orientation="horizontal">
 
 
             <customfonts.MyTextView_SF_Pro_Display_Medium
                 android:id="@+id/about"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_toLeftOf="@id/edit"
-                android:text="One liner god, works at Froogle, "
-                android:textColor="#a9a9b0"
+                android:layout_marginLeft="30dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="---------------------"
+                android:textColor="#68686D"
                 android:textSize="14.3sp" />
 
             <ImageView
                 android:id="@+id/edit"
+                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="16dp"
                 android:src="@drawable/edit_ic" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

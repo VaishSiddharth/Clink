@@ -73,6 +73,7 @@
                 android:layout_gravity="center"
                 android:singleLine="false"
                 android:maxLines="3"
+                android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:text="Answer This Question"
