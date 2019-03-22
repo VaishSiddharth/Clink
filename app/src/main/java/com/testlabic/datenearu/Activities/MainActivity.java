@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean shownLikeBacks = false;
     private static boolean manygiftsactivity = true;
     private static boolean shownUnblurOnce = false;
+    int questionss;
     
     @Override
     protected void onStop() {
@@ -92,6 +93,13 @@ public class MainActivity extends AppCompatActivity {
          StartAppSDK.init(this, "211455651", false);
          StartAppAd.disableSplash();
          StartAppAd.disableAutoInterstitial();
+        SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        int questions = sharedPref.getInt("isQuestionComplete",0);
+        //Log.e(TAG,"session number "+questions);
+        /*SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("trialover", false);
+        editor.commit();*/
          
         boolean moveToLocationActivity = getIntent().getBooleanExtra(Constants.moveToLocationActivity, false);
         if (moveToLocationActivity)
@@ -165,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 ratingDialog.show();
             }
         }, 1000);
-       
-
     }
     
     private void blurtrial() {
@@ -686,11 +692,17 @@ public class MainActivity extends AppCompatActivity {
                             editor.apply();
                             BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_profile);
                             nearby.setBadgeCount(1);
+                            SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor1 = sharedPref.edit();
+                            questionss=sharedPref.getInt("isQuestionComplete",0);
                             Handler h = new Handler();
                             h.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                   // startActivity(new Intent(MainActivity.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                                    if(questionss>=4) {
+                                        Log.e(TAG,"session no. "+questionss);
+                                        startActivity(new Intent(MainActivity.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
+                                    }
                                    
                                 }
                             }, 1500);
@@ -764,6 +776,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         shownLikeBacks = false;
+        SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        int questions=sharedPref.getInt("isQuestionComplete",0);
+        questions=questions+1;
+        editor.putInt("isQuestionComplete",questions);
+        //Log.e(TAG,"session number "+questions);
+        editor.commit();
         shownGifts = false;
         updateStatus(Constants.offline);
         if (mAuth != null && authStateListener != null)
@@ -776,6 +795,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (Constants.uid != null)
             updateStatus(null);
+
     }
 
     @Override
