@@ -445,6 +445,14 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                             about.setText(Html.fromHtml(user.getAbout()));
                         }
                     }
+                    if(user != null && user.getAbout() == null && user.getOneLine()!=null)
+                    {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            about.setText(Html.fromHtml(user.getOneLine(), Html.FROM_HTML_MODE_COMPACT));
+                        } else {
+                            about.setText(Html.fromHtml(user.getOneLine()));
+                        }
+                    }
                     if(user!=null&&user.getGender()!=null)
                     {
                         String gender =user.getGender();
@@ -480,6 +488,8 @@ public class ClickedUser extends AppCompatActivity implements View.OnClickListen
                         imageUrl = user.getImageUrl();
                         imageUrl2 = user.getImage2();
                         imageUrl3 = user.getImage3();
+                        if(imageUrl1==null)
+                            imageUrl1=imageUrl;
                         //Log.e(TAG, imageUrl+ " "+ imageUrl2);
                         isBlur = user.getIsBlur();
                         view_pager_adapter = new View_Pager_Adapter(getSupportFragmentManager(), imageUrl1, imageUrl2, imageUrl3, isBlur);
