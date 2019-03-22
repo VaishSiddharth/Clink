@@ -54,7 +54,7 @@ public class application extends Application {
         };
         auth.addAuthStateListener(stateListener);
         setUpConnectionTest();
-        AddDropsIfNewDay();
+        //AddDropsIfNewDay();
     }
     
     private void AddDropsIfNewDay() {
