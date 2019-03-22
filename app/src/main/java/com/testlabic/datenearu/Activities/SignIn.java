@@ -1,18 +1,24 @@
 package com.testlabic.datenearu.Activities;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.HttpAuthHandler;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -41,19 +47,25 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 import com.testlabic.datenearu.Models.ModelUser;
 import com.testlabic.datenearu.NewUserSetupUtils.NewUserSetup;
 import com.testlabic.datenearu.R;
 import com.testlabic.datenearu.Utils.Constants;
+import com.testlabic.datenearu.Utils.Utils;
 import com.testlabic.datenearu.WaveDrawable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -69,6 +81,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     LoginButton loginButton;
     SweetAlertDialog loadingDialog;
     ImageView imageView;
+    int verCode;
     //ImageView applogo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +193,68 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             @Override
             public void onClick(View view) {
                 LoginManager.getInstance().logInWithReadPermissions(SignIn.this, Arrays.asList("public_profile"));
+            }
+        });
+    }
+    public void appUpdates() {
+        final String appPackageName = this.getPackageName();// getPackageName() from Context or Activity object
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            verCode = pInfo.versionCode;
+            String version = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        //Log.e(TAG,"Version in signIn "+verCode);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("appVersion");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String versionCode = dataSnapshot.getValue(String.class);
+                String verCodestr = String.valueOf(verCode);
+                //Log.e(TAG,"Version in signIn db "+versionCode);
+                if (!verCodestr.equalsIgnoreCase(versionCode)) {
+                    //Log.e(TAG,"Version in signIn db "+versionCode);
+                    SweetAlertDialog alertDialog = new SweetAlertDialog(SignIn.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("App needs Update !!")
+                            .setContentText("Some new features are added & bugs are fixed please update the app otherwise the app will crash frequently.\n" +
+                                    "If this doesn't works please uninstall and reinstall CLINK\n")
+                            .setConfirmButton("Update", new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    try {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                    } catch (android.content.ActivityNotFoundException anfe) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                                    }
+
+                                }
+                            });
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                    Button btn = alertDialog.findViewById(R.id.confirm_button);
+                    btn.setBackground(ContextCompat.getDrawable(SignIn.this, R.drawable.button_4_dialogue));
+                    Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                    btn1.setBackground(ContextCompat.getDrawable(SignIn.this, R.drawable.button_4_dialogue));
+
+                    {
+                        btn.setTypeface(Utils.SFPRoLight(SignIn.this));
+                        btn1.setTypeface(Utils.SFPRoLight(SignIn.this));
+
+                        TextView title = alertDialog.findViewById(R.id.title_text);
+                        if (title != null)
+                            title.setTypeface(Utils.SFProRegular(SignIn.this));
+
+                        TextView contentText = alertDialog.findViewById(R.id.content_text);
+                        if (contentText != null)
+                            contentText.setTypeface(Utils.SFPRoLight(SignIn.this));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -377,6 +452,18 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                appUpdates();
+            }
+        },1000);
+        super.onResume();
     }
 
     private void handleSignInResult(final GoogleSignInResult result) {
