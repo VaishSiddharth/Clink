@@ -455,7 +455,7 @@ public class chatFullScreen extends AppCompatActivity {
     
         final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("Help for you")
-                .setContentText("Can't think of anything to ask your date? Tap to get some intersting questions!")
+                .setContentText("Can't think of anything to ask your date? Tap to get some interesting questions!")
                 .setConfirmText("5 drops")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override

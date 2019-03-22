@@ -703,7 +703,7 @@ public class MainActivity extends AppCompatActivity {
                             h.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(questionss>=3) {
+                                    if(questionss>=4) {
                                         Log.e(TAG,"session no. "+questionss);
                                         startActivity(new Intent(MainActivity.this, QuestionsEnteringNewUser.class).putExtra(Constants.setupQuestions, true));
                                     }
