@@ -391,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void appUpdates() {
-        Log.e(TAG,"Version "+verCode);
+        //Log.e(TAG,"Version "+verCode);
         final String appPackageName = this.getPackageName();// getPackageName() from Context or Activity object
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -400,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("appVersion");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("appVersionAuth");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -495,7 +495,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Log.e(TAG, "Main Activity onresume called! " + Constants.uid);
-        appUpdates();
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                appUpdates();
+            }
+        },1000);
         //Toast.makeText(this, "Main Activity onresume called! "+Constants.uid, Toast.LENGTH_SHORT ).show();
         super.onResume();
         Constants.uid = FirebaseAuth.getInstance().getUid();
