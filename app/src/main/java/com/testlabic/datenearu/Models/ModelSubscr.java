@@ -1,8 +1,15 @@
 package com.testlabic.datenearu.Models;
 
+import com.google.firebase.database.PropertyName;
+
+import java.util.HashMap;
+
 public class ModelSubscr {
-   private int XPoints;
-    
+    @PropertyName("XPoints")
+    private int XPoints;
+   private long lastUpdateTime;
+   
+   @PropertyName("XPoints")
     public int getXPoints() {
         return XPoints;
     }
@@ -10,7 +17,7 @@ public class ModelSubscr {
     public ModelSubscr() {
     }
     
-    public ModelSubscr(int XPoints) {
-        this.XPoints = XPoints;
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
     }
 }

@@ -12,11 +12,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.Utils.Constants;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
@@ -54,21 +57,62 @@ public class application extends Application {
         };
         auth.addAuthStateListener(stateListener);
         setUpConnectionTest();
-        //AddDropsIfNewDay();
+        if(Constants.uid!=null)
+        AddDropsIfNewDay();
     }
     
     private void AddDropsIfNewDay() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
             .child(Constants.xPoints)
             .child(Constants.uid);
-    
     
     reference.addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if(dataSnapshot.getValue()!=null)
             {
-            
+                ModelSubscr modelSubscr = dataSnapshot.getValue(ModelSubscr.class);
+                if (modelSubscr != null) {
+                    if(modelSubscr.getLastUpdateTime()>0)
+                    {
+                        long lastTimeStamp = modelSubscr.getLastUpdateTime();
+                        //if current timeStamp is greater than prev time by 24 hours, increase the drops
+                        //Log.e("App ", lastTimeStamp+ " and current time "+ System.currentTimeMillis());
+                        
+                        int lastDrops = modelSubscr.getXPoints();
+                        if(System.currentTimeMillis()- lastTimeStamp>24*60*60*1000)
+                        {
+                            //update
+                           
+                            HashMap<String, Object> dropsUpdate = new HashMap<>();
+                            dropsUpdate.put(Constants.xPoints,lastDrops+Constants.dailyDrops );
+                            reference.updateChildren(dropsUpdate);
+                            
+                            HashMap<String, Object> timeStampUpdate = new HashMap<>();
+                            timeStampUpdate.put("lastUpdateTime", System.currentTimeMillis());
+                            
+                            reference.updateChildren(timeStampUpdate);
+                            Log.e("App: ", "Updated drops");
+                        }
+                    }
+                    else
+                    {
+                        //For First time
+                        int lastDrops = modelSubscr.getXPoints();
+                            //update
+                     
+                        HashMap<String, Object> dropsUpdate = new HashMap<>();
+                        dropsUpdate.put(Constants.xPoints,lastDrops+Constants.dailyDrops );
+                        reference.updateChildren(dropsUpdate);
+    
+                        HashMap<String, Object> timeStampUpdate = new HashMap<>();
+                        timeStampUpdate.put("lastUpdateTime", System.currentTimeMillis());
+    
+                        reference.updateChildren(timeStampUpdate);
+                        
+                    }
+                   
+                }
             }
         }
     

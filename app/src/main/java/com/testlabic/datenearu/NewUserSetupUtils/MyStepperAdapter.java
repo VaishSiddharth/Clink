@@ -68,7 +68,7 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
                 builder
                         .setEndButtonLabel("COMPLETE")
                         .setBackButtonLabel("BACK")
-                        .setTitle("Priorities");
+                        .setTitle("About you");
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported position: " + position);
