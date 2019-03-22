@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
         
         //initialize the startappSDK
         
-         StartAppSDK.init(this, "211455651", false);
-         StartAppAd.disableSplash();
-         StartAppAd.disableAutoInterstitial();
+        StartAppSDK.init(this, "211455651", false);
+        StartAppAd.disableSplash();
+        StartAppAd.disableAutoInterstitial();
         SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
         int questions = sharedPref.getInt("isQuestionComplete",0);
         //Log.e(TAG,"session number "+questions);
@@ -110,10 +110,7 @@ public class MainActivity extends AppCompatActivity {
         
         boolean refresh = getIntent().getBooleanExtra(Constants.refresh, false);
        
-        /*
-        on create switch to the home fragment
-         */
-        
+        //on create switch to the home fragment
         changeFragment(new pagerTransition());
         
         //setCustomFontAndStyle(tabLayout1, 0);
@@ -782,7 +779,7 @@ public class MainActivity extends AppCompatActivity {
         questions=questions+1;
         editor.putInt("isQuestionComplete",questions);
         //Log.e(TAG,"session number "+questions);
-        editor.commit();
+        editor.apply();
         shownGifts = false;
         updateStatus(Constants.offline);
         if (mAuth != null && authStateListener != null)

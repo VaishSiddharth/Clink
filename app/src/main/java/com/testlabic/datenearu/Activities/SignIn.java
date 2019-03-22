@@ -243,6 +243,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
 
     private void updateDatabaseWithUser(final FirebaseUser mCurrentUser, GoogleSignInAccount account, Profile profile, final Boolean fromFacebook) {
 
+        if(loadingDialog!=null)
         loadingDialog.show();
         
         String firstName = null;
@@ -279,6 +280,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 xPointsRef.updateChildren(updatePoints).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        if(loadingDialog!=null)
                         loadingDialog.dismiss();
                         if (fromFacebook) {
                             startActivity(new Intent(SignIn.this, MainActivity.class));

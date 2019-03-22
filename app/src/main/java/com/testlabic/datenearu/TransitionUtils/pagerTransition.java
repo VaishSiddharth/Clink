@@ -70,6 +70,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -130,7 +131,7 @@ public class pagerTransition extends Fragment {
         contactsUid = new ArrayList<>();
         sharedPreferences = getActivity().getSharedPreferences(Constants.userDetailsOff, MODE_PRIVATE);
         interestedGender = sharedPreferences.getString(Constants.userIntrGender, "female");
-        curUsersMatchSeq = sharedPreferences.getString(Constants.matchAlgo, null);
+        curUsersMatchSeq = sharedPreferences.getString(Constants.matchAlgo, "ABCDEF");
         city = sharedPreferences.getString(Constants.cityLabel, null);
         editor = sharedPreferences.edit();
         filterList = rootView.findViewById(R.id.filter);
@@ -656,17 +657,17 @@ public class pagerTransition extends Fragment {
         
         double dist = prefs != null ? prefs.getDistanceLimit() : 0.0;
         distance.setText(String.valueOf((int) dist) + " km");
-        distance_seek.setProgress((int) dist/10);
+        distance_seek.setProgress((int) dist/50);
         
         distance_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 
-                distance.setText(String.valueOf((int) (double) progress * 10) + " km");
+                distance.setText(String.valueOf((int) (double) progress * 50) + " km");
                 // update the database
                 
                 updateMap = new HashMap<>();
-                updateMap.put("distanceLimit", (double) progress*10);
+                updateMap.put("distanceLimit", (double) progress*50);
                 
             }
             
@@ -710,7 +711,7 @@ public class pagerTransition extends Fragment {
         
     }
     
-    private void fillViewPager(final ArrayList<ModelUser> displayArrayList) {
+    private void fillViewPager() {
         
         indicatorTv = (TextView) rootView.findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
@@ -720,23 +721,32 @@ public class pagerTransition extends Fragment {
         for (int i = 0; i < displayArrayList.size(); i++) {
             fragments.add(new CommonFragment());
         }
-        
+       // Log.e(TAG, "The size of display array list is "+ displayArrayList.size());
         if (getActivity() != null) {
             adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
+                @NonNull
                 @Override
                 public Fragment getItem(int position) {
+                    /*if(position>fragments.size())
+                    {
+                        position--;
+                    }*/
                     CommonFragment fragment = fragments.get(position);
                     fragment.bindData(displayArrayList.get(position));
                     return fragment;
-                }
+                
+                    }
                 
                 @Override
                 public int getCount() {
+                   // Log.e(TAG, "Returning count as "+ displayArrayList.size());
                     return displayArrayList.size();
                 }
             };
             
             viewPager.setAdapter(adapter);
+            //remove listener after setting adapter
+            cleanup();
             
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -763,9 +773,9 @@ public class pagerTransition extends Fragment {
         displayArrayList = new ArrayList<>();
         displayArrayList.clear();
         Log.e(TAG, "Download list called with " + city);
-        interestedGender = sharedPreferences.getString(Constants.userIntrGender, "male");
+        interestedGender = sharedPreferences.getString(Constants.userIntrGender, null);
         
-        if (city == null) {
+        if (city == null || interestedGender == null) {
             fetchPrefsCalledOnce = false;
             fetchPreferences();
         } else {
@@ -778,6 +788,7 @@ public class pagerTransition extends Fragment {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     if (dataSnapshot.getValue() != null) {
+                        //Log.e(TAG, "Child added!");
                         ModelUser item = dataSnapshot.getValue(ModelUser.class);
                         if (item != null) {
                             filterList(item);
@@ -788,18 +799,28 @@ public class pagerTransition extends Fragment {
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Log.e(TAG, "The child changed triggeres");
-                    
-                    //downloadList();
-                    if(adapter!=null)
-                        adapter.notifyDataSetChanged();
                 }
                 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    Log.e(TAG, "The child removerd triggeres");
+                    Log.e(TAG, "The child removed triggeres");
+                   //remove the child from list and call adapter.notify
+                    /*if (dataSnapshot.getValue() != null) {
+                        ModelUser item = dataSnapshot.getValue(ModelUser.class);
+                        if(displayArrayList.size()>0)
+                        {
+                            for (Iterator<ModelUser> iterator = displayArrayList.iterator(); iterator.hasNext(); ) {
+                                ModelUser user = iterator.next();
+                                if (item != null && user.getUid().equals(item.getUid())){
+                                    iterator.remove();
+                                    if(adapter!=null)
+                                        adapter.notifyDataSetChanged();
+                                }
+                                
+                            }
+                        }
+                    }*/
                     downloadList();
-                    if(adapter!=null)
-                        adapter.notifyDataSetChanged();
                 }
                 
                 @Override
@@ -826,17 +847,18 @@ public class pagerTransition extends Fragment {
                         nothere(true);
                     else
                         nothere(false);
-                    sortWithMatch();
+                    //sortWithMatch();
                     emptyView.setVisibility(View.INVISIBLE);
-                    Collections.sort(displayArrayList, new Comparator<ModelUser>() {
+                    /*Collections.sort(displayArrayList, new Comparator<ModelUser>() {
                         @Override
                         public int compare(ModelUser v1, ModelUser v2) {
                             double sub = v1.getMatchIndex() - (v2.getMatchIndex());
                             //Log.e(TAG, "The sub is "+ v1.getUserName() + " second name "+v2.getUserName()+" sum is " +sub);
                             return (int) sub;
                         }
-                    });
-                    fillViewPager(displayArrayList);
+                    });*/
+                    Collections.shuffle(displayArrayList);
+                    fillViewPager();
                 }
                 
                 @Override
@@ -871,11 +893,15 @@ public class pagerTransition extends Fragment {
                 && distanceBetweenThem(item.getLocation()) <= prefs.getDistanceLimit() &&!(contactsUid.contains(item.getUid()))) {
             
             if(item.getUid()!=null) {
-                if(!item.getUid().equals(Constants.uid))
+                if(!item.getUid().equals(Constants.uid)) {
                     displayArrayList.add(item);
+                }
             }
-            else
+            else {
                 displayArrayList.add(item);
+                if(adapter!=null)
+                    adapter.notifyDataSetChanged();
+            }
            
         }
     }

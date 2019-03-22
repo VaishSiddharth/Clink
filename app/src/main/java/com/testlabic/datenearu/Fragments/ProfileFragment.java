@@ -363,7 +363,7 @@ public class ProfileFragment extends Fragment {
         final EditText editText = editTextDialog.findViewById(R.id.ediText);
         editText.setText(text);
         
-        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+        SweetAlertDialog alertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
                 // .setTitleText("Send a one-time message (25 pts)?")
                 .setCustomView(editTextDialog)
                 .setConfirmButton("Update!", new SweetAlertDialog.OnSweetClickListener() {
@@ -443,9 +443,14 @@ public class ProfileFragment extends Fragment {
                         }
                         
                     }
-                })
-                .show();
-        ;
+                });
+                alertDialog.show();
+    
+        Button btn = alertDialog.findViewById(R.id.confirm_button);
+        btn.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_4_dialogue));
+        if (getContext() != null) {
+            btn.setTypeface(Utils.SFPRoLight(getContext()));
+        }
     }
     
     private void fillDesc() {

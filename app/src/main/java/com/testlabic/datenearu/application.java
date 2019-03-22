@@ -54,6 +54,29 @@ public class application extends Application {
         };
         auth.addAuthStateListener(stateListener);
         setUpConnectionTest();
+        AddDropsIfNewDay();
+    }
+    
+    private void AddDropsIfNewDay() {
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+            .child(Constants.xPoints)
+            .child(Constants.uid);
+    
+    
+    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.getValue()!=null)
+            {
+            
+            }
+        }
+    
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+        }
+    });
     }
     
     private void setUpConnectionTest() {

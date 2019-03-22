@@ -76,7 +76,6 @@ public class NewUserSetup extends AppCompatActivity implements StepperLayout.Ste
         adapter.createStep(2);
         adapter.createStep(3);
         adapter.createStep(4);
-        adapter.createStep(5);
         mStepperLayout.setAdapter(adapter);
         setUpLocation();
         

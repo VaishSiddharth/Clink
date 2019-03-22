@@ -33,9 +33,6 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
         else
             if(position==3)
                 return new OneLineDesc();
-        else
-            if(position==4)
-                return new SeriousItems();
         
       //  Bundle b = new Bundle();
       //  b.putInt(CURRENT_STEP_POSITION_KEY, position);
@@ -69,12 +66,6 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
                 break;
             case 3:
                 builder
-                        .setEndButtonLabel("NEXT")
-                        .setBackButtonLabel("BACK")
-                        .setTitle("About you");
-                break;
-            case 4:
-                builder
                         .setEndButtonLabel("COMPLETE")
                         .setBackButtonLabel("BACK")
                         .setTitle("Priorities");
@@ -87,6 +78,6 @@ public class MyStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 }
