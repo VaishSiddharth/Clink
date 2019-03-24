@@ -371,6 +371,8 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
                                 reference.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        
+                                        
                                         //delete the messages also!
                                         
                                         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()

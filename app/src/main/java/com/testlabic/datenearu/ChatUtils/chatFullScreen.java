@@ -824,8 +824,8 @@ public class chatFullScreen extends AppCompatActivity {
         delRef.setValue(null);
         
         if (sendToUid != null) {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.CHATS).child(myUid).child(sendToUid);
+            Query ref = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.CHATS).child(myUid).child(sendToUid).limitToLast(500);
             
             ref.addValueEventListener(new ValueEventListener() {
                 @Override

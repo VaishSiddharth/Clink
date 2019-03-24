@@ -756,8 +756,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         delRef.setValue(null);
         
         if (sendToUid != null) {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.CHATS).child(myUid).child(sendToUid);
+            Query ref = FirebaseDatabase.getInstance().getReference()
+                    .child(Constants.CHATS).child(myUid).child(sendToUid).limitToLast(500);
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -954,8 +954,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         updateStatus(Constants.status + Constants.uid, Constants.offline);
-
-
+        
     }
     
     @Override

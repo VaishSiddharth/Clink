@@ -67,6 +67,8 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
     
     private void setUpOnlineStatus(String contactUid, final ImageView onlineStatus) {
         
+        if(contactUid==null)
+            return;
         onlineStatusRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.usersStatus).child(contactUid)
                 .child("status");
@@ -97,15 +99,45 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
         };
         onlineStatusRef.addValueEventListener(onlineStatusListener);
     }
-    
+    private void fetchImageFromUserInfo(final ImageView photo, String uid, final Context context) {
+        
+        if(uid==null)
+            return;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(uid)
+                .child("imageUrl");
+        
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue(String.class)!=null)
+                {
+                    String url = dataSnapshot.getValue(String.class);
+                    Glide.with(context).load(url).into(photo);
+                }
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            
+            }
+        });
+        
+        
+    }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         
         final ModelLastMessage lastMessage = allModelArrayList.get(position);
         holder.name.setText(allModelArrayList.get(position).getName());
-        Glide.with(context).load(lastMessage.getImageUrl()).into(holder.image);
+        fetchImageFromUserInfo(holder.image, lastMessage.getUid(), context);
+        //Glide.with(context).load(lastMessage.getImageUrl()).into(holder.image);
         
         setUpOnlineStatus(allModelArrayList.get(position).getUid(), holder.onlineStat);
+        
+        if(lastMessage.getUid()==null)
+            return;
         
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.CHATS + Constants.unread)
                 .child(Constants.uid + Constants.unread)

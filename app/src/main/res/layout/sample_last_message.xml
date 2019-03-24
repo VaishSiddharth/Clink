@@ -28,7 +28,8 @@
             android:padding="6dp"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:src="@drawable/profile"/>
+            android:src="@drawable/final_app_logo1bw"
+            />
 
         <LinearLayout
             android:layout_weight="1"
@@ -49,7 +50,7 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Keith Mills"
+                    android:text="loading.."
                     android:textSize="14sp"
                     android:textColor="#212121"/>
 

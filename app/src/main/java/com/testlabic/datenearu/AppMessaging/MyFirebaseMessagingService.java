@@ -54,8 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String sendToName = data.get("sendToName");
         
         if(sendToName!=null&&sendToUid!=null)
-        {
-            intent = new Intent(this, chatFullScreen.class);
+        {intent = new Intent(this, chatFullScreen.class);
             intent.putExtra(Constants.sendToName, sendToName);
             intent.putExtra(Constants.sendToUid, sendToUid);
             

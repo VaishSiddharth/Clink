@@ -199,7 +199,7 @@ public class MatchCalculator extends AppCompatActivity {
                                   */
                 String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                 score = score>5?5:score;
-                String message = userName + " attempted match with you, and passed your test with score of "+score+"/5" + "\nConnect with him by accepting the request.\n";
+                String message = userName + " attempted match with you, and passed your test with score of "+score+"/5" + "\nConnect with him/er by accepting the request.\n";
 
                 long timeStamp = -1 * new Date().getTime();
                 String url = String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());

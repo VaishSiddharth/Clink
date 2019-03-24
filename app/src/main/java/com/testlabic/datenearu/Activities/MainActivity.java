@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
                     SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("App needs Update !!")
                             .setContentText("Some new features are added & bugs are fixed please update the app otherwise the app will crash frequently.\n" +
-                                    "If this doesn't works please uninstall and reinstall CLINK\n")
+                                    "If this doesn't work please uninstall and reinstall CLINK\n")
                             .setConfirmButton("Update", new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {

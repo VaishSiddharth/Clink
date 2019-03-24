@@ -77,7 +77,7 @@ public class SplashScreen extends AppCompatActivity {
                 //((WaveDrawable) mWaveDrawable).setLevel(20);
 
                 imageView.setImageDrawable(mWaveDrawable);
-                Toast.makeText(getApplicationContext(),"Your Internet seems to be very slow. Please Wait...",Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(),"Your Internet seems to be very slow. Please Wait...",Toast.LENGTH_LONG).show();
             }
         },5000);
 

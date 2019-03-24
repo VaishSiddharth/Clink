@@ -28,7 +28,7 @@ public class Button_SF_Pro_Display_Medium extends Button {
 
     private void init() {
         if (!isInEditMode()) {
-            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/SF-Pro-Display-Medium.otf");
+            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/SF-Pro-Display-Light.otf");
             setTypeface(tf);
         }
     }
