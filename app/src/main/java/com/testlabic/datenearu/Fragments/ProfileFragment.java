@@ -528,6 +528,7 @@ public class ProfileFragment extends Fragment {
                     if (user != null && user.getUserName() != null && getContext() != null) {
                         Glide.with(getContext()).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(displayImage);
                         //Glide.with(Profile.this).load(user.getImageUrl()).into(displayImage);
+                        username.setText(user.getUserName());
                     }
                     
                 }
