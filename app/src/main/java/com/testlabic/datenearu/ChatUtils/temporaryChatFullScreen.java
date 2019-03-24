@@ -788,14 +788,14 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         if (bar != null)
             bar.setVisibility(View.GONE);
     }
-    
+
     private void checkUsersStatus() {
           /*
         Before sending message check if user is on your chat screen and online, else move the messages to unread node!
          */
         //Querying database to check status
-        
-        DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
+
+        final DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.usersStatus)
                 .child(Constants.uid)
                 .child(Constants.status + sendToUid);
@@ -803,20 +803,26 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //check if user is online for current user
+                Log.e(TAG, statusCheckRef.toString());
                 if (dataSnapshot.getValue(String.class) != null) {
-                    isOnlineForCurrentUser = true;
+                    String status=dataSnapshot.getValue(String.class);
+                    Log.e(TAG, "In if"+status);
+                    if(status.equalsIgnoreCase(Constants.online))
+                        isOnlineForCurrentUser = true;
                 }
-                // Log.e(TAG, "User is offline move to unread");
-                isOnlineForCurrentUser = false;
-                // send message to unread
+                else {
+                    // Log.e(TAG, "User is offline move to unread");
+                    isOnlineForCurrentUser = false;
+                    // send message to unread
+                }
             }
-            
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            
+
             }
         });
-        
+
     }
     
     private void sendMessage(final String messageText, boolean isOnlineOtherUser) {
@@ -942,12 +948,13 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         reference.updateChildren(updateStatus);
         
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
-        updateStatus(Constants.status + sendToUid, Constants.offline);
-        
+        updateStatus(Constants.status + Constants.uid, Constants.offline);
+
+
     }
     
     @Override
@@ -958,12 +965,12 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         }
         super.onDestroy();
     }
-    
+
     @Override
     protected void onStop() {
         super.onStop();
-        updateStatus(Constants.status + sendToUid, Constants.offline);
-        
+        updateStatus(Constants.status + Constants.uid, Constants.offline);
+
     }
     
     @Override
