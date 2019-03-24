@@ -58,6 +58,7 @@ import com.testlabic.datenearu.Models.LatLong;
 import com.testlabic.datenearu.HelpUtils.NearbyRestaurant;
 import com.testlabic.datenearu.Models.ModelSubscr;
 import com.testlabic.datenearu.R;
+import com.testlabic.datenearu.TransitionUtils.CommonFragment;
 import com.testlabic.datenearu.Utils.Constants;
 import com.testlabic.datenearu.Utils.Utils;
 
@@ -869,18 +870,22 @@ public class chatFullScreen extends AppCompatActivity {
         
         DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.usersStatus)
-                .child(sendToUid)
+                .child(Constants.uid)
                 .child(Constants.status + sendToUid);
         statusCheckRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //check if user is online for current user
                 if (dataSnapshot.getValue(String.class) != null) {
-                    isOnlineForCurrentUser = true;
+                    String status=dataSnapshot.getValue(String.class);
+                    if(status.equalsIgnoreCase(Constants.online))
+                        isOnlineForCurrentUser = true;
                 }
-               // Log.e(TAG, "User is offline move to unread");
-                isOnlineForCurrentUser = false;
-                // send message to unread
+                else {
+                    // Log.e(TAG, "User is offline move to unread");
+                    isOnlineForCurrentUser = false;
+                    // send message to unread
+                }
             }
             
             @Override
@@ -958,8 +963,9 @@ public class chatFullScreen extends AppCompatActivity {
     private void updateStatus(String key, String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(key, status);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
-                .child(Constants.uid);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.usersStatus)
+                .child(sendToUid);
         reference.updateChildren(updateStatus);
         
     }
