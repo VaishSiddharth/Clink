@@ -11,6 +11,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -76,6 +77,7 @@ public class SplashScreen extends AppCompatActivity {
                 //((WaveDrawable) mWaveDrawable).setLevel(20);
 
                 imageView.setImageDrawable(mWaveDrawable);
+                Toast.makeText(getApplicationContext(),"Your Internet seems to be very slow. Please Wait...",Toast.LENGTH_LONG).show();
             }
         },5000);
 
