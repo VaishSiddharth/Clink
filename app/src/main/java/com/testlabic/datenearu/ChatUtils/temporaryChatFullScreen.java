@@ -797,7 +797,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         
         DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.usersStatus)
-                .child(sendToUid)
+                .child(Constants.uid)
                 .child(Constants.status + sendToUid);
         statusCheckRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -970,7 +970,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateStatus(Constants.status, Constants.online);
-        updateStatus(Constants.status + sendToUid, Constants.online);
+        updateStatus(Constants.status + Constants.uid, Constants.online);
         checkUsersStatus();
     }
 }

@@ -99,8 +99,8 @@ public class ChatListAdapter extends BaseAdapter {
                             holder1.messageTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16))
                             + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"));
                     holder1.timeTextView.setText(SIMPLE_DATE_FORMAT.format(message.getSendingTime()));
-                    if(message.getSentPhotoUrl()!=null)
-                        Glide.with(context).load(message.getSentPhotoUrl()).into(holder1.imageView);
+                    /*if(message.getSentPhotoUrl()!=null)
+                        Glide.with(context).load(message.getSentPhotoUrl()).into(holder1.imageView);*/
                 }
               
                 
@@ -114,8 +114,8 @@ public class ChatListAdapter extends BaseAdapter {
                     holder2.timeTextView = (TextView) v.findViewById(R.id.textview_time);
                     holder2.messageStatus = (ImageView) v.findViewById(R.id.readStat);
                     holder2.imageView = v.findViewById(R.id.image);
-                    if(message.getSentPhotoUrl()!=null)
-                    Glide.with(context).load(message.getSentPhotoUrl()).into(holder2.imageView);
+                    /*if(message.getSentPhotoUrl()!=null)
+                    Glide.with(context).load(message.getSentPhotoUrl()).into(holder2.imageView);*/
     
                     v.setTag(holder2);
 

@@ -87,7 +87,8 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
         setUpOnlineStatus(model.getUid(), statusOnline);
         
         name.setText(model.getName());
-        Glide.with(context).load(getBiggerImage(model.getImage())).into(photo);
+        fetchImageFromUserInfo(photo, model.getUid(), context);
+       
         if(model.getBlockStatus())
         {
             //show connection as blocked
@@ -135,6 +136,34 @@ public class ConnectionViewHolder extends RecyclerView.ViewHolder {
         /*if(model.getTimeStamp()!=null)
             setUpTimer(timer, (long) model.getTimeStamp().get(Constants.timeStamp), model.getUid());*/
     
+    }
+    
+    private void fetchImageFromUserInfo(final ImageView photo, String uid, final Context context) {
+        
+        if(uid==null)
+            return;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.userInfo)
+                .child(uid)
+                .child("imageUrl");
+        
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue(String.class)!=null)
+                {
+                    String url = dataSnapshot.getValue(String.class);
+                    Glide.with(context).load(url).into(photo);
+                }
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
+       
     }
     
     private void setUpTimer(final TextView timer, final long time, String uid) {

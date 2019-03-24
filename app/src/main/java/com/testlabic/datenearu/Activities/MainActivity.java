@@ -879,6 +879,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else if (!currentFragPager) {
             changeFragment(new pagerTransition(), true);
+            //set bottom bar to pagertransition
+            bottomBar.selectTabAtPosition(0);
         }
         
         this.doubleBackToExitPressedOnce = true;
