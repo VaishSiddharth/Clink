@@ -56,6 +56,32 @@ public class SplashScreen extends AppCompatActivity {
         //((WaveDrawable) mWaveDrawable).setLevel(20);
 
         imageView.setImageDrawable(mWaveDrawable);
+
+        //new code for black&white loder
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                WaveDrawable mWaveDrawable = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    mWaveDrawable = new WaveDrawable(getDrawable(R.drawable.noherebw));
+                }
+                if (mWaveDrawable != null) {
+                    mWaveDrawable.setWaveAmplitude(30);
+                    mWaveDrawable.setWaveLength(580);
+                    mWaveDrawable.setWaveSpeed(12);
+                    mWaveDrawable.setIndeterminate(true);
+                }
+
+                //((WaveDrawable) mWaveDrawable).setLevel(20);
+
+                imageView.setImageDrawable(mWaveDrawable);
+            }
+        },5000);
+
+
+
+
         //line1.setAnimation(uptodown);
         //line3.setAnimation(downtoup);
         AlphaAnimation anim1 = new AlphaAnimation(0.0f, 1.0f);

@@ -939,14 +939,15 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         //message.setMessageStatus(Constants.DELIVERED);
         
     }
-    
+
     private void updateStatus(String key, String status) {
         HashMap<String, Object> updateStatus = new HashMap<>();
         updateStatus.put(key, status);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.usersStatus)
-                .child(Constants.uid);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.usersStatus)
+                .child(sendToUid);
         reference.updateChildren(updateStatus);
-        
+
     }
 
     @Override
