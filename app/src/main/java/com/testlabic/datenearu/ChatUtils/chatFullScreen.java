@@ -868,7 +868,7 @@ public class chatFullScreen extends AppCompatActivity {
          */
         //Querying database to check status
         
-        DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
+        final DatabaseReference statusCheckRef = FirebaseDatabase.getInstance().getReference()
                 .child(Constants.usersStatus)
                 .child(Constants.uid)
                 .child(Constants.status + sendToUid);
@@ -876,8 +876,10 @@ public class chatFullScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //check if user is online for current user
+                Log.e(TAG, statusCheckRef.toString());
                 if (dataSnapshot.getValue(String.class) != null) {
                     String status=dataSnapshot.getValue(String.class);
+                    Log.e(TAG, "In if"+status);
                     if(status.equalsIgnoreCase(Constants.online))
                         isOnlineForCurrentUser = true;
                 }
@@ -973,7 +975,7 @@ public class chatFullScreen extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        updateStatus(Constants.status + sendToUid, Constants.offline);
+        updateStatus(Constants.status + Constants.uid, Constants.offline);
         
         
     }
@@ -991,7 +993,7 @@ public class chatFullScreen extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        updateStatus(Constants.status + sendToUid, Constants.offline);
+        updateStatus(Constants.status + Constants.uid, Constants.offline);
         
     }
     
@@ -999,7 +1001,7 @@ public class chatFullScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateStatus(Constants.status, Constants.online);
-        updateStatus(Constants.status + sendToUid, Constants.online);
+        updateStatus(Constants.status + Constants.uid, Constants.online);
         checkUsersStatus();
     }
 }
