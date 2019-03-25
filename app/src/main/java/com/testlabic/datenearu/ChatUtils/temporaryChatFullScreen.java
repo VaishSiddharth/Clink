@@ -228,7 +228,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 if(dataSnapshot.getValue(String.class)!=null)
                 {
                     ImageView image = findViewById(R.id.image);
-                    Glide.with(imageView.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
+                    Glide.with(image.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
                 }
             }
         

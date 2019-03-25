@@ -91,7 +91,7 @@ public class chatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
-    ImageView imageView, help, emojis,back;
+    ImageView imageView, help, emojis,back, statusOnline;
     boolean isTemporaryContact = false;
     private View rootView;
     private ArrayList<ChatMessage> messages = new ArrayList<>();
@@ -194,6 +194,8 @@ public class chatFullScreen extends AppCompatActivity {
         
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         bar = findViewById(R.id.progress_bar);
+        statusOnline = findViewById(R.id.statusOnline);
+        statusOnline.setVisibility(View.INVISIBLE);
         bar.setVisibility(View.VISIBLE);
         back=findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +229,7 @@ public class chatFullScreen extends AppCompatActivity {
                 if(dataSnapshot.getValue(String.class)!=null)
                 {
                     ImageView image = findViewById(R.id.image);
-                    Glide.with(imageView.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
+                    Glide.with(image.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
                 }
             }
     
@@ -354,6 +356,7 @@ public class chatFullScreen extends AppCompatActivity {
                         {
                             //show temporay contact info
                             isTemporaryContact = true;
+                            
                             Toast.makeText(chatFullScreen.this, "This is a temporary contact, and will disappear if you don't reply in 24 hours!", Toast.LENGTH_SHORT).show();
                         }
             }
@@ -880,12 +883,15 @@ public class chatFullScreen extends AppCompatActivity {
                 if (dataSnapshot.getValue(String.class) != null) {
                     String status=dataSnapshot.getValue(String.class);
                     Log.e(TAG, "In if"+status);
-                    if(status.equalsIgnoreCase(Constants.online))
+                    if(status.equalsIgnoreCase(Constants.online)) {
                         isOnlineForCurrentUser = true;
+                        statusOnline.setVisibility(View.VISIBLE);
+                    }
                 }
                 else {
                     // Log.e(TAG, "User is offline move to unread");
                     isOnlineForCurrentUser = false;
+                    statusOnline.setVisibility(View.INVISIBLE);
                     // send message to unread
                 }
             }

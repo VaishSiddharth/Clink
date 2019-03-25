@@ -161,6 +161,7 @@ public class ChatListAdapter extends BaseAdapter {
 
             TextView date = v.findViewById(R.id.date);
 
+            if(date!=null)
             setTimeTextVisibility(message.getSendingTime(), previousTs, date);
 
 

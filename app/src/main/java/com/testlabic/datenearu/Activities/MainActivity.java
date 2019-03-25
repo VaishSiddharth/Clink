@@ -751,7 +751,7 @@ public class MainActivity extends AppCompatActivity {
                             editor.apply();
                         }
 
-                        if (user.getUserName() == null || user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0) {
+                        if (user.getUserName() == null || user.getInterestedIn() == null || user.getGender() == null || user.getNumeralAge() < 0 || user.getUserName().equals("")) {
                             //reRun Activity to fill info!
                             Toast.makeText(MainActivity.this, "Please fill the details to continue!", Toast.LENGTH_SHORT).show();
                             Handler h = new Handler();

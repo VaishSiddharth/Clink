@@ -901,6 +901,8 @@ public class pagerTransition extends Fragment {
             if(item.getUid()!=null) {
                 if(!item.getUid().equals(Constants.uid)) {
                     displayArrayList.add(item);
+                    if(adapter!=null)
+                        adapter.notifyDataSetChanged();
                 }
             }
             else {

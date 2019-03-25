@@ -6,7 +6,7 @@ android {
         applicationId "com.testlabic.datenearu"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 13
+        versionCode 14
         versionName "1.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
