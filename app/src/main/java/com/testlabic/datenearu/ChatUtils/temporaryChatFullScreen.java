@@ -88,6 +88,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
+    TextView onlineStatus;
     ImageView imageView, help, emojis,back;
     boolean isTemporaryContact = false;
     private View rootView;
@@ -191,7 +192,8 @@ public class temporaryChatFullScreen extends AppCompatActivity {
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         bar = findViewById(R.id.progress_bar);
         bar.setVisibility(View.VISIBLE);
-
+        onlineStatus = findViewById(R.id.onlineStatus);
+        onlineStatus.setVisibility(View.GONE);
         back=findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +230,7 @@ public class temporaryChatFullScreen extends AppCompatActivity {
                 if(dataSnapshot.getValue(String.class)!=null)
                 {
                     ImageView image = findViewById(R.id.image);
-                    Glide.with(image.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
+                    Glide.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
                 }
             }
         
@@ -803,16 +805,22 @@ public class temporaryChatFullScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //check if user is online for current user
-                Log.e(TAG, statusCheckRef.toString());
+                //Log.e(TAG, statusCheckRef.toString());
                 if (dataSnapshot.getValue(String.class) != null) {
                     String status=dataSnapshot.getValue(String.class);
                     Log.e(TAG, "In if"+status);
-                    if(status.equalsIgnoreCase(Constants.online))
+                    if(status.equalsIgnoreCase(Constants.online)) {
                         isOnlineForCurrentUser = true;
+                        onlineStatus.setVisibility(View.VISIBLE);
+                    } else {
+                        isOnlineForCurrentUser = false;
+                        onlineStatus.setVisibility(View.GONE);
+                    }
                 }
                 else {
                     // Log.e(TAG, "User is offline move to unread");
                     isOnlineForCurrentUser = false;
+                    onlineStatus.setVisibility(View.GONE);
                     // send message to unread
                 }
             }

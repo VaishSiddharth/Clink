@@ -91,7 +91,8 @@ public class chatFullScreen extends AppCompatActivity {
     private ArrayList<DatabaseReference> msgReferenceList = new ArrayList<>();
     private ArrayList<DatabaseReference> msgReferenceListUsersCopy = new ArrayList<>();
     private String sendToName;
-    ImageView imageView, help, emojis,back, statusOnline;
+    ImageView imageView, help, emojis,back;
+    TextView statusOnline;
     boolean isTemporaryContact = false;
     private View rootView;
     private ArrayList<ChatMessage> messages = new ArrayList<>();
@@ -194,8 +195,8 @@ public class chatFullScreen extends AppCompatActivity {
         
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         bar = findViewById(R.id.progress_bar);
-        statusOnline = findViewById(R.id.statusOnline);
-        statusOnline.setVisibility(View.INVISIBLE);
+        statusOnline = findViewById(R.id.onlineStatus);
+        statusOnline.setVisibility(View.GONE);
         bar.setVisibility(View.VISIBLE);
         back=findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +230,7 @@ public class chatFullScreen extends AppCompatActivity {
                 if(dataSnapshot.getValue(String.class)!=null)
                 {
                     ImageView image = findViewById(R.id.image);
-                    Glide.with(image.getContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
+                    Glide.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).apply(RequestOptions.circleCropTransform()).into(image);
                 }
             }
     
@@ -879,7 +880,7 @@ public class chatFullScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //check if user is online for current user
-                Log.e(TAG, statusCheckRef.toString());
+               // Log.e(TAG, statusCheckRef.toString());
                 if (dataSnapshot.getValue(String.class) != null) {
                     String status=dataSnapshot.getValue(String.class);
                     Log.e(TAG, "In if"+status);
@@ -887,11 +888,16 @@ public class chatFullScreen extends AppCompatActivity {
                         isOnlineForCurrentUser = true;
                         statusOnline.setVisibility(View.VISIBLE);
                     }
+                    else
+                    {
+                        isOnlineForCurrentUser = false;
+                        statusOnline.setVisibility(View.GONE);
+                    }
                 }
                 else {
                     // Log.e(TAG, "User is offline move to unread");
                     isOnlineForCurrentUser = false;
-                    statusOnline.setVisibility(View.INVISIBLE);
+                    statusOnline.setVisibility(View.GONE);
                     // send message to unread
                 }
             }

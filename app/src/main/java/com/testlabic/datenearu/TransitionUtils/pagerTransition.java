@@ -729,6 +729,7 @@ public class pagerTransition extends Fragment {
         }
        // Log.e(TAG, "The size of display array list is "+ displayArrayList.size());
         if (getActivity() != null) {
+            cleanup();
             adapter = new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
                 @NonNull
                 @Override
@@ -752,7 +753,7 @@ public class pagerTransition extends Fragment {
             
             viewPager.setAdapter(adapter);
             //remove listener after setting adapter
-            cleanup();
+           
             
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -901,8 +902,6 @@ public class pagerTransition extends Fragment {
             if(item.getUid()!=null) {
                 if(!item.getUid().equals(Constants.uid)) {
                     displayArrayList.add(item);
-                    if(adapter!=null)
-                        adapter.notifyDataSetChanged();
                 }
             }
             else {

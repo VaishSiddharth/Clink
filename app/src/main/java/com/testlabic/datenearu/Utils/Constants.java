@@ -100,6 +100,7 @@ public class Constants {
     public static String hideButtons = "hideButtons";
     public static int minimumScore = 3;
     public static int dailyDrops = 50;
+    public static String updateNecessary = "updateNecessary";
     
     public static String encrypt(String cityLabel) {
         

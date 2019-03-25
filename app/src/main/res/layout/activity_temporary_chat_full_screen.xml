@@ -24,7 +24,6 @@
             android:id="@+id/back"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_left"/>
-
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -34,16 +33,38 @@
             android:layout_marginRight="5dp"
             android:visibility="visible"/>
 
-        <customfonts.MyTextView_SF_Pro_Display_Semibold
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="----"
-            android:id="@+id/sendToName"
             android:layout_gravity="start"
-            android:textSize="15sp"
-            android:textColor="#4a4a4a"/>
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            >
 
 
+
+            <customfonts.MyTextView_SF_Pro_Display_Medium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="----"
+                android:id="@+id/sendToName"
+                android:layout_gravity="start"
+                android:textSize="15sp"
+                android:textColor="#4a4a4a"/>
+
+
+            <customfonts.MyTextView_SF_Pro_Display_Light
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="online"
+                android:visibility="gone"
+                android:id="@+id/onlineStatus"
+                android:layout_gravity="start"
+                android:textSize="12sp"
+                android:textColor="#4a4a4a"/>
+
+
+        </LinearLayout>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,6 +72,7 @@
             android:src="@drawable/ic_help"
             android:id="@+id/help"
             android:layout_marginRight="10dp"/>
+
 
 
 
@@ -88,7 +110,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:id="@+id/emptyView"
-        android:text="You can only send one message until a reply is received..."
+        android:text="Send a message, say hi!"
         android:textSize="13sp" />
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar

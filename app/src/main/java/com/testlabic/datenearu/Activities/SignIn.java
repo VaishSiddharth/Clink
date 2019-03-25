@@ -212,52 +212,71 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String versionCode = dataSnapshot.getValue(String.class);
                 String verCodestr = String.valueOf(verCode);
-                //Log.e(TAG,"Version in signIn db "+versionCode);
                 if (!verCodestr.equalsIgnoreCase(versionCode)) {
-                    //Log.e(TAG,"Version in signIn db "+versionCode);
-                    SweetAlertDialog alertDialog = new SweetAlertDialog(SignIn.this, SweetAlertDialog.WARNING_TYPE)
-                            .setTitleText("App needs Update !!")
-                            .setContentText("Some new features are added & bugs are fixed please update the app otherwise the app will crash frequently.\n" +
-                                    "If this doesn't works please uninstall and reinstall CLINK\n")
-                            .setConfirmButton("Update", new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    try {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                                    } catch (android.content.ActivityNotFoundException anfe) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    //check if update compulsory..
+                
+                    DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child(Constants.updateNecessary);
+                    reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue()!=null)
+                            {
+                                boolean isCompul = dataSnapshot.getValue(Boolean.class);
+                                Log.e(TAG, "The is compul is "+ isCompul);
+                                if(isCompul)
+                                {
+                                    SweetAlertDialog alertDialog = new SweetAlertDialog(SignIn.this, SweetAlertDialog.WARNING_TYPE)
+                                            .setTitleText("App needs Update !!")
+                                            .setContentText("Some new features are added & bugs are fixed please update the app otherwise the app will crash frequently.\n" +
+                                                    "If this doesn't work please uninstall and reinstall CLINK\n")
+                                            .setConfirmButton("Update", new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    try {
+                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                                    } catch (android.content.ActivityNotFoundException anfe) {
+                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                                                    }
+                                                
+                                                }
+                                            });
+                                    alertDialog.setCancelable(false);
+                                    alertDialog.show();
+                                    Button btn = alertDialog.findViewById(R.id.confirm_button);
+                                    btn.setBackground(ContextCompat.getDrawable(SignIn.this, R.drawable.button_4_dialogue));
+                                    Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                                    btn1.setBackground(ContextCompat.getDrawable(SignIn.this, R.drawable.button_4_dialogue));
+                                
+                                    {
+                                        btn.setTypeface(Utils.SFPRoLight(SignIn.this));
+                                        btn1.setTypeface(Utils.SFPRoLight(SignIn.this));
+                                    
+                                        TextView title = alertDialog.findViewById(R.id.title_text);
+                                        if (title != null)
+                                            title.setTypeface(Utils.SFProRegular(SignIn.this));
+                                    
+                                        TextView contentText = alertDialog.findViewById(R.id.content_text);
+                                        if (contentText != null)
+                                            contentText.setTypeface(Utils.SFPRoLight(SignIn.this));
                                     }
-
                                 }
-                            });
-                    alertDialog.setCancelable(false);
-                    alertDialog.show();
-                    Button btn = alertDialog.findViewById(R.id.confirm_button);
-                    btn.setBackground(ContextCompat.getDrawable(SignIn.this, R.drawable.button_4_dialogue));
-                    Button btn1 = alertDialog.findViewById(R.id.cancel_button);
-                    btn1.setBackground(ContextCompat.getDrawable(SignIn.this, R.drawable.button_4_dialogue));
-
-                    {
-                        btn.setTypeface(Utils.SFPRoLight(SignIn.this));
-                        btn1.setTypeface(Utils.SFPRoLight(SignIn.this));
-
-                        TextView title = alertDialog.findViewById(R.id.title_text);
-                        if (title != null)
-                            title.setTypeface(Utils.SFProRegular(SignIn.this));
-
-                        TextView contentText = alertDialog.findViewById(R.id.content_text);
-                        if (contentText != null)
-                            contentText.setTypeface(Utils.SFPRoLight(SignIn.this));
-                    }
+                            }
+                        }
+                    
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        
+                        }
+                    });
+                
                 }
             }
-
+        
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            
             }
-        });
-    }
+        });}
 
     private void handleFacebookAccessToken(AccessToken token, final Profile profile) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);

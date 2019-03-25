@@ -223,6 +223,10 @@ public class LastMessageAdapter extends RecyclerView.Adapter<LastMessageAdapter.
                     if (one.getValue(ChatMessage.class) != null) {
                         final String lastMessage = one.getValue(ChatMessage.class).getMessage();
                         final long timeStamp = one.getValue(ChatMessage.class).getSendingTime();
+                        
+                        //logic for sorting
+                        allModelArrayList.get(position).setTimeStamp(timeStamp);
+                        
                         final Boolean isDelivered = one.getValue(ChatMessage.class).getMessageDelivered();
                         final String sendersUid = one.getValue(ChatMessage.class).getSentFrom();
                         final Boolean successfullySent = one.getValue(ChatMessage.class).getSuccessfullySent();

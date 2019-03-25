@@ -75,4 +75,8 @@ public class ModelLastMessage {
     public long getTimeStamp() {
         return timeStamp;
     }
+    
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 }

@@ -400,47 +400,69 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("appVersionAuth");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("appVersionAuth");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String versionCode = dataSnapshot.getValue(String.class);
                 String verCodestr = String.valueOf(verCode);
                 if (!verCodestr.equalsIgnoreCase(versionCode)) {
-                    SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                            .setTitleText("App needs Update !!")
-                            .setContentText("Some new features are added & bugs are fixed please update the app otherwise the app will crash frequently.\n" +
-                                    "If this doesn't work please uninstall and reinstall CLINK\n")
-                            .setConfirmButton("Update", new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    try {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                                    } catch (android.content.ActivityNotFoundException anfe) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    //check if update compulsory..
+    
+                    DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child(Constants.updateNecessary);
+                    reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue()!=null)
+                            {
+                                boolean isCompul = dataSnapshot.getValue(Boolean.class);
+                                Log.e(TAG, "The is compul is "+ isCompul);
+                                if(isCompul)
+                                {
+                                    SweetAlertDialog alertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                            .setTitleText("App needs Update !!")
+                                            .setContentText("Some new features are added & bugs are fixed please update the app otherwise the app will crash frequently.\n" +
+                                                    "If this doesn't work please uninstall and reinstall CLINK\n")
+                                            .setConfirmButton("Update", new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    try {
+                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                                    } catch (android.content.ActivityNotFoundException anfe) {
+                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                                                    }
+                    
+                                                }
+                                            });
+                                    alertDialog.setCancelable(false);
+                                    alertDialog.show();
+                                    Button btn = alertDialog.findViewById(R.id.confirm_button);
+                                    btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+                                    Button btn1 = alertDialog.findViewById(R.id.cancel_button);
+                                    btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
+    
+                                    {
+                                        btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
+                                        btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
+        
+                                        TextView title = alertDialog.findViewById(R.id.title_text);
+                                        if (title != null)
+                                            title.setTypeface(Utils.SFProRegular(MainActivity.this));
+        
+                                        TextView contentText = alertDialog.findViewById(R.id.content_text);
+                                        if (contentText != null)
+                                            contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
                                     }
-
                                 }
-                            });
-                    alertDialog.setCancelable(false);
-                    alertDialog.show();
-                    Button btn = alertDialog.findViewById(R.id.confirm_button);
-                    btn.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
-                    Button btn1 = alertDialog.findViewById(R.id.cancel_button);
-                    btn1.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.button_4_dialogue));
-
-                    {
-                        btn.setTypeface(Utils.SFPRoLight(MainActivity.this));
-                        btn1.setTypeface(Utils.SFPRoLight(MainActivity.this));
-
-                        TextView title = alertDialog.findViewById(R.id.title_text);
-                        if (title != null)
-                            title.setTypeface(Utils.SFProRegular(MainActivity.this));
-
-                        TextView contentText = alertDialog.findViewById(R.id.content_text);
-                        if (contentText != null)
-                            contentText.setTypeface(Utils.SFPRoLight(MainActivity.this));
-                    }
+                            }
+                        }
+    
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+                        }
+                    });
+                    
                 }
             }
 

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,7 +133,7 @@ public class AllMessagesListFragment extends Fragment {
                         final String imageUrl = contact.getImage();
                         final String uid = contact.getUid();
                         ModelLastMessage message = new ModelLastMessage(name, imageUrl
-                                , uid, null, -1000000000, null, null, status,
+                                , uid, null, 1000000000, null, null, status,
                                 null, contact.getTemporaryContact(), contact.getTempUid());
                         list.add(message);
      
@@ -182,10 +183,13 @@ public class AllMessagesListFragment extends Fragment {
                     @Override
                     public void run() {
                         ArrayList<ModelLastMessage> lastMessages= adapter.getAllModelArrayList();
+                       // for(ModelLastMessage modelLastMessage : lastMessages)
+                       // Log.e(TAG, String.valueOf(modelLastMessage.getTimeStamp()));
                         Collections.sort(lastMessages, new Comparator<ModelLastMessage>() {
                             @Override
                             public int compare(ModelLastMessage v1, ModelLastMessage v2) {
-                                long sub = v2.getTimeStamp() + (v1.getTimeStamp());
+                                long sub = v2.getTimeStamp() - (v1.getTimeStamp());
+                                Log.e(TAG, "Sorting "+sub);
                                 return (int) sub;
                             }
                         });
@@ -193,7 +197,7 @@ public class AllMessagesListFragment extends Fragment {
                         adapter = new LastMessageAdapter(getActivity(),lastMessages);
                         recyclerview.setAdapter(adapter);
                     }
-                },200);
+                },400);
     
             }
     

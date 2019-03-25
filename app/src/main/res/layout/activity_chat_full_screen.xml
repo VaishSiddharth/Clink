@@ -33,7 +33,17 @@
             android:layout_marginRight="5dp"
             android:visibility="visible"/>
 
-        <customfonts.MyTextView_SF_Pro_Display_Semibold
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            >
+
+
+
+        <customfonts.MyTextView_SF_Pro_Display_Medium
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="----"
@@ -43,7 +53,18 @@
             android:textColor="#4a4a4a"/>
 
 
+            <customfonts.MyTextView_SF_Pro_Display_Light
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="online"
+                android:visibility="gone"
+                android:id="@+id/onlineStatus"
+                android:layout_gravity="start"
+                android:textSize="12sp"
+                android:textColor="#4a4a4a"/>
 
+
+        </LinearLayout>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
