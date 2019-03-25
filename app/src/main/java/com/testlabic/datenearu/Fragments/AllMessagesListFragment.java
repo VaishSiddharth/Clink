@@ -35,6 +35,7 @@ import com.testlabic.datenearu.Utils.Constants;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import com.testlabic.datenearu.Adapters.LastMessageAdapter;
 import com.testlabic.datenearu.WaveDrawable;
@@ -54,15 +55,18 @@ public class AllMessagesListFragment extends Fragment {
     private RecyclerView cRecyclerView;
     private FirebaseRecyclerAdapter cAdapter;
     Query lastQuery;
+    boolean firstSort = false;
     ValueEventListener valueEventListener;
     ChildEventListener childEventListener;
     Query reference;
     ImageView emptyViewno;
     TextView emptyViewtext;
+    int holder_duration = 400;
     
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        firstSort = true;
         View view = inflater.inflate(R.layout.fragment_all_messages_list, container, false);
         recyclerview = (view).findViewById(R.id.recycler4);
         emptyView = view.findViewById(R.id.emptyView);
@@ -164,41 +168,17 @@ public class AllMessagesListFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //sort messages with time
-    
-              
-                Collections.sort(list, new Comparator<ModelLastMessage>() {
-                    @Override
-                    public int compare(ModelLastMessage v1, ModelLastMessage v2) {
-                        long sub = v2.getTimeStamp() - (v1.getTimeStamp());
-                        return (int) sub;
-                    }
-                });
+                
     
                 adapter = new LastMessageAdapter(getActivity(), list);
                 recyclerview.setAdapter(adapter);
-    
-    
-                Handler h = new Handler();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayList<ModelLastMessage> lastMessages= adapter.getAllModelArrayList();
-                       // for(ModelLastMessage modelLastMessage : lastMessages)
-                       // Log.e(TAG, String.valueOf(modelLastMessage.getTimeStamp()));
-                        Collections.sort(lastMessages, new Comparator<ModelLastMessage>() {
-                            @Override
-                            public int compare(ModelLastMessage v1, ModelLastMessage v2) {
-                                long sub = v2.getTimeStamp() - (v1.getTimeStamp());
-                                Log.e(TAG, "Sorting "+sub);
-                                return (int) sub;
-                            }
-                        });
-    
-                        adapter = new LastMessageAdapter(getActivity(),lastMessages);
-                        recyclerview.setAdapter(adapter);
-                    }
-                },400);
-    
+                
+                if(firstSort) {
+                    holder_duration = 2000;
+                    firstSort = false;
+                } else
+                    holder_duration =400;
+                sortAndSetAdapter();
             }
     
             @Override
@@ -209,6 +189,30 @@ public class AllMessagesListFragment extends Fragment {
         
     }
     
+    private void sortAndSetAdapter() {
+        Log.e(TAG, "Sort duration is "+holder_duration);
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<ModelLastMessage> lastMessages= adapter.getAllModelArrayList();
+    
+                    // Log.e(TAG, String.valueOf(modelLastMessage.getTimeStamp()));
+                    Collections.sort(lastMessages, new Comparator<ModelLastMessage>() {
+                        @Override
+                        public int compare(ModelLastMessage v1, ModelLastMessage v2) {
+                            long sub = v2.getTimeStamp() - (v1.getTimeStamp());
+                           // Log.e(TAG, "Sorting "+sub);
+                            return (int) sub;
+                        }
+                    });
+    
+                    adapter = new LastMessageAdapter(getActivity(), lastMessages);
+                    recyclerview.setAdapter(adapter);
+                }
+                
+        },holder_duration);
+    }
     
     @Override
     public void onResume() {
@@ -252,8 +256,6 @@ public class AllMessagesListFragment extends Fragment {
         cRecyclerView.setLayoutManager(layoutManager);
         cRecyclerView.setItemAnimator(new DefaultItemAnimator());
         cRecyclerView.setAdapter(cAdapter);
-        
-        
     }
     
     @Override
